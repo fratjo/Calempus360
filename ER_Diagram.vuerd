@@ -158,7 +158,7 @@
           "THzNNZXcj0lgyfr8I-0pn"
         ],
         "ui": {
-          "x": 471,
+          "x": 488.5258,
           "y": 11,
           "zIndex": 111,
           "widthName": 96,
@@ -166,7 +166,7 @@
           "color": ""
         },
         "meta": {
-          "updateAt": 1737493523133,
+          "updateAt": 1737493947614,
           "createAt": 1737492981396
         }
       },
@@ -936,7 +936,7 @@
           "columnIds": [
             "Jx7ZdDSIBofh8jE-Wbdvp"
           ],
-          "x": 626,
+          "x": 643.5258,
           "y": 139,
           "direction": 8
         },
@@ -964,7 +964,7 @@
           "columnIds": [
             "THzNNZXcj0lgyfr8I-0pn"
           ],
-          "x": 471,
+          "x": 488.5258,
           "y": 75,
           "direction": 1
         },
