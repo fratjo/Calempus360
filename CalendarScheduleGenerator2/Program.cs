@@ -218,17 +218,15 @@ List<CourseGroupes> courseGroupes = new()
 // site + classroom , day , hour , course, groupes
 
 Dictionary<
-    Tuple<
-        ((string site, string classroom) location,
+    ((string site, string classroom) location,
         string day,
-        (int startHour, int endHour) timeSlot)>,
+        (int startHour, int endHour) timeSlot),
     (string course, List<string> groups)> GenerateSchedule()
 {
     Dictionary<
-        Tuple<
-            ((string site, string classroom) location,
+        ((string site, string classroom) location,
             string day,
-            (int startHour, int endHour) timeSlot)>,
+            (int startHour, int endHour) timeSlot),
         (string course, List<string> groups)> schedule = new();
 
     if (classes.Count * daysOfWeek.Count * hours.Count >= courseGroupes.Sum(c => c.Groupes.Count))
@@ -249,10 +247,9 @@ bool BacktrackSchedule(
     List<CourseGroupes> courseGroupes,
     List<(string classroom, string site, int capacity)> classes,
     Dictionary<
-        Tuple<
             ((string site, string classroom) location,
             string day,
-            (int startHour, int endHour) timeSlot)>,
+            (int startHour, int endHour) timeSlot),
         (string course, List<string> groups)> schedule,
     int index)
 {
@@ -267,57 +264,90 @@ bool BacktrackSchedule(
 
     foreach (var currentClass in classes)
     {
-        // TODO : Equipement in the classroom
-        // TODO : Flying Equipment available
+        // TODO : Required Equipement in the classroom
+        // TODO : Required Equipement is Flying Equipment & is available
 
-        if (currentClass.capacity >= biggestCourseGroup.GetCapacity())
+        // if (currentClass.capacity >= biggestCourseGroup.GetCapacity())
+        // {
+        //     var groupsToPlace = biggestCourseGroup.Groupes.Select(g => g.Name).ToList();
+
+        //     var key = FindTimeSlotForCourseGroup(currentClass.classroom, currentClass.site, currentClass.capacity, biggestCourse, groupsToPlace, schedule);
+
+        //     if (key is not null)
+        //     {
+        //         schedule.Add(key, (biggestCourse, groupsToPlace));
+
+        //         courseGroupes.RemoveAt(0);
+
+        //         var success = BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule, 0);
+
+        //         if (success) return true;
+
+        //         schedule.Remove(key);
+
+        //         courseGroupes.Insert(0, biggestCourseGroup);
+        //     }
+        // }
+        // else
+        // {
+        //     if (biggestCourseGroup.Groupes.Count == 1) continue;
+
+        //     var groupsToPlace = BacktrackClassroomsCoursGroups(currentClass.capacity, biggestCourseGroup.Groupes);
+
+        //     if (groupsToPlace.Count == 0) continue;
+
+        //     biggestCourseGroup.RemoveGroupes(groupsToPlace);
+
+        //     var groupsToPlaceNames = groupsToPlace.Select(g => g.Name).ToList();
+
+        //     var key = FindTimeSlotForCourseGroup(currentClass.classroom, currentClass.site, currentClass.capacity, biggestCourse, groupsToPlaceNames, schedule);
+
+        //     if (key is not null)
+        //     {
+        //         schedule.Add(key, (biggestCourse, groupsToPlaceNames));
+
+        //         var success = BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule, 0);
+
+        //         if (success) return true;
+
+        //         schedule.Remove(key);
+
+        //     }
+
+        //     biggestCourseGroup.Groupes.AddRange(groupsToPlace);
+        // }
+
+
+        var keyAndGroups = FindTimeSlotForCourseGroup(
+            currentClass.classroom,
+            currentClass.site,
+            currentClass.capacity,
+            biggestCourse,
+            biggestCourseGroup.Groupes, schedule);
+
+        if (keyAndGroups is not null)
         {
-            var groupsToPlace = biggestCourseGroup.Groupes.Select(g => g.Name).ToList();
+            var (key, availableGroups) = keyAndGroups;
 
-            var key = FindTimeSlotForCourseGroup(currentClass.classroom, currentClass.site, biggestCourse, groupsToPlace, schedule);
-
-            if (key is not null)
+            if (availableGroups.Count > 0)
             {
-                schedule.Add(key, (biggestCourse, groupsToPlace));
+                schedule.Add(key, (biggestCourse, availableGroups));
 
-                courseGroupes.RemoveAt(0);
+                // Retirer temporairement les groupes placés
+                biggestCourseGroup.Groupes.RemoveAll(g => availableGroups.Contains(g.Name));
+
+                // Si le CourseGroup est vide, le retirer de la liste
+                if (biggestCourseGroup.Groupes.Count == 0) courseGroupes.RemoveAt(0);
 
                 var success = BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule, 0);
 
                 if (success) return true;
 
+                // En cas d'échec, restaurer les groupes et annuler l'affectation
                 schedule.Remove(key);
-
+                biggestCourseGroup.Groupes.AddRange(availableGroups.Select(name => new Groupe { Name = name }));
                 courseGroupes.Insert(0, biggestCourseGroup);
             }
-        }
-        else
-        {
-            if (biggestCourseGroup.Groupes.Count == 1) continue;
-
-            var groupsToPlace = BacktrackClassroomsCoursGroups(currentClass.capacity, biggestCourseGroup.Groupes);
-
-            if (groupsToPlace.Count == 0) continue;
-
-            biggestCourseGroup.RemoveGroupes(groupsToPlace);
-
-            var groupsToPlaceNames = groupsToPlace.Select(g => g.Name).ToList();
-
-            var key = FindTimeSlotForCourseGroup(currentClass.classroom, currentClass.site, biggestCourse, groupsToPlaceNames, schedule);
-
-            if (key is not null)
-            {
-                schedule.Add(key, (biggestCourse, groupsToPlaceNames));
-
-                var success = BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule, 0);
-
-                if (success) return true;
-
-                schedule.Remove(key);
-
-            }
-
-            biggestCourseGroup.Groupes.AddRange(groupsToPlace);
         }
     }
     return false;
@@ -364,46 +394,100 @@ List<Groupe> BacktrackClassroomsCoursGroups(int capacity, List<Groupe> groupes)
     return bestCombinaison;
 }
 
-Tuple<((string site, string classroom), string currentDay, (int startHour, int endHour) currentHour)>? FindTimeSlotForCourseGroup(
+Tuple<((string site, string classroom) location, string day, (int startHour, int endHour) timeSlot), List<string>>? FindTimeSlotForCourseGroup(
     string classroom,
     string site,
+    int capacity,
     string course,
-    List<string> groups,
+    List<Groupe> groups,
     Dictionary<
-        Tuple<
-            ((string site, string classroom) location,
+        ((string site, string classroom) location,
             string day,
-            (int startHour, int endHour) timeSlot)>,
+            (int startHour, int endHour) timeSlot),
         (string course, List<string> groups)> schedule
 )
 {
-    Tuple<((string site, string classroom), string currentDay, (int startHour, int endHour) currentHour)>? key = null;
-
     foreach (var currentDay in daysOfWeek)
     {
         foreach (var currentHour in hours)
         {
-            // TODO ??? : Course not twice at the same time // secundary
-            // TODO : check if the group is not already placed at the same time and remove groups already placed
+            var key = ((site, classroom), currentDay, currentHour);
+
+            if (schedule.ContainsKey(key)) continue;
+
             // TODO : Inter site travel time (1h)
 
-            key = Tuple.Create(((site, classroom), currentDay, currentHour));
+            // TODO : check if the group is not already placed at the same time and remove groups already placed // TESTING
+            var groupsAvailable = groups.Where(g =>
+                !schedule.Any(s =>
+                    s.Key.day == currentDay &&
+                    s.Key.timeSlot == currentHour &&
+                    s.Value.groups.Contains(g.Name)
+            )).ToList();
 
-            if (!schedule.ContainsKey(key)) return key;
+            if (groupsAvailable.Count == 0) continue;
+
+            var groupsToPlace = BacktrackClassroomsCoursGroups(capacity, groupsAvailable.ToList());
+
+            if (groupsAvailable.Count > 0) return Tuple.Create(key, groupsToPlace.Select(g => g.Name).ToList());
         }
     }
     return null;
 }
 
 
-void DisplaySchedule(Dictionary<Tuple<((string site, string classroom) location, string day, (int startHour, int endHour) timeSlot)>, (string course, List<string> groups)> schedule)
+void DisplaySchedule(Dictionary<((string site, string classroom) location, string day, (int startHour, int endHour) timeSlot), (string course, List<string> groups)> schedule)
 {
     // sort day, time, site, classroom
-    schedule = schedule.OrderBy(s => s.Key.Item1.day).ThenBy(s => s.Key.Item1.timeSlot.startHour).ThenBy(s => s.Key.Item1.location.site).ThenBy(s => s.Key.Item1.location.classroom).ToDictionary(s => s.Key, s => s.Value);
+    schedule = schedule.OrderBy(s => s.Key.day).ThenBy(s => s.Key.timeSlot.startHour).ThenBy(s => s.Key.location.site).ThenBy(s => s.Key.location.classroom).ToDictionary(s => s.Key, s => s.Value);
+
+    // Define course colors
+    Dictionary<string, ConsoleColor> courseColors = new()
+    {
+        { "Math", ConsoleColor.Magenta },
+        { "Chemistry", ConsoleColor.DarkMagenta },
+        { "Physics", ConsoleColor.Cyan },
+        { "Biology", ConsoleColor.DarkCyan },
+        { "English", ConsoleColor.Green },
+        { "Geography", ConsoleColor.DarkGreen },
+        { "French", ConsoleColor.Red },
+        { "History", ConsoleColor.DarkYellow },
+        { "Algebra", ConsoleColor.Blue },
+        { "Philosophy", ConsoleColor.DarkBlue },
+        { "Economy", ConsoleColor.DarkRed },
+        { "Sport", ConsoleColor.DarkGray },
+        { "Music", ConsoleColor.Gray },
+        { "Art", ConsoleColor.White },
+        { "Computer Science", ConsoleColor.DarkGray },
+        { "Geometry", ConsoleColor.DarkGreen }
+    };
 
     foreach (var item in schedule)
     {
-        Console.WriteLine($"Site {item.Key.Item1.location.site}, classroom {item.Key.Item1.location.classroom} : {item.Key.Item1.day} {item.Key.Item1.timeSlot.startHour}-{item.Key.Item1.timeSlot.endHour} : {item.Value.course} ({string.Join(",", item.Value.groups)})");
+        // // Set site color
+        // if (item.Key.Item1.location.site == "A")
+        // {
+        //     Console.ForegroundColor = ConsoleColor.Red;
+        // }
+        // else if (item.Key.Item1.location.site == "B")
+        // {
+        //     Console.ForegroundColor = ConsoleColor.Blue;
+        // }
+        // else
+        // {
+        //     Console.ForegroundColor = ConsoleColor.White;
+        // }
+
+        // Set course color
+        if (courseColors.TryGetValue(item.Value.course, out var courseColor))
+        {
+            Console.ForegroundColor = courseColor;
+        }
+
+        Console.WriteLine($"Site {item.Key.location.site}, classroom {item.Key.location.classroom} : {item.Key.day} {item.Key.timeSlot.startHour}-{item.Key.timeSlot.endHour} : {item.Value.course} ({string.Join(",", item.Value.groups)})");
+
+        // Reset color to default
+        Console.ResetColor();
     }
 }
 
