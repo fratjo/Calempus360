@@ -1,4 +1,6 @@
 ﻿// list classe + site
+using System.Runtime.CompilerServices;
+
 List<(string classroom, string site, int capacity)> classes = new() {
     new("1A", "A", 40),
     new("1B", "B", 40),
@@ -210,11 +212,7 @@ List<CourseGroupes> courseGroupes = new()
 // --------------------------------------------
 // --------------------------------------------
 
-// TODO : Groupe Site preference // courseGroups groupé par site de préférence
-// TODO : Inter site travel time (1h)
-// TODO : Course not twice at the same time
-// TODO : Equipement in the classroom
-// TODO : Flying Equipment available
+// TODO : Groupe Site preference // cours sur le site de préférence si le groupe est seul dans le courseGroup ou si tous les cours du courseGroup ont le même site de préférence !!!
 // TODO : Add Weekly hours for each course // max 2 timeplot in a row // max 4h per day // not twice on the same day not twice in a row
 
 // site + classroom , day , hour , course, groupes
@@ -256,120 +254,70 @@ bool BacktrackSchedule(
             string day,
             (int startHour, int endHour) timeSlot)>,
         (string course, List<string> groups)> schedule,
-    int currentCourseIndex)
+    int index)
 {
-    // si on a plus de cours à placer, on retourne true
-    if (courseGroupes.Count == 0) return true;
+    if (courseGroupes.Count == 0 || classes.Count == 0) return true;
 
-    // trier les cours par capacité
     courseGroupes = courseGroupes.OrderByDescending(c => c.GetCapacity()).ToList();
-
-    // trier les classes par capacité
     classes = classes.OrderByDescending(c => c.Item3).ToList();
 
-    // on prend le cours le plus gros, le premier car trié par capacité
-    string currentCourse = courseGroupes[0].Course;
+    var biggestCourseGroup = courseGroupes[0];
+    var biggestCourse = biggestCourseGroup.Course;
+    int courseCapacity = biggestCourseGroup.GetCapacity();
 
-
-    // pour chaque classe (ordonné par capacité)
-    for (int c = 0; c < classes.Count; c++)
+    foreach (var currentClass in classes)
     {
-        var currentClass = classes[c];
+        // TODO : Equipement in the classroom
+        // TODO : Flying Equipment available
 
-        // si la capacité de la classe est suffisante
-        if (currentClass.Item3 >= courseGroupes[currentCourseIndex].GetCapacity())
+        if (currentClass.capacity >= biggestCourseGroup.GetCapacity())
         {
-            // on trouve un timeslot de libre pour la classe
-            for (int d = 0; d < daysOfWeek.Count; d++)
+            var groupsToPlace = biggestCourseGroup.Groupes.Select(g => g.Name).ToList();
+
+            var key = FindTimeSlotForCourseGroup(currentClass.classroom, currentClass.site, biggestCourse, groupsToPlace, schedule);
+
+            if (key is not null)
             {
-                var currentDay = daysOfWeek[d];
+                schedule.Add(key, (biggestCourse, groupsToPlace));
 
-                // pour chaque timeslot de la jourée
-                for (int j = 0; j < hours.Count; j++)
-                {
-                    var currentHour = hours[j];
+                courseGroupes.RemoveAt(0);
 
-                    // créer la clé de l'emplacement // ((site, classroom), day, (startHour, endHour))
-                    var key = Tuple.Create(((currentClass.Item2, currentClass.Item1), currentDay, currentHour));
+                var success = BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule, 0);
 
-                    if (!schedule.ContainsKey(key)) // TODO : check if the course is not already placed at the same time
-                    {
-                        // on ajoute le cours au schedule
-                        schedule.Add(key, (currentCourse, courseGroupes[currentCourseIndex].Groupes.Select(g => g.Name).ToList()));
+                if (success) return true;
 
-                        // keep track of the current course
-                        var cg = courseGroupes[currentCourseIndex];
+                schedule.Remove(key);
 
-                        // on retire du courseGroupes le cours qui vient d'être placé
-                        courseGroupes.RemoveAt(currentCourseIndex);
-
-                        // on continue avec le prochain cours
-                        if (BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule, currentCourseIndex)) return true;
-
-                        // si on ne peut pas placer le prochain cours, on retire le cours actuel du schedule
-                        schedule.Remove(key);
-
-                        // on réajoute le cours retiré du courseGroupes
-                        courseGroupes.Add(cg);
-
-                        // on trie les courseGroupes restants par capacité
-                        courseGroupes = courseGroupes.OrderByDescending(c => c.GetCapacity()).ToList();
-                    }
-                }
+                courseGroupes.Insert(0, biggestCourseGroup);
             }
         }
-        else // si la capacité de la classe n'est pas suffisante // on split le cours en plusieurs petits groupes
+        else
         {
-            // vérifier si on peut split le cours en plusieurs petits groupes
-            if (courseGroupes[currentCourseIndex].Groupes.Count == 1) return false;
+            if (biggestCourseGroup.Groupes.Count == 1) continue;
 
-            // si la capacité de la classe n'est pas suffisante, on split le cours en plusieurs petits groupes
-            var groupesToPlace = BacktrackClassroomsCoursGroups(currentClass.Item3, courseGroupes[currentCourseIndex].Groupes);
+            var groupsToPlace = BacktrackClassroomsCoursGroups(currentClass.capacity, biggestCourseGroup.Groupes);
 
-            // on trouve un timeslot de libre pour la classe
-            for (int d = 0; d < daysOfWeek.Count; d++)
+            if (groupsToPlace.Count == 0) continue;
+
+            biggestCourseGroup.RemoveGroupes(groupsToPlace);
+
+            var groupsToPlaceNames = groupsToPlace.Select(g => g.Name).ToList();
+
+            var key = FindTimeSlotForCourseGroup(currentClass.classroom, currentClass.site, biggestCourse, groupsToPlaceNames, schedule);
+
+            if (key is not null)
             {
-                var currentDay = daysOfWeek[d];
+                schedule.Add(key, (biggestCourse, groupsToPlaceNames));
 
-                // pour chaque timeslot de la jourée
-                for (int j = 0; j < hours.Count; j++)
-                {
-                    var currentHour = hours[j];
+                var success = BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule, 0);
 
-                    // créer la clé de l'emplacement // ((site, classroom), day, (startHour, endHour))
-                    var key = Tuple.Create(((currentClass.Item2, currentClass.Item1), currentDay, currentHour));
+                if (success) return true;
 
-                    if (!schedule.ContainsKey(key)) // TODO : check if the course is not already placed at the same time
-                    {
-                        // on retire du courseGroupes le(s) groupes qui viennent d'être placés
-                        courseGroupes[currentCourseIndex].RemoveGroupes(groupesToPlace);
+                schedule.Remove(key);
 
-                        // on trie les courseGroupes restants par capacité
-                        courseGroupes = courseGroupes.OrderByDescending(c => c.GetCapacity()).ToList();
-
-                        // on place les groupes dans la classe
-                        schedule.Add(key, (currentCourse, groupesToPlace.Select(g => g.Name).ToList()));
-
-                        // on passe au prochain courseGroupe // on garde le currentCourseIndex car on prend toujours le premier cours (le plus gros)
-                        if (BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule, currentCourseIndex)) return true;
-
-                        // si on ne peut pas placer le prochain coursGroupe, on le retire du schedule => free the timeslot
-                        schedule.Remove(key);
-
-                        // on réajoute les groupes retirés du courseGroupes
-                        courseGroupes[currentCourseIndex].Groupes.AddRange(groupesToPlace);
-
-                        // on trie les courseGroupes restants par capacité
-                        courseGroupes = courseGroupes.OrderByDescending(c => c.GetCapacity()).ToList();
-
-                        // on trie les classes restantes par capacité
-                        classes = classes.OrderByDescending(c => c.Item3).ToList();
-
-                        // on passe au suivant
-                        continue;
-                    }
-                }
             }
+
+            biggestCourseGroup.Groupes.AddRange(groupsToPlace);
         }
     }
     return false;
@@ -411,11 +359,42 @@ List<Groupe> BacktrackClassroomsCoursGroups(int capacity, List<Groupe> groupes)
         }
     }
 
-
     Backtrack(0, 0);
 
     return bestCombinaison;
 }
+
+Tuple<((string site, string classroom), string currentDay, (int startHour, int endHour) currentHour)>? FindTimeSlotForCourseGroup(
+    string classroom,
+    string site,
+    string course,
+    List<string> groups,
+    Dictionary<
+        Tuple<
+            ((string site, string classroom) location,
+            string day,
+            (int startHour, int endHour) timeSlot)>,
+        (string course, List<string> groups)> schedule
+)
+{
+    Tuple<((string site, string classroom), string currentDay, (int startHour, int endHour) currentHour)>? key = null;
+
+    foreach (var currentDay in daysOfWeek)
+    {
+        foreach (var currentHour in hours)
+        {
+            // TODO ??? : Course not twice at the same time // secundary
+            // TODO : check if the group is not already placed at the same time and remove groups already placed
+            // TODO : Inter site travel time (1h)
+
+            key = Tuple.Create(((site, classroom), currentDay, currentHour));
+
+            if (!schedule.ContainsKey(key)) return key;
+        }
+    }
+    return null;
+}
+
 
 void DisplaySchedule(Dictionary<Tuple<((string site, string classroom) location, string day, (int startHour, int endHour) timeSlot)>, (string course, List<string> groups)> schedule)
 {
