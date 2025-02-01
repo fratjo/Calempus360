@@ -1,14 +1,13 @@
 ﻿// list classe + site
 using System.Runtime.CompilerServices;
 
-List<(string classroom, string site, int capacity)> classes = new() {
-    // new("1A", "A", 25),
-    // new("2A", "A", 40),
-    new("1B", "B", 40),
-    new("2B", "B", 90),
-    new("3B", "B", 40),
-    new("4B", "B", 40),
-    // new("5B", "B", 40),
+List<(string classroom, string site, int capacity, List<string>? equipments)> classes = new() {
+    new("1A", "A", 40, null),
+    new("2A", "A", 40, new(){"Science Kit"}),
+    new("3A", "A", 40, null),
+    new("1B", "B", 60, new(){"TV"}),
+    new("2B", "B", 40, new(){"Science Kit"}),
+    new("3B", "B", 90, new(){"Microphone"}),
 };
 
 // list daysOfWeek
@@ -28,9 +27,7 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
             new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" },
-            new Groupe { Name = "3B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "4B", Capacity = 25, PreferedSite = "B" },
+            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroupes
@@ -47,6 +44,7 @@ List<CourseGroupes> courseGroupes = new()
     new CourseGroupes
     {
         Course = "English",
+        Equipements = new(){"TV"},
         Groupes = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
@@ -186,17 +184,8 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
-    },
-    new CourseGroupes // this one is too big to fit in any classroom
-    {
-        Course = "Geometry",
-        Groupes = new List<Groupe>
-        {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-        }
     }
 };
-
 
 // --------------------------------------------
 // --------------------------------------------
@@ -218,20 +207,21 @@ Dictionary<
             (int startHour, int endHour) timeSlot),
         (string course, List<string> groups)> schedule = new();
 
-    var nbCombinaisons = classes.Count * daysOfWeek.Count * hours.Count;
-
-    if (classes.Count * daysOfWeek.Count * hours.Count >= courseGroupes.Sum(c => c.Groupes.Count))
+    if ((classes.Count * daysOfWeek.Count * hours.Count - classes.Count * daysOfWeek.Count * hours.Count * 0.1) >= courseGroupes.Sum(c => c.Groupes.Count)) // If nb slot is enough to place all groups
     {
         if (BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule, 0)) return schedule;
     }
-    else if (courseGroupes.Sum(c => c.GetCapacity()) <= classes.Sum(c => c.capacity) * daysOfWeek.Count * hours.Count)
+    else if (courseGroupes.Sum(c => c.GetCapacity()) <= (classes.Sum(c => c.capacity) * daysOfWeek.Count * hours.Count - classes.Count * daysOfWeek.Count * hours.Count * 0.1)) // If capacity is enough to place all groups
     {
         if (BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule, 0)) return schedule;
     }
     else throw new Exception("No schedule possible");
 
-    throw new Exception("No schedule found");
+    System.Console.WriteLine("No schedule found");
+
+    return schedule;
 }
+
 
 /// <summary>
 /// Prendre le cours le plus gros, et essayer de le placer de la classe la plus grande à la plus petite
@@ -241,7 +231,7 @@ bool BacktrackSchedule(
     List<string> daysOfWeek,
     List<(int startHour, int endHour)> hours,
     List<CourseGroupes> courseGroupes,
-    List<(string classroom, string site, int capacity)> classes,
+    List<(string classroom, string site, int capacity, List<string>? equipments)> classes,
     Dictionary<
             ((string site, string classroom) location,
             string day,
@@ -251,7 +241,7 @@ bool BacktrackSchedule(
 {
     if (courseGroupes.Count == 0 || classes.Count == 0) return true;
 
-    courseGroupes = courseGroupes.OrderByDescending(c => c.GetCapacity()).ToList();
+    courseGroupes = courseGroupes.OrderByDescending(c => c.GetEquipmentCount()).ThenByDescending(c => c.GetCapacity()).ToList();
     classes = classes.OrderByDescending(c => c.Item3).ToList();
 
     var biggestCourseGroup = courseGroupes[0];
@@ -260,15 +250,18 @@ bool BacktrackSchedule(
 
     foreach (var currentClass in classes)
     {
-        // TODO : Required Equipement in the classroom
+        if (biggestCourseGroup.Equipements is not null && biggestCourseGroup.Equipements.Count > 0)
+        {
+            if (currentClass.equipments is null) continue;
+            if (!biggestCourseGroup.Equipements.All(e => currentClass.equipments.Contains(e))) continue;
+        }
+
+
         // TODO : Required Equipement is Flying Equipment & is available
 
         var keyAndGroups = FindTimeSlotForCourseGroup(
-            currentClass.classroom,
-            currentClass.site,
-            currentClass.capacity,
-            biggestCourse,
-            biggestCourseGroup.Groupes, schedule);
+            currentClass,
+            biggestCourseGroup, schedule);
 
         if (keyAndGroups is not null)
         {
@@ -331,11 +324,8 @@ List<Groupe> BacktrackClassroomsCoursGroups(int capacity, List<Groupe> groupes)
 }
 
 Tuple<((string site, string classroom) location, string day, (int startHour, int endHour) timeSlot), List<string>>? FindTimeSlotForCourseGroup(
-    string classroom,
-    string site,
-    int capacity,
-    string course,
-    List<Groupe> groups,
+    (string classroom, string site, int capacity, List<string>? equipments) currentClass,
+    CourseGroupes courseGroup,
     Dictionary<
         ((string site, string classroom) location,
             string day,
@@ -343,13 +333,17 @@ Tuple<((string site, string classroom) location, string day, (int startHour, int
         (string course, List<string> groups)> schedule
 )
 {
+    var groups = courseGroup.Groupes;
+    var course = courseGroup.Course;
+    var requiredEquipment = courseGroup.Equipements;
+
     foreach (var currentDay in daysOfWeek)
     {
         foreach (var currentHour in hours)
         {
             if (schedule.Any(s => s.Key.day == currentDay && s.Key.timeSlot == currentHour && s.Value.course == course)) continue;
 
-            var key = ((site, classroom), currentDay, currentHour);
+            var key = ((currentClass.site, currentClass.classroom), currentDay, currentHour);
 
             // Check if the classroom is already in the schedule for this day and hour
             if (schedule.ContainsKey(key)) continue;
@@ -366,26 +360,34 @@ Tuple<((string site, string classroom) location, string day, (int startHour, int
 
             List<Groupe> groupsToPlace = new();
 
-
             if (groupsAvailable.Count == 1)
             {
-                var dispo = IsSiteFullForTimeSlot(groupsAvailable[0].PreferedSite, classes, schedule);
-                var pref = groupsAvailable[0].PreferedSite == site;
-                if ((!IsSiteFullForTimeSlot(groupsAvailable[0].PreferedSite, classes, schedule) && groupsAvailable[0].PreferedSite == site)
-                    || (IsSiteFullForTimeSlot(groupsAvailable[0].PreferedSite, classes, schedule) && groupsAvailable[0].PreferedSite != site))
+                var isPeferedSiteAvailable = !IsSiteFullForTimeSlot(groupsAvailable[0].PreferedSite, classes, schedule);
+                var isPreferedSite = groupsAvailable[0].PreferedSite == currentClass.site;
+
+                // est-ce que au moins une de mes classes du site préféré possède les équipements requis
+                var havePreferedSiteRequiredEquipments = classes.Any(c =>
+                    c.site == groupsAvailable[0].PreferedSite &&
+                    requiredEquipment is not null &&
+                    c.equipments is not null &&
+                    requiredEquipment.All(e => c.equipments.Contains(e)));
+
+                if ((isPeferedSiteAvailable && isPreferedSite) ||
+                    (!isPeferedSiteAvailable && !isPreferedSite) ||
+                    (isPeferedSiteAvailable && !isPreferedSite && !havePreferedSiteRequiredEquipments))
                 {
                     groupsToPlace = groupsAvailable;
                 }
             }
             else if (groupsAvailable.Count != 0)
             {
-                var groupsAvailablePreferingThisSite = groupsAvailable.Where(g => g.PreferedSite == site).ToList();
+                var groupsAvailablePreferingThisSite = groupsAvailable.Where(g => g.PreferedSite == currentClass.site).ToList();
 
-                groupsToPlace = BacktrackClassroomsCoursGroups(capacity, groupsAvailablePreferingThisSite);
+                groupsToPlace = BacktrackClassroomsCoursGroups(currentClass.capacity, groupsAvailablePreferingThisSite);
 
-                if (groupsToPlace.Sum(g => g.Capacity) < capacity)
+                if (groupsToPlace.Sum(g => g.Capacity) < currentClass.capacity)
                 {
-                    var remainingCapacity = capacity - groupsToPlace.Sum(g => g.Capacity);
+                    var remainingCapacity = currentClass.capacity - groupsToPlace.Sum(g => g.Capacity);
                     var remainingGroups = groupsAvailable.Except(groupsToPlace).ToList();
                     var groupsAvailableNotPreferingThisSite = BacktrackClassroomsCoursGroups(remainingCapacity, remainingGroups);
                     groupsToPlace.AddRange(groupsAvailableNotPreferingThisSite);
@@ -401,7 +403,7 @@ Tuple<((string site, string classroom) location, string day, (int startHour, int
 
 bool IsSiteFullForTimeSlot(
     string site,
-    List<(string classroom, string site, int capacity)> classes,
+    List<(string classroom, string site, int capacity, List<string>? equipments)> classes,
     Dictionary<
         ((string site, string classroom) location,
         string day,
@@ -423,47 +425,20 @@ void DisplaySchedule(Dictionary<((string site, string classroom) location, strin
     // sort day, time, site, classroom
     schedule = schedule.OrderBy(s => s.Key.day).ThenBy(s => s.Key.timeSlot.startHour).ThenBy(s => s.Key.location.site).ThenBy(s => s.Key.location.classroom).ToDictionary(s => s.Key, s => s.Value);
 
-    // Define course colors
-    Dictionary<string, ConsoleColor> courseColors = new()
-    {
-        { "Math", ConsoleColor.Magenta },
-        { "Chemistry", ConsoleColor.DarkMagenta },
-        { "Physics", ConsoleColor.Cyan },
-        { "Biology", ConsoleColor.DarkCyan },
-        { "English", ConsoleColor.Green },
-        { "Geography", ConsoleColor.DarkGreen },
-        { "French", ConsoleColor.Red },
-        { "History", ConsoleColor.DarkYellow },
-        { "Algebra", ConsoleColor.Blue },
-        { "Philosophy", ConsoleColor.DarkBlue },
-        { "Economy", ConsoleColor.DarkRed },
-        { "Sport", ConsoleColor.DarkGray },
-        { "Music", ConsoleColor.Gray },
-        { "Art", ConsoleColor.White },
-        { "Computer Science", ConsoleColor.DarkGray },
-        { "Geometry", ConsoleColor.DarkGreen }
-    };
-
     foreach (var item in schedule)
     {
-        // // Set site color
-        // if (item.Key.Item1.location.site == "A")
-        // {
-        //     Console.ForegroundColor = ConsoleColor.Red;
-        // }
-        // else if (item.Key.Item1.location.site == "B")
-        // {
-        //     Console.ForegroundColor = ConsoleColor.Blue;
-        // }
-        // else
-        // {
-        //     Console.ForegroundColor = ConsoleColor.White;
-        // }
-
-        // Set course color
-        if (courseColors.TryGetValue(item.Value.course, out var courseColor))
+        // Set site color
+        if (item.Key.location.site == "A")
         {
-            Console.ForegroundColor = courseColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+        }
+        else if (item.Key.location.site == "B")
+        {
+            Console.ForegroundColor = ConsoleColor.Blue;
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         Console.WriteLine($"Site {item.Key.location.site}, classroom {item.Key.location.classroom} : {item.Key.day} {item.Key.timeSlot.startHour}-{item.Key.timeSlot.endHour} : {item.Value.course} ({string.Join(",", item.Value.groups)})");
@@ -494,11 +469,16 @@ class CourseGroupes
 {
     public string Course { get; set; } = string.Empty;
     public List<Groupe> Groupes { get; set; } = new List<Groupe>();
-    public List<string> Equipements { get; set; } = new List<string>();
+    public List<string>? Equipements { get; set; } = new List<string>();
 
     public int GetCapacity()
     {
         return Groupes.Sum(g => g.Capacity);
+    }
+
+    public int GetEquipmentCount()
+    {
+        return Equipements?.Count ?? 0;
     }
 
     public void RemoveGroupes(List<Groupe> groupes)
