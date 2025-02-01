@@ -212,7 +212,6 @@ List<CourseGroupes> courseGroupes = new()
 // --------------------------------------------
 // --------------------------------------------
 
-// TODO : Groupe Site preference // cours sur le site de préférence si le groupe est seul dans le courseGroup ou si tous les cours du courseGroup ont le même site de préférence !!!
 // TODO : Add Weekly hours for each course // max 2 timeplot in a row // max 4h per day // not twice on the same day not twice in a row
 
 // site + classroom , day , hour , course, groupes
@@ -267,57 +266,6 @@ bool BacktrackSchedule(
         // TODO : Required Equipement in the classroom
         // TODO : Required Equipement is Flying Equipment & is available
 
-        // if (currentClass.capacity >= biggestCourseGroup.GetCapacity())
-        // {
-        //     var groupsToPlace = biggestCourseGroup.Groupes.Select(g => g.Name).ToList();
-
-        //     var key = FindTimeSlotForCourseGroup(currentClass.classroom, currentClass.site, currentClass.capacity, biggestCourse, groupsToPlace, schedule);
-
-        //     if (key is not null)
-        //     {
-        //         schedule.Add(key, (biggestCourse, groupsToPlace));
-
-        //         courseGroupes.RemoveAt(0);
-
-        //         var success = BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule, 0);
-
-        //         if (success) return true;
-
-        //         schedule.Remove(key);
-
-        //         courseGroupes.Insert(0, biggestCourseGroup);
-        //     }
-        // }
-        // else
-        // {
-        //     if (biggestCourseGroup.Groupes.Count == 1) continue;
-
-        //     var groupsToPlace = BacktrackClassroomsCoursGroups(currentClass.capacity, biggestCourseGroup.Groupes);
-
-        //     if (groupsToPlace.Count == 0) continue;
-
-        //     biggestCourseGroup.RemoveGroupes(groupsToPlace);
-
-        //     var groupsToPlaceNames = groupsToPlace.Select(g => g.Name).ToList();
-
-        //     var key = FindTimeSlotForCourseGroup(currentClass.classroom, currentClass.site, currentClass.capacity, biggestCourse, groupsToPlaceNames, schedule);
-
-        //     if (key is not null)
-        //     {
-        //         schedule.Add(key, (biggestCourse, groupsToPlaceNames));
-
-        //         var success = BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule, 0);
-
-        //         if (success) return true;
-
-        //         schedule.Remove(key);
-
-        //     }
-
-        //     biggestCourseGroup.Groupes.AddRange(groupsToPlace);
-        // }
-
-
         var keyAndGroups = FindTimeSlotForCourseGroup(
             currentClass.classroom,
             currentClass.site,
@@ -333,17 +281,12 @@ bool BacktrackSchedule(
             {
                 schedule.Add(key, (biggestCourse, availableGroups));
 
-                // Retirer temporairement les groupes placés
                 biggestCourseGroup.Groupes.RemoveAll(g => availableGroups.Contains(g.Name));
-
-                // Si le CourseGroup est vide, le retirer de la liste
                 if (biggestCourseGroup.Groupes.Count == 0) courseGroupes.RemoveAt(0);
 
                 var success = BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule, 0);
-
                 if (success) return true;
 
-                // En cas d'échec, restaurer les groupes et annuler l'affectation
                 schedule.Remove(key);
                 biggestCourseGroup.Groupes.AddRange(availableGroups.Select(name => new Groupe { Name = name }));
                 courseGroupes.Insert(0, biggestCourseGroup);
@@ -365,25 +308,21 @@ List<Groupe> BacktrackClassroomsCoursGroups(int capacity, List<Groupe> groupes)
 
     void Backtrack(int index, int currentSum)
     {
-        // Vérification de la meilleure occupation atteinte
         if (currentSum <= capacity && currentSum > bestCombinaisonCapacity)
         {
             bestCombinaisonCapacity = currentSum;
             bestCombinaison = [.. currentCombinaison];
         }
 
-        // Parcours des groupes restants
+
         for (int i = index; i < groupes.Count; i++)
         {
             if (currentSum + groupes[i].Capacity <= capacity)
             {
-                // Ajouter le groupe dans la combinaison actuelle
                 currentCombinaison.Add(groupes[i]);
 
-                // Appel récursif pour explorer les autres combinaisons
                 Backtrack(i + 1, currentSum + groupes[i].Capacity);
 
-                // Retirer le groupe après l'exploration (backtracking)
                 currentCombinaison.RemoveAt(currentCombinaison.Count - 1);
             }
         }
@@ -413,10 +352,12 @@ Tuple<((string site, string classroom) location, string day, (int startHour, int
         {
             var key = ((site, classroom), currentDay, currentHour);
 
+            // Check if the classroom is already in the schedule for this day and hour
             if (schedule.ContainsKey(key)) continue;
 
             // TODO : Inter site travel time (1h)
 
+            // Get groups that are not already in the schedule for this day and hour
             var groupsAvailable = groups.Where(g =>
                 !schedule.Any(s =>
                     s.Key.day == currentDay &&
@@ -424,11 +365,34 @@ Tuple<((string site, string classroom) location, string day, (int startHour, int
                     s.Value.groups.Contains(g.Name)
             )).ToList();
 
-            if (groupsAvailable.Count == 0) continue;
+            List<Groupe> groupsToPlace = new();
 
-            var groupsToPlace = BacktrackClassroomsCoursGroups(capacity, groupsAvailable.ToList());
+            if (groupsAvailable.Count == 1)
+            {
+                if (groupsAvailable[0].PreferedSite == site)
+                {
+                    groupsToPlace.Add(groupsAvailable[0]);
+                }
+            }
+            else if (groupsAvailable.Count != 0)
+            {
+                // TODO : If all groups have the same prefered site => must be in the prefered site
 
-            if (groupsAvailable.Count > 0) return Tuple.Create(key, groupsToPlace.Select(g => g.Name).ToList());
+                // Get groups that prefer this site
+                var groupsAvailablePreferingThisSite = groupsAvailable.Where(g => g.PreferedSite == site).ToList();
+
+                groupsToPlace = BacktrackClassroomsCoursGroups(capacity, groupsAvailablePreferingThisSite);
+
+                if (groupsToPlace.Sum(g => g.Capacity) < capacity)
+                {
+                    var remainingCapacity = capacity - groupsToPlace.Sum(g => g.Capacity);
+                    var groupsAvailableNotPreferingThisSite = BacktrackClassroomsCoursGroups(remainingCapacity, groupsAvailable.Except(groupsToPlace).ToList());
+                    groupsToPlace.AddRange(groupsAvailableNotPreferingThisSite);
+                }
+            }
+            else continue;
+
+            if (groupsToPlace.Count > 0) return Tuple.Create(key, groupsToPlace.Select(g => g.Name).ToList());
         }
     }
     return null;
