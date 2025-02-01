@@ -417,7 +417,6 @@ Tuple<((string site, string classroom) location, string day, (int startHour, int
 
             // TODO : Inter site travel time (1h)
 
-            // TODO : check if the group is not already placed at the same time and remove groups already placed // TESTING
             var groupsAvailable = groups.Where(g =>
                 !schedule.Any(s =>
                     s.Key.day == currentDay &&

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CalendarScheduleGenerator")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8c2d97edded1df2d6684eac4dd89bcfabc0c33f2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a6284000b8d60bdc14854487b86b2c7db3855c1a")]
 [assembly: System.Reflection.AssemblyProductAttribute("CalendarScheduleGenerator")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CalendarScheduleGenerator")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
