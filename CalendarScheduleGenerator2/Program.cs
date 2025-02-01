@@ -2,14 +2,13 @@
 using System.Runtime.CompilerServices;
 
 List<(string classroom, string site, int capacity)> classes = new() {
-    new("1A", "A", 40),
+    // new("1A", "A", 25),
+    // new("2A", "A", 40),
     new("1B", "B", 40),
-    new("2A", "A", 30),
-    new("2B", "B", 30),
-    new("3A", "A", 50),
+    new("2B", "B", 90),
     new("3B", "B", 40),
-    new("4A", "A", 40),
-    new("4B", "B", 40)
+    new("4B", "B", 40),
+    // new("5B", "B", 40),
 };
 
 // list daysOfWeek
@@ -29,18 +28,9 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
             new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
-        }
-    },
-        new CourseGroupes
-    {
-        Course = "Math",
-        Groupes = new List<Groupe>
-        {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" },
+            new Groupe { Name = "3B", Capacity = 20, PreferedSite = "B" },
+            new Groupe { Name = "4B", Capacity = 25, PreferedSite = "B" },
         }
     },
     new CourseGroupes
@@ -228,10 +218,17 @@ Dictionary<
             (int startHour, int endHour) timeSlot),
         (string course, List<string> groups)> schedule = new();
 
+    var nbCombinaisons = classes.Count * daysOfWeek.Count * hours.Count;
+
     if (classes.Count * daysOfWeek.Count * hours.Count >= courseGroupes.Sum(c => c.Groupes.Count))
     {
         if (BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule, 0)) return schedule;
     }
+    else if (courseGroupes.Sum(c => c.GetCapacity()) <= classes.Sum(c => c.capacity) * daysOfWeek.Count * hours.Count)
+    {
+        if (BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule, 0)) return schedule;
+    }
+    else throw new Exception("No schedule possible");
 
     throw new Exception("No schedule found");
 }
@@ -350,6 +347,8 @@ Tuple<((string site, string classroom) location, string day, (int startHour, int
     {
         foreach (var currentHour in hours)
         {
+            if (schedule.Any(s => s.Key.day == currentDay && s.Key.timeSlot == currentHour && s.Value.course == course)) continue;
+
             var key = ((site, classroom), currentDay, currentHour);
 
             // Check if the classroom is already in the schedule for this day and hour
@@ -367,18 +366,19 @@ Tuple<((string site, string classroom) location, string day, (int startHour, int
 
             List<Groupe> groupsToPlace = new();
 
+
             if (groupsAvailable.Count == 1)
             {
-                if (groupsAvailable[0].PreferedSite == site)
+                var dispo = IsSiteFullForTimeSlot(groupsAvailable[0].PreferedSite, classes, schedule);
+                var pref = groupsAvailable[0].PreferedSite == site;
+                if ((!IsSiteFullForTimeSlot(groupsAvailable[0].PreferedSite, classes, schedule) && groupsAvailable[0].PreferedSite == site)
+                    || (IsSiteFullForTimeSlot(groupsAvailable[0].PreferedSite, classes, schedule) && groupsAvailable[0].PreferedSite != site))
                 {
-                    groupsToPlace.Add(groupsAvailable[0]);
+                    groupsToPlace = groupsAvailable;
                 }
             }
             else if (groupsAvailable.Count != 0)
             {
-                // TODO : If all groups have the same prefered site => must be in the prefered site
-
-                // Get groups that prefer this site
                 var groupsAvailablePreferingThisSite = groupsAvailable.Where(g => g.PreferedSite == site).ToList();
 
                 groupsToPlace = BacktrackClassroomsCoursGroups(capacity, groupsAvailablePreferingThisSite);
@@ -386,7 +386,8 @@ Tuple<((string site, string classroom) location, string day, (int startHour, int
                 if (groupsToPlace.Sum(g => g.Capacity) < capacity)
                 {
                     var remainingCapacity = capacity - groupsToPlace.Sum(g => g.Capacity);
-                    var groupsAvailableNotPreferingThisSite = BacktrackClassroomsCoursGroups(remainingCapacity, groupsAvailable.Except(groupsToPlace).ToList());
+                    var remainingGroups = groupsAvailable.Except(groupsToPlace).ToList();
+                    var groupsAvailableNotPreferingThisSite = BacktrackClassroomsCoursGroups(remainingCapacity, remainingGroups);
                     groupsToPlace.AddRange(groupsAvailableNotPreferingThisSite);
                 }
             }
@@ -398,6 +399,24 @@ Tuple<((string site, string classroom) location, string day, (int startHour, int
     return null;
 }
 
+bool IsSiteFullForTimeSlot(
+    string site,
+    List<(string classroom, string site, int capacity)> classes,
+    Dictionary<
+        ((string site, string classroom) location,
+        string day,
+        (int startHour, int endHour) timeSlot),
+        (string course, List<string> groups)> schedule
+)
+{
+    int maxTimeSlotsForSite = classes
+        .Count(c => c.site == site) * daysOfWeek.Count * hours.Count;
+
+    int usedTimeSlotsForSite = schedule
+        .Count(entry => entry.Key.location.site == site);
+
+    return usedTimeSlotsForSite >= maxTimeSlotsForSite;
+}
 
 void DisplaySchedule(Dictionary<((string site, string classroom) location, string day, (int startHour, int endHour) timeSlot), (string course, List<string> groups)> schedule)
 {
