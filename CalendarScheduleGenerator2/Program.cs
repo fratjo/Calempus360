@@ -2,12 +2,15 @@
 using System.Runtime.CompilerServices;
 
 List<(string classroom, string site, int capacity, List<string>? equipments)> classes = new() {
-    new("1A", "A", 40, null),
-    new("2A", "A", 40, new(){"Science Kit"}),
-    new("3A", "A", 40, null),
-    new("1B", "B", 60, new(){"TV"}),
+    new("1A", "A", 40, new(){"TV"}),
+    new("2A", "A", 80, new(){"Science Kit"}),
     new("2B", "B", 40, new(){"Science Kit"}),
     new("3B", "B", 90, new(){"Microphone"}),
+};
+
+List<(string site, string equipment, string code)> flyingEquipments = new() {
+    new("A", "TV", Guid.NewGuid().ToString()),
+    new("A", "Microphone", Guid.NewGuid().ToString())
 };
 
 // list daysOfWeek
@@ -56,6 +59,7 @@ List<CourseGroupes> courseGroupes = new()
     new CourseGroupes
     {
         Course = "French",
+        Equipements = new(){"TV"},
         Groupes = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
@@ -67,6 +71,7 @@ List<CourseGroupes> courseGroupes = new()
     new CourseGroupes
     {
         Course = "History",
+        Equipements = new(){"Microphone"},
         Groupes = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
@@ -89,6 +94,7 @@ List<CourseGroupes> courseGroupes = new()
     new CourseGroupes
     {
         Course = "Biology",
+        Equipements = new(){"Science Kit"},
         Groupes = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
@@ -100,6 +106,7 @@ List<CourseGroupes> courseGroupes = new()
     new CourseGroupes
     {
         Course = "Chemistry",
+        Equipements = new(){"Science Kit"},
         Groupes = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
@@ -253,11 +260,10 @@ bool BacktrackSchedule(
         if (biggestCourseGroup.Equipements is not null && biggestCourseGroup.Equipements.Count > 0)
         {
             if (currentClass.equipments is null) continue;
-            if (!biggestCourseGroup.Equipements.All(e => currentClass.equipments.Contains(e))) continue;
+            if (!biggestCourseGroup.Equipements.All(e => currentClass.equipments.Contains(e)) &&
+                !biggestCourseGroup.Equipements.All(e =>
+                        flyingEquipments.Where(f => f.site == currentClass.site).Any(f => f.equipment == e))) continue;
         }
-
-
-        // TODO : Required Equipement is Flying Equipment & is available
 
         var keyAndGroups = FindTimeSlotForCourseGroup(
             currentClass,
@@ -365,16 +371,29 @@ Tuple<((string site, string classroom) location, string day, (int startHour, int
                 var isPeferedSiteAvailable = !IsSiteFullForTimeSlot(groupsAvailable[0].PreferedSite, classes, schedule);
                 var isPreferedSite = groupsAvailable[0].PreferedSite == currentClass.site;
 
-                // est-ce que au moins une de mes classes du site préféré possède les équipements requis
-                var havePreferedSiteRequiredEquipments = classes.Any(c =>
-                    c.site == groupsAvailable[0].PreferedSite &&
-                    requiredEquipment is not null &&
-                    c.equipments is not null &&
-                    requiredEquipment.All(e => c.equipments.Contains(e)));
+                var havePreferedSiteRequiredEquipments = false;
+                var haveCurrentSiteRequiredFlyingEquipments = true;
+
+                // TODO : Save flying equipment in schedule
+                if (requiredEquipment is not null && requiredEquipment.Count != 0)
+                {
+                    // est-ce que au moins une de mes classes du site préféré possède les équipements requis
+                    havePreferedSiteRequiredEquipments = classes.Any(c =>
+                        c.site == groupsAvailable[0].PreferedSite &&
+                        requiredEquipment is not null &&
+                        requiredEquipment.Count != 0 &&
+                        c.equipments is not null &&
+                        requiredEquipment.All(e => c.equipments.Contains(e)));
+
+                    haveCurrentSiteRequiredFlyingEquipments = requiredEquipment is not null && requiredEquipment.Count != 0 ?
+                        requiredEquipment.All(e =>
+                            flyingEquipments.Where(f => f.site == currentClass.site).Any(f => f.equipment == e)) : true;
+                }
 
                 if ((isPeferedSiteAvailable && isPreferedSite) ||
                     (!isPeferedSiteAvailable && !isPreferedSite) ||
-                    (isPeferedSiteAvailable && !isPreferedSite && !havePreferedSiteRequiredEquipments))
+                    (isPeferedSiteAvailable && !isPreferedSite && !havePreferedSiteRequiredEquipments) ||
+                    (isPeferedSiteAvailable && !isPreferedSite && !havePreferedSiteRequiredEquipments && !haveCurrentSiteRequiredFlyingEquipments))
                 {
                     groupsToPlace = groupsAvailable;
                 }
@@ -469,7 +488,7 @@ class CourseGroupes
 {
     public string Course { get; set; } = string.Empty;
     public List<Groupe> Groupes { get; set; } = new List<Groupe>();
-    public List<string>? Equipements { get; set; } = new List<string>();
+    public List<string>? Equipements { get; set; } = null;
 
     public int GetCapacity()
     {
