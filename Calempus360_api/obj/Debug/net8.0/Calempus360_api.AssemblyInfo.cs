@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Calempus360_api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+891f197db1b9dcd6c3b47cece591d6fed73d2269")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cf1b25c2b46b61e6653b2dddd3bc227d54c82d45")]
 [assembly: System.Reflection.AssemblyProductAttribute("Calempus360_api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Calempus360_api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
