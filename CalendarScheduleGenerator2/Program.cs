@@ -2,8 +2,8 @@
 using System.Runtime.CompilerServices;
 
 List<(string classroom, string site, int capacity, List<string>? equipments)> classes = new() {
-    new("1A", "A", 40, new(){"TV"}),
-    new("2A", "A", 80, new(){"Science Kit"}),
+    new("1A", "A", 40, null),
+    new("2A", "A", 40, new(){"Science Kit"}),
     new("2B", "B", 40, new(){"Science Kit"}),
     new("3B", "B", 90, new(){"Microphone"}),
 };
@@ -71,7 +71,7 @@ List<CourseGroupes> courseGroupes = new()
     new CourseGroupes
     {
         Course = "History",
-        Equipements = new(){"Microphone"},
+        Equipements = new(){"TV", "Microphone"},
         Groupes = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
@@ -204,15 +204,17 @@ List<CourseGroupes> courseGroupes = new()
 
 Dictionary<
     ((string site, string classroom) location,
-        string day,
-        (int startHour, int endHour) timeSlot),
-    (string course, List<string> groups)> GenerateSchedule()
+    string day,
+    (int startHour, int endHour) timeSlot),
+    (string course, List<string> groups, List<string> flyingEquipments)> GenerateSchedule()
 {
     Dictionary<
         ((string site, string classroom) location,
-            string day,
-            (int startHour, int endHour) timeSlot),
-        (string course, List<string> groups)> schedule = new();
+        string day,
+        (int startHour, int endHour) timeSlot),
+        (string course, List<string> groups, List<string> flyingEquipments)> schedule = new();
+
+    // TODO : Add more pre conditions to avoid backtracking if possible, saving ressources
 
     if ((classes.Count * daysOfWeek.Count * hours.Count - classes.Count * daysOfWeek.Count * hours.Count * 0.1) >= courseGroupes.Sum(c => c.Groupes.Count)) // If nb slot is enough to place all groups
     {
@@ -243,7 +245,7 @@ bool BacktrackSchedule(
             ((string site, string classroom) location,
             string day,
             (int startHour, int endHour) timeSlot),
-        (string course, List<string> groups)> schedule,
+            (string course, List<string> groups, List<string> flyingEquipments)> schedule,
     int index)
 {
     if (courseGroupes.Count == 0 || classes.Count == 0) return true;
@@ -271,11 +273,11 @@ bool BacktrackSchedule(
 
         if (keyAndGroups is not null)
         {
-            var (key, availableGroups) = keyAndGroups;
+            var (key, availableGroups, flyingEquipments) = keyAndGroups;
 
             if (availableGroups.Count > 0)
             {
-                schedule.Add(key, (biggestCourse, availableGroups));
+                schedule.Add(key, (biggestCourse, availableGroups, flyingEquipments));
 
                 biggestCourseGroup.Groupes.RemoveAll(g => availableGroups.Contains(g.Name));
                 if (biggestCourseGroup.Groupes.Count == 0) courseGroupes.RemoveAt(0);
@@ -329,14 +331,14 @@ List<Groupe> BacktrackClassroomsCoursGroups(int capacity, List<Groupe> groupes)
     return bestCombinaison;
 }
 
-Tuple<((string site, string classroom) location, string day, (int startHour, int endHour) timeSlot), List<string>>? FindTimeSlotForCourseGroup(
+Tuple<((string site, string classroom) location, string day, (int startHour, int endHour) timeSlot), List<string>, List<string>>? FindTimeSlotForCourseGroup(
     (string classroom, string site, int capacity, List<string>? equipments) currentClass,
     CourseGroupes courseGroup,
     Dictionary<
         ((string site, string classroom) location,
             string day,
             (int startHour, int endHour) timeSlot),
-        (string course, List<string> groups)> schedule
+        (string course, List<string> groups, List<string> flyingEquipments)> schedule
 )
 {
     var groups = courseGroup.Groupes;
@@ -356,6 +358,37 @@ Tuple<((string site, string classroom) location, string day, (int startHour, int
 
             // TODO : Inter site travel time (1h)
 
+            // TODO : Check if flying equipment is available for this time slot
+            if (requiredEquipment is not null && requiredEquipment.Any())
+            {
+                var fE = flyingEquipments.Where(f => f.site == currentClass.site).Select(f => f.equipment).ToList();
+                if (currentClass.equipments is not null)
+                {
+                    var notClassEq = requiredEquipment.Where(e => !currentClass.equipments.Contains(e)).ToList();
+                    if (notClassEq.Any())
+                    {
+                        var hasRequiredEquipment = schedule.Any(s =>
+                            s.Key.day == currentDay &&
+                            s.Key.timeSlot == currentHour &&
+                            s.Value.flyingEquipments.Any(e => notClassEq.Contains(e))
+                        );
+
+                        if (hasRequiredEquipment) continue;
+                    }
+                }
+                else
+                {
+                    var hasRequiredEquipment = schedule.Any(s =>
+                        s.Key.day == currentDay &&
+                        s.Key.timeSlot == currentHour &&
+                        s.Value.flyingEquipments.Any(e => requiredEquipment.Contains(e))
+                    );
+
+                    if (hasRequiredEquipment) continue;
+                }
+            }
+
+
             // Get groups that are not already in the schedule for this day and hour
             var groupsAvailable = groups.Where(g =>
                 !schedule.Any(s =>
@@ -374,7 +407,6 @@ Tuple<((string site, string classroom) location, string day, (int startHour, int
                 var havePreferedSiteRequiredEquipments = false;
                 var haveCurrentSiteRequiredFlyingEquipments = true;
 
-                // TODO : Save flying equipment in schedule
                 if (requiredEquipment is not null && requiredEquipment.Count != 0)
                 {
                     // est-ce que au moins une de mes classes du site préféré possède les équipements requis
@@ -398,7 +430,7 @@ Tuple<((string site, string classroom) location, string day, (int startHour, int
                     groupsToPlace = groupsAvailable;
                 }
             }
-            else if (groupsAvailable.Count != 0)
+            else if (groupsAvailable.Any())
             {
                 var groupsAvailablePreferingThisSite = groupsAvailable.Where(g => g.PreferedSite == currentClass.site).ToList();
 
@@ -414,7 +446,32 @@ Tuple<((string site, string classroom) location, string day, (int startHour, int
             }
             else continue;
 
-            if (groupsToPlace.Count > 0) return Tuple.Create(key, groupsToPlace.Select(g => g.Name).ToList());
+            if (groupsToPlace.Count > 0)
+            {
+                var flyingEquipmentsRequired = new List<string>();
+
+                if (requiredEquipment is not null && requiredEquipment.Count != 0)
+                {
+                    if (currentClass.equipments is not null)
+                    {
+                        // on prend les équipements requis que la classe ne possède pas
+                        flyingEquipmentsRequired = requiredEquipment.Where(e =>
+                            !currentClass.equipments.Contains(e) &&
+                            flyingEquipments.Where(f => f.site == currentClass.site).Any(f => f.equipment == e)
+                        ).ToList();
+                    }
+                    else
+                    {
+                        // on prend tous les équipements requis
+                        flyingEquipmentsRequired = requiredEquipment.Where(e =>
+                            flyingEquipments.Where(f => f.site == currentClass.site).Any(f => f.equipment == e)
+                        ).ToList();
+                    }
+
+                }
+
+                return Tuple.Create(key, groupsToPlace.Select(g => g.Name).ToList(), flyingEquipmentsRequired);
+            }
         }
     }
     return null;
@@ -427,7 +484,7 @@ bool IsSiteFullForTimeSlot(
         ((string site, string classroom) location,
         string day,
         (int startHour, int endHour) timeSlot),
-        (string course, List<string> groups)> schedule
+        (string course, List<string> groups, List<string> flyingEquipments)> schedule
 )
 {
     int maxTimeSlotsForSite = classes
@@ -439,7 +496,7 @@ bool IsSiteFullForTimeSlot(
     return usedTimeSlotsForSite >= maxTimeSlotsForSite;
 }
 
-void DisplaySchedule(Dictionary<((string site, string classroom) location, string day, (int startHour, int endHour) timeSlot), (string course, List<string> groups)> schedule)
+void DisplaySchedule(Dictionary<((string site, string classroom) location, string day, (int startHour, int endHour) timeSlot), (string course, List<string> groups, List<string> flyingEquipments)> schedule)
 {
     // sort day, time, site, classroom
     schedule = schedule.OrderBy(s => s.Key.day).ThenBy(s => s.Key.timeSlot.startHour).ThenBy(s => s.Key.location.site).ThenBy(s => s.Key.location.classroom).ToDictionary(s => s.Key, s => s.Value);
@@ -460,7 +517,7 @@ void DisplaySchedule(Dictionary<((string site, string classroom) location, strin
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        Console.WriteLine($"Site {item.Key.location.site}, classroom {item.Key.location.classroom} : {item.Key.day} {item.Key.timeSlot.startHour}-{item.Key.timeSlot.endHour} : {item.Value.course} ({string.Join(",", item.Value.groups)})");
+        Console.WriteLine($"Site {item.Key.location.site}, classroom {item.Key.location.classroom} : {item.Key.day} {item.Key.timeSlot.startHour}-{item.Key.timeSlot.endHour} : {item.Value.course} ({string.Join(",", item.Value.groups)}) - ({string.Join(",", item.Value.flyingEquipments)})");
 
         // Reset color to default
         Console.ResetColor();
