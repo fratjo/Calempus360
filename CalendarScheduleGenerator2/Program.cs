@@ -4,7 +4,7 @@ List<Class> classes = new() {
     new("1A", "A", 40, null),
     new("2A", "A", 40, new(){"Science Kit"}),
     new("2B", "B", 40, new(){"Science Kit"}),
-    new("3B", "B", 90, new(){"Microphone"}),
+    new("3B", "B", 150, new(){"Microphone"}),
 };
 
 List<(string site, string equipment, string code)> flyingEquipments = new() {
@@ -26,7 +26,8 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
             new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            new Groupe { Name = "2B", Capacity = 30, PreferedSite = "B" },
+            new Groupe { Name = "3B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroupes
@@ -187,6 +188,60 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
+    },
+    new CourseGroupes
+    {
+        Course = "Geometry",
+        Groupes = new List<Groupe>
+        {
+            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroupes
+    {
+        Course = "Trigonometry",
+        Groupes = new List<Groupe>
+        {
+            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroupes
+    {
+        Course = "Calculus",
+        Groupes = new List<Groupe>
+        {
+            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroupes
+    {
+        Course = "Statistics",
+        Groupes = new List<Groupe>
+        {
+            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroupes
+    {
+        Course = "Probability",
+        Groupes = new List<Groupe>
+        {
+            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" }
+        }
     }
 };
 
@@ -209,3 +264,5 @@ var ScheduleGenerator = new ScheduleGenerator(
 var schedule = ScheduleGenerator.GenerateSchedule();
 
 ScheduleGenerator.DisplaySchedule(schedule);
+
+// flyingEquipments.ForEach(e => Console.WriteLine($"{e.site} {e.equipment} {e.code}"));

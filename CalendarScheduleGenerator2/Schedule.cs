@@ -5,29 +5,29 @@ using System.Threading.Tasks;
 
 namespace CalendarScheduleGenerator2
 {
-    public class Schedule : Dictionary<Key, Entry>
+    public class Schedule : Dictionary<ScheduleKey, ScheduleEntry>
     {
         public void AddEntry(string site, string classroom, string day, int startHour, int endHour,
                         string course, List<string> groups, List<string> flyingEquipments)
         {
-            var key = new Key((site, classroom), day, (startHour, endHour));
-            var entry = new Entry(course, groups, flyingEquipments);
+            var key = new ScheduleKey((site, classroom), day, (startHour, endHour));
+            var entry = new ScheduleEntry(course, groups, flyingEquipments);
             this[key] = entry;
         }
 
         public bool IsScheduled(string site, string classroom, string day, int startHour, int endHour)
         {
-            var key = new Key((site, classroom), day, (startHour, endHour));
+            var key = new ScheduleKey((site, classroom), day, (startHour, endHour));
             return this.ContainsKey(key);
         }
     }
-    public class Key
+    public class ScheduleKey
     {
         public (string Site, string Classroom) Location { get; set; }
         public string Day { get; set; }
         public (int StartHour, int EndHour) TimeSlot { get; set; }
 
-        public Key((string, string) location, string day, (int, int) timeSlot)
+        public ScheduleKey((string, string) location, string day, (int, int) timeSlot)
         {
             Location = location;
             Day = day;
@@ -35,7 +35,7 @@ namespace CalendarScheduleGenerator2
         }
         public override bool Equals(object obj)
         {
-            return obj is Key key &&
+            return obj is ScheduleKey key &&
                 Location.Equals(key.Location) &&
                 Day == key.Day &&
                 TimeSlot.Equals(key.TimeSlot);
@@ -46,12 +46,12 @@ namespace CalendarScheduleGenerator2
         }
     }
 
-    public class Entry
+    public class ScheduleEntry
     {
         public string Course { get; set; }
         public List<string> Groups { get; set; }
         public List<string> FlyingEquipments { get; set; }
-        public Entry(string course, List<string> groups, List<string> flyingEquipments)
+        public ScheduleEntry(string course, List<string> groups, List<string> flyingEquipments)
         {
             Course = course;
             Groups = groups;

@@ -12,6 +12,7 @@ namespace CalendarScheduleGenerator2
         private readonly List<(int startHour, int endHour)> hours;
         private readonly List<CourseGroupes> courseGroupes;
         private readonly List<(string site, string equipment, string code)> flyingEquipments;
+        public Schedule schedule { get; private set; } = new Schedule();
 
         public ScheduleGenerator(
                 List<Class> classes,
@@ -27,27 +28,19 @@ namespace CalendarScheduleGenerator2
             this.flyingEquipments = flyingEquipments;
         }
 
-        public Dictionary<
-            ((string site, string classroom) location,
-            string day,
-            (int startHour, int endHour) timeSlot),
-            (string course, List<string> groups, List<string> flyingEquipments)> GenerateSchedule()
+        public Schedule GenerateSchedule()
         {
-            Dictionary<
-                ((string site, string classroom) location,
-                string day,
-                (int startHour, int endHour) timeSlot),
-                (string course, List<string> groups, List<string> flyingEquipments)> schedule = new();
+            // Schedule schedule = new Schedule();
 
             // TODO : Add more pre conditions to avoid backtracking if possible, saving ressources
 
             if ((classes.Count * daysOfWeek.Count * hours.Count - classes.Count * daysOfWeek.Count * hours.Count * 0.1) >= courseGroupes.Sum(c => c.Groupes.Count)) // If nb slot is enough to place all groups
             {
-                if (BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule, 0)) return schedule;
+                if (BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule)) return schedule;
             }
             else if (courseGroupes.Sum(c => c.GetCapacity()) <= (classes.Sum(c => c.Capacity) * daysOfWeek.Count * hours.Count - classes.Count * daysOfWeek.Count * hours.Count * 0.1)) // If capacity is enough to place all groups
             {
-                if (BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule, 0)) return schedule;
+                if (BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule)) return schedule;
             }
             else throw new Exception("No schedule possible");
 
@@ -61,12 +54,7 @@ namespace CalendarScheduleGenerator2
             List<(int startHour, int endHour)> hours,
             List<CourseGroupes> courseGroupes,
             List<Class> classes,
-            Dictionary<
-                    ((string site, string classroom) location,
-                    string day,
-                    (int startHour, int endHour) timeSlot),
-                    (string course, List<string> groups, List<string> flyingEquipments)> schedule,
-            int index)
+            Schedule schedule)
         {
             if (courseGroupes.Count == 0 || classes.Count == 0) return true;
 
@@ -81,7 +69,7 @@ namespace CalendarScheduleGenerator2
             {
                 if (biggestCourseGroup.Equipements is not null && biggestCourseGroup.Equipements.Count > 0)
                 {
-                    if (currentClass.Equipments is null) continue;
+                    if (currentClass.Equipments is null) continue; // ! possible bug
                     if (!biggestCourseGroup.Equipements.All(e => currentClass.Equipments.Contains(e)) &&
                         !biggestCourseGroup.Equipements.All(e =>
                                 flyingEquipments.Where(f => f.site == currentClass.Site).Any(f => f.equipment == e))) continue;
@@ -93,20 +81,20 @@ namespace CalendarScheduleGenerator2
 
                 if (keyAndGroups is not null)
                 {
-                    var (key, availableGroups, flyingEquipments) = keyAndGroups;
+                    var (key, entry) = keyAndGroups;
 
-                    if (availableGroups.Count > 0)
+                    if (entry.Groups.Count > 0)
                     {
-                        schedule.Add(key, (biggestCourse, availableGroups, flyingEquipments));
+                        schedule.Add(key, entry);
 
-                        biggestCourseGroup.Groupes.RemoveAll(g => availableGroups.Contains(g.Name));
+                        biggestCourseGroup.Groupes.RemoveAll(g => entry.Groups.Contains(g.Name));
                         if (biggestCourseGroup.Groupes.Count == 0) courseGroupes.RemoveAt(0);
 
-                        var success = BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule, 0);
+                        var success = BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule);
                         if (success) return true;
 
                         schedule.Remove(key);
-                        biggestCourseGroup.Groupes.AddRange(availableGroups.Select(name => new Groupe { Name = name }));
+                        biggestCourseGroup.Groupes.AddRange(entry.Groups.Select(name => new Groupe { Name = name }));
                         courseGroupes.Insert(0, biggestCourseGroup);
                     }
                 }
@@ -114,32 +102,28 @@ namespace CalendarScheduleGenerator2
             return false;
         }
 
-        Tuple<((string site, string classroom) location, string day, (int startHour, int endHour) timeSlot), List<string>, List<string>>? FindTimeSlotForCourseGroup(
+        Tuple<ScheduleKey, ScheduleEntry>? FindTimeSlotForCourseGroup(
             Class currentClass,
             CourseGroupes courseGroup,
-            Dictionary<
-                ((string site, string classroom) location,
-                string day,
-                (int startHour, int endHour) timeSlot),
-            (string course, List<string> groups, List<string> flyingEquipments)> schedule
+            Schedule schedule
         )
         {
             var groups = courseGroup.Groupes;
             var course = courseGroup.Course;
             var requiredEquipment = courseGroup.Equipements;
 
-            foreach (var currentDay in daysOfWeek)
+            foreach (var currentDay in daysOfWeek) // ("lundi", 8, 10)
             {
                 foreach (var currentHour in hours)
                 {
-                    if (schedule.Any(s => s.Key.day == currentDay && s.Key.timeSlot == currentHour && s.Value.course == course)) continue;
+                    if (schedule.Any(s => s.Key.Day == currentDay && s.Key.TimeSlot == currentHour && s.Value.Course == course)) continue;
 
-                    var key = ((currentClass.Site, currentClass.Classroom), currentDay, currentHour);
+                    // var key = ((currentClass.Site, currentClass.Classroom), currentDay, currentHour);
+                    var SK = new ScheduleKey((currentClass.Site, currentClass.Classroom), currentDay, currentHour);
 
                     // Check if the classroom is already in the schedule for this day and hour
-                    if (schedule.ContainsKey(key)) continue;
+                    if (schedule.ContainsKey(SK)) continue;
 
-                    // TODO : Inter site travel time (1h)
 
                     // TODO : Check if flying equipment is available for this time slot
                     if (requiredEquipment is not null && requiredEquipment.Any())
@@ -151,9 +135,9 @@ namespace CalendarScheduleGenerator2
                             if (notClassEq.Any())
                             {
                                 var hasRequiredEquipment = schedule.Any(s =>
-                                    s.Key.day == currentDay &&
-                                    s.Key.timeSlot == currentHour &&
-                                    s.Value.flyingEquipments.Any(e => notClassEq.Contains(e))
+                                    s.Key.Day == currentDay &&
+                                    s.Key.TimeSlot == currentHour &&
+                                    s.Value.FlyingEquipments.Any(e => notClassEq.Contains(e))
                                 );
 
                                 if (hasRequiredEquipment) continue;
@@ -162,9 +146,9 @@ namespace CalendarScheduleGenerator2
                         else
                         {
                             var hasRequiredEquipment = schedule.Any(s =>
-                                s.Key.day == currentDay &&
-                                s.Key.timeSlot == currentHour &&
-                                s.Value.flyingEquipments.Any(e => requiredEquipment.Contains(e))
+                                s.Key.Day == currentDay &&
+                                s.Key.TimeSlot == currentHour &&
+                                s.Value.FlyingEquipments.Any(e => requiredEquipment.Contains(e))
                             );
 
                             if (hasRequiredEquipment) continue;
@@ -175,10 +159,12 @@ namespace CalendarScheduleGenerator2
                     // Get groups that are not already in the schedule for this day and hour
                     var groupsAvailable = groups.Where(g =>
                         !schedule.Any(s =>
-                            s.Key.day == currentDay &&
-                            s.Key.timeSlot == currentHour &&
-                            s.Value.groups.Contains(g.Name)
+                            s.Key.Day == currentDay &&
+                            s.Key.TimeSlot == currentHour &&
+                            s.Value.Groups.Contains(g.Name)
                     )).ToList();
+
+                    // TODO : Inter site travel time (1h)
 
                     List<Groupe> groupsToPlace = new();
 
@@ -253,7 +239,8 @@ namespace CalendarScheduleGenerator2
 
                         }
 
-                        return Tuple.Create(key, groupsToPlace.Select(g => g.Name).ToList(), flyingEquipmentsRequired);
+                        var SE = new ScheduleEntry(course, groupsToPlace.Select(g => g.Name).ToList(), flyingEquipmentsRequired);
+                        return Tuple.Create(SK, SE);
                     }
                 }
             }
@@ -294,19 +281,25 @@ namespace CalendarScheduleGenerator2
             return bestCombinaison;
         }
 
-        public void DisplaySchedule(Dictionary<((string site, string classroom) location, string day, (int startHour, int endHour) timeSlot), (string course, List<string> groups, List<string> flyingEquipments)> schedule)
+        public void DisplaySchedule(Schedule schedule)
         {
+            if (schedule is null) return;
             // sort day, time, site, classroom
-            schedule = schedule.OrderBy(s => s.Key.day).ThenBy(s => s.Key.timeSlot.startHour).ThenBy(s => s.Key.location.site).ThenBy(s => s.Key.location.classroom).ToDictionary(s => s.Key, s => s.Value);
+            var s = schedule.OrderBy(s => s.Key.Day)
+                                .ThenBy(s => s.Key.TimeSlot.StartHour)
+                                .ThenBy(s => s.Key.Location.Site)
+                                .ThenBy(s => s.Key.Location.Classroom); // ! Bug : Set as null
 
-            foreach (var item in schedule)
+            System.Console.WriteLine(s);
+
+            foreach (var item in s)
             {
                 // Set site color
-                if (item.Key.location.site == "A")
+                if (item.Key.Location.Site == "A")
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                 }
-                else if (item.Key.location.site == "B")
+                else if (item.Key.Location.Site == "B")
                 {
                     Console.ForegroundColor = ConsoleColor.Blue;
                 }
@@ -315,7 +308,7 @@ namespace CalendarScheduleGenerator2
                     Console.ForegroundColor = ConsoleColor.White;
                 }
 
-                Console.WriteLine($"Site {item.Key.location.site}, classroom {item.Key.location.classroom} : {item.Key.day} {item.Key.timeSlot.startHour}-{item.Key.timeSlot.endHour} : {item.Value.course} ({string.Join(",", item.Value.groups)}) - ({string.Join(",", item.Value.flyingEquipments)})");
+                Console.WriteLine($"Site {item.Key.Location.Site}, classroom {item.Key.Location.Classroom} : {item.Key.Day} {item.Key.TimeSlot.StartHour}-{item.Key.TimeSlot.EndHour} : {item.Value.Course} ({string.Join(",", item.Value.Groups)}) - ({string.Join(",", item.Value.FlyingEquipments)})");
 
                 // Reset color to default
                 Console.ResetColor();
@@ -325,18 +318,14 @@ namespace CalendarScheduleGenerator2
         bool IsSiteFullForTimeSlot(
             string site,
             List<Class> classes,
-            Dictionary<
-                ((string site, string classroom) location,
-                string day,
-                (int startHour, int endHour) timeSlot),
-            (string course, List<string> groups, List<string> flyingEquipments)> schedule
+            Schedule schedule
         )
         {
             int maxTimeSlotsForSite = classes
                 .Count(c => c.Site == site) * daysOfWeek.Count * hours.Count;
 
             int usedTimeSlotsForSite = schedule
-                .Count(entry => entry.Key.location.site == site);
+                .Count(entry => entry.Key.Location.Site == site);
 
             return usedTimeSlotsForSite >= maxTimeSlotsForSite;
         }
