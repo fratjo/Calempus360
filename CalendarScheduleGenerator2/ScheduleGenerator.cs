@@ -67,12 +67,18 @@ namespace CalendarScheduleGenerator2
 
             foreach (var currentClass in classes)
             {
-                if (biggestCourseGroup.Equipements is not null && biggestCourseGroup.Equipements.Count > 0)
+                if (biggestCourseGroup.Equipements is not null && biggestCourseGroup.Equipements.Count > 0) // si j'ai besoin d'équipements
                 {
-                    if (currentClass.Equipments is null) continue; // ! possible bug
-                    if (!biggestCourseGroup.Equipements.All(e => currentClass.Equipments.Contains(e)) &&
-                        !biggestCourseGroup.Equipements.All(e =>
-                                flyingEquipments.Where(f => f.site == currentClass.Site).Any(f => f.equipment == e))) continue;
+                    if (currentClass.Equipments is not null)
+                    {
+                        if (!biggestCourseGroup.Equipements.All(e => currentClass.Equipments.Contains(e)) &&
+                            !biggestCourseGroup.Equipements.All(e => !currentClass.Equipments.Contains(e) &&
+                                    flyingEquipments.Where(f =>
+                                        f.site == currentClass.Site).Any(f =>
+                                                f.equipment == e))) continue; // sauf ceux qui sont déjà dans la classe
+                    } // si la classe ne possède pas les équipements requis et que les équipements requis ne sont pas tous disponibles sur le site
+                    else if (!biggestCourseGroup.Equipements.All(e =>
+                                    flyingEquipments.Where(f => f.site == currentClass.Site).Any(f => f.equipment == e))) continue;
                 }
 
                 var keyAndGroups = FindTimeSlotForCourseGroup(
@@ -288,9 +294,7 @@ namespace CalendarScheduleGenerator2
             var s = schedule.OrderBy(s => s.Key.Day)
                                 .ThenBy(s => s.Key.TimeSlot.StartHour)
                                 .ThenBy(s => s.Key.Location.Site)
-                                .ThenBy(s => s.Key.Location.Classroom); // ! Bug : Set as null
-
-            System.Console.WriteLine(s);
+                                .ThenBy(s => s.Key.Location.Classroom);
 
             foreach (var item in s)
             {

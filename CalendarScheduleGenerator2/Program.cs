@@ -221,27 +221,6 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
-    },
-    new CourseGroupes
-    {
-        Course = "Statistics",
-        Groupes = new List<Groupe>
-        {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
-        }
-    },
-    new CourseGroupes
-    {
-        Course = "Probability",
-        Groupes = new List<Groupe>
-        {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" }
-        }
     }
 };
 
