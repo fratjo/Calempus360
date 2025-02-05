@@ -30,22 +30,24 @@ namespace CalendarScheduleGenerator2
 
         public Schedule GenerateSchedule()
         {
-            // Schedule schedule = new Schedule();
-
             // TODO : Add more pre conditions to avoid backtracking if possible, saving ressources
 
-            if ((classes.Count * daysOfWeek.Count * hours.Count - classes.Count * daysOfWeek.Count * hours.Count * 0.1) >= courseGroupes.Sum(c => c.Groupes.Count)) // If nb slot is enough to place all groups
+            if ((classes.Count * daysOfWeek.Count * hours.Count) < courseGroupes.Sum(c => c.Groupes.Count)) // If nb slot is enough to place all groups
             {
-                if (BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule)) return schedule;
+                throw new Exception("No schedule possible: not enough slots. Nb slots : "
+                    + (classes.Count * daysOfWeek.Count * hours.Count)
+                    + " Nb groups : " + courseGroupes.Sum(c => c.Groupes.Count));
             }
-            else if (courseGroupes.Sum(c => c.GetCapacity()) <= (classes.Sum(c => c.Capacity) * daysOfWeek.Count * hours.Count - classes.Count * daysOfWeek.Count * hours.Count * 0.1)) // If capacity is enough to place all groups
+            else if (courseGroupes.Sum(c => c.GetCapacity()) > (classes.Sum(c => c.Capacity) * daysOfWeek.Count * hours.Count)) // If capacity is enough to place all groups
             {
-                if (BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule)) return schedule;
+                throw new Exception("No schedule possible: not enough capacity. Capacity : "
+                    + courseGroupes.Sum(c => c.GetCapacity())
+                    + " Nb classes : " + classes.Sum(c => c.Capacity) * daysOfWeek.Count * hours.Count);
             }
-            else throw new Exception("No schedule possible");
-
-            System.Console.WriteLine("No schedule found");
-
+            else if (!BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule)) // If no schedule found
+            {
+                throw new Exception("No schedule found");
+            }
             return schedule;
         }
 
@@ -71,7 +73,7 @@ namespace CalendarScheduleGenerator2
                 {
                     if (currentClass.Equipments is not null)
                     {
-                        if (!biggestCourseGroup.Equipements.All(e => currentClass.Equipments.Contains(e)) &&
+                        if (!biggestCourseGroup.Equipements.All(currentClass.Equipments.Contains) &&
                             !biggestCourseGroup.Equipements.All(e => !currentClass.Equipments.Contains(e) &&
                                     flyingEquipments.Where(f =>
                                         f.site == currentClass.Site).Any(f =>
@@ -130,8 +132,6 @@ namespace CalendarScheduleGenerator2
                     // Check if the classroom is already in the schedule for this day and hour
                     if (schedule.ContainsKey(SK)) continue;
 
-
-                    // TODO : Check if flying equipment is available for this time slot
                     if (requiredEquipment is not null && requiredEquipment.Any())
                     {
                         var fE = flyingEquipments.Where(f => f.site == currentClass.Site).Select(f => f.equipment).ToList();
@@ -172,6 +172,19 @@ namespace CalendarScheduleGenerator2
 
                     // TODO : Inter site travel time (1h)
 
+                    // trouver tous les groupes qui sont sur un autre site pendant le timeslot précédent
+                    var previousHour = hours.FirstOrDefault(h => h.endHour == currentHour.startHour);
+                    var groupsOnOtherSite = groupsAvailable.Where(g =>
+                        schedule.Any(s =>
+                            s.Key.Day == currentDay &&
+                            s.Key.TimeSlot == previousHour &&
+                            s.Value.Groups.Contains(g.Name) &&
+                            s.Key.Location.Site != currentClass.Site
+                        )
+                    ).ToList();
+
+                    groupsAvailable = groupsAvailable.Except(groupsOnOtherSite).ToList();
+
                     List<Groupe> groupsToPlace = new();
 
                     if (groupsAvailable.Count == 1)
@@ -190,7 +203,7 @@ namespace CalendarScheduleGenerator2
                                 requiredEquipment is not null &&
                                 requiredEquipment.Count != 0 &&
                                 c.Equipments is not null &&
-                                requiredEquipment.All(e => c.Equipments.Contains(e)));
+                                requiredEquipment.All(c.Equipments.Contains));
 
                             haveCurrentSiteRequiredFlyingEquipments = requiredEquipment is not null && requiredEquipment.Count != 0 ?
                                 requiredEquipment.All(e =>
