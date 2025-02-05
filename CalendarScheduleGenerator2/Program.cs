@@ -210,7 +210,7 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
-    }/*,
+    },
     new CourseGroupes
     {
         Course = "Calculus",
@@ -230,9 +230,9 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
             new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            //new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
-    },
+    }/*,
     new CourseGroupes
     {
         Course = "Probability",
@@ -242,7 +242,7 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
             new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" }
         }
-    }*/
+    }*/ 
 };
 
 // TODO : Add Weekly hours for each course // max 2 timeplot in a row // max 4h per day // not twice on the same day not twice in a row

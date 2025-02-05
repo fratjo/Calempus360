@@ -32,22 +32,31 @@ namespace CalendarScheduleGenerator2
         {
             // TODO : Add more pre conditions to avoid backtracking if possible, saving ressources
 
-            if ((classes.Count * daysOfWeek.Count * hours.Count) < courseGroupes.Sum(c => c.Groupes.Count)) // If nb slot is enough to place all groups
+            System.Console.WriteLine("Generating schedule...");
+            var timeSlots = classes.Count * daysOfWeek.Count * hours.Count;
+            System.Console.WriteLine("Time slots (reserve: 5%) : " + (timeSlots - timeSlots * 0.05));
+            var groupsCount = courseGroupes.Sum(c => c.Groupes.Count);
+            System.Console.WriteLine("Groups count : " + groupsCount);
+            var classesCapacity = classes.Sum(c => c.Capacity) * daysOfWeek.Count * hours.Count;
+            System.Console.WriteLine("Capacity (reserve: 5%): " + (classesCapacity - (classesCapacity * 0.05)));
+            var groupsCapacity = courseGroupes.Sum(c => c.GetCapacity());
+            System.Console.WriteLine("Groups capacity: " + groupsCapacity);
+
+            if ((timeSlots - timeSlots * 0.05) < groupsCount) // If nb slot is enough to place all groups
             {
-                throw new Exception("No schedule possible: not enough slots. Nb slots : "
-                    + (classes.Count * daysOfWeek.Count * hours.Count)
-                    + " Nb groups : " + courseGroupes.Sum(c => c.Groupes.Count));
+                throw new Exception("No schedule possible: not enough slots.");
             }
-            else if (courseGroupes.Sum(c => c.GetCapacity()) > (classes.Sum(c => c.Capacity) * daysOfWeek.Count * hours.Count)) // If capacity is enough to place all groups
+            else if (classesCapacity - (classesCapacity * 0.05) < groupsCapacity) // If capacity is enough to place all groups
             {
-                throw new Exception("No schedule possible: not enough capacity. Capacity : "
-                    + courseGroupes.Sum(c => c.GetCapacity())
-                    + " Nb classes : " + classes.Sum(c => c.Capacity) * daysOfWeek.Count * hours.Count);
+                throw new Exception("No schedule possible: not enough capacity.");
             }
             else if (!BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule)) // If no schedule found
             {
                 throw new Exception("No schedule found");
             }
+
+            System.Console.WriteLine("Schedule generated");
+
             return schedule;
         }
 
