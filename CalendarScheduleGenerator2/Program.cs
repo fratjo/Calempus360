@@ -2,19 +2,23 @@
 
 List<Class> classes = new() {
     new("1A", "A", 40, null),
-    new("2A", "A", 40, new(){"Science Kit"}),
-    new("2B", "B", 40, new(){"Science Kit"}),
-    new("3B", "B", 150, new(){"Microphone"}),
+    new("2A", "A", 40, new List<Equipement>{ new Equipement("A", "Science Kit", Guid.NewGuid()) }),
+    new("2A", "A", 40, new List<Equipement>{ new Equipement("A", "Science Kit", Guid.NewGuid()) }),
+    new("2B", "B", 40, new List<Equipement>{ new Equipement("B", "Science Kit", Guid.NewGuid()) }),
+    new("3B", "B", 40, new List<Equipement>{ new Equipement("B", "Microphone", Guid.NewGuid()) }),
+    new("1C", "C", 40, new List<Equipement>{ new Equipement("C", "TV", Guid.NewGuid()), new Equipement("C", "Microphone", Guid.NewGuid()) }),
 };
 
-List<(string site, string equipment, string code)> flyingEquipments = new() {
-    new("A", "TV", Guid.NewGuid().ToString()),
-    new("A", "Microphone", Guid.NewGuid().ToString())
+List<Equipement> flyingEquipments = new() {
+    new("A", "TV", Guid.NewGuid()),
+    new("A", "Microphone", Guid.NewGuid()),
+    new("B", "TV", Guid.NewGuid()),
+    // new("B", "Microphone", Guid.NewGuid()),
 };
 
 List<string> daysOfWeek = new List<string> { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" };
 
-List<(int startHour, int endHour)> hours = new() { new(8, 10), new(10, 12), new(13, 15), new(15, 17) };
+List<(int startHour, int endHour)> hours = new() { new(8, 9), new(9, 10), new(10, 11), new(11, 12), new(13, 14), new(14, 15), new(15, 16), new(16, 17) };
 
 List<CourseGroupes> courseGroupes = new()
 {
@@ -44,7 +48,7 @@ List<CourseGroupes> courseGroupes = new()
     new CourseGroupes
     {
         Course = "English",
-        Equipements = new(){"TV"},
+        Equipements = new List<Equipement>{ new Equipement(null, "TV", null) },
         Groupes = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
@@ -56,7 +60,7 @@ List<CourseGroupes> courseGroupes = new()
     new CourseGroupes
     {
         Course = "French",
-        Equipements = new(){"TV"},
+        Equipements = new List<Equipement>{ new Equipement(null, "TV", null) },
         Groupes = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
@@ -68,7 +72,9 @@ List<CourseGroupes> courseGroupes = new()
     new CourseGroupes
     {
         Course = "History",
-        Equipements = new(){"TV", "Microphone"},
+        Equipements = new List<Equipement>{
+            new Equipement(null, "TV", null),
+            new Equipement(null, "Microphone", null) },
         Groupes = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
@@ -91,7 +97,7 @@ List<CourseGroupes> courseGroupes = new()
     new CourseGroupes
     {
         Course = "Biology",
-        Equipements = new(){"Science Kit"},
+        Equipements = new List<Equipement>{ new Equipement(null, "Science Kit", null) },
         Groupes = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
@@ -103,7 +109,7 @@ List<CourseGroupes> courseGroupes = new()
     new CourseGroupes
     {
         Course = "Chemistry",
-        Equipements = new(){"Science Kit"},
+        Equipements = new List<Equipement>{ new Equipement(null, "Science Kit", null) },
         Groupes = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
@@ -221,7 +227,7 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
-    },
+    }/*,
     new CourseGroupes
     {
         Course = "Statistics",
@@ -230,9 +236,9 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
             new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            //new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
-    }/*,
+    },
     new CourseGroupes
     {
         Course = "Probability",
@@ -247,11 +253,7 @@ List<CourseGroupes> courseGroupes = new()
 
 // TODO : Add Weekly hours for each course // max 2 timeplot in a row // max 4h per day // not twice on the same day not twice in a row
 
-// TODO : Add more pre conditions to avoid backtracking if possible, saving ressources
-
 // TODO : Add more constraints to the schedule
-
-// TODO : Inter site travel time (1h)
 
 var ScheduleGenerator = new ScheduleGenerator(
     classes,
@@ -261,8 +263,5 @@ var ScheduleGenerator = new ScheduleGenerator(
     flyingEquipments
 );
 
-var schedule = ScheduleGenerator.GenerateSchedule();
-
-ScheduleGenerator.DisplaySchedule(schedule);
-
-// flyingEquipments.ForEach(e => Console.WriteLine($"{e.site} {e.equipment} {e.code}"));
+ScheduleGenerator.GenerateSchedule();
+ScheduleGenerator.DisplaySchedule();

@@ -8,7 +8,7 @@ namespace CalendarScheduleGenerator2
     public class Schedule : Dictionary<ScheduleKey, ScheduleEntry>
     {
         public void AddEntry(string site, string classroom, string day, int startHour, int endHour,
-                        string course, List<string> groups, List<string> flyingEquipments)
+                        string course, List<string> groups, List<Equipement> flyingEquipments)
         {
             var key = new ScheduleKey((site, classroom), day, (startHour, endHour));
             var entry = new ScheduleEntry(course, groups, flyingEquipments);
@@ -33,7 +33,7 @@ namespace CalendarScheduleGenerator2
             Day = day;
             TimeSlot = timeSlot;
         }
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is ScheduleKey key &&
                 Location.Equals(key.Location) &&
@@ -50,8 +50,8 @@ namespace CalendarScheduleGenerator2
     {
         public string Course { get; set; }
         public List<string> Groups { get; set; }
-        public List<string> FlyingEquipments { get; set; }
-        public ScheduleEntry(string course, List<string> groups, List<string> flyingEquipments)
+        public List<Equipement> FlyingEquipments { get; set; }
+        public ScheduleEntry(string course, List<string> groups, List<Equipement> flyingEquipments)
         {
             Course = course;
             Groups = groups;

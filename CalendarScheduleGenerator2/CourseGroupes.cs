@@ -7,7 +7,7 @@ namespace CalendarScheduleGenerator2
     {
         public string Course { get; set; } = string.Empty;
         public List<Groupe> Groupes { get; set; } = new List<Groupe>();
-        public List<string>? Equipements { get; set; } = null;
+        public List<Equipement>? Equipements { get; set; } = null;
 
         public int GetCapacity()
         {

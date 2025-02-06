@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 
 namespace CalendarScheduleGenerator2
 {
+    // TODO : Use Equipement Code instead of Name for flyingEquipments and Equipements
     public class ScheduleGenerator
     {
         private readonly List<Class> classes;
         private readonly List<string> daysOfWeek;
         private readonly List<(int startHour, int endHour)> hours;
         private readonly List<CourseGroupes> courseGroupes;
-        private readonly List<(string site, string equipment, string code)> flyingEquipments;
+        private readonly List<Equipement> flyingEquipments;
         public Schedule schedule { get; private set; } = new Schedule();
 
         public ScheduleGenerator(
@@ -19,7 +20,7 @@ namespace CalendarScheduleGenerator2
                 List<string> daysOfWeek,
                 List<(int startHour, int endHour)> hours,
                 List<CourseGroupes> courseGroupes,
-                List<(string site, string equipment, string code)> flyingEquipments)
+                List<Equipement> flyingEquipments)
         {
             this.classes = classes;
             this.daysOfWeek = daysOfWeek;
@@ -30,8 +31,6 @@ namespace CalendarScheduleGenerator2
 
         public Schedule GenerateSchedule()
         {
-            // TODO : Add more pre conditions to avoid backtracking if possible, saving ressources
-
             System.Console.WriteLine("Generating schedule...");
             var timeSlots = classes.Count * daysOfWeek.Count * hours.Count;
             System.Console.WriteLine("Time slots (reserve: 5%) : " + (timeSlots - timeSlots * 0.05));
@@ -72,25 +71,31 @@ namespace CalendarScheduleGenerator2
             courseGroupes = courseGroupes.OrderByDescending(c => c.GetEquipmentCount()).ThenByDescending(c => c.GetCapacity()).ToList();
             classes = classes.OrderByDescending(c => c.Capacity).ToList();
 
+
             var biggestCourseGroup = courseGroupes[0];
             var biggestCourse = biggestCourseGroup.Course;
             int courseCapacity = biggestCourseGroup.GetCapacity();
 
             foreach (var currentClass in classes)
             {
-                if (biggestCourseGroup.Equipements is not null && biggestCourseGroup.Equipements.Count > 0) // si j'ai besoin d'équipements
+                if (biggestCourseGroup.Equipements is not null && biggestCourseGroup.Equipements.Any()) // si j'ai besoin d'équipements
                 {
-                    if (currentClass.Equipments is not null)
+                    var allInFlyingEquipments = biggestCourseGroup.Equipements.All(e =>
+                                                        flyingEquipments.Any(f => f.Site == currentClass.Site && f.Type == e.Type));
+                    if (currentClass.Equipments is not null && currentClass.Equipments.Any()) // si la classe possède des équipements
                     {
-                        if (!biggestCourseGroup.Equipements.All(currentClass.Equipments.Contains) &&
-                            !biggestCourseGroup.Equipements.All(e => !currentClass.Equipments.Contains(e) &&
-                                    flyingEquipments.Where(f =>
-                                        f.site == currentClass.Site).Any(f =>
-                                                f.equipment == e))) continue; // sauf ceux qui sont déjà dans la classe
+                        var allInClassroom = biggestCourseGroup.Equipements.All(e => currentClass.Equipments.Any(ce => ce.Type == e.Type));
+                        var allInBothClassroomAndSite = biggestCourseGroup.Equipements.All(e => currentClass.Equipments.Any(ce => ce.Type == e.Type) ||
+                                                            (!currentClass.Equipments.Any(ce => ce.Type == e.Type) &&
+                                                            flyingEquipments.Where(f => f.Site == currentClass.Site).Any(f => f.Type == e.Type)));
+
+                        if (!allInClassroom && !allInBothClassroomAndSite)
+                            continue;
                     } // si la classe ne possède pas les équipements requis et que les équipements requis ne sont pas tous disponibles sur le site
-                    else if (!biggestCourseGroup.Equipements.All(e =>
-                                    flyingEquipments.Where(f => f.site == currentClass.Site).Any(f => f.equipment == e))) continue;
+                    else if (!allInFlyingEquipments) continue;
+
                 }
+                // Je sais qu'ici la classe possède les équipements requis ou que les équipements requis, sauf ceux qui sont déjà dans la classe, sont disponibles sur le site
 
                 var keyAndGroups = FindTimeSlotForCourseGroup(
                     currentClass,
@@ -133,58 +138,61 @@ namespace CalendarScheduleGenerator2
             {
                 foreach (var currentHour in hours)
                 {
-                    if (schedule.Any(s => s.Key.Day == currentDay && s.Key.TimeSlot == currentHour && s.Value.Course == course)) continue;
+                    // if (schedule.Any(s =>
+                    //     s.Key.Day == currentDay &&
+                    //     s.Key.TimeSlot == currentHour &&
+                    //     s.Value.Course == course &&
+                    //     s.Key.Location.Site == currentClass.Site)) continue;
 
-                    // var key = ((currentClass.Site, currentClass.Classroom), currentDay, currentHour);
                     var SK = new ScheduleKey((currentClass.Site, currentClass.Classroom), currentDay, currentHour);
 
                     // Check if the classroom is already in the schedule for this day and hour
                     if (schedule.ContainsKey(SK)) continue;
 
+                    // Equipements volants pour le site de la classe actuelle
+                    var currentSiteFlyingEquipments = flyingEquipments.Where(f => f.Site == currentClass.Site).Select(f => f).ToList();
+
+                    // Tous les équipements pris pour ce jour et cette heure, pour le site de la classe actuelle
+                    List<Equipement> takenEq = schedule.Where(s =>
+                                                        s.Key.Day == currentDay &&
+                                                        s.Key.TimeSlot == currentHour &&
+                                                        s.Key.Location.Site == currentClass.Site).SelectMany(s => s.Value.FlyingEquipments).ToList();
+
+                    // Equipements volants disponibles pour ce jour et cette heure
+                    var availableEq = currentSiteFlyingEquipments.Where(e => !takenEq.Any(eq => eq.Code == e.Code)).ToList();
+
+                    var currentRequiredFlyingEquipments = requiredEquipment;
+
                     if (requiredEquipment is not null && requiredEquipment.Any())
                     {
-                        var fE = flyingEquipments.Where(f => f.site == currentClass.Site).Select(f => f.equipment).ToList();
-                        if (currentClass.Equipments is not null)
+                        // Check if the equipements are available for this day and hour
+                        if (currentClass.Equipments is not null && currentClass.Equipments.Any())
                         {
-                            var notClassEq = requiredEquipment.Where(e => !currentClass.Equipments.Contains(e)).ToList();
-                            if (notClassEq.Any())
-                            {
-                                var hasRequiredEquipment = schedule.Any(s =>
-                                    s.Key.Day == currentDay &&
-                                    s.Key.TimeSlot == currentHour &&
-                                    s.Value.FlyingEquipments.Any(e => notClassEq.Contains(e))
-                                );
+                            currentRequiredFlyingEquipments = requiredEquipment.Where(e => !currentClass.Equipments.Any(ce => e.Type == ce.Type)).ToList(); // Equipements requis que la classe ne possède pas
 
-                                if (hasRequiredEquipment) continue;
+                            if (currentRequiredFlyingEquipments.Any())
+                            {
+                                // je dois vérifier si dans les équipements volants disponibles, j'ai tous les équipements requis que la classe ne possède pas
+                                if (!currentRequiredFlyingEquipments.All(e => availableEq.Any(eq => eq.Type == e.Type))) continue;
                             }
                         }
                         else
                         {
-                            var hasRequiredEquipment = schedule.Any(s =>
-                                s.Key.Day == currentDay &&
-                                s.Key.TimeSlot == currentHour &&
-                                s.Value.FlyingEquipments.Any(e => requiredEquipment.Contains(e))
-                            );
-
-                            if (hasRequiredEquipment) continue;
+                            // je dois vérifier si dans les équipements volants disponibles, j'ai tous les équipements requis que la classe ne possède pas
+                            if (!requiredEquipment.All(e => availableEq.Any(eq => eq.Type == e.Type))) continue;
                         }
                     }
 
-
                     // Get groups that are not already in the schedule for this day and hour
-                    var groupsAvailable = groups.Where(g =>
-                        !schedule.Any(s =>
+                    var groupsAvailable = groups.Where(g => !schedule.Any(s =>
                             s.Key.Day == currentDay &&
                             s.Key.TimeSlot == currentHour &&
                             s.Value.Groups.Contains(g.Name)
                     )).ToList();
 
-                    // TODO : Inter site travel time (1h)
-
-                    // trouver tous les groupes qui sont sur un autre site pendant le timeslot précédent
+                    // trouver tous les groupes qui sont sur un autre site pendant le timeslot précédent (si il y en a un, donc pas s'il y a une pause entre 2 timeslots)
                     var previousHour = hours.FirstOrDefault(h => h.endHour == currentHour.startHour);
-                    var groupsOnOtherSite = groupsAvailable.Where(g =>
-                        schedule.Any(s =>
+                    var groupsOnOtherSite = groupsAvailable.Where(g => schedule.Any(s =>
                             s.Key.Day == currentDay &&
                             s.Key.TimeSlot == previousHour &&
                             s.Value.Groups.Contains(g.Name) &&
@@ -196,38 +204,7 @@ namespace CalendarScheduleGenerator2
 
                     List<Groupe> groupsToPlace = new();
 
-                    if (groupsAvailable.Count == 1)
-                    {
-                        var isPeferedSiteAvailable = !IsSiteFullForTimeSlot(groupsAvailable[0].PreferedSite, classes, schedule);
-                        var isPreferedSite = groupsAvailable[0].PreferedSite == currentClass.Site;
-
-                        var havePreferedSiteRequiredEquipments = false;
-                        var haveCurrentSiteRequiredFlyingEquipments = true;
-
-                        if (requiredEquipment is not null && requiredEquipment.Count != 0)
-                        {
-                            // est-ce que au moins une de mes classes du site préféré possède les équipements requis
-                            havePreferedSiteRequiredEquipments = classes.Any(c =>
-                                c.Site == groupsAvailable[0].PreferedSite &&
-                                requiredEquipment is not null &&
-                                requiredEquipment.Count != 0 &&
-                                c.Equipments is not null &&
-                                requiredEquipment.All(c.Equipments.Contains));
-
-                            haveCurrentSiteRequiredFlyingEquipments = requiredEquipment is not null && requiredEquipment.Count != 0 ?
-                                requiredEquipment.All(e =>
-                                    flyingEquipments.Where(f => f.site == currentClass.Site).Any(f => f.equipment == e)) : true;
-                        }
-
-                        if ((isPeferedSiteAvailable && isPreferedSite) ||
-                            (!isPeferedSiteAvailable && !isPreferedSite) ||
-                            (isPeferedSiteAvailable && !isPreferedSite && !havePreferedSiteRequiredEquipments) ||
-                            (isPeferedSiteAvailable && !isPreferedSite && !havePreferedSiteRequiredEquipments && !haveCurrentSiteRequiredFlyingEquipments))
-                        {
-                            groupsToPlace = groupsAvailable;
-                        }
-                    }
-                    else if (groupsAvailable.Any())
+                    if (groupsAvailable.Any())
                     {
                         var groupsAvailablePreferingThisSite = groupsAvailable.Where(g => g.PreferedSite == currentClass.Site).ToList();
 
@@ -243,33 +220,32 @@ namespace CalendarScheduleGenerator2
                     }
                     else continue;
 
-                    if (groupsToPlace.Count > 0)
+                    if (groupsToPlace.Count == 1)
                     {
-                        var flyingEquipmentsRequired = new List<string>();
+                        var isPreferedSiteAnyTimeSlotAvailable = !IsSiteFullForTimeSlot(groupsToPlace[0].PreferedSite, classes, schedule);
 
-                        if (requiredEquipment is not null && requiredEquipment.Count != 0)
+                        var preferedSiteEquipments = classes.Where(c => c.Site == groupsToPlace[0].PreferedSite).SelectMany(c => c.Equipments ?? new List<Equipement>());
+                        var preferedSiteFlyingEquipments = flyingEquipments.Where(f => f.Site == groupsToPlace[0].PreferedSite).ToList();
+                        var preferedSiteAllEquipments = preferedSiteEquipments.Concat(preferedSiteFlyingEquipments).ToList();
+
+                        var havePreferedSiteRequiredEquipments = requiredEquipment is not null && requiredEquipment.Count != 0 ?
+                            requiredEquipment.All(e => preferedSiteAllEquipments.Any(f => f.Type == e.Type)) : true;
+
+                        if (currentClass.Site != groupsToPlace[0].PreferedSite)
                         {
-                            if (currentClass.Equipments is not null)
-                            {
-                                // on prend les équipements requis que la classe ne possède pas
-                                flyingEquipmentsRequired = requiredEquipment.Where(e =>
-                                    !currentClass.Equipments.Contains(e) &&
-                                    flyingEquipments.Where(f => f.site == currentClass.Site).Any(f => f.equipment == e)
-                                ).ToList();
-                            }
-                            else
-                            {
-                                // on prend tous les équipements requis
-                                flyingEquipmentsRequired = requiredEquipment.Where(e =>
-                                    flyingEquipments.Where(f => f.site == currentClass.Site).Any(f => f.equipment == e)
-                                ).ToList();
-                            }
-
+                            if (havePreferedSiteRequiredEquipments && isPreferedSiteAnyTimeSlotAvailable) continue;
                         }
-
-                        var SE = new ScheduleEntry(course, groupsToPlace.Select(g => g.Name).ToList(), flyingEquipmentsRequired);
-                        return Tuple.Create(SK, SE);
                     }
+
+                    var flyingEquipmentsRequired = new List<Equipement>();
+
+                    if (currentRequiredFlyingEquipments is not null && currentRequiredFlyingEquipments.Any())
+                    {
+                        flyingEquipmentsRequired = availableEq.Where(e => currentRequiredFlyingEquipments.Any(ce => ce.Type == e.Type)).ToList();
+                    }
+
+                    var SE = new ScheduleEntry(course, groupsToPlace.Select(g => g.Name).ToList(), flyingEquipmentsRequired);
+                    return Tuple.Create(SK, SE);
                 }
             }
             return null;
@@ -309,9 +285,10 @@ namespace CalendarScheduleGenerator2
             return bestCombinaison;
         }
 
-        public void DisplaySchedule(Schedule schedule)
+        public void DisplaySchedule()
         {
-            if (schedule is null) return;
+            if (schedule is null || !schedule.Any()) return;
+
             // sort day, time, site, classroom
             var s = schedule.OrderBy(s => s.Key.Day)
                                 .ThenBy(s => s.Key.TimeSlot.StartHour)
@@ -329,12 +306,16 @@ namespace CalendarScheduleGenerator2
                 {
                     Console.ForegroundColor = ConsoleColor.Blue;
                 }
+                else if (item.Key.Location.Site == "C")
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                }
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.White;
                 }
 
-                Console.WriteLine($"Site {item.Key.Location.Site}, classroom {item.Key.Location.Classroom} : {item.Key.Day} {item.Key.TimeSlot.StartHour}-{item.Key.TimeSlot.EndHour} : {item.Value.Course} ({string.Join(",", item.Value.Groups)}) - ({string.Join(",", item.Value.FlyingEquipments)})");
+                Console.WriteLine($"Site {item.Key.Location.Site}, classroom {item.Key.Location.Classroom} : {item.Key.Day} {item.Key.TimeSlot.StartHour}-{item.Key.TimeSlot.EndHour} : {item.Value.Course} ({string.Join(",", item.Value.Groups)}) - ({string.Join(",", item.Value.FlyingEquipments.Select(e => e.Type + " " + e.Code))})");
 
                 // Reset color to default
                 Console.ResetColor();
