@@ -11,5 +11,6 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new UniversityConfiguration());
+        modelBuilder.ApplyConfiguration(new SiteConfiguration());
     }
 }
