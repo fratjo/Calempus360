@@ -36,6 +36,18 @@ List<CourseGroupes> courseGroupes = new()
     },
     new CourseGroupes
     {
+        Course = "Math",
+        Groupes = new List<Groupe>
+        {
+            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Groupe { Name = "2B", Capacity = 30, PreferedSite = "B" },
+            new Groupe { Name = "3B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroupes
+    {
         Course = "Physics",
         Equipements = new List<Equipement>{ new Equipement(null, "Science Kit", null) },
         Groupes = new List<Groupe>
@@ -254,7 +266,7 @@ List<CourseGroupes> courseGroupes = new()
 
 // TODO : Add Weekly hours for each course // max 2 timeplot in a row // max 4h per day // not twice on the same day not twice in a row
 
-// TODO : Add more constraints to the schedule
+// TODO : Add more constraints before running the schedule
 
 var ScheduleGenerator = new ScheduleGenerator(
     classes,

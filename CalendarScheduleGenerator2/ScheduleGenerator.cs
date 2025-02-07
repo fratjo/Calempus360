@@ -122,7 +122,7 @@ namespace CalendarScheduleGenerator2
             return false;
         }
 
-        Tuple<ScheduleKey, ScheduleEntry>? FindTimeSlotForCourseGroup(
+        private Tuple<ScheduleKey, ScheduleEntry>? FindTimeSlotForCourseGroup(
             Class currentClass,
             CourseGroupes courseGroup,
             Schedule schedule
@@ -134,11 +134,27 @@ namespace CalendarScheduleGenerator2
 
             foreach (var currentDay in daysOfWeek)
             {
+                groups.ForEach(g =>
+                {
+                    var count = schedule.Count(s => s.Key.Day == currentDay && s.Value.Groups.Contains(g.Name) && s.Value.Course == course);
+                    if (count >= 2)
+                    {
+                        groups.Remove(g);
+                    }
+                });
+
                 foreach (var currentHour in hours)
                 {
                     var SK = new ScheduleKey((currentClass.Site, currentClass.Classroom), currentDay, currentHour);
 
                     if (schedule.ContainsKey(SK)) continue;
+
+                    // si mon cours est le même que celui de l'heure précédente
+                    // et que le site est le même
+                    // et que la salle est la même
+                    // et que les groupes sont les mêmes (ou que tous les groupes de l'heure précédente sont dans les groupes de ce cours)
+                    // et que je n'ai pas déjà 2 créneaux de ce cours dans la journée
+                    // alors je peux placer ce cours pour les mêmes groupes que l'heure précédente
 
                     var currentSiteFlyingEquipments = flyingEquipments.Where(f => f.Site == currentClass.Site).Select(f => f).ToList();
 
@@ -220,8 +236,6 @@ namespace CalendarScheduleGenerator2
                         }
                     }
 
-                    // ? Si groupes multiples mais tous du même site, faire la même chose que si un seul groupe afin de toujours préférer le site préféré
-
                     var flyingEquipmentsRequired = new List<Equipement>();
 
                     if (currentRequiredFlyingEquipments is not null && currentRequiredFlyingEquipments.Any())
@@ -236,7 +250,7 @@ namespace CalendarScheduleGenerator2
             return null;
         }
 
-        List<Groupe> BacktrackClassroomsCoursGroups(int capacity, List<Groupe> groupes)
+        private List<Groupe> BacktrackClassroomsCoursGroups(int capacity, List<Groupe> groupes)
         {
             // memoization
             List<Groupe> bestCombinaison = new();
@@ -268,6 +282,18 @@ namespace CalendarScheduleGenerator2
             Backtrack(0, 0);
 
             return bestCombinaison;
+        }
+
+
+        private bool IsSiteFullForTimeSlot(string site, List<Class> classes, Schedule schedule)
+        {
+            int maxTimeSlotsForSite = classes
+                .Count(c => c.Site == site) * daysOfWeek.Count * hours.Count;
+
+            int usedTimeSlotsForSite = schedule
+                .Count(entry => entry.Key.Location.Site == site);
+
+            return usedTimeSlotsForSite >= maxTimeSlotsForSite;
         }
 
         public void DisplaySchedule()
@@ -302,21 +328,6 @@ namespace CalendarScheduleGenerator2
 
                 Console.ResetColor();
             }
-        }
-
-        bool IsSiteFullForTimeSlot(
-            string site,
-            List<Class> classes,
-            Schedule schedule
-        )
-        {
-            int maxTimeSlotsForSite = classes
-                .Count(c => c.Site == site) * daysOfWeek.Count * hours.Count;
-
-            int usedTimeSlotsForSite = schedule
-                .Count(entry => entry.Key.Location.Site == site);
-
-            return usedTimeSlotsForSite >= maxTimeSlotsForSite;
         }
     }
 }
