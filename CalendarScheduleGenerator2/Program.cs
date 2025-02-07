@@ -1,12 +1,12 @@
 ﻿using CalendarScheduleGenerator2;
 
 List<Class> classes = new() {
-    new("1A", "A", 40, null),
+    new("1A", "A", 60, null),
     new("2A", "A", 40, new List<Equipement>{ new Equipement("A", "Science Kit", Guid.NewGuid()) }),
-    new("2A", "A", 40, new List<Equipement>{ new Equipement("A", "Science Kit", Guid.NewGuid()) }),
+    new("2A", "A", 60, new List<Equipement>{ new Equipement("A", "Science Kit", Guid.NewGuid()) }),
     new("2B", "B", 40, new List<Equipement>{ new Equipement("B", "Science Kit", Guid.NewGuid()) }),
     new("3B", "B", 40, new List<Equipement>{ new Equipement("B", "Microphone", Guid.NewGuid()) }),
-    new("1C", "C", 40, new List<Equipement>{ new Equipement("C", "TV", Guid.NewGuid()), new Equipement("C", "Microphone", Guid.NewGuid()) }),
+    new("1C", "C", 60, new List<Equipement>{ new Equipement("C", "TV", Guid.NewGuid()), new Equipement("C", "Microphone", Guid.NewGuid()) }),
 };
 
 List<Equipement> flyingEquipments = new() {
@@ -37,6 +37,7 @@ List<CourseGroupes> courseGroupes = new()
     new CourseGroupes
     {
         Course = "Physics",
+        Equipements = new List<Equipement>{ new Equipement(null, "Science Kit", null) },
         Groupes = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
@@ -227,7 +228,7 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
-    }/*,
+    },
     new CourseGroupes
     {
         Course = "Statistics",
@@ -248,7 +249,7 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
             new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" }
         }
-    }*/ 
+    }
 };
 
 // TODO : Add Weekly hours for each course // max 2 timeplot in a row // max 4h per day // not twice on the same day not twice in a row
