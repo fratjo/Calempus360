@@ -16,5 +16,6 @@ namespace Calempus360.Models.Models
         public List<Group> Groups { get; set; }
         public List<UniversitySiteEquipment> Equipments { get; set; }
         public List<SiteCourseSchedule> Schedules { get; set; }
+        public List<Classroom> Classrooms { get; set; }
     }
 }

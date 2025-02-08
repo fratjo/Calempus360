@@ -13,5 +13,6 @@
         public int EquipmentType_Id { get; set; }
         public EquipmentType EquipmentType { get; set; }
         public UniversitySiteEquipment UniversitySiteEquipment { get; set; }
+        public ClassroomEquipment Classroom{ get; set; }
     }
 }

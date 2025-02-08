@@ -21,6 +21,9 @@ public class AppDbContext : DbContext
     public DbSet<UniversitySiteEquipment> UniversitiesSitesEquipments { get; set; }
     public DbSet<CourseSchedule> CoursesSchedules { get; set; }
     public DbSet<SiteCourseSchedule> SitesCoursesSchedules { get; set; }
+    public DbSet<Classroom> Classrooms { get; set; }
+    public DbSet<ClassroomEquipment> ClassroomsEquipments { get; set; }
+    public DbSet<ClassroomAcademicYear> ClassroomsAcademicYear { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -40,5 +43,9 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new UniversitySiteEquipmentConfiguration());
         modelBuilder.ApplyConfiguration(new CourseScheduleConfiguration());
         modelBuilder.ApplyConfiguration(new SiteCourseScheduleConfiguration());
+        modelBuilder.ApplyConfiguration(new ClassroomConfiguration());
+        modelBuilder.ApplyConfiguration(new ClassroomEquipmentConfiguration());
+        modelBuilder.ApplyConfiguration(new ClassroomAcademicYearConfiguration());
+
     }
 }
