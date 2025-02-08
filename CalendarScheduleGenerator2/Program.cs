@@ -20,12 +20,12 @@ List<string> daysOfWeek = new List<string> { "Monday", "Tuesday", "Wednesday", "
 
 List<(int startHour, int endHour)> hours = new() { new(8, 9), new(9, 10), new(10, 11), new(11, 12), new(13, 14), new(14, 15), new(15, 16), new(16, 17) };
 
-List<CourseGroupes> courseGroupes = new()
+List<CourseGroups> courseGroups = new()
 {
-    new CourseGroupes
+    new CourseGroups
     {
         Course = "Math",
-        Groupes = new List<Groupe>
+        Groups = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
@@ -34,10 +34,10 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "3B", Capacity = 35, PreferedSite = "B" }
         }
     },
-    new CourseGroupes
+    new CourseGroups
     {
         Course = "Math",
-        Groupes = new List<Groupe>
+        Groups = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
@@ -46,11 +46,11 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "3B", Capacity = 35, PreferedSite = "B" }
         }
     },
-    new CourseGroupes
+    new CourseGroups
     {
         Course = "Physics",
         Equipements = new List<Equipement>{ new Equipement(null, "Science Kit", null) },
-        Groupes = new List<Groupe>
+        Groups = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
@@ -58,11 +58,11 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
-    new CourseGroupes
+    new CourseGroups
     {
         Course = "English",
         Equipements = new List<Equipement>{ new Equipement(null, "TV", null) },
-        Groupes = new List<Groupe>
+        Groups = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
@@ -70,11 +70,11 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
-    new CourseGroupes
+    new CourseGroups
     {
         Course = "French",
         Equipements = new List<Equipement>{ new Equipement(null, "TV", null) },
-        Groupes = new List<Groupe>
+        Groups = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
@@ -82,13 +82,13 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
-    new CourseGroupes
+    new CourseGroups
     {
         Course = "History",
         Equipements = new List<Equipement>{
             new Equipement(null, "TV", null),
             new Equipement(null, "Microphone", null) },
-        Groupes = new List<Groupe>
+        Groups = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
@@ -96,10 +96,10 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
-    new CourseGroupes
+    new CourseGroups
     {
         Course = "Geography",
-        Groupes = new List<Groupe>
+        Groups = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
@@ -107,11 +107,11 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
-    new CourseGroupes
+    new CourseGroups
     {
         Course = "Biology",
         Equipements = new List<Equipement>{ new Equipement(null, "Science Kit", null) },
-        Groupes = new List<Groupe>
+        Groups = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
@@ -119,11 +119,11 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
-    new CourseGroupes
+    new CourseGroups
     {
         Course = "Chemistry",
         Equipements = new List<Equipement>{ new Equipement(null, "Science Kit", null) },
-        Groupes = new List<Groupe>
+        Groups = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
@@ -131,10 +131,10 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
-    new CourseGroupes
+    new CourseGroups
     {
         Course = "Philosophy",
-        Groupes = new List<Groupe>
+        Groups = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
@@ -142,10 +142,10 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
-    new CourseGroupes
+    new CourseGroups
     {
         Course = "Economy",
-        Groupes = new List<Groupe>
+        Groups = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
@@ -153,10 +153,10 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
-    new CourseGroupes
+    new CourseGroups
     {
         Course = "Sport",
-        Groupes = new List<Groupe>
+        Groups = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
@@ -164,10 +164,10 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
-    new CourseGroupes
+    new CourseGroups
     {
         Course = "Music",
-        Groupes = new List<Groupe>
+        Groups = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
@@ -175,10 +175,10 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
-    new CourseGroupes
+    new CourseGroups
     {
         Course = "Art",
-        Groupes = new List<Groupe>
+        Groups = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
@@ -186,10 +186,10 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
-    new CourseGroupes
+    new CourseGroups
     {
         Course = "Computer Science",
-        Groupes = new List<Groupe>
+        Groups = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
@@ -197,10 +197,10 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
-    new CourseGroupes
+    new CourseGroups
     {
         Course = "Algebra",
-        Groupes = new List<Groupe>
+        Groups = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
@@ -208,10 +208,10 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
-    new CourseGroupes
+    new CourseGroups
     {
         Course = "Geometry",
-        Groupes = new List<Groupe>
+        Groups = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
@@ -219,10 +219,10 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
-    new CourseGroupes
+    new CourseGroups
     {
         Course = "Trigonometry",
-        Groupes = new List<Groupe>
+        Groups = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
@@ -230,10 +230,10 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
-    new CourseGroupes
+    new CourseGroups
     {
         Course = "Calculus",
-        Groupes = new List<Groupe>
+        Groups = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
@@ -241,10 +241,10 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
-    new CourseGroupes
+    new CourseGroups
     {
         Course = "Statistics",
-        Groupes = new List<Groupe>
+        Groups = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
@@ -252,10 +252,10 @@ List<CourseGroupes> courseGroupes = new()
             new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
-    new CourseGroupes
+    new CourseGroups
     {
         Course = "Probability",
-        Groupes = new List<Groupe>
+        Groups = new List<Groupe>
         {
             new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
             new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
@@ -272,7 +272,7 @@ var ScheduleGenerator = new ScheduleGenerator(
     classes,
     daysOfWeek,
     hours,
-    courseGroupes,
+    courseGroups,
     flyingEquipments
 );
 

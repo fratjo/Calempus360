@@ -3,15 +3,15 @@
 
 namespace CalendarScheduleGenerator2
 {
-    public class CourseGroupes
+    public class CourseGroups
     {
         public string Course { get; set; } = string.Empty;
-        public List<Groupe> Groupes { get; set; } = new List<Groupe>();
+        public List<Groupe> Groups { get; set; } = new List<Groupe>();
         public List<Equipement>? Equipements { get; set; } = null;
 
         public int GetCapacity()
         {
-            return Groupes.Sum(g => g.Capacity);
+            return Groups.Sum(g => g.Capacity);
         }
 
         public int GetEquipmentCount()
@@ -23,7 +23,7 @@ namespace CalendarScheduleGenerator2
         {
             foreach (var groupe in groupes)
             {
-                Groupes.Remove(groupe);
+                Groups.Remove(groupe);
             }
         }
     }

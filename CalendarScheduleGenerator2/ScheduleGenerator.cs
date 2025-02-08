@@ -10,7 +10,7 @@ namespace CalendarScheduleGenerator2
         private readonly List<Class> classes;
         private readonly List<string> daysOfWeek;
         private readonly List<(int startHour, int endHour)> hours;
-        private readonly List<CourseGroupes> courseGroupes;
+        private readonly List<CourseGroups> courseGroups;
         private readonly List<Equipement> flyingEquipments;
         public Schedule schedule { get; private set; } = new Schedule();
 
@@ -18,13 +18,13 @@ namespace CalendarScheduleGenerator2
                 List<Class> classes,
                 List<string> daysOfWeek,
                 List<(int startHour, int endHour)> hours,
-                List<CourseGroupes> courseGroupes,
+                List<CourseGroups> courseGroups,
                 List<Equipement> flyingEquipments)
         {
             this.classes = classes;
             this.daysOfWeek = daysOfWeek;
             this.hours = hours;
-            this.courseGroupes = courseGroupes;
+            this.courseGroups = courseGroups;
             this.flyingEquipments = flyingEquipments;
         }
 
@@ -33,11 +33,11 @@ namespace CalendarScheduleGenerator2
             System.Console.WriteLine("Generating schedule...");
             var timeSlots = classes.Count * daysOfWeek.Count * hours.Count;
             System.Console.WriteLine("Time slots (reserve: 5%) : " + (timeSlots - timeSlots * 0.05));
-            var groupsCount = courseGroupes.Sum(c => c.Groupes.Count);
+            var groupsCount = courseGroups.Sum(c => c.Groups.Count);
             System.Console.WriteLine("Groups count : " + groupsCount);
             var classesCapacity = classes.Sum(c => c.Capacity) * daysOfWeek.Count * hours.Count;
             System.Console.WriteLine("Capacity (reserve: 5%): " + (classesCapacity - (classesCapacity * 0.05)));
-            var groupsCapacity = courseGroupes.Sum(c => c.GetCapacity());
+            var groupsCapacity = courseGroups.Sum(c => c.GetCapacity());
             System.Console.WriteLine("Groups capacity: " + groupsCapacity);
 
             if ((timeSlots - timeSlots * 0.05) < groupsCount) // If nb slot is enough to place all groups
@@ -48,7 +48,7 @@ namespace CalendarScheduleGenerator2
             {
                 throw new Exception("No schedule possible: not enough capacity.");
             }
-            else if (!BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule)) // If no schedule found
+            else if (!BacktrackSchedule(daysOfWeek, hours, courseGroups, classes, schedule)) // If no schedule found
             {
                 throw new Exception("No schedule found");
             }
@@ -61,17 +61,17 @@ namespace CalendarScheduleGenerator2
         private bool BacktrackSchedule(
             List<string> daysOfWeek,
             List<(int startHour, int endHour)> hours,
-            List<CourseGroupes> courseGroupes,
+            List<CourseGroups> courseGroups,
             List<Class> classes,
             Schedule schedule)
         {
-            if (courseGroupes.Count == 0 || classes.Count == 0) return true;
+            if (courseGroups.Count == 0 || classes.Count == 0) return true;
 
-            courseGroupes = courseGroupes.OrderByDescending(c => c.GetEquipmentCount()).ThenByDescending(c => c.GetCapacity()).ToList();
+            courseGroups = courseGroups.OrderByDescending(c => c.GetEquipmentCount()).ThenByDescending(c => c.GetCapacity()).ToList();
             classes = classes.OrderByDescending(c => c.Capacity).ToList();
 
 
-            var biggestCourseGroup = courseGroupes[0];
+            var biggestCourseGroup = courseGroups[0];
             var biggestCourse = biggestCourseGroup.Course;
             int courseCapacity = biggestCourseGroup.GetCapacity();
 
@@ -107,15 +107,15 @@ namespace CalendarScheduleGenerator2
                     {
                         schedule.Add(key, entry);
 
-                        biggestCourseGroup.Groupes.RemoveAll(g => entry.Groups.Contains(g.Name));
-                        if (biggestCourseGroup.Groupes.Count == 0) courseGroupes.RemoveAt(0);
+                        biggestCourseGroup.Groups.RemoveAll(g => entry.Groups.Contains(g.Name));
+                        if (biggestCourseGroup.Groups.Count == 0) courseGroups.RemoveAt(0);
 
-                        var success = BacktrackSchedule(daysOfWeek, hours, courseGroupes, classes, schedule);
+                        var success = BacktrackSchedule(daysOfWeek, hours, courseGroups, classes, schedule);
                         if (success) return true;
 
                         schedule.Remove(key);
-                        biggestCourseGroup.Groupes.AddRange(entry.Groups.Select(name => new Groupe { Name = name }));
-                        courseGroupes.Insert(0, biggestCourseGroup);
+                        biggestCourseGroup.Groups.AddRange(entry.Groups.Select(name => new Groupe { Name = name }));
+                        courseGroups.Insert(0, biggestCourseGroup);
                     }
                 }
             }
@@ -124,46 +124,39 @@ namespace CalendarScheduleGenerator2
 
         private Tuple<ScheduleKey, ScheduleEntry>? FindTimeSlotForCourseGroup(
             Class currentClass,
-            CourseGroupes courseGroup,
+            CourseGroups courseGroup,
             Schedule schedule
         )
         {
-            var groups = courseGroup.Groupes;
+            var groups = courseGroup.Groups;
             var course = courseGroup.Course;
             var requiredEquipment = courseGroup.Equipements;
 
             foreach (var currentDay in daysOfWeek)
             {
-                groups.ForEach(g =>
+                var groupsToRemove = groups.Where(g =>
+                    schedule.Count(s => s.Key.Day == currentDay && s.Value.Groups.Contains(g.Name) && s.Value.Course == course) >= 2).ToList();
+                groups.RemoveAll(g => groupsToRemove.Contains(g));
+
+                foreach (var timeSlot in hours)
                 {
-                    var count = schedule.Count(s => s.Key.Day == currentDay && s.Value.Groups.Contains(g.Name) && s.Value.Course == course);
-                    if (count >= 2)
-                    {
-                        groups.Remove(g);
-                    }
-                });
+                    var scheduleKey = new ScheduleKey((currentClass.Site, currentClass.Classroom), currentDay, timeSlot);
 
-                foreach (var currentHour in hours)
-                {
-                    var SK = new ScheduleKey((currentClass.Site, currentClass.Classroom), currentDay, currentHour);
+                    if (schedule.ContainsKey(scheduleKey)) continue;
 
-                    if (schedule.ContainsKey(SK)) continue;
-
-                    var previousHour = hours.FirstOrDefault(h => h.endHour == currentHour.startHour);
+                    var previousHour = hours.FirstOrDefault(h => h.endHour == timeSlot.startHour);
                     var previousCourseInSameClassroom = schedule.FirstOrDefault(s =>
                         s.Key.Day == currentDay &&
-                        s.Key.TimeSlot.StartHour == previousHour.startHour &&
-                        s.Key.TimeSlot.EndHour == previousHour.endHour &&
+                        IsSameTimeSlot(s.Key.TimeSlot, previousHour) &&
                         s.Key.Location.Site == currentClass.Site &&
                         s.Key.Location.Classroom == currentClass.Classroom
                     );
                     var previousGroupsInSameClassroom = previousCourseInSameClassroom.Value?.Groups ?? new List<string>();
 
-                    var nextHour = hours.FirstOrDefault(h => h.startHour == currentHour.endHour);
+                    var nextHour = hours.FirstOrDefault(h => h.startHour == timeSlot.endHour);
                     var nextCourseInSameClassroom = schedule.FirstOrDefault(s =>
                         s.Key.Day == currentDay &&
-                        s.Key.TimeSlot.StartHour == nextHour.startHour &&
-                        s.Key.TimeSlot.EndHour == nextHour.endHour &&
+                        IsSameTimeSlot(s.Key.TimeSlot, nextHour) &&
                         s.Key.Location.Site == currentClass.Site &&
                         s.Key.Location.Classroom == currentClass.Classroom
                     );
@@ -188,7 +181,7 @@ namespace CalendarScheduleGenerator2
                                 schedule.Count(s => s.Key.Day == currentDay && s.Value.Course == course) < 2)
                             {
                                 var newEntry = new ScheduleEntry(course, previousGroupsInSameClassroom, previousCourseInSameClassroom.Value.FlyingEquipments);
-                                return Tuple.Create(SK, newEntry);
+                                return Tuple.Create(scheduleKey, newEntry);
                             }
                         }
                         else if (nextCourseInSameClassroom.Key is not null && schedule.ContainsKey(nextCourseInSameClassroom.Key))
@@ -200,7 +193,7 @@ namespace CalendarScheduleGenerator2
                                 schedule.Count(s => s.Key.Day == currentDay && s.Value.Course == course) < 2)
                             {
                                 var newEntry = new ScheduleEntry(course, nextGroupsInSameClassroom, nextCourseInSameClassroom.Value.FlyingEquipments);
-                                return Tuple.Create(SK, newEntry);
+                                return Tuple.Create(scheduleKey, newEntry);
                             }
                         }
                     }
@@ -209,7 +202,7 @@ namespace CalendarScheduleGenerator2
 
                     List<Equipement> takenEq = schedule.Where(s =>
                                                         s.Key.Day == currentDay &&
-                                                        s.Key.TimeSlot == currentHour &&
+                                                        IsSameTimeSlot(s.Key.TimeSlot, timeSlot) &&
                                                         s.Key.Location.Site == currentClass.Site).SelectMany(s => s.Value.FlyingEquipments).ToList();
 
                     var availableEq = currentSiteFlyingEquipments.Where(e => !takenEq.Any(eq => eq.Code == e.Code)).ToList();
@@ -235,7 +228,7 @@ namespace CalendarScheduleGenerator2
 
                     var groupsAvailable = groups.Where(g => !schedule.Any(s =>
                             s.Key.Day == currentDay &&
-                            s.Key.TimeSlot == currentHour &&
+                            IsSameTimeSlot(s.Key.TimeSlot, timeSlot) &&
                             s.Value.Groups.Contains(g.Name)
                     )).ToList();
 
@@ -243,8 +236,7 @@ namespace CalendarScheduleGenerator2
                     {
                         var groupsOnOtherSite = groupsAvailable.Where(g => schedule.Any(s =>
                                 s.Key.Day == currentDay &&
-                                s.Key.TimeSlot.StartHour == previousHour.startHour &&
-                                s.Key.TimeSlot.EndHour == previousHour.endHour &&
+                                IsSameTimeSlot(s.Key.TimeSlot, previousHour) &&
                                 s.Value.Groups.Contains(g.Name) &&
                                 s.Key.Location.Site != currentClass.Site
                             )
@@ -257,8 +249,7 @@ namespace CalendarScheduleGenerator2
                     {
                         var groupsOnOtherSite = groupsAvailable.Where(g => schedule.Any(s =>
                                 s.Key.Day == currentDay &&
-                                s.Key.TimeSlot.StartHour == nextHour.startHour &&
-                                s.Key.TimeSlot.EndHour == nextHour.endHour &&
+                                IsSameTimeSlot(s.Key.TimeSlot, nextHour) &&
                                 s.Value.Groups.Contains(g.Name) &&
                                 s.Key.Location.Site != currentClass.Site
                             )
@@ -310,13 +301,13 @@ namespace CalendarScheduleGenerator2
                     }
 
                     var SE = new ScheduleEntry(course, groupsToPlace.Select(g => g.Name).ToList(), flyingEquipmentsRequired);
-                    return Tuple.Create(SK, SE);
+                    return Tuple.Create(scheduleKey, SE);
                 }
             }
             return null;
         }
 
-        private List<Groupe> BacktrackClassroomsCoursGroups(int capacity, List<Groupe> groupes)
+        private List<Groupe> BacktrackClassroomsCoursGroups(int capacity, List<Groupe> groups)
         {
             // memoization
             List<Groupe> bestCombinaison = new();
@@ -332,13 +323,13 @@ namespace CalendarScheduleGenerator2
                 }
 
 
-                for (int i = index; i < groupes.Count; i++)
+                for (int i = index; i < groups.Count; i++)
                 {
-                    if (currentSum + groupes[i].Capacity <= capacity)
+                    if (currentSum + groups[i].Capacity <= capacity)
                     {
-                        currentCombinaison.Add(groupes[i]);
+                        currentCombinaison.Add(groups[i]);
 
-                        Backtrack(i + 1, currentSum + groupes[i].Capacity);
+                        Backtrack(i + 1, currentSum + groups[i].Capacity);
 
                         currentCombinaison.RemoveAt(currentCombinaison.Count - 1);
                     }
@@ -350,6 +341,10 @@ namespace CalendarScheduleGenerator2
             return bestCombinaison;
         }
 
+        private bool IsSameTimeSlot((int startHour, int endHour) slot1, (int startHour, int endHour) slot2)
+        {
+            return slot1.startHour == slot2.startHour && slot1.endHour == slot2.endHour;
+        }
 
         private bool IsSiteFullForTimeSlot(string site, List<Class> classes, Schedule schedule)
         {
