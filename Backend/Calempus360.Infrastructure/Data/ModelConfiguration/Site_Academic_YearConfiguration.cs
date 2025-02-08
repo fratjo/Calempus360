@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Calempus360.Infrastructure.Data
+namespace Calempus360.Infrastructure.Data.ModelConfiguration
 {
     internal class Site_Academic_YearConfiguration : IEntityTypeConfiguration<Site_Academic_Year>
     {

@@ -8,7 +8,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Calempus360.Infrastructure.Data
+namespace Calempus360.Infrastructure.Data.ModelConfiguration
 {
     internal class SiteConfiguration : IEntityTypeConfiguration<Site>
     {

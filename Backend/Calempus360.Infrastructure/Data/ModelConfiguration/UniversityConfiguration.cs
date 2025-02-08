@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Calempus360.Infrastructure.Data
+namespace Calempus360.Infrastructure.Data.ModelConfiguration
 {
     internal class UniversityConfiguration : IEntityTypeConfiguration<University>
     {

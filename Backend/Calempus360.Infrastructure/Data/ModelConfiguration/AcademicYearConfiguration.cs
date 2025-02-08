@@ -1,5 +1,4 @@
 ﻿using Calempus360.Models.Models;
-using Calempus360_api.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -8,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Calempus360.Infrastructure.Data
+namespace Calempus360.Infrastructure.Data.ModelConfiguration
 {
     internal class AcademicYearConfiguration : IEntityTypeConfiguration<Academic_Year>
     {
