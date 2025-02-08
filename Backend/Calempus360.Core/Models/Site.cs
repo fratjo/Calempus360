@@ -1,4 +1,6 @@
-﻿namespace Calempus360_api.Models
+﻿using Calempus360.Models.Models;
+
+namespace Calempus360_api.Models
 {
     public class Site
     {
@@ -11,5 +13,6 @@
         public DateTime UpdatedAt { get; set; }
         public int University_Id { get; set; }
         public University University { get; set; }
+        public List<Site_Academic_Year> Sites_Academic_Year { get; set; }
     }
 }

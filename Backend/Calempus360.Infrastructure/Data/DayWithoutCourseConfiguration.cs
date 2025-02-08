@@ -21,5 +21,5 @@ namespace Calempus360.Infrastructure.Data
             builder.HasOne(a => a.AcademicYear).WithMany(d => d.DaysWithoutCourse).HasForeignKey(d => d.AcademicYear_Id);
         }
     }
-    }
+
 }
