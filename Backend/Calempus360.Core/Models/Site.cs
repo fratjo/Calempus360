@@ -1,6 +1,5 @@
 ﻿using Calempus360.Models.Models;
-
-namespace Calempus360_api.Models
+namespace Calempus360.Models.Models
 {
     public class Site
     {
@@ -14,5 +13,6 @@ namespace Calempus360_api.Models
         public int University_Id { get; set; }
         public University University { get; set; }
         public List<Site_Academic_Year> Sites_Academic_Year { get; set; }
+        public List<Group> Groups { get; set; }
     }
 }

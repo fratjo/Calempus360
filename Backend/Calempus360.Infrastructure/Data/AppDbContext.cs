@@ -1,5 +1,4 @@
 using Calempus360.Models.Models;
-using Calempus360_api.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Calempus360.Infrastructure.Data;

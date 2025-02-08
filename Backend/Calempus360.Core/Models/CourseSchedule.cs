@@ -1,4 +1,4 @@
-﻿namespace Calempus360_api.Models
+﻿namespace Calempus360.Models.Models
 {
     public class CourseSchedule
     {
