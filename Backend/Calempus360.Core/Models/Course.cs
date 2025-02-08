@@ -11,7 +11,7 @@
         public string Semester { get; set; }
         public int Credits { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime UpdateAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
         public List<OptionCourse> OptionsCourse { get; set; }
     }
 }
