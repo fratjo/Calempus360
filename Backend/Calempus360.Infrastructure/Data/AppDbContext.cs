@@ -33,5 +33,6 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new CourseConfiguration());
         modelBuilder.ApplyConfiguration(new EquipmentTypeConfiguration());
         modelBuilder.ApplyConfiguration(new CourseEquipmentTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new EquipmentConfiguration());
     }
 }

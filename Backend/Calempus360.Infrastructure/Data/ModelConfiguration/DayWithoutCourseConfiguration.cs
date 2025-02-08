@@ -14,6 +14,7 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
         public void Configure(EntityTypeBuilder<DayWithoutCourse> builder)
         {
             builder.HasKey(d => d.DayWithoutCourse_Id);
+            builder.Property(d => d.DayWithoutCourse_Id).ValueGeneratedOnAdd();
             builder.Property(d => d.Name).IsRequired();
             builder.Property(d => d.Name).IsRequired();
             builder.Property(d => d.CreatedAt).IsRequired().HasDefaultValueSql("getdate()");

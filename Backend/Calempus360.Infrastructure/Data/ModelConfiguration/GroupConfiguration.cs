@@ -14,10 +14,13 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
         public void Configure(EntityTypeBuilder<Group> builder)
         {
             builder.HasKey(g => g.Group_Id);
+            builder.Property(g => g.Group_Id).ValueGeneratedOnAdd();
             builder.Property(g => g.Code).IsRequired();
             builder.Property(g => g.NumberOfStudents).IsRequired();
             builder.Property(g => g.OptionGrade).IsRequired();
             builder.Property(g => g.AcademicYear_Id).IsRequired();
+            builder.Property(g => g.CreatedAt).IsRequired().HasDefaultValueSql("getdate()");
+            builder.Property(g => g.UpdatedAt).IsRequired().HasDefaultValueSql("getdate()").ValueGeneratedOnAddOrUpdate();
 
             builder.HasOne(g => g.MainSite).WithMany(s => s.Groups).HasForeignKey(g => g.Site_Id);
             builder.HasOne(g => g.Option).WithMany(o => o.Groups).HasForeignKey(g => g.Option_Id);

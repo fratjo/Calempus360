@@ -14,6 +14,7 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
         public void Configure(EntityTypeBuilder<Option> builder)
         {
             builder.HasKey(o => o.Option_Id);
+            builder.Property(o => o.Option_Id).ValueGeneratedOnAdd();
             builder.Property(o => o.Name).IsRequired();
             builder.Property(o => o.Code).IsRequired();
             builder.Property(o => o.Description).IsRequired();
