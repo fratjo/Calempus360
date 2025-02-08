@@ -149,12 +149,61 @@ namespace CalendarScheduleGenerator2
 
                     if (schedule.ContainsKey(SK)) continue;
 
-                    // si mon cours est le même que celui de l'heure précédente
-                    // et que le site est le même
-                    // et que la salle est la même
-                    // et que les groupes sont les mêmes (ou que tous les groupes de l'heure précédente sont dans les groupes de ce cours)
-                    // et que je n'ai pas déjà 2 créneaux de ce cours dans la journée
-                    // alors je peux placer ce cours pour les mêmes groupes que l'heure précédente
+                    var previousHour = hours.FirstOrDefault(h => h.endHour == currentHour.startHour);
+                    var previousCourseInSameClassroom = schedule.FirstOrDefault(s =>
+                        s.Key.Day == currentDay &&
+                        s.Key.TimeSlot.StartHour == previousHour.startHour &&
+                        s.Key.TimeSlot.EndHour == previousHour.endHour &&
+                        s.Key.Location.Site == currentClass.Site &&
+                        s.Key.Location.Classroom == currentClass.Classroom
+                    );
+                    var previousGroupsInSameClassroom = previousCourseInSameClassroom.Value?.Groups ?? new List<string>();
+
+                    var nextHour = hours.FirstOrDefault(h => h.startHour == currentHour.endHour);
+                    var nextCourseInSameClassroom = schedule.FirstOrDefault(s =>
+                        s.Key.Day == currentDay &&
+                        s.Key.TimeSlot.StartHour == nextHour.startHour &&
+                        s.Key.TimeSlot.EndHour == nextHour.endHour &&
+                        s.Key.Location.Site == currentClass.Site &&
+                        s.Key.Location.Classroom == currentClass.Classroom
+                    );
+                    var nextGroupsInSameClassroom = nextCourseInSameClassroom.Value?.Groups ?? new List<string>();
+
+                    if ((previousCourseInSameClassroom.Key is not null &&
+                        schedule.ContainsKey(previousCourseInSameClassroom.Key) &&
+                        nextCourseInSameClassroom.Key is not null &&
+                        !schedule.ContainsKey(nextCourseInSameClassroom.Key))
+                        ||
+                        (previousCourseInSameClassroom.Key is not null &&
+                        !schedule.ContainsKey(previousCourseInSameClassroom.Key) &&
+                        nextCourseInSameClassroom.Key is not null &&
+                        schedule.ContainsKey(nextCourseInSameClassroom.Key)))
+                    {
+                        if (previousCourseInSameClassroom.Key is not null && schedule.ContainsKey(previousCourseInSameClassroom.Key))
+                        {
+                            if (previousCourseInSameClassroom.Value!.Course == course &&
+                                previousCourseInSameClassroom.Key.Location.Site == currentClass.Site &&
+                                previousCourseInSameClassroom.Key.Location.Classroom == currentClass.Classroom &&
+                                previousGroupsInSameClassroom.All(g => groups.Any(go => go.Name == g)) &&
+                                schedule.Count(s => s.Key.Day == currentDay && s.Value.Course == course) < 2)
+                            {
+                                var newEntry = new ScheduleEntry(course, previousGroupsInSameClassroom, previousCourseInSameClassroom.Value.FlyingEquipments);
+                                return Tuple.Create(SK, newEntry);
+                            }
+                        }
+                        else if (nextCourseInSameClassroom.Key is not null && schedule.ContainsKey(nextCourseInSameClassroom.Key))
+                        {
+                            if (nextCourseInSameClassroom.Value!.Course == course &&
+                                nextCourseInSameClassroom.Key.Location.Site == currentClass.Site &&
+                                nextCourseInSameClassroom.Key.Location.Classroom == currentClass.Classroom &&
+                                nextGroupsInSameClassroom.All(g => groups.Any(go => go.Name == g)) &&
+                                schedule.Count(s => s.Key.Day == currentDay && s.Value.Course == course) < 2)
+                            {
+                                var newEntry = new ScheduleEntry(course, nextGroupsInSameClassroom, nextCourseInSameClassroom.Value.FlyingEquipments);
+                                return Tuple.Create(SK, newEntry);
+                            }
+                        }
+                    }
 
                     var currentSiteFlyingEquipments = flyingEquipments.Where(f => f.Site == currentClass.Site).Select(f => f).ToList();
 
@@ -190,16 +239,33 @@ namespace CalendarScheduleGenerator2
                             s.Value.Groups.Contains(g.Name)
                     )).ToList();
 
-                    var previousHour = hours.FirstOrDefault(h => h.endHour == currentHour.startHour);
-                    var groupsOnOtherSite = groupsAvailable.Where(g => schedule.Any(s =>
-                            s.Key.Day == currentDay &&
-                            s.Key.TimeSlot == previousHour &&
-                            s.Value.Groups.Contains(g.Name) &&
-                            s.Key.Location.Site != currentClass.Site
-                        )
-                    ).ToList();
+                    if (previousHour.startHour is not default(int) && previousHour.endHour is not default(int))
+                    {
+                        var groupsOnOtherSite = groupsAvailable.Where(g => schedule.Any(s =>
+                                s.Key.Day == currentDay &&
+                                s.Key.TimeSlot.StartHour == previousHour.startHour &&
+                                s.Key.TimeSlot.EndHour == previousHour.endHour &&
+                                s.Value.Groups.Contains(g.Name) &&
+                                s.Key.Location.Site != currentClass.Site
+                            )
+                        ).ToList();
 
-                    groupsAvailable = groupsAvailable.Except(groupsOnOtherSite).ToList();
+                        groupsAvailable = groupsAvailable.Where(g => !groupsOnOtherSite.Any(go => go.Name == g.Name)).ToList();
+                    }
+
+                    if (nextHour.startHour is not default(int) && nextHour.endHour is not default(int))
+                    {
+                        var groupsOnOtherSite = groupsAvailable.Where(g => schedule.Any(s =>
+                                s.Key.Day == currentDay &&
+                                s.Key.TimeSlot.StartHour == nextHour.startHour &&
+                                s.Key.TimeSlot.EndHour == nextHour.endHour &&
+                                s.Value.Groups.Contains(g.Name) &&
+                                s.Key.Location.Site != currentClass.Site
+                            )
+                        ).ToList();
+
+                        groupsAvailable = groupsAvailable.Where(g => !groupsOnOtherSite.Any(go => go.Name == g.Name)).ToList();
+                    }
 
                     List<Groupe> groupsToPlace = new();
 

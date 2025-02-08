@@ -12,7 +12,7 @@ List<Class> classes = new() {
 List<Equipement> flyingEquipments = new() {
     new("A", "TV", Guid.NewGuid()),
     new("A", "Microphone", Guid.NewGuid()),
-    new("B", "TV", Guid.NewGuid()),
+    // new("B", "TV", Guid.NewGuid()),
     // new("B", "Microphone", Guid.NewGuid()),
 };
 
