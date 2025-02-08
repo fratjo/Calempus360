@@ -24,6 +24,7 @@ public class AppDbContext : DbContext
     public DbSet<Classroom> Classrooms { get; set; }
     public DbSet<ClassroomEquipment> ClassroomsEquipments { get; set; }
     public DbSet<ClassroomAcademicYear> ClassroomsAcademicYear { get; set; }
+    public DbSet<Session> Sessions { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -46,6 +47,7 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new ClassroomConfiguration());
         modelBuilder.ApplyConfiguration(new ClassroomEquipmentConfiguration());
         modelBuilder.ApplyConfiguration(new ClassroomAcademicYearConfiguration());
+        modelBuilder.ApplyConfiguration(new SessionConfiguration());
 
     }
 }

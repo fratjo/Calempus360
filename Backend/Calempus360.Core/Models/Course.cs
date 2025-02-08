@@ -14,5 +14,6 @@
         public DateTime UpdatedAt { get; set; }
         public List<OptionCourse> OptionsCourse { get; set; }
         public List<CourseEquipmentType> EquipmentType { get; set; }
+        public List<Session> Sessions { get; set; }
     }
 }
