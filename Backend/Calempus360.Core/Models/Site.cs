@@ -14,5 +14,6 @@ namespace Calempus360.Models.Models
         public University University { get; set; }
         public List<SiteAcademicYear> Sites_Academic_Year { get; set; }
         public List<Group> Groups { get; set; }
+        public List<UniversitySiteEquipment> Equipments { get; set; }
     }
 }

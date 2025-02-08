@@ -18,6 +18,7 @@ public class AppDbContext : DbContext
     public DbSet<EquipmentType> EquipmentTypes { get; set; }
     public DbSet<Equipment> Equipments { get; set; }
     public DbSet<CourseEquipmentType> CoursesEquipmentTypes { get; set; }
+    public DbSet<UniversitySiteEquipment> UniversitiesSitesEquipments { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -34,5 +35,6 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new EquipmentTypeConfiguration());
         modelBuilder.ApplyConfiguration(new CourseEquipmentTypeConfiguration());
         modelBuilder.ApplyConfiguration(new EquipmentConfiguration());
+        modelBuilder.ApplyConfiguration(new UniversitySiteEquipmentConfiguration());
     }
 }
