@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Calempus360.Infrastructure.Data.ModelConfiguration
 {
-    internal class AcademicYearConfiguration : IEntityTypeConfiguration<Academic_Year>
+    internal class AcademicYearConfiguration : IEntityTypeConfiguration<AcademicYear>
     {
-        public void Configure(EntityTypeBuilder<Academic_Year> builder)
+        public void Configure(EntityTypeBuilder<AcademicYear> builder)
         {
             builder.HasKey(a => a.AcademicYear_Id);
             builder.Property(a => a.DateStart).IsRequired();

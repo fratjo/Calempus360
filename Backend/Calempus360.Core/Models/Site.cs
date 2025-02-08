@@ -12,7 +12,7 @@ namespace Calempus360.Models.Models
         public DateTime UpdatedAt { get; set; }
         public int University_Id { get; set; }
         public University University { get; set; }
-        public List<Site_Academic_Year> Sites_Academic_Year { get; set; }
+        public List<SiteAcademicYear> Sites_Academic_Year { get; set; }
         public List<Group> Groups { get; set; }
     }
 }

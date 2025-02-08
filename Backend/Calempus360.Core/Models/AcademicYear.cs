@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Calempus360.Models.Models
 {
-    public class Academic_Year
+    public class AcademicYear
     {
         public int AcademicYear_Id { get; set; }
         public DateTime DateStart { get; set; }
