@@ -17,5 +17,6 @@ namespace Calempus360.Models.Models
         public Course Course { get; set; }
         public List<Equipment> Equipments { get; set; }
         public List<Group> Groups { get; set; }
+        public List<Session> Sessions { get; set; }
     }
 }

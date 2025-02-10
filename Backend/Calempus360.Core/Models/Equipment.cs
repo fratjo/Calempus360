@@ -14,5 +14,6 @@
         public EquipmentType EquipmentType { get; set; }
         public UniversitySiteEquipment UniversitySiteEquipment { get; set; }
         public ClassroomEquipment Classroom{ get; set; }
+        public List<Session> Sessions { get; set; }
     }
 }
