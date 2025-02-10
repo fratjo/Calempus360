@@ -6,7 +6,7 @@
 // groupe
 namespace CalendarScheduleGenerator2
 {
-    public class Groupe
+    public class Group
     {
         public string Name { get; set; } = string.Empty;
         public int Capacity { get; set; } = 0;

@@ -25,61 +25,61 @@ List<CourseGroups> courseGroups = new()
     new CourseGroups
     {
         Course = "Math",
-        Groups = new List<Groupe>
+        Groups = new List<Group>
         {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 30, PreferedSite = "B" },
-            new Groupe { Name = "3B", Capacity = 35, PreferedSite = "B" }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 30, PreferedSite = "B" },
+            new Group { Name = "3B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroups
     {
         Course = "Math",
-        Groups = new List<Groupe>
+        Groups = new List<Group>
         {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 30, PreferedSite = "B" },
-            new Groupe { Name = "3B", Capacity = 35, PreferedSite = "B" }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 30, PreferedSite = "B" },
+            new Group { Name = "3B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroups
     {
         Course = "Physics",
         Equipements = new List<Equipement>{ new Equipement(null, "Science Kit", null) },
-        Groups = new List<Groupe>
+        Groups = new List<Group>
         {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroups
     {
         Course = "English",
         Equipements = new List<Equipement>{ new Equipement(null, "TV", null) },
-        Groups = new List<Groupe>
+        Groups = new List<Group>
         {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroups
     {
         Course = "French",
         Equipements = new List<Equipement>{ new Equipement(null, "TV", null) },
-        Groups = new List<Groupe>
+        Groups = new List<Group>
         {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroups
@@ -88,178 +88,178 @@ List<CourseGroups> courseGroups = new()
         Equipements = new List<Equipement>{
             new Equipement(null, "TV", null),
             new Equipement(null, "Microphone", null) },
-        Groups = new List<Groupe>
+        Groups = new List<Group>
         {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroups
     {
         Course = "Geography",
-        Groups = new List<Groupe>
+        Groups = new List<Group>
         {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroups
     {
         Course = "Biology",
         Equipements = new List<Equipement>{ new Equipement(null, "Science Kit", null) },
-        Groups = new List<Groupe>
+        Groups = new List<Group>
         {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroups
     {
         Course = "Chemistry",
         Equipements = new List<Equipement>{ new Equipement(null, "Science Kit", null) },
-        Groups = new List<Groupe>
+        Groups = new List<Group>
         {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroups
     {
         Course = "Philosophy",
-        Groups = new List<Groupe>
+        Groups = new List<Group>
         {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroups
     {
         Course = "Economy",
-        Groups = new List<Groupe>
+        Groups = new List<Group>
         {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroups
     {
         Course = "Sport",
-        Groups = new List<Groupe>
+        Groups = new List<Group>
         {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroups
     {
         Course = "Music",
-        Groups = new List<Groupe>
+        Groups = new List<Group>
         {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroups
     {
         Course = "Art",
-        Groups = new List<Groupe>
+        Groups = new List<Group>
         {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroups
     {
         Course = "Computer Science",
-        Groups = new List<Groupe>
+        Groups = new List<Group>
         {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroups
     {
         Course = "Algebra",
-        Groups = new List<Groupe>
+        Groups = new List<Group>
         {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroups
     {
         Course = "Geometry",
-        Groups = new List<Groupe>
+        Groups = new List<Group>
         {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroups
     {
         Course = "Trigonometry",
-        Groups = new List<Groupe>
+        Groups = new List<Group>
         {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroups
     {
         Course = "Calculus",
-        Groups = new List<Groupe>
+        Groups = new List<Group>
         {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroups
     {
         Course = "Statistics",
-        Groups = new List<Groupe>
+        Groups = new List<Group>
         {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" },
-            new Groupe { Name = "2B", Capacity = 35, PreferedSite = "B" }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
         }
     },
     new CourseGroups
     {
         Course = "Probability",
-        Groups = new List<Groupe>
+        Groups = new List<Group>
         {
-            new Groupe { Name = "1A", Capacity = 25, PreferedSite = "A" },
-            new Groupe { Name = "1B", Capacity = 20, PreferedSite = "B" },
-            new Groupe { Name = "2A", Capacity = 30, PreferedSite = "A" }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" }
         }
     }
 };

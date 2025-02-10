@@ -6,7 +6,7 @@ namespace CalendarScheduleGenerator2
     public class CourseGroups
     {
         public string Course { get; set; } = string.Empty;
-        public List<Groupe> Groups { get; set; } = new List<Groupe>();
+        public List<Group> Groups { get; set; } = new List<Group>();
         public List<Equipement>? Equipements { get; set; } = null;
 
         public int GetCapacity()
@@ -19,7 +19,7 @@ namespace CalendarScheduleGenerator2
             return Equipements?.Count ?? 0;
         }
 
-        public void RemoveGroupes(List<Groupe> groupes)
+        public void RemoveGroups(List<Group> groupes)
         {
             foreach (var groupe in groupes)
             {
