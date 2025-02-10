@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+// TODO : Extract constraints to a separate function/class for improving redability
+
 namespace CalendarScheduleGenerator2
 {
     public class ScheduleGenerator
@@ -39,6 +41,10 @@ namespace CalendarScheduleGenerator2
             System.Console.WriteLine("Capacity (reserve: 5%): " + (classesCapacity - (classesCapacity * 0.05)));
             var groupsCapacity = courseGroups.Sum(c => c.GetCapacity());
             System.Console.WriteLine("Groups capacity: " + groupsCapacity);
+
+            // -------------------------------------------------------------------------------------- //
+            // Pre conditions : Check if there is enough time slots and capacity to place all groups  // 
+            // -------------------------------------------------------------------------------------- //
             if ((timeSlots - timeSlots * 0.05) < groupsCount) // If nb slot is enough to place all groups
             {
                 throw new Exception("No schedule possible: not enough slots.");
@@ -79,23 +85,7 @@ namespace CalendarScheduleGenerator2
                 // ----------------------------------------------------------------------------------- //
                 // Constraint: check if the required equipment are available in the classroom + flying //
                 // ----------------------------------------------------------------------------------- //
-                if (biggestCourseGroup.Equipements is not null && biggestCourseGroup.Equipements.Any()) // si j'ai besoin d'équipements
-                {
-                    var allInFlyingEquipments = biggestCourseGroup.Equipements.All(e =>
-                                                        flyingEquipments.Any(f => f.Site == currentClass.Site && f.Type == e.Type));
-                    if (currentClass.Equipments is not null && currentClass.Equipments.Any()) // si la classe possède des équipements
-                    {
-                        var allInClassroom = biggestCourseGroup.Equipements.All(e => currentClass.Equipments.Any(ce => ce.Type == e.Type));
-                        var allInBothClassroomAndSite = biggestCourseGroup.Equipements.All(e => currentClass.Equipments.Any(ce => ce.Type == e.Type) ||
-                                                            (!currentClass.Equipments.Any(ce => ce.Type == e.Type) &&
-                                                            flyingEquipments.Where(f => f.Site == currentClass.Site).Any(f => f.Type == e.Type)));
-
-                        if (!allInClassroom && !allInBothClassroomAndSite)
-                            continue;
-                    }
-                    else if (!allInFlyingEquipments) continue;
-
-                }
+                if (!CheckIfSiteContainsAllRequiredEquipment(biggestCourseGroup, currentClass)) continue;
 
                 var keyAndGroups = FindTimeSlotForCourseGroup(
                     currentClass,
@@ -125,6 +115,35 @@ namespace CalendarScheduleGenerator2
         }
 
         /// <summary>
+        /// Check if the site contains all the required equipment for the course group
+        /// </summary>
+        /// <param name="biggestCourseGroup"></param>
+        /// <param name="currentClass"></param>
+        /// <returns>true if contains all, false if at least one is missing</returns>
+        private bool CheckIfSiteContainsAllRequiredEquipment(CourseGroups biggestCourseGroup, Class currentClass)
+        {
+            if (biggestCourseGroup.Equipements is not null && biggestCourseGroup.Equipements.Any()) // si j'ai besoin d'équipements
+            {
+                var allInFlyingEquipments = biggestCourseGroup.Equipements.All(e =>
+                                                    flyingEquipments.Any(f => f.Site == currentClass.Site && f.Type == e.Type));
+                if (currentClass.Equipments is not null && currentClass.Equipments.Any()) // si la classe possède des équipements
+                {
+                    var allInClassroom = biggestCourseGroup.Equipements.All(e => currentClass.Equipments.Any(ce => ce.Type == e.Type));
+                    var allInBothClassroomAndSite = biggestCourseGroup.Equipements.All(e => currentClass.Equipments.Any(ce => ce.Type == e.Type) ||
+                                                        (!currentClass.Equipments.Any(ce => ce.Type == e.Type) &&
+                                                        flyingEquipments.Where(f => f.Site == currentClass.Site).Any(f => f.Type == e.Type)));
+
+                    if (!allInClassroom && !allInBothClassroomAndSite)
+                        return false;
+                }
+                else if (!allInFlyingEquipments) return false;
+
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Find a time slot for a course group in a classroom with the equipment required.
         /// </summary>
         /// <param name="currentClass"></param>
@@ -142,9 +161,7 @@ namespace CalendarScheduleGenerator2
                 // ------------------------------------------------------------- //
                 // Constraint: Not more than 2h of a course per day for a groupe //
                 // ------------------------------------------------------------- //
-                var groupsToRemove = groups.Where(g =>
-                    schedule.Count(s => s.Key.Day == currentDay && s.Value.Groups.Contains(g.Name) && s.Value.Course == course) >= 2).ToList();
-                groups.RemoveAll(g => groupsToRemove.Contains(g));
+                CheckNoMoreThan2HoursPerDayPerGroupForACourse(schedule, groups, course, currentDay);
 
                 foreach (var timeSlot in hours)
                 {
@@ -243,84 +260,28 @@ namespace CalendarScheduleGenerator2
                         }
                     }
 
-                    // -------------------------------------------------------------------------- //
-                    // Constraint: Check if the groups are available for the timeslot             //
-                    // -------------------------------------------------------------------------- //
-                    var groupsAvailable = groups.Where(g => !schedule.Any(s =>
-                            s.Key.Day == currentDay &&
-                            IsSameTimeSlot(s.Key.TimeSlot, timeSlot) &&
-                            s.Value.Groups.Contains(g.Name)
-                    )).ToList();
+                    // -------------------------------------------------------------- //
+                    // Constraint: Check if the groups are available for the timeslot //
+                    // -------------------------------------------------------------- //
+                    List<Group> groupsAvailable = CheckGroupsAvailableForCurretTimeSlot(schedule, groups, currentDay, timeSlot);
 
                     // -------------------------------------------------------------------------------------- //
                     // Constraint: Check if the groups are not on an other site for the previous or next hour //
                     // -------------------------------------------------------------------------------------- //
-                    if (previousHour.startHour is not default(int) && previousHour.endHour is not default(int))
-                    {
-                        var groupsOnOtherSite = groupsAvailable.Where(g => schedule.Any(s =>
-                                s.Key.Day == currentDay &&
-                                IsSameTimeSlot(s.Key.TimeSlot, previousHour) &&
-                                s.Value.Groups.Contains(g.Name) &&
-                                s.Key.Location.Site != currentClass.Site
-                            )
-                        ).ToList();
+                    groupsAvailable = CheckGroupNotOnAOtherSiteForPreviousOrNextTimeSlot(currentClass, schedule, currentDay, previousHour, nextHour, groupsAvailable);
 
-                        groupsAvailable = groupsAvailable.Where(g => !groupsOnOtherSite.Any(go => go.Name == g.Name)).ToList();
-                    }
-
-                    if (nextHour.startHour is not default(int) && nextHour.endHour is not default(int))
-                    {
-                        var groupsOnOtherSite = groupsAvailable.Where(g => schedule.Any(s =>
-                                s.Key.Day == currentDay &&
-                                IsSameTimeSlot(s.Key.TimeSlot, nextHour) &&
-                                s.Value.Groups.Contains(g.Name) &&
-                                s.Key.Location.Site != currentClass.Site
-                            )
-                        ).ToList();
-
-                        groupsAvailable = groupsAvailable.Where(g => !groupsOnOtherSite.Any(go => go.Name == g.Name)).ToList();
-                    }
-
-                    List<Group> groupsToPlace = new();
 
                     // ----------------------------------------------------------------- //
                     // Constraint: Check the groups that can be placed in this classroom //
                     // ----------------------------------------------------------------- //
-                    if (groupsAvailable.Any())
-                    {
-                        var groupsAvailablePreferingThisSite = groupsAvailable.Where(g => g.PreferedSite == currentClass.Site).ToList();
+                    List<Group> groupsToPlace = new();
+                    if (!CheckIfAnyGroupToPlaceAndPlaceIt(currentClass, groupsAvailable, ref groupsToPlace)) continue;
 
-                        groupsToPlace = BacktrackClassroomsCoursGroups(currentClass.Capacity, groupsAvailablePreferingThisSite);
-
-                        if (groupsToPlace.Sum(g => g.Capacity) < currentClass.Capacity)
-                        {
-                            var remainingCapacity = currentClass.Capacity - groupsToPlace.Sum(g => g.Capacity);
-                            var remainingGroups = groupsAvailable.Except(groupsToPlace).ToList();
-                            var groupsAvailableNotPreferingThisSite = BacktrackClassroomsCoursGroups(remainingCapacity, remainingGroups);
-                            groupsToPlace.AddRange(groupsAvailableNotPreferingThisSite);
-                        }
-                    }
-                    else continue;
 
                     // ----------------------------------------------------------------------------------------------- //
                     // Constraint: Check if the prefered site of the groups is available & have the required equipment //
                     // ----------------------------------------------------------------------------------------------- //
-                    if (groupsToPlace.Count == 1 || groupsToPlace.All(g => g.PreferedSite == groupsToPlace[0].PreferedSite))
-                    {
-                        var isPreferedSiteAnyTimeSlotAvailable = !IsSiteFullForTimeSlot(groupsToPlace[0].PreferedSite, classes, schedule);
-
-                        var preferedSiteEquipments = classes.Where(c => c.Site == groupsToPlace[0].PreferedSite).SelectMany(c => c.Equipments ?? new List<Equipement>());
-                        var preferedSiteFlyingEquipments = flyingEquipments.Where(f => f.Site == groupsToPlace[0].PreferedSite).ToList();
-                        var preferedSiteAllEquipments = preferedSiteEquipments.Concat(preferedSiteFlyingEquipments).ToList();
-
-                        var havePreferedSiteRequiredEquipments = requiredEquipment is not null && requiredEquipment.Count != 0 ?
-                            requiredEquipment.All(e => preferedSiteAllEquipments.Any(f => f.Type == e.Type)) : true;
-
-                        if (currentClass.Site != groupsToPlace[0].PreferedSite)
-                        {
-                            if (havePreferedSiteRequiredEquipments && isPreferedSiteAnyTimeSlotAvailable) continue;
-                        }
-                    }
+                    if (!CheckIfAllTheGroupsPreferTheSameSite(currentClass, schedule, requiredEquipment, groupsToPlace)) continue;
 
                     // -------------------------------------------------------- //
                     // Constraint: Place the equipments required for the course //
@@ -340,6 +301,135 @@ namespace CalendarScheduleGenerator2
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Check if all the groups prefer the same site and if the site + equipment is available for the current time slot
+        /// </summary>
+        /// <param name="currentClass"></param>
+        /// <param name="schedule"></param>
+        /// <param name="requiredEquipment"></param>
+        /// <param name="groupsToPlace"></param>
+        /// <returns>true if we can place the groups on current site, false if we must place groups on the prefered site</returns>
+        private bool CheckIfAllTheGroupsPreferTheSameSite(Class currentClass, Schedule schedule, List<Equipement>? requiredEquipment, List<Group> groupsToPlace)
+        {
+            if (groupsToPlace.Count == 1 || groupsToPlace.All(g => g.PreferedSite == groupsToPlace[0].PreferedSite))
+            {
+                var isPreferedSiteAnyTimeSlotAvailable = !IsSiteFullForTimeSlot(groupsToPlace[0].PreferedSite, classes, schedule);
+
+                var preferedSiteEquipments = classes.Where(c => c.Site == groupsToPlace[0].PreferedSite).SelectMany(c => c.Equipments ?? new List<Equipement>());
+                var preferedSiteFlyingEquipments = flyingEquipments.Where(f => f.Site == groupsToPlace[0].PreferedSite).ToList();
+                var preferedSiteAllEquipments = preferedSiteEquipments.Concat(preferedSiteFlyingEquipments).ToList();
+
+                var havePreferedSiteRequiredEquipments = requiredEquipment is not null && requiredEquipment.Count != 0 ?
+                    requiredEquipment.All(e => preferedSiteAllEquipments.Any(f => f.Type == e.Type)) : true;
+
+                if (currentClass.Site != groupsToPlace[0].PreferedSite)
+                {
+                    if (havePreferedSiteRequiredEquipments && isPreferedSiteAnyTimeSlotAvailable) return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Check if any group can be placed in the classroom, and place them into groupsToPlace
+        /// </summary>
+        /// <param name="currentClass"></param>
+        /// <param name="groupsAvailable"></param>
+        /// <param name="groupsToPlace"></param>
+        /// <returns>true if any group have been placed, false if no group have been placed</returns>
+        private bool CheckIfAnyGroupToPlaceAndPlaceIt(Class currentClass, List<Group> groupsAvailable, ref List<Group> groupsToPlace)
+        {
+            if (groupsAvailable.Any())
+            {
+                var groupsAvailablePreferingThisSite = groupsAvailable.Where(g => g.PreferedSite == currentClass.Site).ToList();
+
+                groupsToPlace = BacktrackClassroomsCoursGroups(currentClass.Capacity, groupsAvailablePreferingThisSite);
+
+                if (groupsToPlace.Sum(g => g.Capacity) < currentClass.Capacity)
+                {
+                    var remainingCapacity = currentClass.Capacity - groupsToPlace.Sum(g => g.Capacity);
+                    var remainingGroups = groupsAvailable.Except(groupsToPlace).ToList();
+                    var groupsAvailableNotPreferingThisSite = BacktrackClassroomsCoursGroups(remainingCapacity, remainingGroups);
+                    groupsToPlace.AddRange(groupsAvailableNotPreferingThisSite);
+                }
+            }
+            else return false;
+            return true;
+        }
+
+        /// <summary>
+        /// Check if the groups are not on an other site for the previous or next hour
+        /// </summary>
+        /// <param name="currentClass"></param>
+        /// <param name="schedule"></param>
+        /// <param name="currentDay"></param>
+        /// <param name="previousHour"></param>
+        /// <param name="nextHour"></param>
+        /// <param name="groupsAvailable"></param>
+        /// <returns>List of groups that are available and not on a other ste for previous and next timeSlot</returns>
+        private List<Group> CheckGroupNotOnAOtherSiteForPreviousOrNextTimeSlot(Class currentClass, Schedule schedule, string currentDay, (int startHour, int endHour) previousHour, (int startHour, int endHour) nextHour, List<Group> groupsAvailable)
+        {
+            if (previousHour.startHour is not default(int) && previousHour.endHour is not default(int))
+            {
+                var groupsOnOtherSite = groupsAvailable.Where(g => schedule.Any(s =>
+                        s.Key.Day == currentDay &&
+                        IsSameTimeSlot(s.Key.TimeSlot, previousHour) &&
+                        s.Value.Groups.Contains(g.Name) &&
+                        s.Key.Location.Site != currentClass.Site
+                    )
+                ).ToList();
+
+                groupsAvailable = groupsAvailable.Where(g => !groupsOnOtherSite.Any(go => go.Name == g.Name)).ToList();
+            }
+
+            if (nextHour.startHour is not default(int) && nextHour.endHour is not default(int))
+            {
+                var groupsOnOtherSite = groupsAvailable.Where(g => schedule.Any(s =>
+                        s.Key.Day == currentDay &&
+                        IsSameTimeSlot(s.Key.TimeSlot, nextHour) &&
+                        s.Value.Groups.Contains(g.Name) &&
+                        s.Key.Location.Site != currentClass.Site
+                    )
+                ).ToList();
+
+                groupsAvailable = groupsAvailable.Where(g => !groupsOnOtherSite.Any(go => go.Name == g.Name)).ToList();
+            }
+
+            return groupsAvailable;
+        }
+
+        /// <summary>
+        /// Check if the groups are available for the current time slot
+        /// </summary>
+        /// <param name="schedule"></param>
+        /// <param name="groups"></param>
+        /// <param name="currentDay"></param>
+        /// <param name="timeSlot"></param>
+        /// <returns>List of groups that are availabe for the time slot</returns>
+        private List<Group> CheckGroupsAvailableForCurretTimeSlot(Schedule schedule, List<Group> groups, string currentDay, (int startHour, int endHour) timeSlot)
+        {
+            return groups.Where(g => !schedule.Any(s =>
+                    s.Key.Day == currentDay &&
+                    IsSameTimeSlot(s.Key.TimeSlot, timeSlot) &&
+                    s.Value.Groups.Contains(g.Name)
+            )).ToList();
+        }
+
+        /// <summary>
+        /// Check if a group has more than 2 hours of a course per day, and remove it from the list of groups
+        /// </summary>
+        /// <param name="schedule"></param>
+        /// <param name="groups"></param>
+        /// <param name="course"></param>
+        /// <param name="currentDay"></param>
+        private static void CheckNoMoreThan2HoursPerDayPerGroupForACourse(Schedule schedule, List<Group> groups, string course, string currentDay)
+        {
+            var groupsToRemove = groups.Where(g =>
+                                schedule.Count(s => s.Key.Day == currentDay && s.Value.Groups.Contains(g.Name) && s.Value.Course == course) >= 2).ToList();
+            groups.RemoveAll(g => groupsToRemove.Contains(g));
         }
 
         /// <summary>
