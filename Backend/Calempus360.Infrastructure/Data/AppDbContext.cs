@@ -1,5 +1,5 @@
 using Calempus360.Infrastructure.Data.ModelConfiguration;
-using Calempus360.Models.Models;
+using Calempus360.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Calempus360.Infrastructure.Data;
@@ -8,9 +8,9 @@ public class AppDbContext : DbContext
 {
     public DbSet<University> Universities { get; set; }
     public DbSet<Site> Sites { get; set; }
-    public DbSet<AcademicYear> Academic_Years { get; set; }
+    public DbSet<AcademicYear> AcademicYears { get; set; }
     public DbSet<DayWithoutCourse> DaysWithoutCourse { get; set; }
-    public DbSet<SiteAcademicYear> Sites_Academic_Year { get; set; }
+    public DbSet<SiteAcademicYear> SitesAcademicYear { get; set; }
     public DbSet<Group> Groups { get; set; }
     public DbSet<Option> Options { get; set; }
     public DbSet<OptionCourse> OptionCourse { get; set; }

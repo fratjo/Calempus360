@@ -1,4 +1,4 @@
-﻿using Calempus360.Models.Models;
+﻿using Calempus360.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

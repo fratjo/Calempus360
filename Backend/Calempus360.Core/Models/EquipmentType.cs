@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Calempus360.Models.Models
+namespace Calempus360.Core.Models
 {
     public class EquipmentType
     {

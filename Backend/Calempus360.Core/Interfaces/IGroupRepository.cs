@@ -1,4 +1,4 @@
-namespace Calempus360.Models.Interfaces;
+namespace Calempus360.Core.Interfaces;
 
 public interface IGroupRepository
 {

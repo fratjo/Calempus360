@@ -1,5 +1,6 @@
-﻿using Calempus360.Models.Models;
-namespace Calempus360.Models.Models
+﻿using Calempus360.Core.Models;
+
+namespace Calempus360.Core.Models
 {
     public class Site
     {

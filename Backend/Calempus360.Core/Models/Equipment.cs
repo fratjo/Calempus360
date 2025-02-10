@@ -1,4 +1,4 @@
-﻿namespace Calempus360.Models.Models
+﻿namespace Calempus360.Core.Models
 {
     public class Equipment
     {
@@ -13,7 +13,7 @@
         public int EquipmentType_Id { get; set; }
         public EquipmentType EquipmentType { get; set; }
         public UniversitySiteEquipment UniversitySiteEquipment { get; set; }
-        public ClassroomEquipment Classroom{ get; set; }
+        public ClassroomEquipment Classroom { get; set; }
         public List<Session> Sessions { get; set; }
     }
 }

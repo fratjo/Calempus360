@@ -1,4 +1,4 @@
-﻿namespace Calempus360.Models.Models
+﻿namespace Calempus360.Core.Models
 {
     public class Classroom
     {
@@ -13,6 +13,6 @@
         public List<ClassroomEquipment> Equipments { get; set; }
         public List<ClassroomAcademicYear> AcademicYears { get; set; }
         public List<Session> Sessions { get; set; }
-        
+
     }
 }

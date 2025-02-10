@@ -1,4 +1,4 @@
-namespace Calempus360.Services.Services;
+namespace Calempus360.Core.Interfaces;
 
 public interface IGroupService
 {
