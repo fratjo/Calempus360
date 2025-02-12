@@ -1,112 +1,280 @@
-﻿List<string> courses = new() { "Math", "Physique", "Chimie", "Biologie", "EPS", "Informatique", "Anglais", "Francais", "Histoire", "Geographie", "EPS", "Musique", "Arts plastiques" };
-List<string> equipementCourse = new() { "", "", "", "", "", "", "", "", "", "", "Tapis de sport", "", "" };
-List<Tuple<int, int>> horaires = new() { new(8, 10), new(10, 12), new(14, 16), new(16, 18) };
-List<string> classrooms = new() { "A1", "A2", "A3", "A4" };
-List<string> equipementClassrooms = new() { "Tapis de sport", "", "", "" };
-List<string> daysOfTheWeek = new() { "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi" };
+﻿using CalendarScheduleGenerator2;
 
+List<Class> classes = new() {
+    new("1A", "A", 60, null),
+    new("2A", "A", 40, new List<Equipement>{ new Equipement("A", "Science Kit", Guid.NewGuid()) }),
+    new("2A", "A", 60, new List<Equipement>{ new Equipement("A", "Science Kit", Guid.NewGuid()) }),
+    new("2B", "B", 40, new List<Equipement>{ new Equipement("B", "Science Kit", Guid.NewGuid()) }),
+    new("3B", "B", 40, new List<Equipement>{ new Equipement("B", "Microphone", Guid.NewGuid()) }),
+    new("1C", "C", 60, new List<Equipement>{ new Equipement("C", "TV", Guid.NewGuid()), new Equipement("C", "Microphone", Guid.NewGuid()) }),
+};
 
-Dictionary<Tuple<string, string, int, int>, string> GenerateSchedule(
-    List<string> courses,
-    List<Tuple<int, int>> horaires,
-    List<string> classrooms)
+List<Equipement> flyingEquipments = new() {
+    new("A", "TV", Guid.NewGuid()),
+    new("A", "Microphone", Guid.NewGuid()),
+    // new("B", "TV", Guid.NewGuid()),
+    // new("B", "Microphone", Guid.NewGuid()),
+};
+
+List<string> daysOfWeek = new List<string> { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" };
+
+List<(int startHour, int endHour)> hours = new() { new(8, 9), new(9, 10), new(10, 11), new(11, 12), new(13, 14), new(14, 15), new(15, 16), new(16, 17) };
+
+List<CourseGroups> courseGroups = new()
 {
-
-    // Calculate faisability of the schedule 
-    // by checking if the number of courses is less than or equal to the number of available slots - 10% of the total slots (to allow for some flexibility)
-
-    Dictionary<Tuple<string, string, int, int>, string> schedule = new();
-
-    if (BacktrackSchedule(daysOfTheWeek, courses, horaires, classrooms, schedule, 0))
+    new CourseGroups
     {
-        return schedule;
-    }
-    throw new Exception("No schedule found");
-}
-
-bool BacktrackSchedule(
-    List<string> daysOfTheWeek,
-    List<string> courses,
-    List<Tuple<int, int>> horaires,
-    List<string> classrooms,
-    Dictionary<Tuple<string, string, int, int>, string> schedule,
-    int courseIndex)
-{
-    if (courseIndex == courses.Count) return true;
-
-    string course = courses[courseIndex];
-
-    for (int d = 0; d < daysOfTheWeek.Count; d++)
-    {
-
-        var day = daysOfTheWeek[d];
-
-        for (int i = 0; i < horaires.Count; i++)
+        Course = "Math",
+        Groups = new List<Group>
         {
-            var timeSlot = horaires[i];
-
-            for (int j = 0; j < classrooms.Count; j++)
-            {
-
-                Tuple<string, string, int, int> key = Tuple.Create(daysOfTheWeek[d], classrooms[j], timeSlot.Item1, timeSlot.Item2);
-                var classroom = classrooms[j];
-                if (!schedule.ContainsKey(key)) // si la salle n'est pas déjà prise à ce créneau horaire
-                {
-                    // ----------- // ----------- // 
-                    // Constraints // Constraints //
-                    // ----------- // ----------- //
-
-                    if (equipementCourse[courseIndex] != "" && equipementClassrooms[j] != equipementCourse[courseIndex]) continue; // Equipement constraint
-
-                    // if (course == "EPS" && schedule.ContainsValue("EPS"))
-                    // {
-                    //     var epsEntries = schedule.Where(entry => entry.Value == "EPS").ToList();
-                    //     if (epsEntries.Any(entry => entryentry.Key.Item2 != classrooms[j] || entry.Key.Item3 + 2 != timeSlot.Item1))
-                    //     {
-                    //         continue; // EPS must be taught in the same classroom for two consecutive timeslots
-                    //     }
-                    // }
-
-                    if ((timeSlot.Equals(Tuple.Create(8, 10))
-                        || timeSlot.Equals(Tuple.Create(10, 12))
-                        || timeSlot.Equals(Tuple.Create(14, 16))
-                        || classrooms[j] == "A3" || classrooms[j] == "A4")
-                        && course == "Informatique") continue; // Informatique cannot be taught in A3, A4, 8-10, 10-12, 14-16
-
-                    if (course == "Anglais" && schedule.Any(entry => entry.Value == "Math" && entry.Key.Item3 == timeSlot.Item1 - 2)) continue; // Anglais cannot be taught right after Math
-
-                    // ----------- // ----------- // 
-                    // Constraints // Constraints //
-                    // ----------- // ----------- //
-
-                    schedule[key] = course;
-
-                    if (BacktrackSchedule(daysOfTheWeek, courses, horaires, classrooms, schedule, courseIndex + 1))
-                    {
-                        return true;
-                    }
-
-                    schedule.Remove(key);
-                }
-            }
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 30, PreferedSite = "B" },
+            new Group { Name = "3B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroups
+    {
+        Course = "Math",
+        Groups = new List<Group>
+        {
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 30, PreferedSite = "B" },
+            new Group { Name = "3B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroups
+    {
+        Course = "Physics",
+        Equipements = new List<Equipement>{ new Equipement(null, "Science Kit", null) },
+        Groups = new List<Group>
+        {
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroups
+    {
+        Course = "English",
+        Equipements = new List<Equipement>{ new Equipement(null, "TV", null) },
+        Groups = new List<Group>
+        {
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroups
+    {
+        Course = "French",
+        Equipements = new List<Equipement>{ new Equipement(null, "TV", null) },
+        Groups = new List<Group>
+        {
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroups
+    {
+        Course = "History",
+        Equipements = new List<Equipement>{
+            new Equipement(null, "TV", null),
+            new Equipement(null, "Microphone", null) },
+        Groups = new List<Group>
+        {
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroups
+    {
+        Course = "Geography",
+        Groups = new List<Group>
+        {
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroups
+    {
+        Course = "Biology",
+        Equipements = new List<Equipement>{ new Equipement(null, "Science Kit", null) },
+        Groups = new List<Group>
+        {
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroups
+    {
+        Course = "Chemistry",
+        Equipements = new List<Equipement>{ new Equipement(null, "Science Kit", null) },
+        Groups = new List<Group>
+        {
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroups
+    {
+        Course = "Philosophy",
+        Groups = new List<Group>
+        {
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroups
+    {
+        Course = "Economy",
+        Groups = new List<Group>
+        {
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroups
+    {
+        Course = "Sport",
+        Groups = new List<Group>
+        {
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroups
+    {
+        Course = "Music",
+        Groups = new List<Group>
+        {
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroups
+    {
+        Course = "Art",
+        Groups = new List<Group>
+        {
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroups
+    {
+        Course = "Computer Science",
+        Groups = new List<Group>
+        {
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroups
+    {
+        Course = "Algebra",
+        Groups = new List<Group>
+        {
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroups
+    {
+        Course = "Geometry",
+        Groups = new List<Group>
+        {
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroups
+    {
+        Course = "Trigonometry",
+        Groups = new List<Group>
+        {
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroups
+    {
+        Course = "Calculus",
+        Groups = new List<Group>
+        {
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroups
+    {
+        Course = "Statistics",
+        Groups = new List<Group>
+        {
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" },
+            new Group { Name = "2B", Capacity = 35, PreferedSite = "B" }
+        }
+    },
+    new CourseGroups
+    {
+        Course = "Probability",
+        Groups = new List<Group>
+        {
+            new Group { Name = "1A", Capacity = 25, PreferedSite = "A" },
+            new Group { Name = "1B", Capacity = 20, PreferedSite = "B" },
+            new Group { Name = "2A", Capacity = 30, PreferedSite = "A" }
         }
     }
+};
 
+// TODO : Add Weekly hours for each course // max 2 timeplot in a row // max 4h per day // not twice on the same day not twice in a row
 
-    return false;
-}
+// TODO : Add more constraints before running the schedule
 
-void DisplaySchedule(Dictionary<Tuple<string, string, int, int>, string> schedule)
-{
-    var sortedSchedule = schedule.OrderBy(entry => entry.Key.Item1).ThenBy(entry => entry.Key.Item3).ThenBy(entry => entry.Value);
+var ScheduleGenerator = new ScheduleGenerator(
+    classes,
+    daysOfWeek,
+    hours,
+    courseGroups,
+    flyingEquipments
+);
 
-    foreach (var entry in sortedSchedule)
-    {
-        Console.WriteLine($"{entry.Key.Item1}: {entry.Key.Item3}:00-{entry.Key.Item4}:00 - {entry.Value} in {entry.Key.Item2}");
-    }
-}
-
-
-var schedule = GenerateSchedule(courses, horaires, classrooms);
-DisplaySchedule(schedule);
-
+ScheduleGenerator.GenerateSchedule();
+ScheduleGenerator.DisplaySchedule();

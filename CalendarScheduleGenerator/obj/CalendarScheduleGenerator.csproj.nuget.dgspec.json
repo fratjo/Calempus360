@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/francoistjoens/Documents/EPHEC/SGBD/PROJECTS/Calempus360/CalendarScheduleGenerator/CalendarScheduleGenerator.csproj": {}
+    "/Users/francoistjoens/Documents/EPHEC/SGBD/PROJECTS/Calempus360/CalendarScheduleGenerator2/CalendarScheduleGenerator2.csproj": {}
   },
   "projects": {
-    "/Users/francoistjoens/Documents/EPHEC/SGBD/PROJECTS/Calempus360/CalendarScheduleGenerator/CalendarScheduleGenerator.csproj": {
+    "/Users/francoistjoens/Documents/EPHEC/SGBD/PROJECTS/Calempus360/CalendarScheduleGenerator2/CalendarScheduleGenerator2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/francoistjoens/Documents/EPHEC/SGBD/PROJECTS/Calempus360/CalendarScheduleGenerator/CalendarScheduleGenerator.csproj",
-        "projectName": "CalendarScheduleGenerator",
-        "projectPath": "/Users/francoistjoens/Documents/EPHEC/SGBD/PROJECTS/Calempus360/CalendarScheduleGenerator/CalendarScheduleGenerator.csproj",
+        "projectUniqueName": "/Users/francoistjoens/Documents/EPHEC/SGBD/PROJECTS/Calempus360/CalendarScheduleGenerator2/CalendarScheduleGenerator2.csproj",
+        "projectName": "CalendarScheduleGenerator2",
+        "projectPath": "/Users/francoistjoens/Documents/EPHEC/SGBD/PROJECTS/Calempus360/CalendarScheduleGenerator2/CalendarScheduleGenerator2.csproj",
         "packagesPath": "/Users/francoistjoens/.nuget/packages/",
-        "outputPath": "/Users/francoistjoens/Documents/EPHEC/SGBD/PROJECTS/Calempus360/CalendarScheduleGenerator/obj/",
+        "outputPath": "/Users/francoistjoens/Documents/EPHEC/SGBD/PROJECTS/Calempus360/CalendarScheduleGenerator2/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/francoistjoens/.nuget/NuGet/NuGet.Config"
