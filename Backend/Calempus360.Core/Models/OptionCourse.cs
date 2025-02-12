@@ -8,11 +8,15 @@ namespace Calempus360.Core.Models
 {
     public class OptionCourse
     {
-        public int AcademicYear_Id { get; set; }
+        public int AcademicYearId { get; set; }
+        public virtual AcademicYear AcademicYear { get; set; } = null!;
+        
+        public int CourseId { get; set; }
+        public virtual Course Course { get; set; } = null!;
+        
+        public int OptionId { get; set; }
+        public virtual Option Option { get; set; } = null!;
+        
         public int OptionGrade { get; set; }
-        public int Course_Id { get; set; }
-        public int Option_Id { get; set; }
-        public Option Option { get; set; }
-        public Course Course { get; set; }
     }
 }

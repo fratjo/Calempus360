@@ -2,7 +2,7 @@
 {
     public class Equipment
     {
-        public int Equipment_Id { get; set; }
+        public int EquipmentId { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public string Brand { get; set; }
@@ -10,10 +10,20 @@
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public int EquipmentType_Id { get; set; }
-        public EquipmentType EquipmentType { get; set; }
-        public UniversitySiteEquipment UniversitySiteEquipment { get; set; }
-        public ClassroomEquipment Classroom { get; set; }
-        public List<Session> Sessions { get; set; }
+        
+        // Navigation Properties
+        
+        // EquipmentType
+        public int EquipmentTypeId { get; set; }
+        public virtual EquipmentType EquipmentType { get; set; } = null!;
+        
+        // UniversitySiteEquipment
+        public virtual UniversitySiteEquipment UniversitySiteEquipment { get; set; } = null!;
+        
+        // ClassroomEquipment
+        public virtual ClassroomEquipment ClassroomEquipment { get; set; }
+        
+        // EquipmentSession
+        public virtual List<EquipmentSession> EquipmentSessions { get; set; }
     }
 }

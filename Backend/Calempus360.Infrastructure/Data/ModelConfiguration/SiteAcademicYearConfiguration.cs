@@ -1,11 +1,6 @@
 ﻿using Calempus360.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Calempus360.Infrastructure.Data.ModelConfiguration
 {
@@ -13,9 +8,16 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<SiteAcademicYear> builder)
         {
-            builder.HasKey(sa => new { sa.Site_Id, sa.University_Id });
-            builder.Property(sa => sa.AcademicYear_Id).IsRequired();
-            builder.HasOne(sa => sa.Site).WithMany(s => s.Sites_Academic_Year).HasForeignKey(sa => sa.Site_Id);
+            builder.HasKey(sa => new { sa.SiteId, sa.AcademicYearId });
+            builder.Property(sa => sa.AcademicYearId).IsRequired();
+            builder
+                .HasOne(sa => sa.Site)
+                .WithMany(s => s.SiteAcademicYears)
+                .HasForeignKey(sa => sa.SiteId);
+            builder
+                .HasOne(sa => sa.AcademicYear)
+                .WithMany(a => a.SiteAcademicYears)
+                .HasForeignKey(sa => sa.AcademicYearId);
         }
     }
 }

@@ -8,12 +8,20 @@ namespace Calempus360.Core.Models
 {
     public class UniversitySiteEquipment
     {
-        public int AcademicYear_Id { get; set; }
-        public int Equipment_Id { get; set; }
-        public int Site_Id { get; set; }
-        public int University_Id { get; set; }
-        public University University { get; set; }
+        // AcademicYear
+        public int AcademicYearId { get; set; }
+        public AcademicYear AcademicYear { get; set; } = null!;
+        
+        // Equipment
+        public int EquipmentId { get; set; }
+        public Equipment Equipment { get; set; } = null!;
+        
+        // Site
+        public int SiteId { get; set; }
         public Site Site { get; set; }
-        public Equipment Equipment { get; set; }
+        
+        // University
+        public int UniversityId { get; set; }
+        public University University { get; set; } = null!;
     }
 }

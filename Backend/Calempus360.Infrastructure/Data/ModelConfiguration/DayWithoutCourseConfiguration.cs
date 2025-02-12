@@ -13,13 +13,16 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<DayWithoutCourse> builder)
         {
-            builder.HasKey(d => d.DayWithoutCourse_Id);
-            builder.Property(d => d.DayWithoutCourse_Id).ValueGeneratedOnAdd();
+            builder.HasKey(d => d.DayWithoutCourseId);
+            builder.Property(d => d.DayWithoutCourseId).ValueGeneratedOnAdd();
             builder.Property(d => d.Name).IsRequired();
             builder.Property(d => d.Name).IsRequired();
             builder.Property(d => d.CreatedAt).IsRequired().HasDefaultValueSql("getdate()");
             builder.Property(d => d.UpdatedAt).IsRequired().HasDefaultValueSql("getdate()").ValueGeneratedOnAddOrUpdate();
-            builder.HasOne(a => a.AcademicYear).WithMany(d => d.DaysWithoutCourse).HasForeignKey(d => d.AcademicYear_Id);
+            builder
+                .HasOne(a => a.AcademicYear)
+                .WithMany(d => d.DaysWithoutCourse)
+                .HasForeignKey(d => d.AcademicYearId);
         }
     }
 

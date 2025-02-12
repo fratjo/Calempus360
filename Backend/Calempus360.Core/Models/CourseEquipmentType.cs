@@ -8,11 +8,20 @@ namespace Calempus360.Core.Models
 {
     public class CourseEquipmentType
     {
-        public int AcademicYear_Id { get; set; }
-        public int Course_Id { get; set; }
-        public int EquipmentType_Id { get; set; }
-        public int Quantity { get; set; }
-        public EquipmentType EquipmentType { get; set; }
-        public Course Course { get; set; }
+        public int AcademicYearId { get; set; }
+        public virtual AcademicYear AcademicYear { get; set; } = null!;
+        
+        public int CourseId { get; set; }
+        public virtual Course Course { get; set; } = null!;
+        
+        public int EquipmentTypeId { get; set; }
+        public virtual EquipmentType EquipmentType { get; set; } = null!;
+        
+        public int UniversityId { get; set; }
+        public virtual University University { get; set; } = null!;
+        
+        public int Quantity { get; set; } = 1;
+        
+
     }
 }

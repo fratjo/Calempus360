@@ -12,8 +12,8 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
     {
         public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<EquipmentType> builder)
         {
-            builder.HasKey(e => e.EquipmentType_Id);
-            builder.Property(e => e.EquipmentType_Id).ValueGeneratedOnAdd();
+            builder.HasKey(e => e.EquipmentTypeId);
+            builder.Property(e => e.EquipmentTypeId).ValueGeneratedOnAdd();
             builder.Property(e => e.Name).IsRequired();
             builder.Property(e => e.Code).IsRequired();
             builder.Property(e => e.Description).IsRequired();

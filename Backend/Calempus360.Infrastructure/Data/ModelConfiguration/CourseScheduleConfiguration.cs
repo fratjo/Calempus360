@@ -13,8 +13,8 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<CourseSchedule> builder)
         {
-            builder.HasKey(cs => cs.Schedule_Id);
-            builder.Property(cs => cs.Schedule_Id).ValueGeneratedOnAdd();
+            builder.HasKey(cs => cs.ScheduleId);
+            builder.Property(cs => cs.ScheduleId).ValueGeneratedOnAdd();
             builder.Property(cs => cs.DayOfTheWeek).IsRequired();
             builder.Property(cs => cs.HourStart).IsRequired();
             builder.Property(cs => cs.HourEnd).IsRequired();

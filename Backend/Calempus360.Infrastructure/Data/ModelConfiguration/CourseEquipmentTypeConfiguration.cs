@@ -13,11 +13,28 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<CourseEquipmentType> builder)
         {
-            builder.HasKey(ce => new { ce.EquipmentType_Id, ce.Course_Id });
-            builder.Property(ce => ce.AcademicYear_Id).IsRequired();
+            builder.HasKey(ce => new
+            {
+                ce.EquipmentTypeId, ce.CourseId, ce.UniversityId, ce.AcademicYearId
+            });
+            builder.Property(ce => ce.AcademicYearId).IsRequired();
             builder.Property(ce => ce.Quantity).IsRequired();
-            builder.HasOne(ce => ce.EquipmentType).WithMany(ce => ce.Courses).HasForeignKey(ce => ce.EquipmentType_Id);
-            builder.HasOne(ce => ce.Course).WithMany(ce => ce.EquipmentType).HasForeignKey(ce => ce.Course_Id);
+            builder
+                .HasOne(ce => ce.EquipmentType)
+                .WithMany(ce => ce.CourseEquipmentTypes)
+                .HasForeignKey(ce => ce.EquipmentTypeId);
+            builder
+                .HasOne(ce => ce.Course)
+                .WithMany(ce => ce.EquipmentTypes)
+                .HasForeignKey(ce => ce.CourseId);
+            builder
+                .HasOne(ce => ce.University)
+                .WithMany(ce => ce.CourseEquipmentTypes)
+                .HasForeignKey(ce => ce.UniversityId);
+            builder
+                .HasOne(ce => ce.AcademicYear)
+                .WithMany(ce => ce.CourseEquipmentTypes)
+                .HasForeignKey(ce => ce.AcademicYearId);
         }
     }
 }

@@ -13,9 +13,16 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<ClassroomAcademicYear> builder)
         {
-            builder.HasKey(ca => new { ca.Classroom_Id, ca.Site_Id });
-            builder.Property(ca => ca.AcademicYear_Id).IsRequired();
-            builder.HasOne(ca => ca.Classroom).WithMany(ca => ca.AcademicYears).HasForeignKey(ca => ca.Classroom_Id);
+            builder.HasKey(ca => new { ca.ClassroomId, ca.AcademicYearId});
+            builder.Property(ca => ca.AcademicYearId).IsRequired();
+            builder
+                .HasOne(ca => ca.Classroom)
+                .WithMany(ca => ca.ClassroomAcademicYears)
+                .HasForeignKey(ca => ca.ClassroomId);
+            builder
+                .HasOne(ca => ca.AcademicYear)
+                .WithMany(ca => ca.ClassroomAcademicYears)
+                .HasForeignKey(ca => ca.AcademicYearId);
         }
     }
 }

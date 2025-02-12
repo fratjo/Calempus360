@@ -8,10 +8,12 @@ namespace Calempus360.Core.Models
 {
     public class ClassroomAcademicYear
     {
-        public int AcademicYear_Id { get; set; }
-        public int Classroom_Id { get; set; }
-        public int Site_Id { get; set; }
-        public Classroom Classroom { get; set; }
-
+        // AcademicYear
+        public int AcademicYearId { get; set; }
+        public virtual AcademicYear AcademicYear { get; set; } = null!;
+        
+        // Classroom
+        public int ClassroomId { get; set; }
+        public virtual Classroom Classroom { get; set; } = null!;
     }
 }

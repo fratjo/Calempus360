@@ -2,7 +2,7 @@
 {
     public class Course
     {
-        public int Course_Id { get; set; }
+        public int CourseId { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public string Description { get; set; }
@@ -12,8 +12,16 @@
         public int Credits { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public List<OptionCourse> OptionsCourse { get; set; }
-        public List<CourseEquipmentType> EquipmentType { get; set; }
-        public List<Session> Sessions { get; set; }
+        
+        // Navigation Properties
+        
+        // OptionCourse
+        public virtual List<OptionCourse> OptionsCourses { get; set; } = new();
+        
+        // CourseEquipmentType
+        public virtual List<CourseEquipmentType> EquipmentTypes { get; set; }
+        
+        //
+        public virtual List<Session> Sessions { get; set; }
     }
 }

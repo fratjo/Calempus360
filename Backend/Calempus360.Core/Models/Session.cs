@@ -8,15 +8,24 @@ namespace Calempus360.Core.Models
 {
     public class Session
     {
-        public int Session_Id { get; set; }
+        public int SessionId { get; set; }
         public DateTime DatetimeStart { get; set; }
         public DateTime DatetimeEnd { get; set; }
-        public int Classroom_Id { get; set; }
-        public int Course_Id { get; set; }
-        public Classroom Classroom { get; set; }
-        public Course Course { get; set; }
-        public List<Equipment> Equipments { get; set; }
-        public List<Group> Groups { get; set; }
-        public List<Session> Sessions { get; set; }
+        
+        // Navigation Properties
+        
+        // Classroom
+        public int ClassroomId { get; set; }
+        public virtual Classroom Classroom { get; set; } = null!;
+        
+        // Course
+        public int CourseId { get; set; }
+        public virtual Course Course { get; set; } = null!;
+        
+        //  EquipmentSessions
+        public virtual List<EquipmentSession> EquipmentSessions { get; set; }
+        
+        // StudentGroupSessions
+        public virtual List<StudentGroupSession> StudentGroupSessions { get; set; }
     }
 }

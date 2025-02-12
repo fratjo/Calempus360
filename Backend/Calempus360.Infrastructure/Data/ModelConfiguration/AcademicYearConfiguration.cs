@@ -13,8 +13,8 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<AcademicYear> builder)
         {
-            builder.HasKey(a => a.AcademicYear_Id);
-            builder.Property(a => a.AcademicYear_Id).ValueGeneratedOnAdd();
+            builder.HasKey(a => a.AcademicYearId);
+            builder.Property(a => a.AcademicYearId).ValueGeneratedOnAdd();
             builder.Property(a => a.DateStart).IsRequired();
             builder.Property(a => a.DateEnd).IsRequired();
             builder.Property(a => a.CreatedAt).IsRequired().HasDefaultValueSql("getdate()");

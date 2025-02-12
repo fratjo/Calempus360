@@ -13,8 +13,8 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<Equipment> builder)
         {
-            builder.HasKey(e => e.Equipment_Id);
-            builder.Property(e => e.Equipment_Id).ValueGeneratedOnAdd();
+            builder.HasKey(e => e.EquipmentId);
+            builder.Property(e => e.EquipmentId).ValueGeneratedOnAdd();
             builder.Property(e => e.Name).IsRequired();
             builder.Property(e => e.Code).IsRequired();
             builder.Property(e => e.Brand).IsRequired();
@@ -23,7 +23,10 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             builder.Property(e => e.CreatedAt).IsRequired().HasDefaultValueSql("getdate()");
             builder.Property(e => e.UpdatedAt).IsRequired().HasDefaultValueSql("getdate()").ValueGeneratedOnAddOrUpdate();
 
-            builder.HasOne(e => e.EquipmentType).WithMany(e => e.Equipments).HasForeignKey(e => e.EquipmentType_Id);
+            builder
+                .HasOne(e => e.EquipmentType)
+                .WithMany(e => e.Equipments)
+                .HasForeignKey(e => e.EquipmentTypeId);
         }
     }
 }

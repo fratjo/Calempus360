@@ -13,8 +13,8 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<Course> builder)
         {
-            builder.HasKey(c => c.Course_Id);
-            builder.Property(c => c.Course_Id).ValueGeneratedOnAdd();
+            builder.HasKey(c => c.CourseId);
+            builder.Property(c => c.CourseId).ValueGeneratedOnAdd();
             builder.Property(c => c.Name).IsRequired();
             builder.Property(c => c.Code).IsRequired();
             builder.Property(c => c.Description).IsRequired();

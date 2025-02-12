@@ -8,7 +8,13 @@
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public List<Group> Groups { get; set; }
-        public List<OptionCourse> OptionCourses { get; set; }
+        
+        // Navigation Properties
+        
+        // StudentGroup
+        public List<StudentGroup> StudentGroups { get; set; } 
+
+        // OptionCourse
+        public List<OptionCourse> OptionCourses { get; set; } = new();
     }
 }

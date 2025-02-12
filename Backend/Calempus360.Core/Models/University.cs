@@ -2,14 +2,23 @@
 {
     public class University
     {
-        public int University_Id { get; set; }
+        public int UniversityId { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public List<Site> Sites { get; set; }
-        public List<UniversitySiteEquipment> Equipments { get; set; }
+        
+        // Navigation Properties
+        
+        // Site
+        public virtual List<Site> Sites { get; set; } = new();
+        
+        // UniversitySiteEquipment
+        public virtual List<UniversitySiteEquipment> Equipments { get; set; }
+        
+        // CourseEquipmentType
+        public virtual List<CourseEquipmentType> CourseEquipmentTypes { get; set; }
     }
 }

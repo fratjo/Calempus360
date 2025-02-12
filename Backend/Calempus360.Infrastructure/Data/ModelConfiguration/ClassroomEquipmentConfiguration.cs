@@ -13,10 +13,20 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<ClassroomEquipment> builder)
         {
-            builder.HasKey(ce => new { ce.Equipment_Id, ce.Classroom_Id });
-            builder.Property(ce => ce.AcademicYear_Id).IsRequired();
-            builder.HasOne(ce => ce.Classroom).WithMany(ce => ce.Equipments).HasForeignKey(ce => ce.Equipment_Id);
-            builder.HasOne(ce => ce.Equipment).WithOne(ce => ce.Classroom).HasForeignKey<ClassroomEquipment>(ce => ce.Equipment_Id);
+            builder.HasKey(ce => new { ce.EquipmentId, ce.ClassroomId, ce.AcademicYearId });
+            builder.Property(ce => ce.AcademicYearId).IsRequired();
+            builder
+                .HasOne(ce => ce.Classroom)
+                .WithMany(ce => ce.ClassroomEquipments)
+                .HasForeignKey(ce => ce.EquipmentId);
+            builder
+                .HasOne(ce => ce.Equipment)
+                .WithOne(ce => ce.ClassroomEquipment)
+                .HasForeignKey<ClassroomEquipment>(ce => ce.EquipmentId);
+            builder
+                .HasOne(ce => ce.AcademicYear)
+                .WithMany(ce => ce.ClassroomEquipments)
+                .HasForeignKey(ce => ce.AcademicYearId);
         }
     }
 }

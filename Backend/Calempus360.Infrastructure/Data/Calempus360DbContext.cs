@@ -4,14 +4,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Calempus360.Infrastructure.Data;
 
-public class AppDbContext : DbContext
+public class Calempus360DbContext : DbContext
 {
+    public Calempus360DbContext(DbContextOptions<Calempus360DbContext> options) : base(options)
+    {
+    }
+    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+            optionsBuilder.UseSqlServer("Server=localhost,1433;Database=Calempus360;User Id=SA;Password=MyStrongPass123;TrustServerCertificate=True;");
+    }
+    
     public DbSet<University> Universities { get; set; }
     public DbSet<Site> Sites { get; set; }
     public DbSet<AcademicYear> AcademicYears { get; set; }
     public DbSet<DayWithoutCourse> DaysWithoutCourse { get; set; }
     public DbSet<SiteAcademicYear> SitesAcademicYear { get; set; }
-    public DbSet<Group> Groups { get; set; }
+    public DbSet<StudentGroup> StudentGroups { get; set; }
     public DbSet<Option> Options { get; set; }
     public DbSet<OptionCourse> OptionCourse { get; set; }
     public DbSet<Course> Courses { get; set; }
@@ -25,6 +35,8 @@ public class AppDbContext : DbContext
     public DbSet<ClassroomEquipment> ClassroomsEquipments { get; set; }
     public DbSet<ClassroomAcademicYear> ClassroomsAcademicYear { get; set; }
     public DbSet<Session> Sessions { get; set; }
+    public DbSet<EquipmentSession> EquipmentSessions { get; set; }
+    public DbSet<StudentGroupSession> StudentGroupSessions { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -34,7 +46,7 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new AcademicYearConfiguration());
         modelBuilder.ApplyConfiguration(new DayWithoutCourseConfiguration());
         modelBuilder.ApplyConfiguration(new SiteAcademicYearConfiguration());
-        modelBuilder.ApplyConfiguration(new GroupConfiguration());
+        modelBuilder.ApplyConfiguration(new StudentGroupConfiguration());
         modelBuilder.ApplyConfiguration(new OptionConfiguration());
         modelBuilder.ApplyConfiguration(new OptionCourseConfiguration());
         modelBuilder.ApplyConfiguration(new CourseConfiguration());
@@ -48,6 +60,12 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new ClassroomEquipmentConfiguration());
         modelBuilder.ApplyConfiguration(new ClassroomAcademicYearConfiguration());
         modelBuilder.ApplyConfiguration(new SessionConfiguration());
+        modelBuilder.ApplyConfiguration(new EquipmentSessionConfiguration());
+        modelBuilder.ApplyConfiguration(new StudentGroupSessionConfiguration());
 
+        foreach (var fk in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+        {
+            fk.DeleteBehavior = DeleteBehavior.NoAction;
+        }
     }
 }

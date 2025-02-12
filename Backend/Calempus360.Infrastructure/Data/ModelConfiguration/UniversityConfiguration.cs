@@ -13,8 +13,8 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<University> builder)
         {
-            builder.HasKey(u => u.University_Id);
-            builder.Property(u => u.University_Id).ValueGeneratedOnAdd();
+            builder.HasKey(u => u.UniversityId);
+            builder.Property(u => u.UniversityId).ValueGeneratedOnAdd();
             builder.Property(u => u.Name).IsRequired();
             builder.Property(u => u.Code).IsRequired();
             builder.Property(u => u.Phone).IsRequired();
