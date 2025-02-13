@@ -1,7 +1,4 @@
-// list classe + site
-// course + list<groupe>
-
-namespace CalendarScheduleGenerator2
+namespace ScheduleGenerator
 {
     public class CourseGroups
     {

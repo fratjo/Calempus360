@@ -1,10 +1,4 @@
-// list classe + site
-// --------------------------------------------
-// --------------------------------------------
-// --------------------------------------------
-
-// groupe
-namespace CalendarScheduleGenerator2
+namespace ScheduleGenerator
 {
     public class Group
     {
