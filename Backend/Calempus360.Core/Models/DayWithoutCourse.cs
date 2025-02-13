@@ -8,16 +8,16 @@ namespace Calempus360.Core.Models
 {
     public class DayWithoutCourse
     {
-        public int DayWithoutCourseId { get; set; }
+        public Guid DayWithoutCourseId { get; set; }
         public string Name { get; set; }
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         
         // Navigation Properties
         
         // AcademicYear
-        public int AcademicYearId { get; set; }
+        public string AcademicYearId { get; set; }
         public virtual AcademicYear AcademicYear { get; set; } = null!;
     }
 }

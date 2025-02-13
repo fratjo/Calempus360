@@ -14,13 +14,20 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
         public void Configure(EntityTypeBuilder<Equipment> builder)
         {
             builder.HasKey(e => e.EquipmentId);
-            builder.Property(e => e.EquipmentId).ValueGeneratedOnAdd();
+            builder.Property(e => e.EquipmentId).HasDefaultValueSql("NEWID()");
+            
             builder.Property(e => e.Name).IsRequired();
+            
             builder.Property(e => e.Code).IsRequired();
+            
             builder.Property(e => e.Brand).IsRequired();
+            
             builder.Property(e => e.Model).IsRequired();
+            
             builder.Property(e => e.Description).IsRequired();
+            
             builder.Property(e => e.CreatedAt).IsRequired().HasDefaultValueSql("getdate()");
+            
             builder.Property(e => e.UpdatedAt).IsRequired().HasDefaultValueSql("getdate()").ValueGeneratedOnAddOrUpdate();
 
             builder

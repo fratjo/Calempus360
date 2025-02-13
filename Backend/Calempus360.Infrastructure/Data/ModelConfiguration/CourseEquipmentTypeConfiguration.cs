@@ -17,20 +17,33 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             {
                 ce.EquipmentTypeId, ce.CourseId, ce.UniversityId, ce.AcademicYearId
             });
+            
+            builder.Property(ce => ce.UniversityId).IsRequired();
+            
+            
+            builder.Property(ce => ce.CourseId).IsRequired();
+            
+            builder.Property(ce => ce.EquipmentTypeId).IsRequired();
+            
             builder.Property(ce => ce.AcademicYearId).IsRequired();
+            
             builder.Property(ce => ce.Quantity).IsRequired();
+            
             builder
                 .HasOne(ce => ce.EquipmentType)
                 .WithMany(ce => ce.CourseEquipmentTypes)
                 .HasForeignKey(ce => ce.EquipmentTypeId);
+            
             builder
                 .HasOne(ce => ce.Course)
                 .WithMany(ce => ce.EquipmentTypes)
                 .HasForeignKey(ce => ce.CourseId);
+            
             builder
                 .HasOne(ce => ce.University)
                 .WithMany(ce => ce.CourseEquipmentTypes)
                 .HasForeignKey(ce => ce.UniversityId);
+            
             builder
                 .HasOne(ce => ce.AcademicYear)
                 .WithMany(ce => ce.CourseEquipmentTypes)

@@ -9,9 +9,15 @@ public class StudentGroupSessionConfiguration: IEntityTypeConfiguration<StudentG
     public void Configure(EntityTypeBuilder<StudentGroupSession> builder)
     {
         builder.HasKey(sgs => new { sgs.StudentGroupId, sgs.SessionId });
+        
+        builder.Property(sgs => sgs.StudentGroupId).IsRequired();
+        
+        builder.Property(sgs => sgs.SessionId).IsRequired();
+        
         builder.HasOne(sgs => sgs.StudentGroup)
             .WithMany(sg => sg.StudentGroupSessions)
             .HasForeignKey(sgs => sgs.StudentGroupId);
+        
         builder.HasOne(sgs => sgs.Session)
             .WithMany(s => s.StudentGroupSessions)
             .HasForeignKey(sgs => sgs.SessionId);

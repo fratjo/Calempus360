@@ -17,15 +17,25 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             {
                 oc.CourseId, oc.OptionId, oc.AcademicYearId
             });
+            
+            builder.Property(oc => oc.CourseId).IsRequired();
+            
+            builder.Property(oc => oc.OptionId).IsRequired();
+            
+            builder.Property(oc => oc.AcademicYearId).IsRequired();
+            
             builder.Property(oc => oc.OptionGrade).IsRequired();
+            
             builder
                 .HasOne(oc => oc.Option)
                 .WithMany(oc => oc.OptionCourses)
                 .HasForeignKey(oc => oc.OptionId);
+            
             builder
                 .HasOne(oc => oc.Course)
                 .WithMany(oc => oc.OptionsCourses)
                 .HasForeignKey(oc => oc.CourseId);
+            
             builder
                 .HasOne(oc => oc.AcademicYear)
                 .WithMany(oc => oc.OptionCourses)

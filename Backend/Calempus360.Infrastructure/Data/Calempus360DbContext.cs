@@ -6,16 +6,6 @@ namespace Calempus360.Infrastructure.Data;
 
 public class Calempus360DbContext : DbContext
 {
-    public Calempus360DbContext(DbContextOptions<Calempus360DbContext> options) : base(options)
-    {
-    }
-    
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-            optionsBuilder.UseSqlServer("Server=localhost,1433;Database=Calempus360;User Id=SA;Password=MyStrongPass123;TrustServerCertificate=True;");
-    }
-    
     public DbSet<University> Universities { get; set; }
     public DbSet<Site> Sites { get; set; }
     public DbSet<AcademicYear> AcademicYears { get; set; }

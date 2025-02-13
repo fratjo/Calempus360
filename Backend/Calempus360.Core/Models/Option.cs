@@ -2,7 +2,7 @@
 {
     public class Option
     {
-        public int Option_Id { get; set; }
+        public Guid OptionId { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public string Description { get; set; }

@@ -15,13 +15,23 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
         public void Configure(EntityTypeBuilder<Site> builder)
         {
             builder.HasKey(u => u.SiteId);
-            builder.Property(u => u.SiteId).ValueGeneratedOnAdd();
+            builder.Property(u => u.SiteId).HasDefaultValueSql("NEWID()");
+            
             builder.Property(u => u.Name).IsRequired();
+            
             builder.Property(u => u.Code).IsRequired();
+            builder.HasIndex(u => u.Code).IsUnique();
+            
             builder.Property(u => u.Phone).IsRequired();
+            
             builder.Property(u => u.Address).IsRequired();
-            builder.Property(u => u.CreatedAt).IsRequired().HasDefaultValueSql("getdate()");
-            builder.Property(u => u.UpdatedAt).IsRequired().HasDefaultValueSql("getdate()").ValueGeneratedOnAddOrUpdate();
+            
+            builder.Property(u => u.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
+            
+            builder.Property(u => u.UpdatedAt).IsRequired().HasDefaultValueSql("GETDATE()").ValueGeneratedOnAddOrUpdate();
+            
+            builder.Property(u => u.UniversityId).IsRequired();
+            
             builder
                 .HasOne(s => s.University)
                 .WithMany(u => u.Sites)

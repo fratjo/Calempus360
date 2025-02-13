@@ -2,7 +2,7 @@
 {
     public class University
     {
-        public int UniversityId { get; set; }
+        public Guid UniversityId { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public string Phone { get; set; }

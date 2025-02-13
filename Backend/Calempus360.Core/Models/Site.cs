@@ -4,7 +4,7 @@ namespace Calempus360.Core.Models
 {
     public class Site
     {
-        public int SiteId { get; set; }
+        public Guid SiteId { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public string Address { get; set; }
@@ -15,11 +15,11 @@ namespace Calempus360.Core.Models
         // Navigation Properties
         
         // University
-        public virtual int UniversityId { get; set; }
+        public virtual Guid UniversityId { get; set; }
         public virtual University University { get; set; } = null!;
         
         // SiteAcademicYear
-        public virtual int AcademicYearId { get; set; }
+        public virtual string AcademicYearId { get; set; }
         public virtual List<SiteAcademicYear> SiteAcademicYears { get; set; } 
         
         // StudentGroup

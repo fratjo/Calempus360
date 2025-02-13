@@ -9,15 +9,15 @@ namespace Calempus360.Core.Models
     public class ClassroomEquipment
     {
         // AcademicYear
-        public int AcademicYearId { get; set; }
+        public string AcademicYearId { get; set; }
         public virtual AcademicYear AcademicYear { get; set; } = null!;
         
         // Equipment
-        public int EquipmentId { get; set; }
+        public Guid EquipmentId { get; set; }
         public virtual Equipment Equipment { get; set; } = null!;
         
         // Classroom
-        public int ClassroomId { get; set; }
+        public Guid ClassroomId { get; set; }
         public virtual Classroom Classroom { get; set; } = null!;
     }
 }

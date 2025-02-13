@@ -14,7 +14,11 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
         public void Configure(EntityTypeBuilder<ClassroomAcademicYear> builder)
         {
             builder.HasKey(ca => new { ca.ClassroomId, ca.AcademicYearId});
+            
+            builder.Property(ca => ca.ClassroomId).IsRequired();
+            
             builder.Property(ca => ca.AcademicYearId).IsRequired();
+            
             builder
                 .HasOne(ca => ca.Classroom)
                 .WithMany(ca => ca.ClassroomAcademicYears)

@@ -9,11 +9,11 @@ namespace Calempus360.Core.Models
     public class SiteAcademicYear
     {   
         // AcademicYear
-        public int AcademicYearId { get; set; }
+        public string AcademicYearId { get; set; }
         public virtual AcademicYear AcademicYear { get; set; } = null!;
         
         // Site
-        public int SiteId { get; set; }
+        public Guid SiteId { get; set; }
         public virtual Site Site { get; set; } = null!;
     }
 }

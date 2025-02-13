@@ -14,13 +14,28 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
         public void Configure(EntityTypeBuilder<Session> builder)
         {
             builder.HasKey(s => s.SessionId);
-            builder.Property(s => s.SessionId).ValueGeneratedOnAdd();
+            builder.Property(s => s.SessionId).HasDefaultValueSql("NEWID()");
+            
             builder.Property(s => s.DatetimeStart).IsRequired();
+            
             builder.Property(s => s.DatetimeEnd).IsRequired();
+            
+            builder.Property(s => s.ClassroomId).IsRequired();
+            
+            builder.Property(s => s.CourseId).IsRequired();
+
+            builder.HasIndex(s => new { s.ClassroomId, s.DatetimeStart, s.DatetimeEnd }).IsUnique();
+            
+            builder.Property(s => s.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
+
+            builder.Property(s => s.UpdatedAt).IsRequired().HasDefaultValueSql("GETDATE()")
+                .ValueGeneratedOnAddOrUpdate();
+            
             builder
                 .HasOne(s => s.Classroom)
                 .WithMany(s => s.Sessions)
                 .HasForeignKey(s => s.ClassroomId);
+            
             builder
                 .HasOne(s => s.Course)
                 .WithMany(s => s.Sessions)

@@ -3,7 +3,7 @@ namespace Calempus360.Core.Models;
 
 public class StudentGroup
 {
-    public int GroupId { get; set; }
+    public Guid GroupId { get; set; }
     public string Code { get; set; }
     public int NumberOfStudents { get; set; }
     public int OptionGrade { get; set; }
@@ -13,15 +13,15 @@ public class StudentGroup
     // Navigation Properties
     
     // AcademicYear
-    public int AcademicYearId { get; set; }
+    public string AcademicYearId { get; set; }
     public virtual AcademicYear AcademicYear { get; set; } = null!;
     
     // Site
-    public int SiteId { get; set; }
+    public Guid SiteId { get; set; }
     public virtual Site Site { get; set; } = null!;
     
     // Option
-    public int OptionId { get; set; }
+    public Guid OptionId { get; set; }
     public virtual Option Option { get; set; } = null!;
     
     // StudentGroupSessions

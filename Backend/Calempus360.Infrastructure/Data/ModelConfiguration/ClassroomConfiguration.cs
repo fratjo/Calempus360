@@ -14,12 +14,19 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
         public void Configure(EntityTypeBuilder<Classroom> builder)
         {
             builder.HasKey(c => c.ClassroomId);
-            builder.Property(c => c.ClassroomId).ValueGeneratedOnAdd();
+            builder.Property(c => c.ClassroomId).HasDefaultValueSql("NEWID()");
+            
             builder.Property(c => c.Name).IsRequired();
+            
             builder.Property(c => c.Code).IsRequired();
+            builder.HasIndex(c => c.Code).IsUnique();
+            
             builder.Property(c => c.Capacity).IsRequired();
+            
             builder.Property(c => c.CreatedAt).IsRequired().HasDefaultValueSql("getdate()");
+            
             builder.Property(c => c.UpdatedAt).IsRequired().HasDefaultValueSql("getdate()").ValueGeneratedOnAddOrUpdate();
+            
             builder
                 .HasOne(c => c.Site)
                 .WithMany(c => c.Classrooms)

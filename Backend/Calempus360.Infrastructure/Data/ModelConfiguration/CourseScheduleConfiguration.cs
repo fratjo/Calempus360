@@ -14,11 +14,18 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
         public void Configure(EntityTypeBuilder<CourseSchedule> builder)
         {
             builder.HasKey(cs => cs.ScheduleId);
-            builder.Property(cs => cs.ScheduleId).ValueGeneratedOnAdd();
+            builder.Property(cs => cs.ScheduleId).HasDefaultValueSql("NEWID()");
+
             builder.Property(cs => cs.DayOfTheWeek).IsRequired();
+            
             builder.Property(cs => cs.HourStart).IsRequired();
+            
             builder.Property(cs => cs.HourEnd).IsRequired();
+            
+            builder.HasIndex(cs => new { cs.DayOfTheWeek, cs.HourStart, cs.HourEnd }).IsUnique();
+            
             builder.Property(cs => cs.CreatedAt).IsRequired().HasDefaultValueSql("getdate()");
+            
             builder.Property(cs => cs.UpdatedAt).IsRequired().HasDefaultValueSql("getdate()").ValueGeneratedOnAddOrUpdate();
         }
     }

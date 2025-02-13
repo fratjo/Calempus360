@@ -2,7 +2,7 @@
 {
     public class Classroom
     {
-        public int ClassroomId { get; set; }
+        public Guid ClassroomId { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public int Capacity { get; set; }
@@ -12,7 +12,7 @@
         // Navigation Properties
         
         // Site
-        public int SiteId { get; set; }
+        public Guid SiteId { get; set; }
         public virtual Site Site { get; set; } = null!;
         
         // ClassroomEquipment

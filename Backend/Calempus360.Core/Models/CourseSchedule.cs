@@ -2,7 +2,7 @@
 {
     public class CourseSchedule
     {
-        public int ScheduleId { get; set; }
+        public Guid ScheduleId { get; set; }
         public int DayOfTheWeek { get; set; }
         public DateTime HourStart { get; set; }
         public DateTime HourEnd { get; set; }

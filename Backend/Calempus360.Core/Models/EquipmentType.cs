@@ -8,7 +8,7 @@ namespace Calempus360.Core.Models
 {
     public class EquipmentType
     {
-        public int EquipmentTypeId { get; set; }
+        public Guid EquipmentTypeId { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public string Description { get; set; }

@@ -2,7 +2,7 @@
 {
     public class Equipment
     {
-        public int EquipmentId { get; set; }
+        public Guid EquipmentId { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public string Brand { get; set; }
@@ -14,7 +14,7 @@
         // Navigation Properties
         
         // EquipmentType
-        public int EquipmentTypeId { get; set; }
+        public Guid EquipmentTypeId { get; set; }
         public virtual EquipmentType EquipmentType { get; set; } = null!;
         
         // UniversitySiteEquipment

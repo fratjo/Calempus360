@@ -7,16 +7,20 @@ using System.Threading.Tasks;
 namespace Calempus360.Core.Models
 {
     public class OptionCourse
-    {
-        public int AcademicYearId { get; set; }
+    {   
+        // AcademicYear
+        public string AcademicYearId { get; set; }
         public virtual AcademicYear AcademicYear { get; set; } = null!;
         
-        public int CourseId { get; set; }
+        // Course
+        public Guid CourseId { get; set; }
         public virtual Course Course { get; set; } = null!;
         
-        public int OptionId { get; set; }
+        // Option
+        public Guid OptionId { get; set; }
         public virtual Option Option { get; set; } = null!;
         
+        // OptionGrade
         public int OptionGrade { get; set; }
     }
 }
