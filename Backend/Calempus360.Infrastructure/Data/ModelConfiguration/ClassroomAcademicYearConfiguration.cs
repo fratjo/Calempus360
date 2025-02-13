@@ -23,6 +23,7 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
                 .HasOne(ca => ca.Classroom)
                 .WithMany(ca => ca.ClassroomAcademicYears)
                 .HasForeignKey(ca => ca.ClassroomId);
+            
             builder
                 .HasOne(ca => ca.AcademicYear)
                 .WithMany(ca => ca.ClassroomAcademicYears)

@@ -19,12 +19,12 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             
             builder.Property(d => d.Name).IsRequired();
             
-            builder.Property(d => d.Date).IsRequired();
+            builder.Property(d => d.Date).IsRequired().HasColumnType("DATE");
             builder.HasIndex(d => d.Date).IsUnique();
             
-            builder.Property(d => d.CreatedAt).IsRequired().HasDefaultValueSql("getdate()");
+            builder.Property(d => d.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
             
-            builder.Property(d => d.UpdatedAt).IsRequired().HasDefaultValueSql("getdate()").ValueGeneratedOnAddOrUpdate();
+            builder.Property(d => d.UpdatedAt).IsRequired().HasDefaultValueSql("GETDATE()").ValueGeneratedOnAddOrUpdate();
             
             builder
                 .HasOne(a => a.AcademicYear)

@@ -4,8 +4,8 @@
     {
         public Guid ScheduleId { get; set; }
         public int DayOfTheWeek { get; set; }
-        public DateTime HourStart { get; set; }
-        public DateTime HourEnd { get; set; }
+        public TimeOnly HourStart { get; set; }
+        public TimeOnly HourEnd { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         

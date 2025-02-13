@@ -9,7 +9,6 @@ namespace Calempus360.Core.Models
     public class AcademicYear
     {
         public string AcademicYearId { get; set; }
-        public string Year { get; set; }
         public DateOnly DateStart { get; set; }
         public DateOnly DateEnd { get; set; }
         public DateTime CreatedAt { get; set; }

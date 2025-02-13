@@ -20,7 +20,6 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             
             builder.Property(ce => ce.UniversityId).IsRequired();
             
-            
             builder.Property(ce => ce.CourseId).IsRequired();
             
             builder.Property(ce => ce.EquipmentTypeId).IsRequired();

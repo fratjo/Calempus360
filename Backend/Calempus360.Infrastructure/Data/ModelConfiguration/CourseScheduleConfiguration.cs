@@ -17,16 +17,16 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             builder.Property(cs => cs.ScheduleId).HasDefaultValueSql("NEWID()");
 
             builder.Property(cs => cs.DayOfTheWeek).IsRequired();
+
+            builder.Property(cs => cs.HourStart).IsRequired().HasColumnType("TIME");
             
-            builder.Property(cs => cs.HourStart).IsRequired();
-            
-            builder.Property(cs => cs.HourEnd).IsRequired();
+            builder.Property(cs => cs.HourEnd).IsRequired().HasColumnType("TIME");
             
             builder.HasIndex(cs => new { cs.DayOfTheWeek, cs.HourStart, cs.HourEnd }).IsUnique();
             
-            builder.Property(cs => cs.CreatedAt).IsRequired().HasDefaultValueSql("getdate()");
+            builder.Property(cs => cs.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
             
-            builder.Property(cs => cs.UpdatedAt).IsRequired().HasDefaultValueSql("getdate()").ValueGeneratedOnAddOrUpdate();
+            builder.Property(cs => cs.UpdatedAt).IsRequired().HasDefaultValueSql("GETDATE()").ValueGeneratedOnAddOrUpdate();
         }
     }
 }
