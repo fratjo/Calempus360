@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduleGenerator", "Schedu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduleGeneratorRunner", "ScheduleGeneratorRunner\ScheduleGeneratorRunner.csproj", "{5EE76843-95E7-4282-8F4D-B0F7D389EB9E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calempus360.Test", "Calempus360.Test\Calempus360.Test.csproj", "{55630EAA-63F8-4185-B1B1-98039BE54193}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,5 +56,9 @@ Global
 		{5EE76843-95E7-4282-8F4D-B0F7D389EB9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EE76843-95E7-4282-8F4D-B0F7D389EB9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EE76843-95E7-4282-8F4D-B0F7D389EB9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55630EAA-63F8-4185-B1B1-98039BE54193}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55630EAA-63F8-4185-B1B1-98039BE54193}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55630EAA-63F8-4185-B1B1-98039BE54193}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55630EAA-63F8-4185-B1B1-98039BE54193}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
