@@ -1,14 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Calempus360.Core\Calempus360.Core.csproj" />
-      <ProjectReference Include="..\Calempus360.Errors\Calempus360.Errors.csproj" />
       <ProjectReference Include="..\ScheduleGenerator\ScheduleGenerator.csproj" />
     </ItemGroup>
 

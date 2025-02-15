@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace CalendarScheduleGenerator2
+namespace ScheduleGenerator
 {
     public class ScheduleGenerator
     {
@@ -163,7 +158,7 @@ namespace CalendarScheduleGenerator2
 
                 foreach (var timeSlot in hours)
                 {
-                    var scheduleKey = new ScheduleKey((currentClass.Site, currentClass.Classroom), currentDay, timeSlot);
+                    var scheduleKey = new ScheduleKey((currentClass.Site, currentClass.Name), currentDay, timeSlot);
 
                     // ------------------------------------------------------------ //
                     // Constraint: Check if the class is already taken at this time //
@@ -252,7 +247,7 @@ namespace CalendarScheduleGenerator2
                                     s.Key.Day == currentDay &&
                                     IsSameTimeSlot(s.Key.TimeSlot, pvH) &&
                                     s.Key.Location.Site == currentClass.Site &&
-                                    s.Key.Location.Classroom == currentClass.Classroom
+                                    s.Key.Location.Classroom == currentClass.Name
                                 );
             var previousGroupsInSameClassroom = previousCourseInSameClassroom.Value?.Groups ?? new List<string>();
 
@@ -262,7 +257,7 @@ namespace CalendarScheduleGenerator2
                 s.Key.Day == currentDay &&
                 IsSameTimeSlot(s.Key.TimeSlot, nxH) &&
                 s.Key.Location.Site == currentClass.Site &&
-                s.Key.Location.Classroom == currentClass.Classroom
+                s.Key.Location.Classroom == currentClass.Name
             );
             var nextGroupsInSameClassroom = nextCourseInSameClassroom.Value?.Groups ?? new List<string>();
 
@@ -280,7 +275,7 @@ namespace CalendarScheduleGenerator2
                 {
                     if (previousCourseInSameClassroom.Value!.Course == course &&
                         previousCourseInSameClassroom.Key.Location.Site == currentClass.Site &&
-                        previousCourseInSameClassroom.Key.Location.Classroom == currentClass.Classroom &&
+                        previousCourseInSameClassroom.Key.Location.Classroom == currentClass.Name &&
                         previousGroupsInSameClassroom.All(g => groups.Any(go => go.Name == g)) &&
                         schedule.Count(s => s.Key.Day == currentDay && s.Value.Course == course) < 2)
                     {
@@ -293,7 +288,7 @@ namespace CalendarScheduleGenerator2
                 {
                     if (nextCourseInSameClassroom.Value!.Course == course &&
                         nextCourseInSameClassroom.Key.Location.Site == currentClass.Site &&
-                        nextCourseInSameClassroom.Key.Location.Classroom == currentClass.Classroom &&
+                        nextCourseInSameClassroom.Key.Location.Classroom == currentClass.Name &&
                         nextGroupsInSameClassroom.All(g => groups.Any(go => go.Name == g)) &&
                         schedule.Count(s => s.Key.Day == currentDay && s.Value.Course == course) < 2)
                     {

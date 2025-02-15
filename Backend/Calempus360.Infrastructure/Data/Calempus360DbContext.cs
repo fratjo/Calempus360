@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Calempus360.Infrastructure.Data;
 
-public class Calempus360DbContext : DbContext
+public class Calempus360DbContext(DbContextOptions<Calempus360DbContext> options) : DbContext(options)
 {
     public DbSet<University> Universities { get; set; }
     public DbSet<Site> Sites { get; set; }
