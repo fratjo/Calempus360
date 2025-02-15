@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Calempus360.API.Handlers;
 using Calempus360.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,10 +24,16 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 // DI Configuration
 // services
 // repositories
+// handlers
+builder.Services.AddExceptionHandler<TestExceptionHandler>();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Logging.AddFilter("Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware", LogLevel.Warning);
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
