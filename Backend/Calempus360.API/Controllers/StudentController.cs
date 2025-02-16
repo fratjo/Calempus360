@@ -17,8 +17,13 @@ namespace Calempus360.API.Controllers
         
         // GET: api/students/{groupId}/schedule
         [HttpGet("{groupId}/schedule")]
-        public async Task<IActionResult> GetGroupSchedule([FromQuery] GetGroupScheduleRequest request)
+        public async Task<IActionResult> GetGroupSchedule([FromRoute] int groupId)
         {
+            var request = new GetGroupScheduleRequest
+            {
+                GroupId = groupId
+            };
+            
             var response = await _scheduleService.GetGroupScheduleAsync(request);
             return Ok(response);
         }
