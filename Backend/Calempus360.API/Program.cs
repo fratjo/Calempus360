@@ -1,6 +1,9 @@
 using System.Text.Json.Serialization;
 using Calempus360.API.Handlers;
+using Calempus360.Core.Interfaces.Schedule;
 using Calempus360.Infrastructure.Data;
+using Calempus360.Infrastructure.Repositories.ScheduleRepository;
+using Calempus360.Services.ScheduleService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +26,9 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 // DI Configuration
 // services
+builder.Services.AddScoped<IScheduleService, ScheduleService>();
 // repositories
+builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>();
 // handlers
 builder.Services.AddExceptionHandler<TestExceptionHandler>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
@@ -32,7 +37,7 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Logging.AddFilter("Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware", LogLevel.Warning);
+builder.Logging.AddFilter("Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware", LogLevel.None);
 builder.Services.AddProblemDetails();
 
 var app = builder.Build();
@@ -44,6 +49,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
