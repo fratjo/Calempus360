@@ -8,6 +8,11 @@ namespace Calempus360.Infrastructure.Repositories.ScheduleRepository;
 public class ScheduleRepository : IScheduleRepository
 {
     private readonly Calempus360DbContext _context;
+
+    public ScheduleRepository(Calempus360DbContext context)
+    {
+        _context = context;
+    }
     
     public async Task<Session> GetScheduleByGroupIdAsync(int groupId)
     {
