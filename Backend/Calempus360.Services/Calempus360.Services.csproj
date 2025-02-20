@@ -9,6 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Calempus360.Core\Calempus360.Core.csproj" />
       <ProjectReference Include="..\Calempus360.Errors\Calempus360.Errors.csproj" />
+      <ProjectReference Include="..\Calempus360.Infrastructure\Calempus360.Infrastructure.csproj" />
       <ProjectReference Include="..\ScheduleGenerator\ScheduleGenerator.csproj" />
     </ItemGroup>
 

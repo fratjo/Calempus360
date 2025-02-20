@@ -1,23 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace Calempus360.Core.Models;
 
-namespace Calempus360.Core.Models
+public class DayWithoutCourse
 {
-    public class DayWithoutCourse
+    public Guid Id { get; private set; }
+    public string Name { get; private set; }
+    public DateOnly Date { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public DateTime UpdatedAt { get; private set; }
+    
+    public DayWithoutCourse(
+        Guid     id,
+        string   name,
+        DateOnly date,
+        DateTime createdAt,
+        DateTime updatedAt)
     {
-        public Guid DayWithoutCourseId { get; set; }
-        public string Name { get; set; }
-        public DateOnly Date { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        
-        // Navigation Properties
-        
-        // AcademicYear
-        public string AcademicYearId { get; set; }
-        public virtual AcademicYear AcademicYear { get; set; } = null!;
+        Id        = id;
+        Name      = name;
+        Date      = date;
+        CreatedAt = createdAt;
+        UpdatedAt = updatedAt;
     }
 }

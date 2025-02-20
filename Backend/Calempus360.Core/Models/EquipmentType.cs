@@ -1,26 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace Calempus360.Core.Models;
 
-namespace Calempus360.Core.Models
+public class EquipmentType
 {
-    public class EquipmentType
+    public Guid Id { get; private set; }
+    public string Name { get; private set; }
+    public string Code { get; private set; }
+    public string Description { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public DateTime UpdatedAt { get; private set; }
+    
+    public EquipmentType(
+        Guid     id,
+        string   name,
+        string   code,
+        string   description,
+        DateTime createdAt,
+        DateTime updatedAt)
     {
-        public Guid EquipmentTypeId { get; set; }
-        public string Name { get; set; }
-        public string Code { get; set; }
-        public string Description { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        
-        // Navigation Properties
-        
-        // Equipment
-        public virtual List<Equipment> Equipments { get; set; }
-        
-        // CourseEquipmentType
-        public virtual List<CourseEquipmentType> CourseEquipmentTypes { get; set; }
+        Id          = id;
+        Name        = name;
+        Code        = code;
+        Description = description;
+        CreatedAt   = createdAt;
+        UpdatedAt   = updatedAt;
     }
 }

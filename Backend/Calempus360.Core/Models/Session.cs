@@ -1,33 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace Calempus360.Core.Models;
 
-namespace Calempus360.Core.Models
+public class Session
 {
-    public class Session
+    public Guid     Id            { get; private set; }
+    public string   Name          { get; private set; }
+    public DateTime DateTimeStart { get; private set; }
+    public DateTime DateTimeEnd   { get; private set; }
+    public DateTime CreatedAt     { get; private set; }
+    public DateTime UpdatedAt     { get; private set; }
+    
+    // aggregates
+    public List<Equipment> Equipments { get; private set; }
+    public List<StudentGroup> StudentGroups { get; private set; }
+    public Course Course { get; private set; }
+    public Classroom Classroom { get; private set; }
+    
+    public Session(
+        Guid           id,
+        string         name,
+        DateTime       dateTimeStart,
+        DateTime       dateTimeEnd,
+        DateTime       createdAt,
+        DateTime       updatedAt,
+        List<Equipment> equipments,
+        List<StudentGroup> studentGroups,
+        Course         course,
+        Classroom      classroom)
     {
-        public Guid SessionId { get; set; }
-        public DateTime DatetimeStart { get; set; }
-        public DateTime DatetimeEnd { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        
-        // Navigation Properties
-        
-        // Classroom
-        public Guid ClassroomId { get; set; }
-        public virtual Classroom Classroom { get; set; } = null!;
-        
-        // Course
-        public Guid CourseId { get; set; }
-        public virtual Course Course { get; set; } = null!;
-        
-        //  EquipmentSessions
-        public virtual List<EquipmentSession> EquipmentSessions { get; set; }
-        
-        // StudentGroupSessions
-        public virtual List<StudentGroupSession> StudentGroupSessions { get; set; }
+        Id            = id;
+        Name          = name;
+        DateTimeStart = dateTimeStart;
+        DateTimeEnd   = dateTimeEnd;
+        CreatedAt     = createdAt;
+        UpdatedAt     = updatedAt;
+        Equipments    = equipments;
+        StudentGroups = studentGroups;
+        Course        = course;
+        Classroom     = classroom;
     }
 }
