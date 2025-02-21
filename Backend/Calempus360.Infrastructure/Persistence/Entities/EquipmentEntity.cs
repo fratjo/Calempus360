@@ -14,8 +14,8 @@
         // Navigation Properties
         
         // EquipmentType
-        public Guid EquipmentTypeId { get; set; }
-        public virtual EquipmentTypeEntity EquipmentTypeEntity { get; set; } = null!;
+        public         Guid                 EquipmentTypeId     { get; set; }
+        public virtual EquipmentTypeEntity? EquipmentTypeEntity { get; set; } = null!;
         
         // UniversitySiteEquipment
         public virtual UniversitySiteEquipmentEntity UniversitySiteEquipmentEntity { get; set; } = null!;

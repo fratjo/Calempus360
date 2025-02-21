@@ -11,22 +11,14 @@ public enum DayOfWeek : int
     Saturday  = 6
 }
 
-public class Schedule
+public class Schedule(
+    Guid      id,
+    DayOfWeek dayOfWeek,
+    TimeOnly  timeStart,
+    TimeOnly  timeEnd)
 {
-    public Guid      Id        { get; private set; }
-    public DayOfWeek DayOfWeek { get; private set; }
-    public TimeSpan  TimeStart { get; private set; }
-    public TimeSpan  TimeEnd   { get; private set; }
-    
-    public Schedule(
-        Guid      id,
-        DayOfWeek dayOfWeek,
-        TimeSpan  timeStart,
-        TimeSpan  timeEnd)
-    {
-        Id        = id;
-        DayOfWeek = dayOfWeek;
-        TimeStart = timeStart;
-        TimeEnd   = timeEnd;
-    }
+    public Guid      Id        { get; private set; } = id;
+    public DayOfWeek DayOfWeek { get; private set; } = dayOfWeek;
+    public TimeOnly  TimeStart { get; private set; } = timeStart;
+    public TimeOnly  TimeEnd   { get; private set; } = timeEnd;
 }

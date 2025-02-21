@@ -13,8 +13,8 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<StudentGroupEntity> builder)
         {
-            builder.HasKey(g => g.GroupId);
-            builder.Property(g => g.GroupId).HasDefaultValueSql("NEWID()");
+            builder.HasKey(g => g.StudentGroupId);
+            builder.Property(g => g.StudentGroupId).HasDefaultValueSql("NEWID()");
 
             builder.Property(g => g.Code).IsRequired();
             builder.HasIndex(g => g.Code).IsUnique();

@@ -1,4 +1,6 @@
-﻿namespace Calempus360.Infrastructure.Persistence.Entities
+﻿using DayOfWeek = Calempus360.Core.Models.DayOfWeek;
+
+namespace Calempus360.Infrastructure.Persistence.Entities
 {
     public class CourseScheduleEntity
     {

@@ -1,27 +1,17 @@
 namespace Calempus360.Core.Models;
 
-public class AcademicYear
+public class AcademicYear(
+    string                  id,
+    DateOnly                dateStart,
+    DateOnly                dateEnd,
+    DateTime                createdAt,
+    DateTime                updatedAt,
+    List<DayWithoutCourse>? daysWithoutCourse)
 {
-    public string                 Id                { get; private set; }
-    public DateOnly               DateStart         { get; private set; }
-    public DateOnly               DateEnd           { get; private set; }
-    public DateTime               CreatedAt         { get; private set; }
-    public DateTime               UpdatedAt         { get; private set; }
-    public List<DayWithoutCourse> DaysWithoutCourse { get; private set; }
-    
-    public AcademicYear(
-        string                 id,
-        DateOnly               dateStart,
-        DateOnly               dateEnd,
-        DateTime               createdAt,
-        DateTime               updatedAt,
-        List<DayWithoutCourse> daysWithoutCourse)
-    {
-        Id                = id;
-        DateStart         = dateStart;
-        DateEnd           = dateEnd;
-        CreatedAt         = createdAt;
-        UpdatedAt         = updatedAt;
-        DaysWithoutCourse = daysWithoutCourse;
-    }
+    public string                  Id                { get; private set; } = id;
+    public DateOnly                DateStart         { get; private set; } = dateStart;
+    public DateOnly                DateEnd           { get; private set; } = dateEnd;
+    public DateTime                CreatedAt         { get; private set; } = createdAt;
+    public DateTime                UpdatedAt         { get; private set; } = updatedAt;
+    public List<DayWithoutCourse>? DaysWithoutCourse { get; private set; } = daysWithoutCourse;
 }

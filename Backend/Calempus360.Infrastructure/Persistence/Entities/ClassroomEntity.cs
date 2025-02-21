@@ -12,17 +12,17 @@
         // Navigation Properties
         
         // Site
-        public Guid SiteId { get; set; }
-        public virtual SiteEntity SiteEntity { get; set; } = null!;
+        public         Guid?       SiteId     { get; set; }
+        public virtual SiteEntity? SiteEntity { get; set; } = null!;
         
         // ClassroomEquipment
-        public List<ClassroomEquipmentEntity> ClassroomEquipments { get; set; }
+        public List<ClassroomEquipmentEntity>? ClassroomEquipments { get; set; }
         
         // ClassroomAcademicYear
-        public List<ClassroomAcademicYearEntity> ClassroomAcademicYears { get; set; } 
+        public List<ClassroomAcademicYearEntity>? ClassroomAcademicYears { get; set; } 
         
         // Session
-        public List<SessionEntity> Sessions { get; set; }
+        public List<SessionEntity>? Sessions { get; set; }
 
     }
 }

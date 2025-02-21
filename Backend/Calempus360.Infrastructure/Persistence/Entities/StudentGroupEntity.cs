@@ -2,7 +2,7 @@ namespace Calempus360.Infrastructure.Persistence.Entities;
 
 public class StudentGroupEntity
 {
-    public Guid GroupId { get; set; }
+    public Guid StudentGroupId { get; set; }
     public string Code { get; set; }
     public int NumberOfStudents { get; set; }
     public int OptionGrade { get; set; }
