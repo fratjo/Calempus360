@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 using Calempus360.API.Handlers;
 using Calempus360.Core.Interfaces.Schedule;
 using Calempus360.Infrastructure.Data;
-using Calempus360.Infrastructure.Repositories.ScheduleRepository;
+using Calempus360.Infrastructure.Repositories;
 using Calempus360.Services.ScheduleService;
 using Microsoft.EntityFrameworkCore;
 

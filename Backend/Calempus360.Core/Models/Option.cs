@@ -1,20 +1,19 @@
-﻿namespace Calempus360.Core.Models
-{
-    public class Option
-    {
-        public Guid OptionId { get; set; }
-        public string Name { get; set; }
-        public string Code { get; set; }
-        public string Description { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        
-        // Navigation Properties
-        
-        // StudentGroup
-        public List<StudentGroup> StudentGroups { get; set; } 
+namespace Calempus360.Core.Models;
 
-        // OptionCourse
-        public List<OptionCourse> OptionCourses { get; set; } = new();
-    }
+public class Option(
+    Guid          id,
+    string        name,
+    string        code,
+    string        description,
+    DateTime      createdAt,
+    DateTime      updatedAt,
+    List<Course>? courses)
+{
+    public Guid         Id          { get; private set; } = id;
+    public string       Name        { get; private set; } = name;
+    public string       Code        { get; private set; } = code;
+    public string       Description { get; private set; } = description;
+    public DateTime     CreatedAt   { get; private set; } = createdAt;
+    public DateTime     UpdatedAt   { get; private set; } = updatedAt;
+    public List<Course> Courses     { get; private set; } = courses ?? new List<Course>();
 }

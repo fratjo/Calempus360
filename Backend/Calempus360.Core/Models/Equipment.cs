@@ -1,29 +1,24 @@
-﻿namespace Calempus360.Core.Models
+#nullable enable
+namespace Calempus360.Core.Models;
+
+public class Equipment(
+    Guid           id,
+    string         name,
+    string         code,
+    string         brand,
+    string         model,
+    string         description,
+    DateTime       createdAt,
+    DateTime       updatedAt,
+    EquipmentType? equipmentType)
 {
-    public class Equipment
-    {
-        public Guid EquipmentId { get; set; }
-        public string Name { get; set; }
-        public string Code { get; set; }
-        public string Brand { get; set; }
-        public string Model { get; set; }
-        public string Description { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        
-        // Navigation Properties
-        
-        // EquipmentType
-        public Guid EquipmentTypeId { get; set; }
-        public virtual EquipmentType EquipmentType { get; set; } = null!;
-        
-        // UniversitySiteEquipment
-        public virtual UniversitySiteEquipment UniversitySiteEquipment { get; set; } = null!;
-        
-        // ClassroomEquipment
-        public virtual ClassroomEquipment ClassroomEquipment { get; set; }
-        
-        // EquipmentSession
-        public virtual List<EquipmentSession> EquipmentSessions { get; set; }
-    }
+    public Guid           Id            { get; private set; } = id;
+    public string         Name          { get; private set; } = name;
+    public string         Code          { get; private set; } = code;
+    public string         Brand         { get; private set; } = brand;
+    public string         Model         { get; private set; } = model;
+    public string         Description   { get; private set; } = description;
+    public DateTime       CreatedAt     { get; private set; } = createdAt;
+    public DateTime       UpdatedAt     { get; private set; } = updatedAt;
+    public EquipmentType? EquipmentType { get; private set; } = equipmentType;
 }

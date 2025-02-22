@@ -1,28 +1,19 @@
-﻿namespace Calempus360.Core.Models
-{
-    public class Classroom
-    {
-        public Guid ClassroomId { get; set; }
-        public string Name { get; set; }
-        public string Code { get; set; }
-        public int Capacity { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        
-        // Navigation Properties
-        
-        // Site
-        public Guid SiteId { get; set; }
-        public virtual Site Site { get; set; } = null!;
-        
-        // ClassroomEquipment
-        public List<ClassroomEquipment> ClassroomEquipments { get; set; }
-        
-        // ClassroomAcademicYear
-        public List<ClassroomAcademicYear> ClassroomAcademicYears { get; set; } 
-        
-        // Session
-        public List<Session> Sessions { get; set; }
+namespace Calempus360.Core.Models;
 
-    }
+public class Classroom(
+    Guid             id,
+    string           name,
+    string           code,
+    int              capacity,
+    DateTime         createdAt,
+    DateTime         updatedAt,
+    List<Equipment>? equipments)
+{
+    public Guid             Id         { get; private set; } = id;
+    public string           Name       { get; private set; } = name;
+    public string           Code       { get; private set; } = code;
+    public int              Capacity   { get; private set; } = capacity;
+    public DateTime         CreatedAt  { get; private set; } = createdAt;
+    public DateTime         UpdatedAt  { get; private set; } = updatedAt;
+    public List<Equipment>? Equipments { get; private set; } = equipments;
 }

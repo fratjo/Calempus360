@@ -1,30 +1,21 @@
-
 namespace Calempus360.Core.Models;
 
-public class StudentGroup
+public class StudentGroup(
+    Guid     id,
+    string   code,
+    int      numberOfStudents,
+    int      optionGrade,
+    DateTime createdAt,
+    DateTime updatedAt,
+    Site     site,
+    Option   option)
 {
-    public Guid GroupId { get; set; }
-    public string Code { get; set; }
-    public int NumberOfStudents { get; set; }
-    public int OptionGrade { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
-    
-    // Navigation Properties
-    
-    // AcademicYear
-    public string AcademicYearId { get; set; }
-    public virtual AcademicYear AcademicYear { get; set; } = null!;
-    
-    // Site
-    public Guid SiteId { get; set; }
-    public virtual Site Site { get; set; } = null!;
-    
-    // Option
-    public Guid OptionId { get; set; }
-    public virtual Option Option { get; set; } = null!;
-    
-    // StudentGroupSessions
-    public virtual List<StudentGroupSession> StudentGroupSessions { get; set; } 
-
+    public Guid     Id               { get; private set; } = id;
+    public string   Code             { get; private set; } = code;
+    public int      NumberOfStudents { get; private set; } = numberOfStudents;
+    public int      OptionGrade      { get; private set; } = optionGrade;
+    public DateTime CreatedAt        { get; private set; } = createdAt;
+    public DateTime UpdatedAt        { get; private set; } = updatedAt;
+    public Site     Site             { get; private set; } = site;
+    public Option   Option           { get; private set; } = option;
 }

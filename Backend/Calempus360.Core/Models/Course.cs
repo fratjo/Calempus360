@@ -1,27 +1,27 @@
-﻿namespace Calempus360.Core.Models
+namespace Calempus360.Core.Models;
+
+public class Course(
+    Guid                 id,
+    string               name,
+    string               code,
+    string               description,
+    int                  totalHours,
+    int                  weeklyHours,
+    string               semester,
+    int                  credits,
+    DateTime             createdAt,
+    DateTime             updatedAt,
+    List<EquipmentType>? equipmentTypes)
 {
-    public class Course
-    {
-        public Guid CourseId { get; set; }
-        public string Name { get; set; }
-        public string Code { get; set; }
-        public string Description { get; set; }
-        public int TotalHours { get; set; }
-        public int WeeklyHours { get; set; }
-        public string Semester { get; set; }
-        public int Credits { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        
-        // Navigation Properties
-        
-        // OptionCourse
-        public virtual List<OptionCourse> OptionsCourses { get; set; } = new();
-        
-        // CourseEquipmentType
-        public virtual List<CourseEquipmentType> EquipmentTypes { get; set; }
-        
-        // Session
-        public virtual List<Session> Sessions { get; set; }
-    }
+    public Guid                 Id             { get; private set; } = id;
+    public string               Name           { get; private set; } = name;
+    public string               Code           { get; private set; } = code;
+    public string               Description    { get; private set; } = description;
+    public int                  TotalHours     { get; private set; } = totalHours;
+    public int                  WeeklyHours    { get; private set; } = weeklyHours;
+    public string               Semester       { get; private set; } = semester;
+    public int                  Credits        { get; private set; } = credits;
+    public DateTime             CreatedAt      { get; private set; } = createdAt;
+    public DateTime             UpdatedAt      { get; private set; } = updatedAt;
+    public List<EquipmentType>? EquipmentTypes { get; private set; } = equipmentTypes;
 }

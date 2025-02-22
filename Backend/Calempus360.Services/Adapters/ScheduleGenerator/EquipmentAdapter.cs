@@ -1,15 +1,16 @@
 using Calempus360.Core.Models;
+using Calempus360.Infrastructure.Persistence.Entities;
 using ScheduleGenerator;
 
 namespace Calempus360.Services.Adapters.ScheduleGenerator;
 
 public static class EquipmentAdapter
 {
-    public static Equipement Adapt(Equipment equipment)
+    public static Equipement Adapt(EquipmentEntity equipment)
     {
         return new Equipement(
-            equipment.UniversitySiteEquipment.Site.Name,
-            equipment.EquipmentType.Name,
+            equipment.UniversitySiteEquipmentEntity.SiteEntity.Name,
+            equipment.EquipmentTypeEntity.Name,
             equipment.EquipmentId
         );
     }

@@ -1,37 +1,25 @@
-﻿using Calempus360.Core.Models;
+namespace Calempus360.Core.Models;
 
-namespace Calempus360.Core.Models
+public class Site(
+    Guid             id,
+    string           name,
+    string           code,
+    string           address,
+    string           phone,
+    DateTime         createdAt,
+    DateTime         updatedAt,
+    List<Classroom>? classrooms,
+    List<Schedule>?  schedules,
+    List<Equipment>? equipments)
 {
-    public class Site
-    {
-        public Guid SiteId { get; set; }
-        public string Name { get; set; }
-        public string Code { get; set; }
-        public string Address { get; set; }
-        public string Phone { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        
-        // Navigation Properties
-        
-        // University
-        public virtual Guid UniversityId { get; set; }
-        public virtual University University { get; set; } = null!;
-        
-        // SiteAcademicYear
-        public virtual string AcademicYearId { get; set; }
-        public virtual List<SiteAcademicYear> SiteAcademicYears { get; set; } 
-        
-        // StudentGroup
-        public virtual List<StudentGroup> StudentGroups { get; set; }
-        
-        // UniversitySiteEquipment
-        public virtual List<UniversitySiteEquipment> Equipments { get; set; }
-        
-        // SiteCourseSchedule
-        public virtual List<SiteCourseSchedule> SiteCourseSchedules { get; set; } = new();
-        
-        // Classroom
-        public virtual List<Classroom> Classrooms { get; set; } = new();
-    }
+    public Guid             Id         { get; private set; } = id;
+    public string           Name       { get; private set; } = name;
+    public string           Code       { get; private set; } = code;
+    public string           Address    { get; private set; } = address;
+    public string           Phone      { get; private set; } = phone;
+    public DateTime         CreatedAt  { get; private set; } = createdAt;
+    public DateTime         UpdatedAt  { get; private set; } = updatedAt;
+    public List<Classroom>? Classrooms { get; private set; } = classrooms;
+    public List<Schedule>?  Schedules  { get; private set; } = schedules;
+    public List<Equipment>? Equipments { get; private set; } = equipments;
 }

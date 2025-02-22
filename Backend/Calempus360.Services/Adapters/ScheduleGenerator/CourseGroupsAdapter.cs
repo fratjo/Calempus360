@@ -1,11 +1,12 @@
 using Calempus360.Core.Models;
+using Calempus360.Infrastructure.Persistence.Entities;
 using ScheduleGenerator;
 
 namespace Calempus360.Services.Adapters.ScheduleGenerator;
 
 public static class CourseGroupsAdapter
 {
-    public static CourseGroups Adapt(Course course, List<StudentGroup> groups)
+    public static CourseGroups Adapt(CourseEntity course, List<StudentGroupEntity> groups)
     {
         var courseGroups = new CourseGroups
         {
@@ -14,14 +15,14 @@ public static class CourseGroupsAdapter
                 {
                     Name = g.Code,
                     Capacity = g.NumberOfStudents,
-                    PreferedSite = g.Site.Code
+                    PreferedSite = g.SiteEntity.Code
                 }
                 ).ToList(),
             Equipements = course.EquipmentTypes
                                 .Select(et => 
                                             new Equipement(
                                                 null, 
-                                                et.EquipmentType.Name, 
+                                                et.EquipmentTypeEntity.Name, 
                                                 null))
                                 .ToList()
         };
