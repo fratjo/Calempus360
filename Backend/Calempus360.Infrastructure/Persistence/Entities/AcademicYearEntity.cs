@@ -35,6 +35,6 @@
         public virtual List<OptionCourseEntity> OptionCourses { get; set; }
         
         // DayWithoutCourse
-        public virtual List<DayWithoutCourseEntity> DaysWithoutCourse { get; set; } = new();
+        public virtual List<DayWithoutCourseEntity> DaysWithoutCourses { get; set; } = new();
     }
 }

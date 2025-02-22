@@ -28,7 +28,7 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             
             builder
                 .HasOne(a => a.AcademicYearEntity)
-                .WithMany(d => d.DaysWithoutCourse)
+                .WithMany(d => d.DaysWithoutCourses)
                 .HasForeignKey(d => d.AcademicYearId);
         }
     }

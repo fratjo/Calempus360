@@ -13,7 +13,7 @@ public static class AcademicYearMapper
             dateEnd: entity.DateEnd,
             createdAt: entity.CreatedAt,
             updatedAt: entity.UpdatedAt,
-            daysWithoutCourse: entity.DaysWithoutCourse?
+            daysWithoutCourses: entity.DaysWithoutCourses?
                                   .Select(dw => dw.ToDomainModel())
                                   .ToList()
         );
