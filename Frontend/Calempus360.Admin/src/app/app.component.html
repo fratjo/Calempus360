@@ -1,1 +1,6 @@
-<mat-slide-toggle>Slide me !</mat-slide-toggle>
+<app-top-bar [title]="university()"></app-top-bar>
+<app-left-panel
+  [universities]="universities()"
+  [university]="university()"
+  (title)="onTitleChange($event)"
+></app-left-panel>

@@ -1,0 +1,17 @@
+<mat-dialog-content>
+  <p>Choose university:</p>
+  <mat-form-field>
+    <mat-label>University</mat-label>
+    <mat-select [(value)]="university">
+      @for (university of universities(); track university) {
+      <mat-option [value]="university">{{ university }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button [mat-dialog-close]="university()" cdkFocusInitial>
+    Ok
+  </button>
+</mat-dialog-actions>
