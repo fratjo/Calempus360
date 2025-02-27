@@ -77,6 +77,10 @@ export const routes: Routes = [
     canActivate: [univeristyGuard, academicYearGuard],
   },
   {
+    path: 'groups',
+    component: StudentGroupsComponent
+  },
+  {
     path: '**',
     redirectTo: 'home',
   },
