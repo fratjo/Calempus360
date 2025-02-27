@@ -40,7 +40,7 @@ namespace Calempus360.Infrastructure.Repositories
         {
             var entity = await _context.StudentGroups.FindAsync(id);
             if(entity != null)
-            {
+        {
                 _context.Remove(entity);
                 return await _context.SaveChangesAsync() > 0;
             }
