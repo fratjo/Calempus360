@@ -1,6 +1,7 @@
 ﻿using Calempus360.Core.Interfaces.Group;
 using Calempus360.Core.Models;
 using Calempus360.Infrastructure.Data;
+using Calempus360.Infrastructure.Persistence.Entities;
 using Calempus360.Infrastructure.Persistence.Mappers;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -20,12 +21,12 @@ namespace Calempus360.Infrastructure.Repositories
             _context = context;
         }
 
-        public Task AddStudentGroupAsync(StudentGroup studentGroup)
+        public async Task AddStudentGroupAsync(StudentGroup studentGroup)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteStudentGroupAsyncById(int id)
+        public async Task<bool> DeleteStudentGroupAsyncById(Guid id)
         {
             throw new NotImplementedException();
         }
@@ -37,12 +38,13 @@ namespace Calempus360.Infrastructure.Repositories
             return entities.Select(e => e.ToDomainModel());
         }
 
-        public async Task<StudentGroup> GetStudentGroupAsyncById(int id)
+        public async Task<StudentGroup?> GetStudentGroupAsyncById(Guid id)
         {
-            throw new NotImplementedException();
+            var entities = await _context.StudentGroups.FindAsync(id);
+            return entities?.ToDomainModel();
         }
 
-        public Task<bool> UpdateStudentGroupAsync(StudentGroup studentGroup)
+        public async Task<bool> UpdateStudentGroupAsync(StudentGroup studentGroup)
         {
             throw new NotImplementedException();
         }
