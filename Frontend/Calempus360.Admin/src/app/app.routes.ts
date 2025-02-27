@@ -81,6 +81,10 @@ export const routes: Routes = [
     component: StudentGroupsComponent
   },
   {
+    path: 'groups',
+    component: StudentGroupsComponent
+  },
+  {
     path: '**',
     redirectTo: 'home',
   },
