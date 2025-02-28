@@ -1,9 +1,12 @@
 using System.Text.Json.Serialization;
 using Calempus360.API.Handlers;
 using Calempus360.Core.Interfaces.Schedule;
+using Calempus360.Core.Interfaces.University;
+using Calempus360.Errors;
 using Calempus360.Infrastructure.Data;
 using Calempus360.Infrastructure.Repositories;
 using Calempus360.Services.ScheduleService;
+using Calempus360.Services.UniversityService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,22 +17,26 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<Calempus360DbContext>(options =>
 {
     options
-        .UseSqlServer(connectionString)
-        .UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll)
-        .EnableSensitiveDataLogging(); // log sensitive data // remove in production ! 
+       .UseSqlServer(connectionString)
+       .UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll)
+       .EnableSensitiveDataLogging(); // log sensitive data // remove in production ! 
 });
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.ReferenceHandler =
+        ReferenceHandler.IgnoreCycles;
 });
 
 // DI Configuration
 // services
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
+builder.Services.AddScoped<IUniversityService, UniversityService>();
 // repositories
 builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>();
+builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();
 // handlers
+builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
 builder.Services.AddExceptionHandler<TestExceptionHandler>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
@@ -48,6 +55,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(options =>
+options.WithOrigins("http://localhost:4200")
+       .AllowAnyMethod()
+       .AllowAnyHeader());
 
 app.UseExceptionHandler();
 app.UseHttpsRedirection();

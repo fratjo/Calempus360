@@ -2,37 +2,32 @@
   <mat-drawer mode="side" opened>
     <div>
       <ul class="nav">
-        <li>
-          <a routerLink="/university"
-            ><mat-icon fontIcon="school"></mat-icon>University</a
-          >
+        <li routerLink="/university" [routerLinkActive]="'active'">
+          <mat-icon fontIcon="school"></mat-icon>University
         </li>
-        <li>
-          <a routerLink="/sites"
-            ><mat-icon fontIcon="domain"></mat-icon>Sites</a
-          >
+        <li routerLink="/sites" [routerLinkActive]="'active'">
+          <mat-icon fontIcon="domain"></mat-icon>Sites
         </li>
-        <li>
-          <a routerLink="/classrooms"
-            ><mat-icon fontIcon="meeting_room"></mat-icon>Classrooms</a
-          >
+        <li routerLink="/classrooms" [routerLinkActive]="'active'">
+          <mat-icon fontIcon="meeting_room"></mat-icon>Classrooms
         </li>
-        <li>
-          <a routerLink="/groups"
-            ><mat-icon fontIcon="groups"></mat-icon>Student Groups</a
-          >
+        <li routerLink="/groups" [routerLinkActive]="'active'">
+          <mat-icon fontIcon="groups"></mat-icon>Student Groups
         </li>
-        <li>
-          <a routerLink="/equipments"
-            ><mat-icon fontIcon="category"></mat-icon>Equipments</a
-          >
+        <li routerLink="/equipments" [routerLinkActive]="'active'">
+          <mat-icon fontIcon="category"></mat-icon>Equipments
         </li>
       </ul>
       <ul>
         <li>
-          <a (click)="openUniversityChoice()"
-            ><mat-icon fontIcon="logout"></mat-icon>Change University</a
-          >
+          <a href="/university/add">
+            <mat-icon fontIcon="add"></mat-icon>Add University
+          </a>
+        </li>
+        <li>
+          <a href="/university/change">
+            <mat-icon fontIcon="sync_alt"></mat-icon>Switch University
+          </a>
         </li>
       </ul>
     </div>

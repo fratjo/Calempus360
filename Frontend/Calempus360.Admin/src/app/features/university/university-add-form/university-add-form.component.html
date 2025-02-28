@@ -1,0 +1,24 @@
+<div>
+  <form [formGroup]="universityForm" (ngSubmit)="save()">
+    <mat-form-field>
+      <input matInput placeholder="Name" formControlName="name" />
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Code" formControlName="code" />
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Address" formControlName="address" />
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Phone" formControlName="phone" />
+    </mat-form-field>
+    <div>
+      <button mat-button (click)="cancel()" type="reset">
+        <mat-icon fontIcon="cancel"></mat-icon>Cancel
+      </button>
+      <button mat-button type="submit" [disabled]="!universityForm.valid">
+        <mat-icon fontIcon="save"></mat-icon>Add
+      </button>
+    </div>
+  </form>
+</div>

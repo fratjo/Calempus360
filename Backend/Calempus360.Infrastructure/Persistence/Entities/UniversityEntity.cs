@@ -2,13 +2,13 @@
 
 public class UniversityEntity
 {
-    public Guid     UniversityId { get; set; }
+    public Guid?     UniversityId { get; set; }
     public string   Name         { get; set; }
     public string   Code         { get; set; }
     public string   Phone        { get; set; }
     public string   Address      { get; set; }
-    public DateTime CreatedAt    { get; set; }
-    public DateTime UpdatedAt    { get; set; }
+    public DateTime? CreatedAt    { get; set; }
+    public DateTime? UpdatedAt    { get; set; }
 
     // Navigation Properties
 

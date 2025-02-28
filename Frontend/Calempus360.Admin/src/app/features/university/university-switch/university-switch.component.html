@@ -1,0 +1,22 @@
+@if (universityList$ | async ; as universities) {
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Code</th>
+    <th>Address</th>
+    <th>Phone</th>
+  </tr>
+  @for(university of universities; track university?.id) {
+  <tr (click)="onSelect(university.id!)">
+    <td>{{ university?.name }}</td>
+    <td>{{ university?.code }}</td>
+    <td>{{ university?.address }}</td>
+    <td>{{ university?.phone }}</td>
+  </tr>
+  } @empty {
+  <p>University empty !</p>
+  }
+</table>
+} @else {
+<p>University not found!</p>
+}

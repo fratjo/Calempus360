@@ -1,6 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { TopBarComponent } from './layout/top-bar/top-bar.component';
 import { LeftPanelComponent } from './layout/left-panel/left-panel.component';
+import { UniversityService } from './core/services/university.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-root',
@@ -8,18 +10,11 @@ import { LeftPanelComponent } from './layout/left-panel/left-panel.component';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
-  universities = signal<string[]>([
-    'Stanford University',
-    'University of California, Berkeley',
-    'University of California, Los Angeles',
-  ]);
-  university = signal<string>(this.universities()[0]);
+export class AppComponent implements OnInit {
+  private readonly universityService = inject(UniversityService);
+  private readonly dialog = inject(MatDialog);
 
-  onTitleChange(newTitle: string): void {
-    if (!this.universities().includes(newTitle)) {
-      this.universities().push(newTitle);
-    }
-    this.university.set(newTitle);
-  }
+  constructor() {}
+
+  ngOnInit() {}
 }

@@ -35,6 +35,13 @@ mat-drawer-container {
             color: white;
           }
 
+          text-decoration: none;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 10px;
+          color: inherit;
+
           a {
             text-decoration: none;
             display: flex;
