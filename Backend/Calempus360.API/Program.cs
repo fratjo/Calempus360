@@ -1,9 +1,11 @@
 using System.Text.Json.Serialization;
 using Calempus360.API.Handlers;
+using Calempus360.Core.Interfaces.Group;
 using Calempus360.Core.Interfaces.Schedule;
 using Calempus360.Infrastructure.Data;
 using Calempus360.Infrastructure.Repositories;
 using Calempus360.Services.ScheduleService;
+using Calempus360.Services.StudentGroupService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,8 +29,10 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 // DI Configuration
 // services
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
+builder.Services.AddScoped<IStudentGroupService,StudentGroupService>();
 // repositories
 builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>();
+builder.Services.AddScoped<IStudentGroupRepository, StudentGroupRepository>();
 // handlers
 builder.Services.AddExceptionHandler<TestExceptionHandler>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
