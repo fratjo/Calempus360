@@ -1,3 +1,7 @@
 <mat-toolbar>
-  <h1>Calempus360</h1>
+  <h1>
+    @if(university$ | async; as university) { @if(university.name) { Calempus360
+    - {{ university.name }} @if(academicYear$ | async; as academicYear) { -
+    {{ academicYear.id }} } } @else { Calempus360 }}
+  </h1>
 </mat-toolbar>

@@ -2,32 +2,31 @@
   <mat-drawer mode="side" opened>
     <div>
       <ul class="nav">
-        <li routerLink="/university" [routerLinkActive]="'active'">
+        <li routerLink="university" [routerLinkActive]="'active'">
           <mat-icon fontIcon="school"></mat-icon>University
         </li>
-        <li routerLink="/sites" [routerLinkActive]="'active'">
+        <li routerLink="sites" [routerLinkActive]="'active'">
           <mat-icon fontIcon="domain"></mat-icon>Sites
         </li>
-        <li routerLink="/classrooms" [routerLinkActive]="'active'">
+        <li routerLink="classrooms" [routerLinkActive]="'active'">
           <mat-icon fontIcon="meeting_room"></mat-icon>Classrooms
         </li>
-        <li routerLink="/groups" [routerLinkActive]="'active'">
+        <li routerLink="groups" [routerLinkActive]="'active'">
           <mat-icon fontIcon="groups"></mat-icon>Student Groups
         </li>
-        <li routerLink="/equipments" [routerLinkActive]="'active'">
+        <li routerLink="equipments" [routerLinkActive]="'active'">
           <mat-icon fontIcon="category"></mat-icon>Equipments
+        </li>
+        <li routerLink="academic-year" [routerLinkActive]="'active'">
+          <mat-icon fontIcon="schedule"></mat-icon>Academic Year
         </li>
       </ul>
       <ul>
-        <li>
-          <a href="/university/add">
-            <mat-icon fontIcon="add"></mat-icon>Add University
-          </a>
+        <li routerLink="academic-year/change">
+          <mat-icon fontIcon="sync_alt"></mat-icon>Switch Year
         </li>
-        <li>
-          <a href="/university/change">
-            <mat-icon fontIcon="sync_alt"></mat-icon>Switch University
-          </a>
+        <li routerLink="university/change">
+          <mat-icon fontIcon="sync_alt"></mat-icon>Switch University
         </li>
       </ul>
     </div>

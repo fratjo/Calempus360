@@ -13,6 +13,7 @@ import { MatFormField, MatInput } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-university-add-form',
@@ -23,6 +24,7 @@ import { Router, RouterModule } from '@angular/router';
     MatFormFieldModule,
     MatIconModule,
     RouterModule,
+    MatButtonModule,
   ],
   templateUrl: './university-add-form.component.html',
   styleUrl: './university-add-form.component.scss',
@@ -41,17 +43,13 @@ export class UniversityAddFormComponent {
     });
   }
 
-  ngOnInit() {
-    const universityData = this.universityService.getUniversityByName('');
-  }
-
   cancel() {
     // redirect to university
     this.router.navigate(['/university']);
   }
 
   save() {
-    this.universityService.addUniversity(this.universityForm.value);
+    this.universityService.addUniversity(this.universityForm.value).subscribe();
     // redirect to university
     this.router.navigate(['/university']);
   }

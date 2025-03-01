@@ -1,10 +1,12 @@
 using System.Text.Json.Serialization;
 using Calempus360.API.Handlers;
+using Calempus360.Core.Interfaces.Directory;
 using Calempus360.Core.Interfaces.Schedule;
 using Calempus360.Core.Interfaces.University;
 using Calempus360.Errors;
 using Calempus360.Infrastructure.Data;
 using Calempus360.Infrastructure.Repositories;
+using Calempus360.Services.AcademicYearService;
 using Calempus360.Services.ScheduleService;
 using Calempus360.Services.UniversityService;
 using Microsoft.EntityFrameworkCore;
@@ -32,9 +34,11 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 // services
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<IUniversityService, UniversityService>();
+builder.Services.AddScoped<IAcademicYearService, AcademciYearService>();
 // repositories
 builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>();
 builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();
+builder.Services.AddScoped<IAcademicYearRepository, AcademicYearRepository>();
 // handlers
 builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
 builder.Services.AddExceptionHandler<TestExceptionHandler>();

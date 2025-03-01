@@ -1,0 +1,23 @@
+<button mat-button routerLink="/academic-year/add">
+  <mat-icon fontIcon="add"></mat-icon> Add New Academic Year
+</button>
+@if (academicYearList$ | async ; as academicYears) {
+<table>
+  <tr>
+    <th>Code</th>
+    <th>Start Date</th>
+    <th>End Date</th>
+  </tr>
+  @for(academicYear of academicYears; track academicYear?.id) {
+  <tr (click)="onSelect(academicYear.id!)">
+    <td>{{ academicYear?.id }}</td>
+    <td>{{ academicYear?.dateStart }}</td>
+    <td>{{ academicYear?.dateEnd }}</td>
+  </tr>
+  } @empty {
+  <p>University empty !</p>
+  }
+</table>
+} @else {
+<p>University not found!</p>
+}

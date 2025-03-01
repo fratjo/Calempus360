@@ -1,0 +1,32 @@
+<div>
+  <form [formGroup]="academicYearForm" (ngSubmit)="save()">
+    <mat-form-field>
+      <input matInput placeholder="Code" formControlName="id" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Enter a date range</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input
+          matStartDate
+          placeholder="Start date"
+          formControlName="dateStart"
+        />
+        <input matEndDate placeholder="End date" formControlName="dateEnd" />
+      </mat-date-range-input>
+      <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker"
+      ></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+    <div>
+      <button mat-button (click)="cancel()" type="reset">
+        <mat-icon fontIcon="cancel"></mat-icon>Cancel
+      </button>
+      <button mat-button type="submit" [disabled]="!academicYearForm.valid">
+        <mat-icon fontIcon="save"></mat-icon>Add
+      </button>
+    </div>
+  </form>
+</div>

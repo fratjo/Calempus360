@@ -2,40 +2,38 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Universities, University } from '../models/university.interface';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UniversityService {
   private http: HttpClient = inject(HttpClient);
-
+  private readonly router = inject(Router);
   public university$ = new BehaviorSubject<University>({});
   public universities$ = new BehaviorSubject<University[]>([]);
 
   URL = 'http://localhost:5257/api/universities';
 
-  ping() {
-    return this.http.get(this.URL + '/ping').pipe(
-      tap((res) => {
-        console.log('Ping Response:', res);
+  isUniversity(): boolean {
+    return !!this.university$.value && !!this.university$.value.id;
+  }
+
+  getUniversities() {
+    return this.http.get<Universities>(this.URL).pipe(
+      tap((u: Universities) => {
+        this.universities$.next(u);
       })
     );
   }
 
-  getUniversities() {
-    return this.http
-      .get<Universities>(this.URL)
-      .pipe(
-        tap((u: Universities) => {
-          this.universities$.next(u);
-          console.log(u);
-        })
-      )
-      .subscribe();
-  }
-
-  getUniversityByName(name: string): void {
-    // return this.http.get(`https://api.com/universities/${id}`);
+  getUniversityById(id: string) {
+    return this.http.get<University>(this.URL + `/${id}`).pipe(
+      tap((u: University) => {
+        this.university$.next(u);
+        this.router.navigate(['university']);
+      })
+    );
   }
 
   updateUniversity(university: University) {
@@ -44,21 +42,15 @@ export class UniversityService {
       .pipe(
         tap((u: University) => {
           this.university$.next(u);
-          console.log(this.university$.value);
         })
-      )
-      .subscribe();
+      );
   }
 
   addUniversity(university: University) {
-    return this.http
-      .post<University>(this.URL, university)
-      .pipe(
-        tap((u: University) => {
-          this.university$.next(u);
-          console.log(this.university$.value);
-        })
-      )
-      .subscribe();
+    return this.http.post<University>(this.URL, university).pipe(
+      tap((u: University) => {
+        this.university$.next(u);
+      })
+    );
   }
 }

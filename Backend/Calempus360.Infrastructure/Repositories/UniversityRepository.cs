@@ -53,6 +53,7 @@ public class UniversityRepository : IUniversityRepository
         existing.Code    = university.Code;
         existing.Phone   = university.Phone;
         existing.Address = university.Address;
+        existing.UpdatedAt = DateTime.Now;
 
         await _context.SaveChangesAsync();
 

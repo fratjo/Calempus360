@@ -24,7 +24,7 @@ import { AsyncPipe } from '@angular/common';
   templateUrl: './university.component.html',
   styleUrl: './university.component.scss',
 })
-export class UniversityComponent implements OnInit {
+export class UniversityComponent {
   private universityService = inject(UniversityService);
 
   public university$: Observable<University> =
@@ -41,10 +41,6 @@ export class UniversityComponent implements OnInit {
       code: ['', Validators.required],
       phone: ['', Validators.required],
     });
-  }
-
-  ngOnInit() {
-    const universityData = this.universityService.getUniversityByName('');
   }
 
   edit() {
@@ -70,7 +66,9 @@ export class UniversityComponent implements OnInit {
     this.editMode = !this.editMode;
     if (this.universityForm.valid) {
       //console.log('New University:', this.universityForm.value);
-      this.universityService.updateUniversity(this.universityForm.value);
+      this.universityService
+        .updateUniversity(this.universityForm.value)
+        .subscribe();
     }
   }
 }

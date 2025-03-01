@@ -3,6 +3,7 @@ import { TopBarComponent } from './layout/top-bar/top-bar.component';
 import { LeftPanelComponent } from './layout/left-panel/left-panel.component';
 import { UniversityService } from './core/services/university.service';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -12,9 +13,9 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class AppComponent implements OnInit {
   private readonly universityService = inject(UniversityService);
-  private readonly dialog = inject(MatDialog);
+  private readonly router = inject(Router);
 
-  constructor() {}
-
-  ngOnInit() {}
+  ngOnInit() {
+    this.router.navigate(['/university']);
+  }
 }
