@@ -32,6 +32,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 // DI Configuration
 // services
+builder.Services.AddScoped<IScheduleService, ScheduleService>();
+builder.Services.AddScoped<IStudentGroupService,StudentGroupService>();
 builder.Services.AddScoped<IUniversityService, UniversityService>();
 builder.Services.AddScoped<IAcademicYearService, AcademicYearService>();
 builder.Services.AddScoped<ISiteService, SiteService>();
@@ -39,6 +41,8 @@ builder.Services.AddScoped<ISiteService, SiteService>();
 builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();
 builder.Services.AddScoped<IAcademicYearRepository, AcademicYearRepository>();
 builder.Services.AddScoped<ISiteRepository, SitesRepository>();
+builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>();
+builder.Services.AddScoped<IStudentGroupRepository, StudentGroupRepository>();
 // handlers
 builder.Services.AddExceptionHandler<ExistingEntityExceptionHandler>();
 builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();

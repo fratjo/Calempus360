@@ -28,7 +28,7 @@ namespace Calempus360.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> DeleteStudentGroupAsyncById(Guid id)
+        public async Task<bool> DeleteStudentGroupByIdAsync(Guid id)
         {
             var entity = await _context.StudentGroups.FindAsync(id);
             if(entity != null)
@@ -46,7 +46,7 @@ namespace Calempus360.Infrastructure.Repositories
             return entities.Select(e => e.ToDomainModel());
         }
 
-        public async Task<StudentGroup?> GetStudentGroupAsyncById(Guid id)
+        public async Task<StudentGroup?> GetStudentGroupByIdAsync(Guid id)
         {
             var entity = await _context.StudentGroups.FindAsync(id);
             return entity?.ToDomainModel();
