@@ -4,6 +4,8 @@ using Calempus360.Core.DTOs.Requests;
 using Calempus360.Core.Interfaces.AcademicYear;
 using Calempus360.Core.Interfaces.Site;
 using Calempus360.Core.Interfaces.University;
+using Calempus360.Core.Interfaces.Group;
+using Calempus360.Core.Interfaces.Schedule;
 using Calempus360.Infrastructure.Data;
 using Calempus360.Infrastructure.Repositories;
 using Calempus360.Services.Services;
@@ -33,6 +35,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 // DI Configuration
 // services
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
+builder.Services.AddScoped<IStudentGroupService,StudentGroupService>();
 builder.Services.AddScoped<IStudentGroupService,StudentGroupService>();
 builder.Services.AddScoped<IUniversityService, UniversityService>();
 builder.Services.AddScoped<IAcademicYearService, AcademicYearService>();

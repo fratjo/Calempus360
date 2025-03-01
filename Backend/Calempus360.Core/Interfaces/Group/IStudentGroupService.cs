@@ -11,10 +11,10 @@ namespace Calempus360.Core.Interfaces.Group
 {
     public interface IStudentGroupService
     {
-        Task<IEnumerable<GetStudentGroupResponse>> GetAllStudentGroupAsync(string academicYear);
-        Task<GetStudentGroupResponse> GetStudentGroupByIdAsync(Guid id, string academicYear);
-        Task AddStudentGroupAsync(AddStudentGroupRequest studentGroup, string academicYear);
-        Task<bool> UpdateStudentGroupAsync(StudentGroupRequestDto studentGroup);
+        Task<IEnumerable<GetStudentGroupResponse>> GetAllStudentGroupAsync();
+        Task<GetStudentGroupResponse> GetStudentGroupByIdAsync(Guid id);
+        Task AddStudentGroupAsync(GetStudentGroupRequest studentGroup);
+        Task<bool> UpdateStudentGroupAsync(GetStudentGroupRequest studentGroup, Guid id);
         Task<bool> DeleteStudentGroupByIdAsync(Guid id);
     }
 }

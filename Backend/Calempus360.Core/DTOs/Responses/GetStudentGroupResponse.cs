@@ -8,10 +8,10 @@ namespace Calempus360.Core.DTOs.Responses
 {
     public class GetStudentGroupResponse
     {
-        public string Name { get; set; } = string.Empty;
         public string Code {  get; set; } = string.Empty;
-        public string OptionGrade {  get; set; } = string.Empty;
+        public int OptionGrade {  get; set; }
         public string Option {  get; set; } = string.Empty;
         public int NumberOfStudents { get; set; }
+        public string Site { get; set; } = string.Empty;
     }
 }
