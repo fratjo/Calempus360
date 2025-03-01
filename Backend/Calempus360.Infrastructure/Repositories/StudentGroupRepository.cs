@@ -23,12 +23,20 @@ namespace Calempus360.Infrastructure.Repositories
 
         public async Task AddStudentGroupAsync(StudentGroup studentGroup)
         {
-            throw new NotImplementedException();
+            var entity = studentGroup.ToEntity();
+            await _context.StudentGroups.AddAsync(entity);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<bool> DeleteStudentGroupAsyncById(Guid id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.StudentGroups.FindAsync(id);
+            if(entity != null)
+            {
+                _context.Remove(entity);
+                return await _context.SaveChangesAsync() > 0;
+            }
+            return false;
         }
 
         public async Task<IEnumerable<StudentGroup>> GetAllStudentGroupAsync()
@@ -40,13 +48,20 @@ namespace Calempus360.Infrastructure.Repositories
 
         public async Task<StudentGroup?> GetStudentGroupAsyncById(Guid id)
         {
-            var entities = await _context.StudentGroups.FindAsync(id);
-            return entities?.ToDomainModel();
+            var entity = await _context.StudentGroups.FindAsync(id);
+            return entity?.ToDomainModel();
         }
 
         public async Task<bool> UpdateStudentGroupAsync(StudentGroup studentGroup)
         {
-            throw new NotImplementedException();
+            var updatedEntity = studentGroup.ToEntity();
+            var entity = await _context.StudentGroups.FindAsync(updatedEntity.StudentGroupId);
+            if(entity != null)
+            {
+                entity = updatedEntity;
+                return await _context.SaveChangesAsync() > 0;
+            }
+            return false;
         }
     }
 }
