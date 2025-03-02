@@ -1,25 +1,34 @@
 <button mat-button routerLink="/university/add">
   <mat-icon fontIcon="add"></mat-icon> Add New University
 </button>
-@if (universityList$ | async ; as universities) {
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Code</th>
-    <th>Address</th>
-    <th>Phone</th>
-  </tr>
-  @for(university of universities; track university?.id) {
-  <tr (click)="onSelect(university.id!)">
-    <td>{{ university?.name }}</td>
-    <td>{{ university?.code }}</td>
-    <td>{{ university?.address }}</td>
-    <td>{{ university?.phone }}</td>
-  </tr>
-  } @empty {
-  <p>University empty !</p>
-  }
-</table>
+@if (universityList$ | async; as universities) {
+  <div
+    class="rounded-box border-base-content/5 bg-base-100 overflow-x-auto border"
+  >
+    <table class="table-xs table-pin-rows table">
+      <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Code</th>
+        <th>Address</th>
+        <th>Phone</th>
+      </tr>
+      @for (university of universities; track university?.id; let i = $index) {
+        <tr
+          (click)="onSelect(university.id!)"
+          class="hover:bg-primary hover:text-primary-content"
+        >
+          <th>{{ i }}</th>
+          <td>{{ university?.name }}</td>
+          <td>{{ university?.code }}</td>
+          <td>{{ university?.address }}</td>
+          <td>{{ university?.phone }}</td>
+        </tr>
+      } @empty {
+        <p>University empty !</p>
+      }
+    </table>
+  </div>
 } @else {
-<p>University not found!</p>
+  <p>University not found!</p>
 }

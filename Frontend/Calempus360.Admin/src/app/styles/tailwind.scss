@@ -1,8 +1,9 @@
-@use "tailwindcss/base";
-@use "tailwindcss/components";
-@use "tailwindcss/utilities";
+@use "tailwindcss";
+@plugin "daisyui" {
+  themes: all;
+}
 
-// Material Tailwind Fixes
+/* // Material Tailwind Fixes */
 .mdc-notched-outline__notch {
   border-style: none;
 }
