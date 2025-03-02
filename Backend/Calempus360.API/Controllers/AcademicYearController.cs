@@ -34,12 +34,12 @@ namespace Calempus360.API.Controllers
         #region POST
         
         [HttpPost]
-        public async Task<IActionResult> CreateAcademicYear([FromBody] AcademicYearRequest request)
+        public async Task<IActionResult> CreateAcademicYear([FromBody] AcademicYearRequestDto requestDto)
         {   
             var academicYear = new AcademicYear(
-                id: request.Id,
-                dateStart: DateOnly.FromDateTime(request.DateStart),
-                dateEnd: DateOnly.FromDateTime(request.DateEnd));
+                id: requestDto.Id,
+                dateStart: DateOnly.FromDateTime(requestDto.DateStart),
+                dateEnd: DateOnly.FromDateTime(requestDto.DateEnd));
             
             var createdAcademicYear = await academicYearService.CreateAcademicYearAsync(academicYear);
             
@@ -51,12 +51,12 @@ namespace Calempus360.API.Controllers
         #region PUT
         
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAcademicYear(string id, [FromBody] AcademicYearRequest request)
+        public async Task<IActionResult> UpdateAcademicYear(string id, [FromBody] AcademicYearRequestDto requestDto)
         {
             var academicYear = new AcademicYear(
-                id: request.Id,
-                dateStart: DateOnly.FromDateTime(request.DateStart),
-                dateEnd: DateOnly.FromDateTime(request.DateEnd));
+                id: requestDto.Id,
+                dateStart: DateOnly.FromDateTime(requestDto.DateStart),
+                dateEnd: DateOnly.FromDateTime(requestDto.DateEnd));
             
             academicYear = await academicYearService.UpdateAcademicYearAsync(id, academicYear);
             

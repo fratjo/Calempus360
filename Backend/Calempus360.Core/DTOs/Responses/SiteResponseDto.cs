@@ -2,7 +2,7 @@ using Calempus360.Core.Models;
 
 namespace Calempus360.Core.DTOs.Responses;
 
-public class SiteResponse
+public class SiteResponseDto
 {
     public Guid?                    Id         { get; set; }
     public string?                  Name       { get; set; }
@@ -11,16 +11,16 @@ public class SiteResponse
     public string?                  Phone      { get; set; }
     public DateTime?                CreatedAt  { get; set; }
     public DateTime?                UpdatedAt  { get; set; }
-    public List<ClassroomResponse>? Classrooms { get; set; }
-    public List<ScheduleResponse>?  Schedules  { get; set; }
-    public List<EquipmentResponse>? Equipments { get; set; }
+    public List<ClassroomResponseDto>? Classrooms { get; set; }
+    public List<ScheduleResponseDto>?  Schedules  { get; set; }
+    public List<EquipmentResponseDto>? Equipments { get; set; }
 }
 
 public static partial class DtoMapper
 {
-    public static SiteResponse MapToDto(this Site site)
+    public static SiteResponseDto MapToDto(this Site site)
     {
-        return new SiteResponse 
+        return new SiteResponseDto 
         {
             Id         = site.Id,
             Name       = site.Name,

@@ -2,7 +2,7 @@ using Calempus360.Core.Models;
 
 namespace Calempus360.Core.DTOs.Responses;
 
-public class DayWithoutCourseResponse
+public class DayWithoutCourseResponseDto
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = null!;
@@ -13,9 +13,9 @@ public class DayWithoutCourseResponse
 
 public static partial class DtoMapper
 {
-    public static DayWithoutCourseResponse MapToDto(this DayWithoutCourse dayWithoutCourse)
+    public static DayWithoutCourseResponseDto MapToDto(this DayWithoutCourse dayWithoutCourse)
     {
-        return new DayWithoutCourseResponse
+        return new DayWithoutCourseResponseDto
         {
             Id        = dayWithoutCourse.Id,
             Name      = dayWithoutCourse.Name,

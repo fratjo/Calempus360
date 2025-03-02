@@ -1,12 +1,13 @@
 using System.Net;
 using System.Text.Json;
 using Calempus360.Errors;
+using Calempus360.Errors.CustomExceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Calempus360.API.Handlers;
 
-public class TestExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
+public class TestExceptionHandler(ILogger<TestExceptionHandler> logger) : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(
         HttpContext       httpContext, 

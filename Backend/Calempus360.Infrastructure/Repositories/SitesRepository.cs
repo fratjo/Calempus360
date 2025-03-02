@@ -1,6 +1,7 @@
 using Calempus360.Core.Interfaces.Site;
 using Calempus360.Core.Models;
 using Calempus360.Errors;
+using Calempus360.Errors.CustomExceptions;
 using Calempus360.Infrastructure.Data;
 using Calempus360.Infrastructure.Persistence.Mappers;
 using Microsoft.EntityFrameworkCore;

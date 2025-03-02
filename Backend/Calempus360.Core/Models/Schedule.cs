@@ -12,12 +12,12 @@ public enum DayOfWeek : int
 }
 
 public class Schedule(
-    Guid      id,
     DayOfWeek dayOfWeek,
     TimeOnly  timeStart,
-    TimeOnly  timeEnd)
+    TimeOnly  timeEnd,
+    Guid?      id = null)
 {
-    public Guid      Id        { get; private set; } = id;
+    public Guid      Id        { get; private set; } = id ?? Guid.NewGuid();
     public DayOfWeek DayOfWeek { get; private set; } = dayOfWeek;
     public TimeOnly  TimeStart { get; private set; } = timeStart;
     public TimeOnly  TimeEnd   { get; private set; } = timeEnd;

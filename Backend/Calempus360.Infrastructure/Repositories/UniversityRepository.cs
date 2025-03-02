@@ -1,6 +1,7 @@
 using Calempus360.Core.Interfaces.University;
 using Calempus360.Core.Models;
 using Calempus360.Errors;
+using Calempus360.Errors.CustomExceptions;
 using Calempus360.Infrastructure.Data;
 using Calempus360.Infrastructure.Persistence.Mappers;
 using Microsoft.EntityFrameworkCore;
@@ -18,12 +19,22 @@ public class UniversityRepository(Calempus360DbContext context) : IUniversityRep
         return list.Select(x => x.ToDomainModel());
     }
 
-    public async Task<University> GetByIdAsync(Guid id)
+    public async Task<University> GetUniversityByIdAsync(Guid id)
     {
         var u = await context.Universities
                               .Include(u => u.Sites)
                               .FirstOrDefaultAsync(u => u.UniversityId == id);
         
+        if (u == null) throw new NotFoundException("University not found");
+        
+        return u.ToDomainModel();
+    }
+
+    public async Task<University> GetUniversityByNameAsync(string name)
+    {
+        var u = await context.Universities
+                             .FirstOrDefaultAsync(u => u.Name.ToLower() == name.ToLower());
+
         if (u == null) throw new NotFoundException("University not found");
         
         return u.ToDomainModel();

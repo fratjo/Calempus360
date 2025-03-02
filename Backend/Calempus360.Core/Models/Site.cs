@@ -12,13 +12,13 @@ public class Site(
     List<Schedule>?  schedules = null,
     List<Equipment>? equipments = null)
 {
-    public Guid?            Id         { get; private set; } = id;
+    public Guid?            Id         { get; private set; } = id ?? Guid.NewGuid();
     public string           Name       { get; private set; } = name;
     public string           Code       { get; private set; } = code;
     public string           Address    { get; private set; } = address;
     public string           Phone      { get; private set; } = phone;
-    public DateTime?        CreatedAt  { get; private set; } = createdAt;
-    public DateTime?        UpdatedAt  { get; private set; } = updatedAt;
+    public DateTime        CreatedAt  { get; private set; } = createdAt ?? DateTime.Now;
+    public DateTime        UpdatedAt  { get; private set; } = updatedAt ?? DateTime.Now;
     public List<Classroom>? Classrooms { get; private set; } = classrooms;
     public List<Schedule>?  Schedules  { get; private set; } = schedules;
     public List<Equipment>? Equipments { get; private set; } = equipments;

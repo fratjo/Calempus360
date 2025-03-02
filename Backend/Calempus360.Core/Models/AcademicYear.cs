@@ -11,7 +11,7 @@ public class AcademicYear(
     public string                  Id                { get; private set; } = id;
     public DateOnly                DateStart         { get; private set; } = dateStart;
     public DateOnly                DateEnd           { get; private set; } = dateEnd;
-    public DateTime?                CreatedAt         { get; private set; } = createdAt;
-    public DateTime?                UpdatedAt         { get; private set; } = updatedAt;
+    public DateTime                CreatedAt         { get; private set; } = createdAt ?? DateTime.Now;
+    public DateTime                UpdatedAt         { get; private set; } = updatedAt ?? DateTime.Now;
     public List<DayWithoutCourse>? DaysWithoutCourses { get; private set; } = daysWithoutCourses;
 }

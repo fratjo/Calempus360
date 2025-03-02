@@ -24,14 +24,7 @@ namespace Calempus360.API.Controllers
         public async Task<IActionResult> GetById(Guid id)
         {
             var u = await universityService.GetByIdAsync(id);
-            return Ok(new UniversityResponse
-            {
-                Id      = u.Id ?? Guid.Empty,
-                Name    = u.Name,
-                Code    = u.Code,
-                Phone   = u.Phone,
-                Address = u.Address
-            });
+            return Ok(u.MapToDto());
         }
 
         #endregion
@@ -39,13 +32,13 @@ namespace Calempus360.API.Controllers
         #region Post
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] UniversityRequest request)
+        public async Task<IActionResult> Add([FromBody] UniversityRequestDto requestDto)
         {
             var u = new University(
-                name: request.Name,
-                code: request.Code,
-                phone: request.Phone,
-                address: request.Address
+                name: requestDto.Name,
+                code: requestDto.Code,
+                phone: requestDto.Phone,
+                address: requestDto.Address
             );
 
             u = await universityService.PostNewUniversityAsync(u);
@@ -58,13 +51,13 @@ namespace Calempus360.API.Controllers
         #region Put
         
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UniversityRequest request)
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UniversityRequestDto requestDto)
         {
             var u = new University(
-                name: request.Name,
-                code: request.Code,
-                phone: request.Phone,
-                address: request.Address,
+                name: requestDto.Name,
+                code: requestDto.Code,
+                phone: requestDto.Phone,
+                address: requestDto.Address,
                 id
             );
 

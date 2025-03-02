@@ -1,4 +1,5 @@
 using Calempus360.Errors;
+using Calempus360.Errors.CustomExceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Calempus360.API.Controllers;

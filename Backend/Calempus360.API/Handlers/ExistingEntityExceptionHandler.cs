@@ -7,22 +7,22 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Calempus360.API.Handlers;
 
-public class NotFoundExceptionHandler(ILogger<NotFoundExceptionHandler> logger) : IExceptionHandler
+public class ExistingEntityExceptionHandler(ILogger<ExistingEntityExceptionHandler> logger) : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(
         HttpContext       httpContext,
         Exception         exception,
         CancellationToken cancellationToken)
     {
-        if (exception is not NotFoundException ex) return false;
+        if (exception is not ExistingEntityException ex) return false;
 
-        logger.LogError("Not found exception : {Exception}", ex.Message);
+        logger.LogError("Existing item exception : {Exception}", ex.Message);
 
         var problemDetails = new ProblemDetails
         {
-            Status = (int)HttpStatusCode.NotFound,
-            Type   = "https://httpstatuses.com/404",
-            Title  = "Resource not found",
+            Status = (int)HttpStatusCode.Conflict,
+            Type   = "https://httpstatuses.com/409",
+            Title  = "Already existing item",
             Detail = exception.Message // Masquer en prod si besoin
         };
 

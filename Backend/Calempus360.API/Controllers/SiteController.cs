@@ -32,14 +32,14 @@ namespace Calempus360.API.Controllers
         #region POST
         
         [HttpPost]
-        public async Task<IActionResult> CreateSiteAsync(Guid universityId, [FromBody] SiteRequest request)
+        public async Task<IActionResult> CreateSiteAsync(Guid universityId, [FromBody] SiteRequestDto requestDto)
         {
             var site = await siteService.CreateSiteAsync(new Site
             (
-                name    : request.Name,
-                code    : request.Code,
-                address : request.Address,
-                phone   : request.Phone
+                name    : requestDto.Name,
+                code    : requestDto.Code,
+                address : requestDto.Address,
+                phone   : requestDto.Phone
             ), universityId);
             
             return Ok(site.MapToDto());
@@ -50,14 +50,14 @@ namespace Calempus360.API.Controllers
         #region PUT
         
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdateSiteAsync(Guid id, [FromBody] SiteRequest request)
+        public async Task<IActionResult> UpdateSiteAsync(Guid id, [FromBody] SiteRequestDto requestDto)
         {
             var site = await siteService.UpdateSiteAsync(new Site
             (
-                name    : request.Name,
-                code    : request.Code,
-                address : request.Address,
-                phone   : request.Phone,
+                name    : requestDto.Name,
+                code    : requestDto.Code,
+                address : requestDto.Address,
+                phone   : requestDto.Phone,
                 id      : id
             ));
             

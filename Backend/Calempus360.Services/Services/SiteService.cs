@@ -1,44 +1,65 @@
+using System.ComponentModel.DataAnnotations;
 using Calempus360.Core.Interfaces.Site;
 using Calempus360.Core.Models;
+using Calempus360.Errors.Mappers;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
-namespace Calempus360.Services.SiteService;
+namespace Calempus360.Services.Services;
 
-public class SiteService : ISiteService
+public class SiteService(ISiteRepository siteRepository) : ISiteService
 {
-    private readonly ISiteRepository _siteRepository;
-    
-    public SiteService(ISiteRepository siteRepository)
-    {
-        _siteRepository = siteRepository;
-    }
-
     public async Task<IEnumerable<Site>> GetSitesAsync()
     {
-        var sites = await _siteRepository.GetSitesAsync();
+        var sites = await siteRepository.GetSitesAsync();
         return sites;
     }
 
     public async Task<IEnumerable<Site>> GetSitesByUniversityAsync(Guid universityId)
     {
-        var sites = await _siteRepository.GetSitesByUniversityAsync(universityId);
+        var sites = await siteRepository.GetSitesByUniversityAsync(universityId);
         return sites;
     }
 
     public async Task<Site> GetSiteByIdAsync(Guid id)
     {
-        var site = await _siteRepository.GetSiteByIdAsync(id);
+        var site = await siteRepository.GetSiteByIdAsync(id);
         return site;
     }
 
     public async Task<Site> CreateSiteAsync(Site site, Guid universityId)
     {
-        var newSite = await _siteRepository.CreateSiteAsync(site, universityId);
-        return newSite;
+        try
+        {
+            return await siteRepository.CreateSiteAsync(site, universityId);
+        }
+        catch (DbUpdateException e)
+        {
+            if (e.InnerException is SqlException sqlException)
+                sqlException.MapSqlException();
+            throw new ValidationException("Site or one or more site's field already exists");
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
     public async Task<Site> UpdateSiteAsync(Site site)
     {
-        var updatedSite = await _siteRepository.UpdateSiteAsync(site);
-        return updatedSite;
+        try
+        {
+            return await siteRepository.UpdateSiteAsync(site);
+        }
+        catch (DbUpdateException e)
+        {
+            if (e.InnerException is SqlException sqlException)
+                sqlException.MapSqlException();
+            throw new ValidationException("Site or one or more site's field already exists");
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 }

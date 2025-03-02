@@ -1,4 +1,5 @@
 using Calempus360.Infrastructure.Data.ModelConfiguration;
+using Calempus360.Infrastructure.Persistence.Configurations;
 using Calempus360.Infrastructure.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,37 +1,60 @@
-using Calempus360.Core.DTOs.Requests;
+using System.ComponentModel.DataAnnotations;
 using Calempus360.Core.Interfaces.University;
 using Calempus360.Core.Models;
+using Calempus360.Errors;
+using Calempus360.Errors.Mappers;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
-namespace Calempus360.Services.UniversityService;
+namespace Calempus360.Services.Services;
 
-public class UniversityService : IUniversityService
+public class UniversityService(IUniversityRepository universityRepository) : IUniversityService
 {
-    private readonly IUniversityRepository _universityRepository;
-    
-    public UniversityService(IUniversityRepository universityRepository)
-    {
-        _universityRepository = universityRepository;
-    }
-
     public async Task<IEnumerable<University>> GetAllAsync()
     {
-        var list = await this._universityRepository.GetAllAsync();
+        var list = await universityRepository.GetAllAsync();
         return list;
     }
 
     public async Task<University> GetByIdAsync(Guid id)
     {
-        var u = await this._universityRepository.GetByIdAsync(id);
+        var u = await universityRepository.GetUniversityByIdAsync(id);
         return u;
     }
 
     public async Task<University> PostNewUniversityAsync(University university)
     {
-        return await this._universityRepository.PostNewUniversityAsync(university);
+        try
+        {
+            return await universityRepository.PostNewUniversityAsync(university);
+        }
+        catch (DbUpdateException e)
+        {
+            if (e.InnerException is SqlException sqlException)
+                sqlException.MapSqlException();
+            throw new ValidationException("University or one or more university's field already exists");
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
-    
+
     public async Task<University> UpdateUniversityAsync(University university)
     {
-        return await this._universityRepository.UpdateUniversityAsync(university);
+        try
+        {
+            return await universityRepository.UpdateUniversityAsync(university);
+        }
+        catch (DbUpdateException e)
+        {
+            if (e.InnerException is SqlException sqlException)
+                sqlException.MapSqlException();
+            throw new ValidationException("University or one or more university's field already exists");
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 }

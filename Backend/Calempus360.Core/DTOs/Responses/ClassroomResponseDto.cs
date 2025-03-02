@@ -2,16 +2,16 @@ using Calempus360.Core.Models;
 
 namespace Calempus360.Core.DTOs.Responses;
 
-public class ScheduleResponse
+public class ClassroomResponseDto
 {
     
 }
 
 public static partial class DtoMapper
 {
-    public static ScheduleResponse MapToDTO(this Schedule schedule)
+    public static ClassroomResponseDto MapToDTO(this Classroom classroom)
     {
-        return new ScheduleResponse
+        return new ClassroomResponseDto
         {
             
         };
