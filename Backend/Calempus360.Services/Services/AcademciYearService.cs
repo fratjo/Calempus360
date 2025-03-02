@@ -1,4 +1,4 @@
-using Calempus360.Core.Interfaces.Directory;
+using Calempus360.Core.Interfaces.AcademicYear;
 using Calempus360.Core.Models;
 
 namespace Calempus360.Services.AcademicYearService;

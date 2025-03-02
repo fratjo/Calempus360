@@ -3,10 +3,10 @@ using System.Text.Json.Serialization;
 
 namespace Calempus360.Core.DTOs.Requests;
 
-public class PostPutAcademicYearRequest
+public class AcademicYearRequest
 {
     [Required]
-    public string   Id        { get; set; }
+    public string   Id        { get; set; } = string.Empty;
     [Required]
     public DateTime DateStart { get; set; }
     [Required]

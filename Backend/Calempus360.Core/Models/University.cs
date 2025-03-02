@@ -1,15 +1,15 @@
 namespace Calempus360.Core.Models;
 
 public class University(
-    Guid?            id,
     string           name,
     string           code,
     string           phone,
     string           address,
-    DateTime?        createdAt,
-    DateTime?        updatedAt,
-    List<Site>?      sites,
-    List<Equipment>? equipments)
+    Guid?            id = null,
+    DateTime?        createdAt = null,
+    DateTime?        updatedAt = null,
+    List<Site>?      sites = null,
+    List<Equipment>? equipments = null)
 {
     public Guid?            Id         { get; private set; } = id;
     public string           Name       { get; private set; } = name;

@@ -1,4 +1,4 @@
-namespace Calempus360.Core.Interfaces.Directory;
+namespace Calempus360.Core.Interfaces.AcademicYear;
 
 public interface IAcademicYearService
 {

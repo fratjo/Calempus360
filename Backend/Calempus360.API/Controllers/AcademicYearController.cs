@@ -1,6 +1,7 @@
 using System.Net;
 using Calempus360.Core.DTOs.Requests;
-using Calempus360.Core.Interfaces.Directory;
+using Calempus360.Core.DTOs.Responses;
+using Calempus360.Core.Interfaces.AcademicYear;
 using Calempus360.Core.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,53 +10,59 @@ namespace Calempus360.API.Controllers
 {
     [Route("api/academic-years")]
     [ApiController]
-    public class AcademicYearController : ControllerBase
+    public class AcademicYearController(IAcademicYearService academicYearService) : ControllerBase
     {
-        private readonly IAcademicYearService _academicYearService;
+        #region GET
         
-        public AcademicYearController(IAcademicYearService academicYearService)
-        {
-            _academicYearService = academicYearService;
-        }
         
         [HttpGet]
         public async Task<IActionResult> GetAcademicYears()
         {
-            var academicYears = await _academicYearService.GetAcademicYearsAsync();
-            return Ok(academicYears);
+            var academicYears = await academicYearService.GetAcademicYearsAsync();
+            return Ok(academicYears.Select(ac => ac.MapToDto()));
         }
         
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAcademicYearById(string id)
         {
-            var academicYear = await _academicYearService.GetAcademicYearByIdAsync(id);
-            return Ok(academicYear);
+            var academicYear = await academicYearService.GetAcademicYearByIdAsync(id);
+            return Ok(academicYear.MapToDto());
         }
         
+        #endregion
+        
+        #region POST
+        
         [HttpPost]
-        public async Task<IActionResult> CreateAcademicYear([FromBody] PostPutAcademicYearRequest request)
+        public async Task<IActionResult> CreateAcademicYear([FromBody] AcademicYearRequest request)
         {   
             var academicYear = new AcademicYear(
                 id: request.Id,
                 dateStart: DateOnly.FromDateTime(request.DateStart),
-                dateEnd: DateOnly.FromDateTime(request.DateEnd),
-                null,null,null);
+                dateEnd: DateOnly.FromDateTime(request.DateEnd));
             
-            var createdAcademicYear = await _academicYearService.CreateAcademicYearAsync(academicYear);
-            return CreatedAtAction(nameof(GetAcademicYearById), new { id = createdAcademicYear.Id }, createdAcademicYear);
+            var createdAcademicYear = await academicYearService.CreateAcademicYearAsync(academicYear);
+            
+            return CreatedAtAction(nameof(GetAcademicYearById), new { id = createdAcademicYear.Id }, createdAcademicYear.MapToDto());
         }
         
+        #endregion
+        
+        #region PUT
+        
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAcademicYear(string id, [FromBody] PostPutAcademicYearRequest request)
+        public async Task<IActionResult> UpdateAcademicYear(string id, [FromBody] AcademicYearRequest request)
         {
             var academicYear = new AcademicYear(
                 id: request.Id,
                 dateStart: DateOnly.FromDateTime(request.DateStart),
-                dateEnd: DateOnly.FromDateTime(request.DateEnd),
-                null,null,null);
+                dateEnd: DateOnly.FromDateTime(request.DateEnd));
             
-            academicYear = await _academicYearService.UpdateAcademicYearAsync(id, academicYear);
-            return Ok(academicYear);
+            academicYear = await academicYearService.UpdateAcademicYearAsync(id, academicYear);
+            
+            return Ok(academicYear.MapToDto());
         }
+        
+        #endregion
     }
 }

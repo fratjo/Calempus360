@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Calempus360.Core.DTOs.Requests;
 
-public class PostPutUniversityRequest
+public class UniversityRequest
 {
     [Required]
     public string Name { get; set; } = string.Empty;

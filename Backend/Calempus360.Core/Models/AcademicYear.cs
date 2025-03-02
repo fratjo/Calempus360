@@ -4,9 +4,9 @@ public class AcademicYear(
     string                  id,
     DateOnly                dateStart,
     DateOnly                dateEnd,
-    DateTime?                createdAt,
-    DateTime?                updatedAt,
-    List<DayWithoutCourse>? daysWithoutCourses)
+    DateTime?               createdAt          = null,
+    DateTime?               updatedAt          = null,
+    List<DayWithoutCourse>? daysWithoutCourses = null)
 {
     public string                  Id                { get; private set; } = id;
     public DateOnly                DateStart         { get; private set; } = dateStart;

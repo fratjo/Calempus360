@@ -1,16 +1,16 @@
 namespace Calempus360.Core.Models;
 
 public class Site(
-    Guid?            id,
     string           name,
     string           code,
     string           address,
     string           phone,
-    DateTime?        createdAt,
-    DateTime?        updatedAt,
-    List<Classroom>? classrooms,
-    List<Schedule>?  schedules,
-    List<Equipment>? equipments)
+    Guid?            id = null,
+    DateTime?        createdAt = null,
+    DateTime?        updatedAt = null,
+    List<Classroom>? classrooms = null,
+    List<Schedule>?  schedules = null,
+    List<Equipment>? equipments = null)
 {
     public Guid?            Id         { get; private set; } = id;
     public string           Name       { get; private set; } = name;

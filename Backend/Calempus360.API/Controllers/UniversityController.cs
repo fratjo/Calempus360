@@ -9,38 +9,24 @@ namespace Calempus360.API.Controllers
 {
     [Route("api/universities")]
     [ApiController]
-    public class UniversityController : ControllerBase
+    public class UniversityController(IUniversityService universityService) : ControllerBase
     {
-        private readonly IUniversityService _universityService;
-
-        public UniversityController(IUniversityService universityService)
-        {
-            _universityService = universityService;
-        }
-
         #region Get
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var list = await this._universityService.GetAllAsync();
-            return Ok(list.Select(u => new GetUniversityOnlyResponse
-            {
-                Id      = u.Id,
-                Name    = u.Name,
-                Code    = u.Code,
-                Phone   = u.Phone,
-                Address = u.Address
-            }));
+            var list = await universityService.GetAllAsync();
+            return Ok(list.Select(u => u.MapToDto()));
         }
 
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var u = await this._universityService.GetByIdAsync(id);
-            return Ok(new GetUniversityOnlyResponse
+            var u = await universityService.GetByIdAsync(id);
+            return Ok(new UniversityResponse
             {
-                Id      = u.Id,
+                Id      = u.Id ?? Guid.Empty,
                 Name    = u.Name,
                 Code    = u.Code,
                 Phone   = u.Phone,
@@ -53,27 +39,18 @@ namespace Calempus360.API.Controllers
         #region Post
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] PostPutUniversityRequest request)
+        public async Task<IActionResult> Add([FromBody] UniversityRequest request)
         {
             var u = new University(
-                id: null,
                 name: request.Name,
                 code: request.Code,
                 phone: request.Phone,
-                address: request.Address,
-                null, null, null, null
+                address: request.Address
             );
 
-            u = await this._universityService.PostNewUniversityAsync(u);
+            u = await universityService.PostNewUniversityAsync(u);
 
-            return CreatedAtAction(nameof(Add), new { id = u.Id }, new GetUniversityOnlyResponse
-            {
-                Id      = u.Id,
-                Name    = u.Name,
-                Code    = u.Code,
-                Phone   = u.Phone,
-                Address = u.Address
-            });
+            return CreatedAtAction(nameof(Add), new { id = u.Id }, u.MapToDto());
         }
 
         #endregion
@@ -81,27 +58,19 @@ namespace Calempus360.API.Controllers
         #region Put
         
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] PostPutUniversityRequest request)
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UniversityRequest request)
         {
             var u = new University(
-                id: id,
                 name: request.Name,
                 code: request.Code,
                 phone: request.Phone,
                 address: request.Address,
-                null, null, null, null
+                id
             );
 
-            u = await this._universityService.UpdateUniversityAsync(u);
+            u = await universityService.UpdateUniversityAsync(u);
 
-            return Ok(new GetUniversityOnlyResponse
-            {
-                Id      = u.Id,
-                Name    = u.Name,
-                Code    = u.Code,
-                Phone   = u.Phone,
-                Address = u.Address
-            });
+            return Ok(u.MapToDto());
         }
         
         #endregion

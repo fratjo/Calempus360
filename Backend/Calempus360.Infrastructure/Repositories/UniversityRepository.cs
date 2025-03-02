@@ -7,24 +7,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Calempus360.Infrastructure.Repositories;
 
-public class UniversityRepository : IUniversityRepository
+public class UniversityRepository(Calempus360DbContext context) : IUniversityRepository
 {
-    private readonly Calempus360DbContext _context;
-
-    public UniversityRepository(Calempus360DbContext context)
-    {
-        _context = context;
-    }
-
     public async Task<IEnumerable<University>> GetAllAsync()
     {
-        var list = await _context.Universities.ToListAsync();
+        var list = await context.Universities
+                                 .Include(u => u.Sites)
+                                 .ToListAsync();
+        
         return list.Select(x => x.ToDomainModel());
     }
 
     public async Task<University> GetByIdAsync(Guid id)
     {
-        var u = await _context.Universities.FindAsync(id);
+        var u = await context.Universities
+                              .Include(u => u.Sites)
+                              .FirstOrDefaultAsync(u => u.UniversityId == id);
+        
+        if (u == null) throw new NotFoundException("University not found");
+        
         return u.ToDomainModel();
     }
 
@@ -32,8 +33,8 @@ public class UniversityRepository : IUniversityRepository
     {
         var entity = university.ToEntity();
 
-        await _context.Universities.AddAsync(entity);
-        await _context.SaveChangesAsync();
+        await context.Universities.AddAsync(entity);
+        await context.SaveChangesAsync();
 
         return entity.ToDomainModel();
     }
@@ -42,20 +43,20 @@ public class UniversityRepository : IUniversityRepository
     {
         var entity = university.ToEntity();
 
-        var existing = await _context.Universities.FindAsync(entity.UniversityId);
+        var existing = await context.Universities.FindAsync(entity.UniversityId);
 
         if (existing == null)
         {
             throw new NotFoundException($"University with id {entity.UniversityId} not found");
         }
 
-        existing.Name    = university.Name;
-        existing.Code    = university.Code;
-        existing.Phone   = university.Phone;
-        existing.Address = university.Address;
+        existing.Name      = university.Name;
+        existing.Code      = university.Code;
+        existing.Phone     = university.Phone;
+        existing.Address   = university.Address;
         existing.UpdatedAt = DateTime.Now;
 
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
 
         return entity.ToDomainModel();
     }
