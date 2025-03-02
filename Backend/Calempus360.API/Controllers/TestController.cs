@@ -5,7 +5,7 @@ namespace Calempus360.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class TestController : ControllerBase
+public class  TestController : ControllerBase
 {
     [HttpGet("error")]
     public IActionResult Get()
