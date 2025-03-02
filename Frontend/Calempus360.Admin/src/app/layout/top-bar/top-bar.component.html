@@ -1,7 +1,14 @@
-<mat-toolbar>
+<div class="navbar bg-blue-700 text-3xl text-white shadow-sm">
   <h1>
-    @if(university$ | async; as university) { @if(university.name) { Calempus360
-    - {{ university.name }} @if(academicYear$ | async; as academicYear) { -
-    {{ academicYear.id }} } } @else { Calempus360 }}
+    @if (university$ | async; as university) {
+      @if (university.name) {
+        Calempus360 - {{ university.name }}
+        @if (academicYear$ | async; as academicYear) {
+          - {{ academicYear.id }}
+        }
+      } @else {
+        Calempus360
+      }
+    }
   </h1>
-</mat-toolbar>
+</div>
