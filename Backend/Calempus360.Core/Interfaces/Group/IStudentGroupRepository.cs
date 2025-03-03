@@ -12,7 +12,9 @@ namespace Calempus360.Core.Interfaces.Group
         Task<IEnumerable<StudentGroup>> GetAllStudentGroupAsync();
         Task<StudentGroup?> GetStudentGroupByIdAsync(Guid id);
         Task AddStudentGroupAsync(StudentGroup studentGroup);
-        Task<bool> UpdateStudentGroupAsync(StudentGroup studentGroup);
+        Task<bool> UpdateStudentGroupAsync(StudentGroup studentGroup, Guid id);
         Task<bool> DeleteStudentGroupByIdAsync(Guid id);
+        Task<Site> GetSiteByName(string name);
+        Task<Option> GetOptionByName(string name);
     }
 }

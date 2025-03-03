@@ -48,7 +48,9 @@ namespace Calempus360.Services.StudentGroupService
 
         public async Task<bool> DeleteStudentGroupByIdAsync(Guid id)
         {
-            return await _studentGroupRepository.DeleteStudentGroupByIdAsync(id);
+            var isDeleted = await _studentGroupRepository.DeleteStudentGroupByIdAsync(id);
+            if (!isDeleted) throw new StudentGroupNotFoundException(id);
+            return isDeleted;
         }
 
         public async Task<IEnumerable<GetStudentGroupResponse>> GetAllStudentGroupAsync()
@@ -62,9 +64,9 @@ namespace Calempus360.Services.StudentGroupService
                 {
                     Code = group.Code,
                     OptionGrade = group.OptionGrade,
-                    Option = group.Option.ToString()!,
+                    Option = group.Option.Name,
                     NumberOfStudents = group.NumberOfStudents,
-                    Site = group.Site.ToString()!
+                    Site = group.Site.Name
                 });
             }
 
@@ -79,9 +81,9 @@ namespace Calempus360.Services.StudentGroupService
             {
                 Code = studentGroup.Code,
                 OptionGrade = studentGroup.OptionGrade,
-                Option = studentGroup.Option.ToString()!,
+                Option = studentGroup.Option.Name,
                 NumberOfStudents = studentGroup.NumberOfStudents,
-                Site = studentGroup.Site.ToString()!
+                Site = studentGroup.Site.Name
             };
         }
 
@@ -98,13 +100,13 @@ namespace Calempus360.Services.StudentGroupService
                 throw new InvalidStudentGroupException();
             }
 
-            var studentGroup = await _studentGroupRepository.GetStudentGroupByIdAsync(id);
-            if (studentGroup == null) throw new StudentGroupNotFoundException(id);
-
             var studentGroupUpdated = new StudentGroup(id, studentGroupRequest.Code, studentGroupRequest.NumberOfStudents,
-                studentGroupRequest.OptionGrade, studentGroup.CreatedAt, DateTime.Now,null,null);
+                studentGroupRequest.OptionGrade, DateTime.Now, DateTime.Now, null, null);//Remplacer qd j'ai service Site et Option
 
-            return await _studentGroupRepository.UpdateStudentGroupAsync(studentGroupUpdated);
+            var isUpdated = await _studentGroupRepository.UpdateStudentGroupAsync(studentGroupUpdated,id);
+            if (!isUpdated) throw new StudentGroupNotFoundException(id);
+  
+            return isUpdated;
         }
 
         
