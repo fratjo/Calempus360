@@ -17,13 +17,13 @@ namespace Calempus360.Services.StudentGroupService
     public class StudentGroupService : IStudentGroupService
     {
         private readonly IStudentGroupRepository _studentGroupRepository;
-        //TODO Repo Site et Option pour completer le service
+
         public StudentGroupService(IStudentGroupRepository studentGroupRepository)
         {
             _studentGroupRepository = studentGroupRepository;
         }
 
-        public async Task AddStudentGroupAsync(GetStudentGroupRequest studentGroupRequest)
+        public async Task AddStudentGroupAsync(GetStudentGroupRequest studentGroupRequest, string AcademicYear)
         {
             if (studentGroupRequest.NumberOfStudents < 20 || studentGroupRequest.NumberOfStudents > 40)
             {
@@ -41,9 +41,9 @@ namespace Calempus360.Services.StudentGroupService
             //var option
 
             var studentGroup = new StudentGroup(Guid.NewGuid(),studentGroupRequest.Code, studentGroupRequest.NumberOfStudents,
-                studentGroupRequest.OptionGrade, DateTime.Now, DateTime.Now, null, null);
+                studentGroupRequest.OptionGrade, DateTime.Now, DateTime.Now, site, option);
 
-            await _studentGroupRepository.AddStudentGroupAsync(studentGroup);
+            await _studentGroupRepository.AddStudentGroupAsync(studentGroup, AcademicYear);
         }
 
         public async Task<bool> DeleteStudentGroupByIdAsync(Guid id)
@@ -53,10 +53,10 @@ namespace Calempus360.Services.StudentGroupService
             return isDeleted;
         }
 
-        public async Task<IEnumerable<GetStudentGroupResponse>> GetAllStudentGroupAsync()
+        public async Task<IEnumerable<GetStudentGroupResponse>> GetAllStudentGroupAsync(string academicYear)
         {
             var studentGroupsResponse = new List<GetStudentGroupResponse>();
-            var studentGroups = await _studentGroupRepository.GetAllStudentGroupAsync();
+            var studentGroups = await _studentGroupRepository.GetAllStudentGroupAsync(academicYear);
 
             foreach (var group in studentGroups)
             {
@@ -73,9 +73,9 @@ namespace Calempus360.Services.StudentGroupService
             return studentGroupsResponse;
         }
 
-        public async Task<GetStudentGroupResponse> GetStudentGroupByIdAsync(Guid id)
+        public async Task<GetStudentGroupResponse> GetStudentGroupByIdAsync(Guid id, string academicYear)
         {
-            var studentGroup = await _studentGroupRepository.GetStudentGroupByIdAsync(id);
+            var studentGroup = await _studentGroupRepository.GetStudentGroupByIdAsync(id,academicYear);
             if (studentGroup == null) throw new StudentGroupNotFoundException(id);
             return new GetStudentGroupResponse()
             {
@@ -100,8 +100,12 @@ namespace Calempus360.Services.StudentGroupService
                 throw new InvalidStudentGroupException();
             }
 
+            //Pour Tester
+            var site = await _studentGroupRepository.GetSiteByName(studentGroupRequest.Site);
+            var option = await _studentGroupRepository.GetOptionByName(studentGroupRequest.Option);
+            
             var studentGroupUpdated = new StudentGroup(id, studentGroupRequest.Code, studentGroupRequest.NumberOfStudents,
-                studentGroupRequest.OptionGrade, DateTime.Now, DateTime.Now, null, null);//Remplacer qd j'ai service Site et Option
+                studentGroupRequest.OptionGrade, DateTime.Now, DateTime.Now, site, option);//Remplacer qd j'ai service Site et Option
 
             var isUpdated = await _studentGroupRepository.UpdateStudentGroupAsync(studentGroupUpdated,id);
             if (!isUpdated) throw new StudentGroupNotFoundException(id);

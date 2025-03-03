@@ -16,23 +16,24 @@ namespace Calempus360.API.Controllers
         }
 
         [HttpGet("groups")]
-        public async Task<IActionResult> GetAllStudentGroups()
+        public async Task<IActionResult> GetAllStudentGroups(string academicYear)
         {
-            var studentGroups = await _studentGroupService.GetAllStudentGroupAsync();
+            var studentGroups = await _studentGroupService.GetAllStudentGroupAsync(academicYear);
+
             return Ok(studentGroups);
         }
 
         [HttpGet("group/{id:guid}")]
-        public async Task<IActionResult> GetStudentGroupById(Guid id)
+        public async Task<IActionResult> GetStudentGroupById(Guid id, string academicYear)
         {
-            var studentGroup = await _studentGroupService.GetStudentGroupByIdAsync(id);
+            var studentGroup = await _studentGroupService.GetStudentGroupByIdAsync(id, academicYear);
             return Ok(studentGroup);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddStudentGroup(GetStudentGroupRequest studentGroupRequest)
+        public async Task<IActionResult> AddStudentGroup(GetStudentGroupRequest studentGroupRequest, string academicYear)
         {
-            await _studentGroupService.AddStudentGroupAsync(studentGroupRequest);
+            await _studentGroupService.AddStudentGroupAsync(studentGroupRequest, academicYear);
             return Ok($"Student Group {studentGroupRequest.Code} added !");
         }
 

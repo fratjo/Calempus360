@@ -59,7 +59,7 @@ namespace Calempus360.Infrastructure.Repositories
             return entities.Select(e => e.ToDomainModel());
         }
 
-        public async Task<StudentGroup?> GetStudentGroupByIdAsync(Guid id)
+        public async Task<StudentGroup?> GetStudentGroupByIdAsync(Guid id, string academicYear)
         {
             var entity = await _context.StudentGroups
                 .Include(sg => sg.SiteEntity)
