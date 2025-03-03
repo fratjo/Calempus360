@@ -21,9 +21,17 @@ namespace Calempus360.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task AddStudentGroupAsync(StudentGroup studentGroup)
+        public async Task AddStudentGroupAsync(StudentGroup studentGroup, string academicYear)
         {
+            var siteEntity = await _context.Sites.FindAsync(studentGroup.Site.Id);
+            var optionEntity = await _context.Options.FindAsync(studentGroup.Option.Id);
+            var academicYearEntity = await _context.AcademicYears.FindAsync(academicYear);
             var entity = studentGroup.ToEntity();
+
+            entity.SiteEntity = siteEntity!;
+            entity.OptionEntity = optionEntity!;
+            entity.AcademicYearEntity = academicYearEntity!;
+
             await _context.StudentGroups.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
@@ -39,30 +47,30 @@ namespace Calempus360.Infrastructure.Repositories
             return false;
         }
 
-        public async Task<IEnumerable<StudentGroup>> GetAllStudentGroupAsync()
+        public async Task<IEnumerable<StudentGroup>> GetAllStudentGroupAsync(string academicYear)
         {
             var entities = await _context.StudentGroups
                 .Include(sg => sg.SiteEntity)
                 .Include(sg => sg.AcademicYearEntity)
                 .Include(sg => sg.OptionEntity)
+                .Where(sg => sg.AcademicYearId == academicYear)
                 .ToListAsync();
 
             return entities.Select(e => e.ToDomainModel());
         }
 
-        public async Task<StudentGroup?> GetStudentGroupByIdAsync(Guid id)
+        public async Task<StudentGroup?> GetStudentGroupByIdAsync(Guid id, string academicYear)
         {
             var entity = await _context.StudentGroups
                 .Include(sg => sg.SiteEntity)
                 .Include(sg => sg.AcademicYearEntity)
                 .Include(sg => sg.OptionEntity)
-                .FirstOrDefaultAsync(sg => sg.StudentGroupId == id);
+                .FirstOrDefaultAsync(sg => sg.StudentGroupId == id && sg.AcademicYearId == academicYear);
             return entity?.ToDomainModel();
         }
 
         public async Task<bool> UpdateStudentGroupAsync(StudentGroup studentGroup, Guid id)
         {
-            var updatedEntity = studentGroup.ToEntity();
             var entity = await _context.StudentGroups
                 .Include(sg => sg.SiteEntity)
                 .Include(sg => sg.AcademicYearEntity)
@@ -75,6 +83,7 @@ namespace Calempus360.Infrastructure.Repositories
                 entity.OptionGrade = studentGroup.OptionGrade;
                 entity.SiteId = studentGroup.Site.Id;
                 entity.OptionId = studentGroup.Option.Id;
+                entity.UpdatedAt = DateTime.Now;
 
                 return await _context.SaveChangesAsync() > 0;
             }
@@ -92,7 +101,7 @@ namespace Calempus360.Infrastructure.Repositories
         //Trouver option selon nom
         public async Task<Option> GetOptionByName(string name)
         {
-            var option = await _context.Options.FirstOrDefaultAsync(s => s.Name == name);
+            var option = await _context.Options.FirstOrDefaultAsync(o => o.Name == name);
             return option.ToDomainModel();
         }
     }
