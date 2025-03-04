@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Calempus360.Core.DTOs.Requests
+namespace Calempus360.Core.DTOs.Requests.Group
 {
     public class AddStudentGroupRequest
     {
