@@ -63,4 +63,14 @@ export class UniversityService {
     //   }),
     // );
   }
+
+  deleteUniversity(id: string) {
+    return this.http.delete<University>(this.URL + `/${id}`).pipe(
+      tap((u: University) => {
+        this.universities$.next(
+          this.universities$.value.filter((u) => u.id !== id),
+        );
+      }),
+    );
+  }
 }

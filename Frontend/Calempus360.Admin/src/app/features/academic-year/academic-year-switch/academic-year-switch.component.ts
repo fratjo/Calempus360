@@ -42,6 +42,6 @@ export class AcademicYearSwitchComponent implements OnInit {
   }
 
   onDelete(academicYearId: string) {
-    //this.academicYearService.deleteAcademicYear(academicYearId).subscribe();
+    this.academicYearService.deleteAcademicYear(academicYearId).subscribe();
   }
 }

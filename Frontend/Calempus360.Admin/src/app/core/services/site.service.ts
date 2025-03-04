@@ -73,4 +73,14 @@ export class SiteService {
     //   }),
     // );
   }
+
+  deleteSite(id: string) {
+    const universityId = this.universityService.university$.value.id;
+    const url = this.URL.replace('{universityId}', universityId!);
+    return this.http.delete<Site>(url + `/${id}`).pipe(
+      tap((s: Site) => {
+        this.sites$.next(this.sites$.value.filter((site) => site.id !== id));
+      }),
+    );
+  }
 }

@@ -30,6 +30,6 @@ export class SiteListComponent implements OnInit {
   }
 
   onDelete(siteId: string) {
-    //this.siteService.deleteSite(siteId).subscribe();
+    this.siteService.deleteSite(siteId).subscribe();
   }
 }

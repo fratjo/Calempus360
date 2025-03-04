@@ -64,4 +64,14 @@ export class AcademicYearService {
     //   }),
     // );
   }
+
+  deleteAcademicYear(id: string) {
+    return this.http.delete<AcademicYear>(this.URL + `/${id}`).pipe(
+      tap((a: AcademicYear) => {
+        this.academicYears$.next(
+          this.academicYears$.value.filter((a) => a.id !== id),
+        );
+      }),
+    );
+  }
 }

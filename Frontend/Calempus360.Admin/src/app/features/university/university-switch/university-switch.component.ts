@@ -33,6 +33,6 @@ export class UniversitySwitchComponent implements OnInit {
   }
 
   onDelete(universityId: string) {
-    //this.universityService.deleteUniversity(universityId).subscribe();
+    this.universityService.deleteUniversity(universityId).subscribe();
   }
 }
