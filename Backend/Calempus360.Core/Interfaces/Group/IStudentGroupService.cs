@@ -1,5 +1,5 @@
-﻿using Calempus360.Core.DTOs.Requests;
-using Calempus360.Core.DTOs.Responses;
+﻿using Calempus360.Core.DTOs.Requests.Group;
+using Calempus360.Core.DTOs.Responses.Group;
 using Calempus360.Core.Models;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿using Calempus360.Core.DTOs.Requests;
+﻿using Calempus360.Core.DTOs.Requests.Group;
 using Calempus360.Core.Interfaces.Group;
 using Microsoft.AspNetCore.Mvc;
 

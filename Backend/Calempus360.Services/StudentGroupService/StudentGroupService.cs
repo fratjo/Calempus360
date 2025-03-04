@@ -1,5 +1,5 @@
-﻿using Calempus360.Core.DTOs.Requests;
-using Calempus360.Core.DTOs.Responses;
+﻿using Calempus360.Core.DTOs.Requests.Group;
+using Calempus360.Core.DTOs.Responses.Group;
 using Calempus360.Core.Interfaces.Group;
 using Calempus360.Core.Models;
 using Calempus360.Errors;
@@ -38,7 +38,7 @@ namespace Calempus360.Services.StudentGroupService
 
             //Pour Tester
             var site = await _studentGroupRepository.GetSiteByName(studentGroupRequest.Site);
-            var option = await _studentGroupRepository.GetOptionByName(studentGroupRequest.Option);
+            //var option
 
             var studentGroup = new StudentGroup(Guid.NewGuid(),studentGroupRequest.Code, studentGroupRequest.NumberOfStudents,
                 studentGroupRequest.OptionGrade, DateTime.Now, DateTime.Now, site, option);
@@ -102,7 +102,7 @@ namespace Calempus360.Services.StudentGroupService
 
             //Pour Tester
             var site = await _studentGroupRepository.GetSiteByName(studentGroupRequest.Site);
-            var option = await _studentGroupRepository.GetOptionByName(studentGroupRequest.Option);
+            //var option
             
             var studentGroupUpdated = new StudentGroup(studentGroupRequest.Id, studentGroupRequest.Code, studentGroupRequest.NumberOfStudents,
                 studentGroupRequest.OptionGrade, DateTime.Now, DateTime.Now, site, option);//Remplacer qd j'ai service Site et Option
