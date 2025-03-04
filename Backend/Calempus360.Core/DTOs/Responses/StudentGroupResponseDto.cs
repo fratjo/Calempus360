@@ -9,13 +9,12 @@ namespace Calempus360.Core.DTOs.Responses
 {
     public class StudentGroupResponseDto
     {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
+        public Guid Id { get; set; }
         public string Code {  get; set; } = string.Empty;
-        public string OptionGrade {  get; set; } = string.Empty;
-        public string Option {  get; set; } = string.Empty;
+        public int OptionGrade {  get; set; }
+        public OptionResponseDto? Option {  get; set; }
         public int NumberOfStudents { get; set; }
-
+        public SiteResponseDto? Site { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }
@@ -27,14 +26,13 @@ namespace Calempus360.Core.DTOs.Responses
             return new StudentGroupResponseDto
             {
                 Id = studentGroup.Id,
-                Name = studentGroup.Na,
                 Code = studentGroup.Code,
-                OptionGrade = studentGroup.OptionGrade.ToString(),
-                Option = studentGroup.Option.Name,
+                OptionGrade = studentGroup.OptionGrade,
+                Option = studentGroup.Option?.MapToDto(),
                 CreatedAt = studentGroup.CreatedAt,
                 UpdatedAt = studentGroup.UpdatedAt,
-                NumberOfStudents = studentGroup.NumberOfStudents
-                Equipments = university.Equipments?.Select(equipment => equipment.MapToDTO()).ToList()
+                NumberOfStudents = studentGroup.NumberOfStudents,
+                Site = studentGroup.Site?.MapToDto()
             };
         }
     }
