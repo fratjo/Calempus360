@@ -23,7 +23,7 @@ namespace Calempus360.Services.StudentGroupService
             _studentGroupRepository = studentGroupRepository;
         }
 
-        public async Task AddStudentGroupAsync(GetStudentGroupRequest studentGroupRequest, string AcademicYear)
+        public async Task AddStudentGroupAsync(AddStudentGroupRequest studentGroupRequest, string AcademicYear)
         {
             if (studentGroupRequest.NumberOfStudents < 20 || studentGroupRequest.NumberOfStudents > 40)
             {
@@ -87,7 +87,7 @@ namespace Calempus360.Services.StudentGroupService
             };
         }
 
-        public async Task<bool> UpdateStudentGroupAsync(GetStudentGroupRequest studentGroupRequest, Guid id)
+        public async Task<bool> UpdateStudentGroupAsync(UpdateStudentGroupRequest studentGroupRequest)
         {
             if (studentGroupRequest.NumberOfStudents < 20 || studentGroupRequest.NumberOfStudents > 40)
             {
@@ -104,11 +104,11 @@ namespace Calempus360.Services.StudentGroupService
             var site = await _studentGroupRepository.GetSiteByName(studentGroupRequest.Site);
             var option = await _studentGroupRepository.GetOptionByName(studentGroupRequest.Option);
             
-            var studentGroupUpdated = new StudentGroup(id, studentGroupRequest.Code, studentGroupRequest.NumberOfStudents,
+            var studentGroupUpdated = new StudentGroup(studentGroupRequest.Id, studentGroupRequest.Code, studentGroupRequest.NumberOfStudents,
                 studentGroupRequest.OptionGrade, DateTime.Now, DateTime.Now, site, option);//Remplacer qd j'ai service Site et Option
 
-            var isUpdated = await _studentGroupRepository.UpdateStudentGroupAsync(studentGroupUpdated,id);
-            if (!isUpdated) throw new StudentGroupNotFoundException(id);
+            var isUpdated = await _studentGroupRepository.UpdateStudentGroupAsync(studentGroupUpdated,studentGroupRequest.Id);
+            if (!isUpdated) throw new StudentGroupNotFoundException(studentGroupRequest.Id);
   
             return isUpdated;
         }
