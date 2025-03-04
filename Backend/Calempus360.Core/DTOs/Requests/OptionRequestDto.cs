@@ -12,7 +12,7 @@ namespace Calempus360.Core.DTOs.Requests
         public string Name { get; set; } = string.Empty;
         public string Code { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public List<string> Courses { get; set; } = new List<string>();
+        public List<Guid> Courses { get; set; } = new List<Guid>();
 
     }
 
@@ -20,7 +20,9 @@ namespace Calempus360.Core.DTOs.Requests
     {
         public OptionRequestDtoValidator()
         {
-
+            RuleFor(o => o.Name).NotEmpty().WithMessage("Option Name is required !");
+            RuleFor(o => o.Code).NotEmpty().WithMessage("Option Code is required !");
+            RuleFor(o => o.Description).NotEmpty().WithMessage("Option Description is required !");
         }
     }
 }
