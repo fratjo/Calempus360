@@ -16,5 +16,6 @@ namespace Calempus360.Core.Interfaces.Group
         Task<bool> DeleteStudentGroupByIdAsync(Guid id);
         //Uniquement pour Test
         Task<Site> GetSiteByName(string name);
+        Task<Option> GetOptionByName(string name);
     }
 }

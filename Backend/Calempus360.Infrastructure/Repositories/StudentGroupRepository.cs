@@ -69,7 +69,7 @@ namespace Calempus360.Infrastructure.Repositories
             return entity?.ToDomainModel();
         }
 
-        public async Task<bool> UpdateStudentGroupAsync(StudentGroup studentGroup)
+        public async Task<bool> UpdateStudentGroupAsync(StudentGroup studentGroup, Guid id)
         {
             var entity = await _context.StudentGroups
                 .Include(sg => sg.SiteEntity)
@@ -97,6 +97,12 @@ namespace Calempus360.Infrastructure.Repositories
         {
             var site = await _context.Sites.FirstOrDefaultAsync(s => s.Name == name);
             return site.ToDomainModel();
+        }
+        //Trouver option selon nom
+        public async Task<Option> GetOptionByName(string name)
+        {
+            var option = await _context.Options.FirstOrDefaultAsync(o => o.Name == name);
+            return option.ToDomainModel();
         }
     }
 }

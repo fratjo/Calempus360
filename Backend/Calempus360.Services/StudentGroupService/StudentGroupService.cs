@@ -1,5 +1,5 @@
 ﻿using Calempus360.Core.DTOs.Requests;
-using Calempus360.Core.DTOs.Responses.Group;
+using Calempus360.Core.DTOs.Responses;
 using Calempus360.Core.Interfaces.Group;
 using Calempus360.Core.Models;
 using Calempus360.Errors;
@@ -87,7 +87,7 @@ namespace Calempus360.Services.StudentGroupService
             };
         }
 
-        public async Task<bool> UpdateStudentGroupAsync(StudentGroupRequestDto studentGroupRequest)
+        public async Task<bool> UpdateStudentGroupAsync(GetStudentGroupRequest studentGroupRequest, Guid id)
         {
             if (studentGroupRequest.NumberOfStudents < 20 || studentGroupRequest.NumberOfStudents > 40)
             {
