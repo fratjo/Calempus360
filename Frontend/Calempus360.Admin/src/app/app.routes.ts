@@ -9,8 +9,19 @@ import { AcademicYearAddFormComponent } from './features/academic-year/academic-
 import { AcademicYearComponent } from './features/academic-year/academic-year.component';
 import { AcademicYearSwitchComponent } from './features/academic-year/academic-year-switch/academic-year-switch.component';
 import { academicYearGuard } from './core/guards/academic-year.guard';
+import { HomeComponent } from './features/home/home.component';
+import { UniversityEditFormComponent } from './features/university/university-edit-form/university-edit-form.component';
+import { AcademicYearEditFormComponent } from './features/academic-year/academic-year-edit-form/academic-year-edit-form.component';
+import { SiteListComponent } from './features/site/site-list/site-list.component';
+import { SiteAddFormComponent } from './features/site/site-add-form/site-add-form.component';
+import { SiteEditFormComponent } from './features/site/site-edit-form/site-edit-form.component';
 
 export const routes: Routes = [
+  {
+    path: 'home',
+    component: HomeComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
   {
     path: 'university',
     component: UniversityComponent,
@@ -19,6 +30,10 @@ export const routes: Routes = [
   {
     path: 'university/add',
     component: UniversityAddFormComponent,
+  },
+  {
+    path: 'university/edit/:id',
+    component: UniversityEditFormComponent,
   },
   {
     path: 'university/change',
@@ -34,16 +49,35 @@ export const routes: Routes = [
     component: AcademicYearAddFormComponent,
   },
   {
+    path: 'academic-year/edit/:id',
+    component: AcademicYearEditFormComponent,
+  },
+  {
     path: 'academic-year/change',
     component: AcademicYearSwitchComponent,
   },
   {
     path: 'sites',
+    component: SiteListComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'site/:id',
     component: SiteComponent,
     canActivate: [univeristyGuard, academicYearGuard],
   },
   {
+    path: 'sites/add',
+    component: SiteAddFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'sites/edit/:id',
+    component: SiteEditFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
     path: '**',
-    redirectTo: 'university',
+    redirectTo: 'home',
   },
 ];

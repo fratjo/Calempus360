@@ -16,7 +16,7 @@ public class AcademicYearRepository(Calempus360DbContext dbContext) : IAcademicY
         return list.Select(a => a.ToDomainModel());
     }
 
-    public async Task<AcademicYear> GetAcademicYearByIdAsync(string id)
+    public async Task<AcademicYear> GetAcademicYearByIdAsync(Guid id)
     {
         var entity = await dbContext.AcademicYears.Include(ac => ac.DaysWithoutCourses)
                                     .FirstOrDefaultAsync(a => a.AcademicYearId == id);
@@ -36,7 +36,7 @@ public class AcademicYearRepository(Calempus360DbContext dbContext) : IAcademicY
         return entity.ToDomainModel();
     }
 
-    public async Task<AcademicYear> UpdateAcademicYearAsync(string id, AcademicYear academicYear)
+    public async Task<AcademicYear> UpdateAcademicYearAsync(Guid id, AcademicYear academicYear)
     {
         var entity = academicYear.ToEntity();
 

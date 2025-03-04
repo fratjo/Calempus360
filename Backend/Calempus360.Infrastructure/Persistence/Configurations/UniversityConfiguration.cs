@@ -24,7 +24,7 @@ namespace Calempus360.Infrastructure.Persistence.Configurations
             
             builder.Property(u => u.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
             
-            builder.Property(u => u.UpdatedAt).IsRequired().HasDefaultValueSql("GETDATE()").ValueGeneratedOnAddOrUpdate();
+            builder.Property(u => u.UpdatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
         }
     }
 }

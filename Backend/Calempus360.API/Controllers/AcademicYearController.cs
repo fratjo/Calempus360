@@ -22,8 +22,8 @@ namespace Calempus360.API.Controllers
             return Ok(academicYears.Select(ac => ac.MapToDto()));
         }
         
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetAcademicYearById(string id)
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetAcademicYearById(Guid id)
         {
             var academicYear = await academicYearService.GetAcademicYearByIdAsync(id);
             return Ok(academicYear.MapToDto());
@@ -37,7 +37,7 @@ namespace Calempus360.API.Controllers
         public async Task<IActionResult> CreateAcademicYear([FromBody] AcademicYearRequestDto requestDto)
         {   
             var academicYear = new AcademicYear(
-                id: requestDto.Id,
+                code: requestDto.Code,
                 dateStart: DateOnly.FromDateTime(requestDto.DateStart),
                 dateEnd: DateOnly.FromDateTime(requestDto.DateEnd));
             
@@ -50,11 +50,11 @@ namespace Calempus360.API.Controllers
         
         #region PUT
         
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAcademicYear(string id, [FromBody] AcademicYearRequestDto requestDto)
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> UpdateAcademicYear(Guid id, [FromBody] AcademicYearRequestDto requestDto)
         {
             var academicYear = new AcademicYear(
-                id: requestDto.Id,
+                code: requestDto.Code,
                 dateStart: DateOnly.FromDateTime(requestDto.DateStart),
                 dateEnd: DateOnly.FromDateTime(requestDto.DateEnd));
             

@@ -9,6 +9,7 @@ public static class AcademicYearMapper
     {
         return new AcademicYear(
             id: entity.AcademicYearId,
+            code: entity.AcademicYearCode,
             dateStart: entity.DateStart,
             dateEnd: entity.DateEnd,
             createdAt: entity.CreatedAt,
@@ -23,7 +24,7 @@ public static class AcademicYearMapper
     {
         return new AcademicYearEntity
         {
-            AcademicYearId = model.Id,
+            AcademicYearCode = model.Code,
             DateStart      = model.DateStart,
             DateEnd        = model.DateEnd,
             CreatedAt      = model.CreatedAt,

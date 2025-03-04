@@ -1128,7 +1128,8 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         
         var academicYearEntity = new AcademicYearEntity
         {
-            AcademicYearId = "2023-2024",
+            AcademicYearId = Guid.NewGuid(),
+            AcademicYearCode = "2023-2024",
             DateStart = DateOnly.FromDateTime(DateTime.Now),
             DateEnd   = DateOnly.FromDateTime(DateTime.Now.AddYears(1)),
             CreatedAt      = DateTime.Now,
@@ -1164,7 +1165,8 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         // Arrange
         
         var academicYear = new AcademicYear(
-            id: "2023-2024",
+            id: Guid.NewGuid(),
+            code: "2023-2024",
             dateStart: DateOnly.FromDateTime(DateTime.Now),
             dateEnd: DateOnly.FromDateTime(DateTime.Now.AddYears(1)),
             createdAt: DateTime.Now,
@@ -1182,6 +1184,7 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         
         Assert.NotNull(academicYearEntity);
         Assert.Equal(academicYear.Id,        academicYearEntity.AcademicYearId);
+        Assert.Equal(academicYear.Code,      academicYearEntity.AcademicYearCode);
         Assert.Equal(academicYear.DateStart, academicYearEntity.DateStart);
         Assert.Equal(academicYear.DateEnd,   academicYearEntity.DateEnd);
         Assert.Equal(academicYear.CreatedAt, academicYearEntity.CreatedAt);

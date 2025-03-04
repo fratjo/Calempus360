@@ -1,0 +1,81 @@
+<div
+  class="card bg-base-100 flex flex-col items-center justify-center rounded-lg"
+>
+  <h1 class="card-title mt-4">Add Site</h1>
+  <form
+    [formGroup]="siteForm"
+    (ngSubmit)="save()"
+    class="card-body flex w-64 flex-col space-y-4"
+  >
+    <input
+      [ngClass]="{
+        'border-error':
+          siteForm.controls['name'].touched &&
+          siteForm.controls['name'].invalid,
+        'border-primary':
+          siteForm.controls['name'].touched && siteForm.controls['name'].valid,
+      }"
+      type="text"
+      placeholder="Site Name"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="name"
+    />
+    <input
+      [ngClass]="{
+        'border-error':
+          siteForm.controls['code'].touched &&
+          siteForm.controls['code'].invalid,
+        'border-primary':
+          siteForm.controls['code'].touched && siteForm.controls['code'].valid,
+      }"
+      type="text"
+      placeholder="Site Code"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="code"
+    />
+    <input
+      [ngClass]="{
+        'border-error':
+          siteForm.controls['address'].touched &&
+          siteForm.controls['address'].invalid,
+        'border-primary':
+          siteForm.controls['address'].touched &&
+          siteForm.controls['address'].valid,
+      }"
+      type="text"
+      placeholder="Site Address"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="address"
+    />
+    <input
+      [ngClass]="{
+        'border-error':
+          siteForm.controls['phone'].touched &&
+          siteForm.controls['phone'].invalid,
+        'border-primary':
+          siteForm.controls['phone'].touched &&
+          siteForm.controls['phone'].valid,
+      }"
+      type="text"
+      placeholder="Site Phone"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="phone"
+    />
+    <div class="flex justify-between space-x-4">
+      <button
+        (click)="cancel()"
+        type="reset"
+        class="bg-warning btn flex flex-row space-x-2 rounded p-2 text-white"
+      >
+        <mat-icon fontIcon="cancel"></mat-icon>Cancel
+      </button>
+      <button
+        type="submit"
+        [disabled]="!siteForm.valid"
+        class="bg-success btn flex flex-row rounded p-2 text-white disabled:opacity-50"
+      >
+        <mat-icon fontIcon="save"></mat-icon>Add
+      </button>
+    </div>
+  </form>
+</div>

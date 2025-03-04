@@ -1,0 +1,57 @@
+@if (siteList$ | async; as sites) {
+  <div class="rounded-box bg-base-100">
+    <div
+      class="rounded-box border-base-content/5 bg-base-100 border-base-content overflow-x-auto"
+    >
+      <table class="table-pin-rows table w-full">
+        <thead>
+          <tr class="pt-2 pb-2">
+            <th></th>
+            <th>Name</th>
+            <th>Code</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th class="">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (site of sites; track site?.id; let i = $index) {
+            <tr
+              class="hover:bg-primary hover:text-primary-content hover:rounded"
+            >
+              <th>{{ i }}</th>
+              <td>{{ site?.name }}</td>
+              <td>{{ site?.code }}</td>
+              <td>{{ site?.address }}</td>
+              <td>{{ site?.phone }}</td>
+              <td class="space-x-2">
+                <button mat-icon-button (click)="onSelect(site.id!)">
+                  <mat-icon fontIcon="visibility"></mat-icon>
+                </button>
+                <button mat-icon-button (click)="onEdit(site.id!)">
+                  <mat-icon fontIcon="edit"></mat-icon>
+                </button>
+                <button mat-icon-button (click)="onDelete(site.id!)">
+                  <mat-icon fontIcon="delete"></mat-icon>
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="text-center">Site empty!</td>
+            </tr>
+          }
+          <tr>
+            <td colspan="6" class="text-center">
+              <button routerLink="/sites/add" class="btn btn-primary mr-1 p-1">
+                <mat-icon fontIcon="add"></mat-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+} @else {
+  <p>Site not found!</p>
+}

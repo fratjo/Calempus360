@@ -14,4 +14,13 @@ import { RouterLink, RouterModule } from '@angular/router';
 export class TopBarComponent {
   university$ = inject(UniversityService).university$.asObservable();
   academicYear$ = inject(AcademicYearService).academicYear$.asObservable();
+
+  closeDetails(e: Event) {
+    const target = (e.target as HTMLElement).closest('details');
+    console.log(target);
+
+    if (target) {
+      target.removeAttribute('open');
+    }
+  }
 }

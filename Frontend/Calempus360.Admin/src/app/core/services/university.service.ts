@@ -9,7 +9,6 @@ import { Router } from '@angular/router';
 })
 export class UniversityService {
   private http: HttpClient = inject(HttpClient);
-  private readonly router = inject(Router);
   public university$ = new BehaviorSubject<University>({});
   public universities$ = new BehaviorSubject<University[]>([]);
 
@@ -23,34 +22,45 @@ export class UniversityService {
     return this.http.get<Universities>(this.URL).pipe(
       tap((u: Universities) => {
         this.universities$.next(u);
-      })
+      }),
     );
   }
 
-  getUniversityById(id: string) {
+  getUniversityById(id: string): Observable<University> {
+    return this.http.get<University>(this.URL + `/${id}`);
+    // .pipe(
+    //   tap((u: University) => {
+    //     this.university$.next(u);
+    //   }),
+    // );
+  }
+
+  setUniversity(id: string) {
     return this.http.get<University>(this.URL + `/${id}`).pipe(
       tap((u: University) => {
         this.university$.next(u);
-        this.router.navigate(['university']);
-      })
+      }),
     );
   }
 
   updateUniversity(university: University) {
-    return this.http
-      .put<University>(this.URL + `/${university.id}`, university)
-      .pipe(
-        tap((u: University) => {
-          this.university$.next(u);
-        })
-      );
+    return this.http.put<University>(
+      this.URL + `/${university.id}`,
+      university,
+    );
+    // .pipe(
+    //   tap((u: University) => {
+    //     this.university$.next(u);
+    //   }),
+    // );
   }
 
   addUniversity(university: University) {
-    return this.http.post<University>(this.URL, university).pipe(
-      tap((u: University) => {
-        this.university$.next(u);
-      })
-    );
+    return this.http.post<University>(this.URL, university);
+    // .pipe(
+    //   tap((u: University) => {
+    //     this.university$.next(u);
+    //   }),
+    // );
   }
 }

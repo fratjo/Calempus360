@@ -2,11 +2,12 @@
 {
     public class AcademicYearEntity
     {
-        public string AcademicYearId { get; set; }
-        public DateOnly DateStart { get; set; }
-        public DateOnly DateEnd { get; set; }
-        public DateTime? CreatedAt { get; set; }
-        public DateTime? UpdatedAt { get; set; }
+        public Guid     AcademicYearId   { get; set; }
+        public string    AcademicYearCode { get; set; }
+        public DateOnly  DateStart        { get; set; }
+        public DateOnly  DateEnd          { get; set; }
+        public DateTime? CreatedAt        { get; set; }
+        public DateTime? UpdatedAt        { get; set; }
         
         // Navigation Properties
         

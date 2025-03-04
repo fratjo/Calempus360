@@ -15,7 +15,7 @@ public class AcademicYearService(IAcademicYearRepository academicYearRepository)
         return list;
     }
 
-    public async Task<AcademicYear> GetAcademicYearByIdAsync(string id)
+    public async Task<AcademicYear> GetAcademicYearByIdAsync(Guid id)
     {
         var a = await academicYearRepository.GetAcademicYearByIdAsync(id);
         return a;
@@ -39,7 +39,7 @@ public class AcademicYearService(IAcademicYearRepository academicYearRepository)
         }
     }
 
-    public async Task<AcademicYear> UpdateAcademicYearAsync(string id, AcademicYear academicYear)
+    public async Task<AcademicYear> UpdateAcademicYearAsync(Guid id, AcademicYear academicYear)
     {
         try
         {

@@ -1,30 +1,67 @@
-<div>
-  <form [formGroup]="academicYearForm" (ngSubmit)="save()">
-    <mat-form-field>
-      <input matInput placeholder="Code" formControlName="id" />
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Enter a date range</mat-label>
-      <mat-date-range-input [rangePicker]="picker">
-        <input
-          matStartDate
-          placeholder="Start date"
-          formControlName="dateStart"
-        />
-        <input matEndDate placeholder="End date" formControlName="dateEnd" />
-      </mat-date-range-input>
-      <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-      <mat-datepicker-toggle
-        matIconSuffix
-        [for]="picker"
-      ></mat-datepicker-toggle>
-      <mat-date-range-picker #picker></mat-date-range-picker>
-    </mat-form-field>
-    <div>
-      <button mat-button (click)="cancel()" type="reset">
+<div
+  class="card bg-base-100 flex flex-col items-center justify-center rounded-lg"
+>
+  <h1 class="card-title mt-4">Add University</h1>
+  <form
+    [formGroup]="academicYearForm"
+    (ngSubmit)="save()"
+    class="card-body flex w-64 flex-col space-y-4"
+  >
+    <input
+      [ngClass]="{
+        'border-error':
+          academicYearForm.controls['code'].touched &&
+          academicYearForm.controls['code'].invalid,
+        'border-primary':
+          academicYearForm.controls['code'].touched &&
+          academicYearForm.controls['code'].valid,
+      }"
+      type="text"
+      placeholder="Academic Year Code"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="code"
+    />
+    <input
+      [ngClass]="{
+        'border-error':
+          academicYearForm.controls['dateStart'].touched &&
+          academicYearForm.controls['dateStart'].invalid,
+        'border-primary':
+          academicYearForm.controls['dateStart'].touched &&
+          academicYearForm.controls['dateStart'].valid,
+      }"
+      type="date"
+      placeholder="Date Start"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="dateStart"
+    />
+    <input
+      [ngClass]="{
+        'border-error':
+          academicYearForm.controls['dateEnd'].touched &&
+          academicYearForm.controls['dateEnd'].invalid,
+        'border-primary':
+          academicYearForm.controls['dateEnd'].touched &&
+          academicYearForm.controls['dateEnd'].valid,
+      }"
+      type="date"
+      placeholder="Date End"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="dateEnd"
+    />
+    <div class="flex justify-between space-x-4">
+      <button
+        (click)="cancel()"
+        type="reset"
+        class="bg-warning btn flex flex-row space-x-2 rounded p-2 text-white"
+      >
         <mat-icon fontIcon="cancel"></mat-icon>Cancel
       </button>
-      <button mat-button type="submit" [disabled]="!academicYearForm.valid">
+      <button
+        type="submit"
+        [disabled]="!academicYearForm.valid"
+        class="bg-success btn flex flex-row rounded p-2 text-white disabled:opacity-50"
+      >
         <mat-icon fontIcon="save"></mat-icon>Add
       </button>
     </div>

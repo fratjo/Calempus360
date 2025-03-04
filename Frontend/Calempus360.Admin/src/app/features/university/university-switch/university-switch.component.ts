@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './university-switch.component.scss',
 })
 export class UniversitySwitchComponent implements OnInit {
+  private readonly router = inject(Router);
   private universityService = inject(UniversityService);
   universityList$: Observable<Universities> =
     this.universityService.universities$;
@@ -23,6 +24,15 @@ export class UniversitySwitchComponent implements OnInit {
   }
 
   onSelect(universityId: string) {
-    this.universityService.getUniversityById(universityId).subscribe();
+    this.universityService.setUniversity(universityId).subscribe();
+    this.router.navigate(['']);
+  }
+
+  onEdit(universityId: string) {
+    this.router.navigate(['/university/edit', universityId]);
+  }
+
+  onDelete(universityId: string) {
+    //this.universityService.deleteUniversity(universityId).subscribe();
   }
 }

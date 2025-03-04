@@ -1,14 +1,16 @@
 namespace Calempus360.Core.Models;
 
 public class AcademicYear(
-    string                  id,
+    string                  code,
     DateOnly                dateStart,
     DateOnly                dateEnd,
+    Guid?                   id                = null,
     DateTime?               createdAt          = null,
     DateTime?               updatedAt          = null,
     List<DayWithoutCourse>? daysWithoutCourses = null)
 {
-    public string                  Id                { get; private set; } = id;
+    public Guid?                    Id                { get; private set; } = id ?? Guid.NewGuid();
+    public string                  Code                { get; private set; } = code;
     public DateOnly                DateStart         { get; private set; } = dateStart;
     public DateOnly                DateEnd           { get; private set; } = dateEnd;
     public DateTime                CreatedAt         { get; private set; } = createdAt ?? DateTime.Now;

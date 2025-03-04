@@ -3,7 +3,7 @@
     public class CourseEquipmentTypeEntity
     {
         // AcademicYear
-        public string AcademicYearId { get; set; }
+        public Guid AcademicYearId { get; set; }
         public virtual AcademicYearEntity AcademicYearEntity { get; set; } = null!;
         
         // Course

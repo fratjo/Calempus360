@@ -1,13 +1,12 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { TopBarComponent } from './layout/top-bar/top-bar.component';
-import { LeftPanelComponent } from './layout/left-panel/left-panel.component';
 import { UniversityService } from './core/services/university.service';
-import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
+import { DockBarComponent } from './layout/dock-bar/dock-bar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [TopBarComponent, LeftPanelComponent],
+  imports: [TopBarComponent, DockBarComponent, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -16,6 +15,6 @@ export class AppComponent implements OnInit {
   private readonly router = inject(Router);
 
   ngOnInit() {
-    this.router.navigate(['/university']);
+    this.router.navigate(['home']);
   }
 }

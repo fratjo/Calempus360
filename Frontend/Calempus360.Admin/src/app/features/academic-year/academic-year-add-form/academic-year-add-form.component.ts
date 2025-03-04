@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { AcademicYearService } from '../../../core/services/academic-year.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-academic-year-add-form',
@@ -23,6 +24,7 @@ import { AcademicYearService } from '../../../core/services/academic-year.servic
     FormsModule,
     MatInputModule,
     MatDatepickerModule,
+    CommonModule,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './academic-year-add-form.component.html',
@@ -35,7 +37,7 @@ export class AcademicYearAddFormComponent {
 
   constructor(public fb: FormBuilder) {
     this.academicYearForm = this.fb.group({
-      id: ['', Validators.required],
+      code: ['', Validators.required],
       dateStart: ['', Validators.required],
       dateEnd: ['', Validators.required],
     });

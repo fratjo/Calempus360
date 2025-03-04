@@ -28,7 +28,7 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             
             builder.Property(e => e.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
             
-            builder.Property(e => e.UpdatedAt).IsRequired().HasDefaultValueSql("GETDATE()").ValueGeneratedOnAddOrUpdate();
+            builder.Property(e => e.UpdatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
 
             builder
                 .HasOne(e => e.EquipmentTypeEntity)

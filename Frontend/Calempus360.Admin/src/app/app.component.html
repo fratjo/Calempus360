@@ -1,2 +1,7 @@
-<app-top-bar></app-top-bar>
-<app-left-panel></app-left-panel>
+<div class="flex h-screen flex-col bg-slate-100">
+  <app-top-bar></app-top-bar>
+  <div class="flex-grow p-2">
+    <router-outlet></router-outlet>
+  </div>
+  <app-dock-bar></app-dock-bar>
+</div>

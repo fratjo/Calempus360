@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, tap } from 'rxjs';
+import { BehaviorSubject, pipe, tap } from 'rxjs';
 import { AcademicYear, AcademicYears } from '../models/academicYear.interface';
 import { Router } from '@angular/router';
 
@@ -23,36 +23,45 @@ export class AcademicYearService {
     return this.http.get<AcademicYears>(this.URL).pipe(
       tap((a: AcademicYears) => {
         this.academicYears$.next(a);
-      })
+      }),
     );
   }
 
   getAdademicYearById(id: string) {
+    return this.http.get<AcademicYear>(this.URL + `/${id}`);
+    // .pipe(
+    //   tap((a: AcademicYear) => {
+    //     this.academicYear$.next(a);
+    //   }),
+    // );
+  }
+
+  setAcademicYear(id: string) {
     return this.http.get<AcademicYear>(this.URL + `/${id}`).pipe(
       tap((a: AcademicYear) => {
         this.academicYear$.next(a);
-        this.router.navigate(['academic-year']);
-      })
+      }),
     );
   }
 
   addAcademicYear(academicYear: AcademicYear) {
-    console.info('Academic Year:', academicYear);
-    return this.http.post<AcademicYear>(this.URL, academicYear).pipe(
-      tap((a: AcademicYear) => {
-        this.academicYear$.next(a);
-      })
-    );
+    return this.http.post<AcademicYear>(this.URL, academicYear);
+    // .pipe(
+    //   tap((a: AcademicYear) => {
+    //     this.academicYear$.next(a);
+    //   }),
+    // );
   }
 
   updateAcademicYear(academicYear: AcademicYear) {
-    console.info('Academic Year:', academicYear);
-    return this.http
-      .put<AcademicYear>(this.URL + `/${academicYear.id}`, academicYear)
-      .pipe(
-        tap((a: AcademicYear) => {
-          this.academicYear$.next(a);
-        })
-      );
+    return this.http.put<AcademicYear>(
+      this.URL + `/${academicYear.id}`,
+      academicYear,
+    );
+    // .pipe(
+    //   tap((a: AcademicYear) => {
+    //     this.academicYear$.next(a);
+    //   }),
+    // );
   }
 }
