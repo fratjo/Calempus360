@@ -49,6 +49,7 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<UniversityRequestDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<SiteRequestDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<AcademicYearRequestDtoValidator>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
