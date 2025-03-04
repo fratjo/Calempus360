@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Calempus360.Core.DTOs.Requests.Option
+namespace Calempus360.Core.DTOs.Responses
 {
-    public class AddOptionRequest
+    public class OptionResponseDto
     {
         public string Name { get; set; } = string.Empty;
         public string Code { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public List<string> Courses { get; set; } = new List<string>();
+        public List<string> Courses { get; set; } = new List<string>(); //Remplacer par DTO Courses au lieu de string
     }
 }
