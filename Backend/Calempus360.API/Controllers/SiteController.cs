@@ -65,5 +65,16 @@ namespace Calempus360.API.Controllers
         }
         
         #endregion
+        
+        #region DELETE
+        
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteSiteAsync(Guid id)
+        {
+            await siteService.DeleteSiteAsync(id);
+            return NoContent();
+        }
+        
+        #endregion
     }
 }

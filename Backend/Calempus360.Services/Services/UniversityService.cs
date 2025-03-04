@@ -57,4 +57,9 @@ public class UniversityService(IUniversityRepository universityRepository) : IUn
             throw new Exception(e.Message);
         }
     }
+
+    public Task DeleteUniversityAsync(Guid id)
+    {
+        return universityRepository.DeleteUniversityAsync(id);
+    }
 }

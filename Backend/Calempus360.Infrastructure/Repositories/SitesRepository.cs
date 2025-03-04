@@ -70,4 +70,17 @@ public class SitesRepository(Calempus360DbContext dbContext) : ISiteRepository
 
         return entity.ToDomainModel();
     }
+
+    public async Task DeleteSiteAsync(Guid id)
+    {
+        var entity = await dbContext.Sites.FirstOrDefaultAsync(s => s.SiteId == id);
+        
+        if (entity == null) throw new NotFoundException("Site not found");
+        
+        dbContext.Sites.Remove(entity);
+        
+        await dbContext.SaveChangesAsync();
+        
+        return;
+    }
 }

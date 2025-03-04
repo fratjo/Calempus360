@@ -9,4 +9,5 @@ public interface IUniversityRepository
     Task<Models.University> GetUniversityByNameAsync(string name);
     Task<Models.University> PostNewUniversityAsync(Models.University university);
     Task<Models.University> UpdateUniversityAsync(Models.University university);
+    Task DeleteUniversityAsync(Guid id);
 }

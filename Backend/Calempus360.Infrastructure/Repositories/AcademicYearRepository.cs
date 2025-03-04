@@ -52,4 +52,17 @@ public class AcademicYearRepository(Calempus360DbContext dbContext) : IAcademicY
 
         return entity.ToDomainModel();
     }
+
+    public async Task DeleteAcademicYearAsync(Guid id)
+    {
+        var entity = await dbContext.AcademicYears.FirstOrDefaultAsync(a => a.AcademicYearId == id);
+        
+        if (entity == null) throw new NotFoundException("Academic year not found");
+        
+        dbContext.AcademicYears.Remove(entity);
+        
+        await dbContext.SaveChangesAsync();
+        
+        return;
+    }
 }

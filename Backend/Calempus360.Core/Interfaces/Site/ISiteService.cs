@@ -7,4 +7,5 @@ public interface ISiteService
     Task<Models.Site>              GetSiteByIdAsync(Guid       id);
     Task<Models.Site>              CreateSiteAsync(Models.Site site, Guid universityId);
     Task<Models.Site>              UpdateSiteAsync(Models.Site site);
+    Task DeleteSiteAsync(Guid id);
 }

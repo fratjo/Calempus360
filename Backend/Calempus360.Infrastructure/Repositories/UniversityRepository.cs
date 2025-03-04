@@ -71,4 +71,17 @@ public class UniversityRepository(Calempus360DbContext context) : IUniversityRep
 
         return entity.ToDomainModel();
     }
+
+    public async Task DeleteUniversityAsync(Guid id)
+    {
+        var entity = await context.Universities.FirstOrDefaultAsync(x => x.UniversityId == id);
+        
+        if (entity == null) throw new NotFoundException("University not found");
+        
+        context.Universities.Remove(entity);
+        
+        await context.SaveChangesAsync();
+        
+        return;
+    }
 }

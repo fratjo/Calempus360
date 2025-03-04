@@ -62,4 +62,9 @@ public class SiteService(ISiteRepository siteRepository) : ISiteService
             throw new Exception(e.Message);
         }
     }
+
+    public Task DeleteSiteAsync(Guid id)
+    {
+        return siteRepository.DeleteSiteAsync(id);
+    }
 }

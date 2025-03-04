@@ -64,5 +64,16 @@ namespace Calempus360.API.Controllers
         }
         
         #endregion
+        
+        #region DELETE
+        
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteAcademicYear(Guid id)
+        {
+            await academicYearService.DeleteAcademicYearAsync(id);
+            return NoContent();
+        }
+        
+        #endregion
     }
 }

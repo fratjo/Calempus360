@@ -56,4 +56,9 @@ public class AcademicYearService(IAcademicYearRepository academicYearRepository)
             throw new Exception(e.Message);
         }
     }
+
+    public Task DeleteAcademicYearAsync(Guid id)
+    {
+        return academicYearRepository.DeleteAcademicYearAsync(id);
+    }
 }
