@@ -1,4 +1,4 @@
-﻿using Calempus360.Core.DTOs.Requests.Group;
+﻿using Calempus360.Core.DTOs.Requests;
 using Calempus360.Core.Interfaces.Group;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,11 +6,11 @@ namespace Calempus360.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AdminController : ControllerBase
+    public class StudentGroupController : ControllerBase
     {
         private readonly IStudentGroupService _studentGroupService;
 
-        public AdminController(IStudentGroupService studentGroupService)
+        public StudentGroupController(IStudentGroupService studentGroupService)
         {
             _studentGroupService = studentGroupService;
         }
@@ -38,7 +38,7 @@ namespace Calempus360.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateStudentGroup(UpdateStudentGroupRequest studentGroupRequest)
+        public async Task<IActionResult> UpdateStudentGroup(StudentGroupRequestDto studentGroupRequest)
         {
             var response = await _studentGroupService.UpdateStudentGroupAsync(studentGroupRequest);
             return Ok($"Student Group {studentGroupRequest.Code} updated !");
