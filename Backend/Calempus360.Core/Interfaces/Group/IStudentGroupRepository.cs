@@ -10,12 +10,12 @@ namespace Calempus360.Core.Interfaces.Group
     public interface IStudentGroupRepository
     {
         Task<IEnumerable<StudentGroup>> GetAllStudentGroupAsync(string academicYear);
-        Task<StudentGroup?> GetStudentGroupByIdAsync(Guid id, string academicYear);
-        Task AddStudentGroupAsync(StudentGroup studentGroup, string academicYear);
-        Task<bool> UpdateStudentGroupAsync(StudentGroup studentGroup, Guid id);
+        Task<StudentGroup> GetStudentGroupByIdAsync(Guid id, string academicYear);
+        Task<StudentGroup> AddStudentGroupAsync(StudentGroup studentGroup, string academicYear);
+        Task<StudentGroup> UpdateStudentGroupAsync(StudentGroup studentGroup, Guid id);
         Task<bool> DeleteStudentGroupByIdAsync(Guid id);
         //Uniquement pour Test
-        Task<Site> GetSiteByName(string name);
-        Task<Option> GetOptionByName(string name);
+        Task<Models.Site> GetSiteByName(string name);
+        Task<Models.Option> GetOptionByName(string name);
     }
 }
