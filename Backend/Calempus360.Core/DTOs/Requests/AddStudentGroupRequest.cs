@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Calempus360.Core.DTOs.Requests
 {
-    public class GetStudentGroupRequest
+    public class AddStudentGroupRequest
     {
         public string Code { get; set; } = string.Empty;
         public int OptionGrade { get; set; }

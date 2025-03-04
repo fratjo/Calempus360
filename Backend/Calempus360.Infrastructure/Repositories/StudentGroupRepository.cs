@@ -15,7 +15,7 @@ namespace Calempus360.Infrastructure.Repositories
     public class StudentGroupRepository : IStudentGroupRepository
     {
         private readonly Calempus360DbContext _context;
-        //TODO : Ajout Include dans Update et GetStudent
+
         public StudentGroupRepository(Calempus360DbContext context)
         {
             _context = context;
