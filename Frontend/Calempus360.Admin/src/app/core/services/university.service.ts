@@ -34,6 +34,7 @@ export class UniversityService {
     return this.http.get<University>(this.URL + `/${id}`).pipe(
       tap((u: University) => {
         this.university$.next(u);
+        sessionStorage.setItem('university', JSON.stringify(u.id));
       }),
     );
   }
@@ -65,6 +66,10 @@ export class UniversityService {
         this.universities$.next(
           this.universities$.value.filter((u) => u.id !== id),
         );
+        if (this.university$.value.id === id) {
+          this.university$.next({});
+          sessionStorage.removeItem('university');
+        }
       }),
     );
   }

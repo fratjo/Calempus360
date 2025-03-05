@@ -37,6 +37,7 @@ export class SiteEditFormComponent implements OnInit {
 
   constructor(public fb: FormBuilder) {
     this.siteForm = this.fb.group({
+      id: ['', Validators.required],
       name: ['', Validators.required],
       address: ['', Validators.required],
       code: ['', Validators.required],
@@ -71,8 +72,8 @@ export class SiteEditFormComponent implements OnInit {
         }),
       )
       .subscribe(() => {
-        this.router.navigate(['']);
+        this.router.navigate(['/sites']);
       });
-    this.router.navigate(['']);
+    this.router.navigate(['/sites']);
   }
 }

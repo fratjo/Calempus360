@@ -35,6 +35,7 @@ export class AcademicYearService {
     return this.http.get<AcademicYear>(this.URL + `/${id}`).pipe(
       tap((a: AcademicYear) => {
         this.academicYear$.next(a);
+        sessionStorage.setItem('academicYear', JSON.stringify(a.id));
       }),
     );
   }
@@ -68,6 +69,10 @@ export class AcademicYearService {
         this.academicYears$.next(
           this.academicYears$.value.filter((a) => a.id !== id),
         );
+        if (this.academicYear$.value.id === id) {
+          this.academicYear$.next({});
+          sessionStorage.removeItem('academicYear');
+        }
       }),
     );
   }

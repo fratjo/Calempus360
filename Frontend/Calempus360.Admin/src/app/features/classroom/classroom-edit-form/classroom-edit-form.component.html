@@ -1,0 +1,69 @@
+<div
+  class="card bg-base-100 flex flex-col items-center justify-center rounded-lg"
+>
+  <h1 class="card-title mt-4">Edit Classroom</h1>
+  <form
+    [formGroup]="classroomForm"
+    (ngSubmit)="save()"
+    class="card-body flex w-64 flex-col space-y-4"
+  >
+    <input
+      [ngClass]="{
+        'border-error':
+          classroomForm.controls['name'].touched &&
+          classroomForm.controls['name'].invalid,
+        'border-primary':
+          classroomForm.controls['name'].touched &&
+          classroomForm.controls['name'].valid,
+      }"
+      type="text"
+      placeholder="Classroom Name"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="name"
+    />
+    <input
+      [ngClass]="{
+        'border-error':
+          classroomForm.controls['code'].touched &&
+          classroomForm.controls['code'].invalid,
+        'border-primary':
+          classroomForm.controls['code'].touched &&
+          classroomForm.controls['code'].valid,
+      }"
+      type="text"
+      placeholder="Classroom Code"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="code"
+    />
+    <input
+      [ngClass]="{
+        'border-error':
+          classroomForm.controls['capacity'].touched &&
+          classroomForm.controls['capacity'].invalid,
+        'border-primary':
+          classroomForm.controls['capacity'].touched &&
+          classroomForm.controls['capacity'].valid,
+      }"
+      type="number"
+      placeholder="Classroom Capacity"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="capacity"
+    />
+    <div class="flex justify-between space-x-4">
+      <button
+        (click)="cancel()"
+        type="reset"
+        class="bg-warning btn flex flex-row space-x-2 rounded p-2 text-white"
+      >
+        <mat-icon fontIcon="cancel"></mat-icon>Cancel
+      </button>
+      <button
+        type="submit"
+        [disabled]="!classroomForm.valid"
+        class="bg-success btn flex flex-row rounded p-2 text-white disabled:opacity-50"
+      >
+        <mat-icon fontIcon="save"></mat-icon>Add
+      </button>
+    </div>
+  </form>
+</div>

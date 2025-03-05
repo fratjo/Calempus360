@@ -1,29 +1,97 @@
-@if (site$ | async; as site) {
-  <div class="flex w-full flex-row gap-4">
-    <div class="card bg-base-100 w-full shadow-sm">
-      <figure>
-        <h2 class="mt-10 text-3xl">{{ site.name }}</h2>
-      </figure>
-      <div class="card-body">
-        <div class="stats border-primary border shadow">
-          <div class="stat">
-            <div class="stat-title">Classrooms</div>
-            <div class="stat-value">{{ site.classrooms?.length }}</div>
-          </div>
+<div class="flex w-full flex-col gap-2">
+  @if (site$ | async; as site) {
+    <div class="flex w-full flex-row gap-4">
+      <div class="card bg-base-100 w-full shadow-sm">
+        <figure>
+          <h2 class="mt-10 text-3xl">{{ site.name }}</h2>
+        </figure>
+        <div class="card-body">
+          <div class="stats border-primary border shadow">
+            <div class="stat">
+              <div class="stat-title">Classrooms</div>
+              <div class="stat-value">{{ site.classrooms?.length }}</div>
+            </div>
 
-          <div class="stat">
-            <div class="stat-title">New Users</div>
-            <div class="stat-value">4,200</div>
-            <div class="stat-desc">↗︎ 400 (22%)</div>
-          </div>
+            <div class="stat">
+              <div class="stat-title">New Users</div>
+              <div class="stat-value">4,200</div>
+              <div class="stat-desc">↗︎ 400 (22%)</div>
+            </div>
 
-          <div class="stat">
-            <div class="stat-title">New Registers</div>
-            <div class="stat-value">1,200</div>
-            <div class="stat-desc">↘︎ 90 (14%)</div>
+            <div class="stat">
+              <div class="stat-title">New Registers</div>
+              <div class="stat-value">1,200</div>
+              <div class="stat-desc">↘︎ 90 (14%)</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-}
+    <div>
+      <fieldset
+        class="fieldset bg-base-100 border-primary rounded-box mb-2 flex h-full w-full flex-auto flex-col gap-4 border p-2"
+      >
+        <legend class="fieldset-legend">Classrooms</legend>
+        <div
+          class="rounded-box border-base-content/5 bg-base-100 overflow-x-auto border"
+        >
+          <table class="table">
+            <!-- head -->
+            <thead>
+              <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Code</th>
+                <th>Capacity</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if (classrooms$ | async; as classrooms) {
+                @for (
+                  classroom of classrooms;
+                  track classroom?.id;
+                  let i = $index
+                ) {
+                  <tr
+                    class="hover:bg-primary hover:text-primary-content hover:rounded"
+                  >
+                    <th>{{ i }}</th>
+                    <td>{{ classroom.name }}</td>
+                    <td>{{ classroom.code }}</td>
+                    <td>{{ classroom.capacity }}</td>
+                    <td class="space-x-2">
+                      <button mat-icon-button (click)="onSelect(classroom.id!)">
+                        <mat-icon fontIcon="visibility"></mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="onEdit(classroom.id!)">
+                        <mat-icon fontIcon="edit"></mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="onDelete(classroom.id!)">
+                        <mat-icon fontIcon="delete"></mat-icon>
+                      </button>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="6" class="text-center">No Classrooms!</td>
+                  </tr>
+                }
+              }
+              <tr>
+                <td colspan="6" class="text-center">
+                  <button
+                    routerLink="/classrooms/add"
+                    class="btn btn-primary mr-1 p-1"
+                  >
+                    <mat-icon fontIcon="add"></mat-icon>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </fieldset>
+    </div>
+  }
+</div>

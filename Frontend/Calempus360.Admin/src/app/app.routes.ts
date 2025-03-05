@@ -15,6 +15,9 @@ import { AcademicYearEditFormComponent } from './features/academic-year/academic
 import { SiteListComponent } from './features/site/site-list/site-list.component';
 import { SiteAddFormComponent } from './features/site/site-add-form/site-add-form.component';
 import { SiteEditFormComponent } from './features/site/site-edit-form/site-edit-form.component';
+import { ClassroomComponent } from './features/classroom/classroom.component';
+import { ClassroomAddFormComponent } from './features/classroom/classroom-add-form/classroom-add-form.component';
+import { ClassroomEditFormComponent } from './features/classroom/classroom-edit-form/classroom-edit-form.component';
 
 export const routes: Routes = [
   {
@@ -74,6 +77,21 @@ export const routes: Routes = [
   {
     path: 'sites/edit/:id',
     component: SiteEditFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'classroom/:id',
+    component: ClassroomComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'classrooms/add',
+    component: ClassroomAddFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'classrooms/edit/:id',
+    component: ClassroomEditFormComponent,
     canActivate: [univeristyGuard, academicYearGuard],
   },
   {
