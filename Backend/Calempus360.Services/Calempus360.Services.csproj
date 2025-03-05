@@ -13,4 +13,8 @@
       <ProjectReference Include="..\ScheduleGenerator\ScheduleGenerator.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="NuGet.DependencyResolver.Core" Version="6.11.0" />
+    </ItemGroup>
+
 </Project>

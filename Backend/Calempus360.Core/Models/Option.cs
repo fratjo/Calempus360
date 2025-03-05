@@ -1,19 +1,19 @@
 namespace Calempus360.Core.Models;
 
 public class Option(
-    Guid          id,
     string        name,
     string        code,
     string        description,
-    DateTime      createdAt,
-    DateTime      updatedAt,
-    List<Course>? courses)
+    Guid?          id = null,
+    DateTime?      createdAt = null,
+    DateTime?      updatedAt = null,
+    List<Course>? courses = null)
 {
-    public Guid         Id          { get; private set; } = id;
+    public Guid         Id          { get; private set; } = id ?? Guid.NewGuid();
     public string       Name        { get; private set; } = name;
     public string       Code        { get; private set; } = code;
     public string       Description { get; private set; } = description;
-    public DateTime     CreatedAt   { get; private set; } = createdAt;
-    public DateTime     UpdatedAt   { get; private set; } = updatedAt;
+    public DateTime     CreatedAt   { get; private set; } = createdAt ?? DateTime.Now;
+    public DateTime     UpdatedAt   { get; private set; } = updatedAt ?? DateTime.Now;
     public List<Course> Courses     { get; private set; } = courses ?? new List<Course>();
 }

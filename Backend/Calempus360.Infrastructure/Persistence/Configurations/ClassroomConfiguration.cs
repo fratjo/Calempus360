@@ -24,13 +24,13 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             builder.Property(c => c.Capacity).IsRequired();
             
             builder.Property(c => c.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
-            
-            builder.Property(c => c.UpdatedAt).IsRequired().HasDefaultValueSql("GETDATE()").ValueGeneratedOnAddOrUpdate();
+
+            builder.Property(c => c.UpdatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
             
             builder
                 .HasOne(c => c.SiteEntity)
                 .WithMany(c => c.Classrooms)
-                .HasForeignKey(c => c.SiteId);
+                .HasForeignKey(c => c.SiteId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

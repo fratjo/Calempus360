@@ -1,3 +1,57 @@
-<mat-toolbar>
-  <span>{{ title() }}</span>
-</mat-toolbar>
+<div class="top-bar">
+  <div class="navbar bg-base-100 z-10 shadow-sm">
+    <div class="flex-1">
+      <a class="btn btn-ghost text-xl" routerLink="">
+        Calempus360 <span class="text-primary">Admin</span></a
+      >
+    </div>
+    <div class="flex-none">
+      <ul class="menu menu-horizontal px-1">
+        <li>
+          <details>
+            <summary>
+              @if (university$ | async; as university) {
+                @if (university.name) {
+                  {{ university.name }}
+                } @else {
+                  University
+                }
+              }
+            </summary>
+            <ul class="bg-base-100 z-10 rounded-t-none p-2">
+              <li
+                (click)="closeDetails($event)"
+                class="hover:bg-secundary"
+                routerLink="university/change"
+              >
+                <a>Change</a>
+              </li>
+            </ul>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>
+              @if (academicYear$ | async; as academicYear) {
+                @if (academicYear.code) {
+                  {{ academicYear.code }}
+                } @else {
+                  Academic Year
+                }
+              }
+            </summary>
+            <ul class="bg-base-100 z-10 rounded-t-none p-2">
+              <li
+                (click)="closeDetails($event)"
+                class="hover:bg-secundary"
+                routerLink="academic-year/change"
+              >
+                <a>Change</a>
+              </li>
+            </ul>
+          </details>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

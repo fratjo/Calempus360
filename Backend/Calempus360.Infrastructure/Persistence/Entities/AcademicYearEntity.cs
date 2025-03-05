@@ -2,22 +2,17 @@
 {
     public class AcademicYearEntity
     {
-        public string AcademicYearId { get; set; }
-        public DateOnly DateStart { get; set; }
-        public DateOnly DateEnd { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public Guid     AcademicYearId   { get; set; }
+        public string    AcademicYearCode { get; set; }
+        public DateOnly  DateStart        { get; set; }
+        public DateOnly  DateEnd          { get; set; }
+        public DateTime? CreatedAt        { get; set; }
+        public DateTime? UpdatedAt        { get; set; }
         
         // Navigation Properties
         
-        // SiteAcademicYear
-        public virtual List<SiteAcademicYearEntity> SiteAcademicYears { get; set; }
-        
         // SiteCourseSchedule
         public virtual List<SiteCourseScheduleEntity> SiteCourseSchedules { get; set; }
-        
-        // ClassroomAcademicYear
-        public virtual List<ClassroomAcademicYearEntity> ClassroomAcademicYears { get; set; }
         
         // StudentGroup
         public virtual List<StudentGroupEntity> StudentGroups { get; set; }

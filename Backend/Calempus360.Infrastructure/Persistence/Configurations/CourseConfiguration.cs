@@ -33,7 +33,7 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             
             builder.Property(c => c.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
             
-            builder.Property(c => c.UpdatedAt).IsRequired().HasDefaultValueSql("GETDATE()").ValueGeneratedOnAddOrUpdate();
+            builder.Property(c => c.UpdatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
         }
     }
 }

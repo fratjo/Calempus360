@@ -1,0 +1,18 @@
+@if (university$ | async; as university) {
+  <div class="stats shadow">
+    <div class="stat">
+      <div class="stat-title">Sites</div>
+      <div class="stat-value">{{ university.sites?.length }}</div>
+    </div>
+
+    <div class="stat place-items-center">
+      <div class="stat-title">Users</div>
+      <div class="stat-value text-secondary">4,200</div>
+    </div>
+
+    <div class="stat place-items-center">
+      <div class="stat-title">New Registers</div>
+      <div class="stat-value">1,200</div>
+    </div>
+  </div>
+}

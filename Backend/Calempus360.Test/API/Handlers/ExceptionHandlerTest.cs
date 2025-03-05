@@ -1,5 +1,6 @@
 using Calempus360.API.Controllers;
 using Calempus360.Errors;
+using Calempus360.Errors.CustomExceptions;
 
 namespace Calempus360.Test.API.Handlers;
 

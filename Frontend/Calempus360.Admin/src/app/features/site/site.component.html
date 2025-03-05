@@ -1,1 +1,29 @@
-<p>site works!</p>
+@if (site$ | async; as site) {
+  <div class="flex w-full flex-row gap-4">
+    <div class="card bg-base-100 w-full shadow-sm">
+      <figure>
+        <h2 class="mt-10 text-3xl">{{ site.name }}</h2>
+      </figure>
+      <div class="card-body">
+        <div class="stats border-primary border shadow">
+          <div class="stat">
+            <div class="stat-title">Classrooms</div>
+            <div class="stat-value">{{ site.classrooms?.length }}</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-title">New Users</div>
+            <div class="stat-value">4,200</div>
+            <div class="stat-desc">↗︎ 400 (22%)</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-title">New Registers</div>
+            <div class="stat-value">1,200</div>
+            <div class="stat-desc">↘︎ 90 (14%)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}

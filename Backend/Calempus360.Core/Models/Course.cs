@@ -1,7 +1,6 @@
 namespace Calempus360.Core.Models;
 
 public class Course(
-    Guid                 id,
     string               name,
     string               code,
     string               description,
@@ -9,11 +8,12 @@ public class Course(
     int                  weeklyHours,
     string               semester,
     int                  credits,
-    DateTime             createdAt,
-    DateTime             updatedAt,
-    List<EquipmentType>? equipmentTypes)
+    Guid?                 id = null,
+    DateTime?             createdAt = null,
+    DateTime?             updatedAt = null,
+    List<EquipmentType>? equipmentTypes = null)
 {
-    public Guid                 Id             { get; private set; } = id;
+    public Guid                 Id             { get; private set; } = id ?? Guid.NewGuid();
     public string               Name           { get; private set; } = name;
     public string               Code           { get; private set; } = code;
     public string               Description    { get; private set; } = description;
@@ -21,7 +21,7 @@ public class Course(
     public int                  WeeklyHours    { get; private set; } = weeklyHours;
     public string               Semester       { get; private set; } = semester;
     public int                  Credits        { get; private set; } = credits;
-    public DateTime             CreatedAt      { get; private set; } = createdAt;
-    public DateTime             UpdatedAt      { get; private set; } = updatedAt;
+    public DateTime             CreatedAt      { get; private set; } = createdAt ?? DateTime.Now;
+    public DateTime             UpdatedAt      { get; private set; } = updatedAt ?? DateTime.Now;
     public List<EquipmentType>? EquipmentTypes { get; private set; } = equipmentTypes;
 }

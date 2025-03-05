@@ -3,7 +3,7 @@
     public class UniversitySiteEquipmentEntity
     {
         // AcademicYear
-        public string AcademicYearId { get; set; }
+        public Guid AcademicYearId { get; set; }
         public AcademicYearEntity AcademicYearEntity { get; set; } = null!;
         
         // Equipment
@@ -11,8 +11,8 @@
         public EquipmentEntity EquipmentEntity { get; set; } = null!;
         
         // Site
-        public Guid SiteId { get; set; }
-        public SiteEntity SiteEntity { get; set; }
+        public Guid?       SiteId     { get; set; }
+        public SiteEntity? SiteEntity { get; set; }
         
         // University
         public Guid UniversityId { get; set; }

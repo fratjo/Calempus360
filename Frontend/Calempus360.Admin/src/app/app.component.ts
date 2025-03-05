@@ -1,25 +1,20 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { TopBarComponent } from './layout/top-bar/top-bar.component';
-import { LeftPanelComponent } from './layout/left-panel/left-panel.component';
+import { UniversityService } from './core/services/university.service';
+import { Router, RouterOutlet } from '@angular/router';
+import { DockBarComponent } from './layout/dock-bar/dock-bar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [TopBarComponent, LeftPanelComponent],
+  imports: [TopBarComponent, DockBarComponent, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
-  universities = signal<string[]>([
-    'Stanford University',
-    'University of California, Berkeley',
-    'University of California, Los Angeles',
-  ]);
-  university = signal<string>(this.universities()[0]);
+export class AppComponent implements OnInit {
+  private readonly universityService = inject(UniversityService);
+  private readonly router = inject(Router);
 
-  onTitleChange(newTitle: string): void {
-    if (!this.universities().includes(newTitle)) {
-      this.universities().push(newTitle);
-    }
-    this.university.set(newTitle);
+  ngOnInit() {
+    this.router.navigate(['home']);
   }
 }

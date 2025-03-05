@@ -1,0 +1,32 @@
+/* table {
+  width: 100%;
+  border-collapse: collapse;
+
+  tr {
+    border-bottom: 1px solid #e0e0e0;
+
+    th {
+      text-align: left;
+      padding: 10px 0;
+    }
+
+    td {
+      padding: 10px 0;
+    }
+
+    &:nth-child(odd) {
+      background-color: #1875d152;
+    }
+
+    &:hover {
+      background-color: #1876d1;
+      color: white;
+      cursor: pointer;
+    }
+
+    &:first-child {
+      background-color: #1876d1;
+      color: white;
+    }
+  }
+} */

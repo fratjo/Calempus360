@@ -27,22 +27,22 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             
             builder.Property(g => g.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
             
-            builder.Property(g => g.UpdatedAt).IsRequired().HasDefaultValueSql("GETDATE()").ValueGeneratedOnAddOrUpdate();
+            builder.Property(g => g.UpdatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
 
             builder
                 .HasOne(g => g.SiteEntity)
                 .WithMany(s => s.StudentGroups)
-                .HasForeignKey(g => g.SiteId);
+                .HasForeignKey(g => g.SiteId).OnDelete(DeleteBehavior.SetNull);
             
             builder
                 .HasOne(g => g.OptionEntity)
                 .WithMany(o => o.StudentGroups)
-                .HasForeignKey(g => g.OptionId);
+                .HasForeignKey(g => g.OptionId).OnDelete(DeleteBehavior.SetNull);
             
             builder
                 .HasOne(g => g.AcademicYearEntity)
                 .WithMany(ay => ay.StudentGroups)
-                .HasForeignKey(g => g.AcademicYearId);
+                .HasForeignKey(g => g.AcademicYearId).OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

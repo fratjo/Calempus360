@@ -28,18 +28,17 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             
             builder.Property(s => s.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
 
-            builder.Property(s => s.UpdatedAt).IsRequired().HasDefaultValueSql("GETDATE()")
-                .ValueGeneratedOnAddOrUpdate();
+            builder.Property(s => s.UpdatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
             
             builder
                 .HasOne(s => s.ClassroomEntity)
                 .WithMany(s => s.Sessions)
-                .HasForeignKey(s => s.ClassroomId);
+                .HasForeignKey(s => s.ClassroomId).OnDelete(DeleteBehavior.Cascade);
             
             builder
                 .HasOne(s => s.CourseEntity)
                 .WithMany(s => s.Sessions)
-                .HasForeignKey(s => s.CourseId);
+                .HasForeignKey(s => s.CourseId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

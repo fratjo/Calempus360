@@ -1,13 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Calempus360.Infrastructure.Persistence.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Calempus360.Infrastructure.Persistence.Entities;
 
-namespace Calempus360.Infrastructure.Data.ModelConfiguration
+namespace Calempus360.Infrastructure.Persistence.Configurations
 {
     internal class UniversitySiteEquipmentConfiguration : IEntityTypeConfiguration<UniversitySiteEquipmentEntity>
     {
@@ -24,22 +19,22 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             builder
                 .HasOne(use => use.EquipmentEntity)
                 .WithOne(use => use.UniversitySiteEquipmentEntity)
-                .HasForeignKey<UniversitySiteEquipmentEntity>(use => use.EquipmentId);
+                .HasForeignKey<UniversitySiteEquipmentEntity>(use => use.EquipmentId).OnDelete(DeleteBehavior.Cascade);
             
             builder
                 .HasOne(use => use.UniversityEntity)
                 .WithMany(use => use.Equipments)
-                .HasForeignKey(use => use.UniversityId);
+                .HasForeignKey(use => use.UniversityId).OnDelete(DeleteBehavior.Cascade);
             
             builder
                 .HasOne(use => use.SiteEntity)
                 .WithMany(use => use.Equipments)
-                .HasForeignKey(use => use.SiteId);
+                .HasForeignKey(use => use.SiteId).OnDelete(DeleteBehavior.SetNull);
             
             builder
                 .HasOne(use => use.AcademicYearEntity)
                 .WithMany(use => use.UniversitySiteEquipments)
-                .HasForeignKey(use => use.AcademicYearId);
+                .HasForeignKey(use => use.AcademicYearId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

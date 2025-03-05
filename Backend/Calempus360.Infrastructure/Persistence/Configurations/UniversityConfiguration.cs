@@ -1,13 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Calempus360.Infrastructure.Persistence.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Calempus360.Infrastructure.Persistence.Entities;
 
-namespace Calempus360.Infrastructure.Data.ModelConfiguration
+namespace Calempus360.Infrastructure.Persistence.Configurations
 {
     internal class UniversityConfiguration : IEntityTypeConfiguration<UniversityEntity>
     {
@@ -29,7 +24,7 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             
             builder.Property(u => u.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
             
-            builder.Property(u => u.UpdatedAt).IsRequired().HasDefaultValueSql("GETDATE()").ValueGeneratedOnAddOrUpdate();
+            builder.Property(u => u.UpdatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
         }
     }
 }

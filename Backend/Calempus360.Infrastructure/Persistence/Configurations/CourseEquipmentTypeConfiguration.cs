@@ -31,22 +31,22 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             builder
                 .HasOne(ce => ce.EquipmentTypeEntity)
                 .WithMany(ce => ce.CourseEquipmentTypes)
-                .HasForeignKey(ce => ce.EquipmentTypeId);
+                .HasForeignKey(ce => ce.EquipmentTypeId).OnDelete(DeleteBehavior.Cascade);
             
             builder
                 .HasOne(ce => ce.CourseEntity)
                 .WithMany(ce => ce.EquipmentTypes)
-                .HasForeignKey(ce => ce.CourseId);
+                .HasForeignKey(ce => ce.CourseId).OnDelete(DeleteBehavior.Cascade);
             
             builder
                 .HasOne(ce => ce.UniversityEntity)
                 .WithMany(ce => ce.CourseEquipmentTypes)
-                .HasForeignKey(ce => ce.UniversityId);
+                .HasForeignKey(ce => ce.UniversityId).OnDelete(DeleteBehavior.Cascade);
             
             builder
                 .HasOne(ce => ce.AcademicYearEntity)
                 .WithMany(ce => ce.CourseEquipmentTypes)
-                .HasForeignKey(ce => ce.AcademicYearId);
+                .HasForeignKey(ce => ce.AcademicYearId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

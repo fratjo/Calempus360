@@ -1,0 +1,62 @@
+@if (academicYearList$ | async; as academicYears) {
+  <div class="rounded-box bg-base-100">
+    <div
+      class="rounded-box border-base-content/5 bg-base-100 border-base-content overflow-x-auto"
+    >
+      <table class="table-pin-rows table w-full">
+        <thead>
+          <tr class="pt-2 pb-2">
+            <th></th>
+            <th>Code</th>
+            <th>Date Start</th>
+            <th>Daye End</th>
+            <th class="">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (
+            academicYear of academicYears;
+            track academicYear?.id;
+            let i = $index
+          ) {
+            <tr
+              class="hover:bg-primary hover:text-primary-content hover:rounded"
+            >
+              <th>{{ i }}</th>
+              <td>{{ academicYear?.code }}</td>
+              <td>{{ academicYear?.dateStart }}</td>
+              <td>{{ academicYear?.dateEnd }}</td>
+              <td>
+                <button mat-icon-button (click)="onSelect(academicYear.id!)">
+                  <mat-icon fontIcon="check"></mat-icon>
+                </button>
+                <button mat-icon-button (click)="onEdit(academicYear.id!)">
+                  <mat-icon fontIcon="edit"></mat-icon>
+                </button>
+                <button mat-icon-button (click)="onDelete(academicYear.id!)">
+                  <mat-icon fontIcon="delete"></mat-icon>
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="text-center">academicYear empty!</td>
+            </tr>
+          }
+          <tr>
+            <td colspan="6" class="text-center">
+              <button
+                routerLink="/academic-year/add"
+                class="btn btn-primary mr-1 p-1"
+              >
+                <mat-icon fontIcon="add"></mat-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+} @else {
+  <p>academicYear not found!</p>
+}

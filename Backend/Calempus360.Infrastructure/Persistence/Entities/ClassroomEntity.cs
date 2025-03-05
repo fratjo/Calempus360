@@ -18,9 +18,6 @@
         // ClassroomEquipment
         public List<ClassroomEquipmentEntity>? ClassroomEquipments { get; set; }
         
-        // ClassroomAcademicYear
-        public List<ClassroomAcademicYearEntity>? ClassroomAcademicYears { get; set; } 
-        
         // Session
         public List<SessionEntity>? Sessions { get; set; }
 

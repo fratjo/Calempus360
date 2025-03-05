@@ -1,19 +1,19 @@
 namespace Calempus360.Core.Models;
 
 public class Classroom(
-    Guid             id,
     string           name,
     string           code,
     int              capacity,
-    DateTime         createdAt,
-    DateTime         updatedAt,
-    List<Equipment>? equipments)
+    Guid?            id         = null,
+    DateTime?        createdAt  = null,
+    DateTime?        updatedAt  = null,
+    List<Equipment>? equipments = null)
 {
-    public Guid             Id         { get; private set; } = id;
+    public Guid             Id         { get; private set; } = id ?? Guid.NewGuid();
     public string           Name       { get; private set; } = name;
     public string           Code       { get; private set; } = code;
     public int              Capacity   { get; private set; } = capacity;
-    public DateTime         CreatedAt  { get; private set; } = createdAt;
-    public DateTime         UpdatedAt  { get; private set; } = updatedAt;
+    public DateTime         CreatedAt  { get; private set; } = createdAt ?? DateTime.Now;
+    public DateTime         UpdatedAt  { get; private set; } = updatedAt ?? DateTime.Now;
     public List<Equipment>? Equipments { get; private set; } = equipments;
 }
