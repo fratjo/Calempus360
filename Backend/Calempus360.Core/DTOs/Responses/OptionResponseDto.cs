@@ -9,6 +9,7 @@ namespace Calempus360.Core.DTOs.Responses
 {
     public class OptionResponseDto
     {
+        public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Code { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
@@ -20,6 +21,7 @@ namespace Calempus360.Core.DTOs.Responses
         {
             return new OptionResponseDto
             {
+                Id = option.Id,
                 Name = option.Name,
                 Code = option.Code,
                 Description = option.Description,

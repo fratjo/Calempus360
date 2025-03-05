@@ -8,11 +8,11 @@
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        
+
         // Navigation Properties
-        
+
         // StudentGroup
-        public List<StudentGroupEntity> StudentGroups { get; set; } 
+        public List<StudentGroupEntity> StudentGroups { get; set; } = new();
 
         // OptionCourse
         public List<OptionCourseEntity> OptionCourses { get; set; } = new();

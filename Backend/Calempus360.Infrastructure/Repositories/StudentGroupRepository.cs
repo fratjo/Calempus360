@@ -46,12 +46,9 @@ namespace Calempus360.Infrastructure.Repositories
         public async Task<bool> DeleteStudentGroupByIdAsync(Guid id)
         {
             var entity = await _context.StudentGroups.FindAsync(id);
-            if(entity != null)
-            {
-                _context.Remove(entity);
-                return await _context.SaveChangesAsync() > 0;
-            }
-            return false;
+            if (entity == null) throw new NotFoundException("Student Group not found");
+            _context.Remove(entity);
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task<IEnumerable<StudentGroup>> GetAllStudentGroupAsync(Guid academicYear)
@@ -93,31 +90,16 @@ namespace Calempus360.Infrastructure.Repositories
             if (siteEntity == null) throw new NotFoundException("Site not found");
             if (optionEntity == null) throw new NotFoundException("Option not found");
         
-                entity.Code = studentGroup.Code;
-                entity.NumberOfStudents = studentGroup.NumberOfStudents;
-                entity.OptionGrade = studentGroup.OptionGrade;
+            entity.Code = studentGroup.Code;
+            entity.NumberOfStudents = studentGroup.NumberOfStudents;
+            entity.OptionGrade = studentGroup.OptionGrade;
             entity.SiteId = site;
             entity.OptionId = option;
-                entity.UpdatedAt = DateTime.Now;
+            entity.UpdatedAt = DateTime.Now;
 
             await _context.SaveChangesAsync();
             return entity.ToDomainModel();
             
-        }
-
-        //----------Méthode pour certains tests
-
-        //Trouver site selon nom
-        public async Task<Site> GetSiteByName(string name)
-        {
-            var site = await _context.Sites.FirstOrDefaultAsync(s => s.Name == name);
-            return site.ToDomainModel();
-        }
-        //Trouver option selon nom
-        public async Task<Option> GetOptionByName(string name)
-        {
-            var option = await _context.Options.FirstOrDefaultAsync(o => o.Name == name);
-            return option.ToDomainModel();
         }
     }
 }

@@ -32,7 +32,6 @@ namespace Calempus360.Services.Services
         public async Task<bool> DeleteStudentGroupByIdAsync(Guid id)
         {
             var isDeleted = await _studentGroupRepository.DeleteStudentGroupByIdAsync(id);
-            if (!isDeleted) throw new StudentGroupNotFoundException(id);
             return isDeleted;
         }
 

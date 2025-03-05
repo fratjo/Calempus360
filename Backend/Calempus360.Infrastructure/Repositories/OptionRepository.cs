@@ -1,8 +1,10 @@
 ﻿using Calempus360.Core.Interfaces.Option;
 using Calempus360.Core.Models;
+using Calempus360.Errors.CustomExceptions;
 using Calempus360.Infrastructure.Data;
 using Calempus360.Infrastructure.Persistence.Entities;
 using Calempus360.Infrastructure.Persistence.Mappers;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,48 +22,94 @@ namespace Calempus360.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task AddOptionAsync(Option option)
+        public async Task<Option> AddOptionAsync(Option option, List<Guid> courses, Guid academicYear)
         {
-            //List<CourseEntity> courses = new List<CourseEntity>();
-            //foreach(Course course in option.Courses)
-            //{
-            //    var courseEntity = await _context.Courses.FindAsync(course.Id);
-            //    if(courseEntity != null) courses.Add(courseEntity);
-            //}
-            var optionEntity = option.ToEntity();
-            
-            await _context.Options.AddAsync(optionEntity);
+            var academicYearEntity = await _context.AcademicYears.FindAsync(academicYear);
+            if(academicYearEntity == null) throw new NotFoundException("Academic Year not found !");
+            var entity = option.ToEntity();
+            foreach (var id in courses)
+            {
+                var courseEntity = await _context.Courses.FindAsync(id);
+                if (courseEntity == null) throw new NotFoundException("Course not found !");
+                entity.OptionCourses.Add(
+                    new OptionCourseEntity
+                    {
+                        AcademicYearEntity = academicYearEntity,
+                        CourseEntity = courseEntity,
+                        OptionEntity = entity,
+                    });                   
+            }
+
+            await _context.Options.AddAsync(entity);
             await _context.SaveChangesAsync();
+
+            return entity.ToDomainModel();          
         }
 
-        public Task<bool> DeleteOptionAsync(Guid id)
+        public async Task<bool> DeleteOptionAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.Options.FindAsync(id);
+            if (entity == null) throw new NotFoundException("Option not found");
+            _context.Remove(entity);
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<IEnumerable<Option>> GetAllOptionAsync()
+        public async Task<IEnumerable<Option>> GetAllOptionAsync()
         {
-            throw new NotImplementedException();
+            var entities = await _context.Options
+                .Include(o => o.OptionCourses)
+                    .ThenInclude(oc => oc.CourseEntity)
+                .Include(o => o.OptionCourses)
+                    .ThenInclude(oc => oc.AcademicYearEntity)
+                .Include(o => o.StudentGroups)
+                .ToListAsync();
+
+            return entities.Select(e => e.ToDomainModel());
         }
 
-        public Task<Option?> GetOptionByIdAsync(Guid id)
+        public async Task<Option?> GetOptionByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.Options
+                .Include(o => o.OptionCourses)
+                    .ThenInclude(oc => oc.CourseEntity)
+                .Include(o => o.OptionCourses)
+                    .ThenInclude(oc => oc.AcademicYearEntity)
+                .Include(o => o.StudentGroups)
+                .FirstOrDefaultAsync(o => o.OptionId == id);
+            if (entity == null) throw new NotFoundException("Option not found !");
+            return entity.ToDomainModel();
         }
 
-        public Task<bool> UpdateOptionAsync(Option option)
+        public async Task<Option> UpdateOptionAsync(Option option, List<Guid> courses, Guid academicYear)
         {
-            throw new NotImplementedException();
-        }
+            var entity = await _context.Options
+                        .Include(o => o.OptionCourses)
+                            .ThenInclude(oc => oc.CourseEntity)
+                        .Include(o => o.OptionCourses)
+                            .ThenInclude(oc => oc.AcademicYearEntity)
+                        .Include(o => o.StudentGroups)
+                        .FirstOrDefaultAsync(o => o.OptionId == option.Id);
+            if (entity == null) throw new NotFoundException("Option not found");
 
-        Task<Option> IOptionRepository.AddOptionAsync(Option option)
-        {
-            throw new NotImplementedException();
-        }
+            var academicYearEntity = await _context.AcademicYears.FindAsync(academicYear);
+            if (academicYearEntity == null) throw new NotFoundException("Academic Year not found !");
 
-        Task<Option> IOptionRepository.UpdateOptionAsync(Option option)
-        {
-            throw new NotImplementedException();
+            entity.Name = option.Name;
+            entity.Code = option.Code;
+            entity.Description = option.Description;
+            foreach (var id in courses)
+            {
+                var courseEntity = await _context.Courses.FindAsync(id);
+                if (courseEntity == null) throw new NotFoundException("Course not found !");
+                entity.OptionCourses.Add(
+                    new OptionCourseEntity
+                    {
+                        AcademicYearEntity = academicYearEntity,
+                        CourseEntity = courseEntity,
+                        OptionEntity = entity,
+                    });
+            }
+            return entity.ToDomainModel();
         }
     }
 }
