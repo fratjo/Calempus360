@@ -85,7 +85,7 @@ public class SitesRepository(Calempus360DbContext dbContext) : ISiteRepository
         return true;
     }
 
-    public async Task<bool> DeleteSiteByUniversityAsync(Guid universityId)
+    public async Task<bool> DeleteSitesByUniversityAsync(Guid universityId)
     {
         var sites = await dbContext.Sites.Where(s => s.UniversityId == universityId).ToListAsync();
         

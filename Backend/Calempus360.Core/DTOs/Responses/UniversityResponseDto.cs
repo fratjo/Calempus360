@@ -30,7 +30,7 @@ public static partial class DtoMapper
             CreatedAt  = university.CreatedAt,
             UpdatedAt  = university.UpdatedAt,
             Sites      = university.Sites?.Select(site => site.MapToDto()).ToList(),
-            Equipments = university.Equipments?.Select(equipment => equipment.MapToDTO()).ToList()
+            Equipments = university.Equipments?.Select(equipment => equipment.MapToDto()).ToList()
         };
     }
 }

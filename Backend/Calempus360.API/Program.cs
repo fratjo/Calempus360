@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using Calempus360.API.Handlers;
 using Calempus360.Core.DTOs.Requests;
 using Calempus360.Core.Interfaces.AcademicYear;
+using Calempus360.Core.Interfaces.Classroom;
 using Calempus360.Core.Interfaces.Site;
 using Calempus360.Core.Interfaces.University;
 using Calempus360.Infrastructure.Data;
@@ -35,10 +36,12 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddScoped<IUniversityService, UniversityService>();
 builder.Services.AddScoped<IAcademicYearService, AcademicYearService>();
 builder.Services.AddScoped<ISiteService, SiteService>();
+builder.Services.AddScoped<IClassroomService, ClassroomService>();
 // repositories
 builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();
 builder.Services.AddScoped<IAcademicYearRepository, AcademicYearRepository>();
 builder.Services.AddScoped<ISiteRepository, SitesRepository>();
+builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
 // handlers
 builder.Services.AddExceptionHandler<ExistingEntityExceptionHandler>();
 builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
@@ -50,6 +53,7 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<UniversityRequestDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<SiteRequestDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<AcademicYearRequestDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<ClassroomRequestDtoValidator>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

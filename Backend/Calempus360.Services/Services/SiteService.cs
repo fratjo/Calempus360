@@ -80,6 +80,6 @@ public class SiteService(ISiteRepository siteRepository) : ISiteService
             
         });
         
-        return await siteRepository.DeleteSiteByUniversityAsync(id);
+        return await siteRepository.DeleteSitesByUniversityAsync(id);
     }
 }

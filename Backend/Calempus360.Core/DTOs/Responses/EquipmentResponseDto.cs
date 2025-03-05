@@ -9,7 +9,7 @@ public class EquipmentResponseDto
 
 public static partial class DtoMapper
 {
-    public static EquipmentResponseDto MapToDTO(this Equipment equipment)
+    public static EquipmentResponseDto MapToDto(this Equipment equipment)
     {
         return new EquipmentResponseDto
         {

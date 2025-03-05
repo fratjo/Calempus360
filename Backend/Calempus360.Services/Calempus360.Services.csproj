@@ -17,4 +17,10 @@
       <PackageReference Include="NuGet.DependencyResolver.Core" Version="6.11.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="Calempus360.Errors">
+        <HintPath>..\Calempus360.API\bin\Debug\net8.0\Calempus360.Errors.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>
