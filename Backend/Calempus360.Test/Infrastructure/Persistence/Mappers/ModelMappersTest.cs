@@ -1165,7 +1165,6 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         // Arrange
         
         var academicYear = new AcademicYear(
-            id: Guid.NewGuid(),
             code: "2023-2024",
             dateStart: DateOnly.FromDateTime(DateTime.Now),
             dateEnd: DateOnly.FromDateTime(DateTime.Now.AddYears(1)),

@@ -24,6 +24,7 @@ public static class AcademicYearMapper
     {
         return new AcademicYearEntity
         {
+            AcademicYearId   = model.Id ?? Guid.Empty,
             AcademicYearCode = model.Code,
             DateStart      = model.DateStart,
             DateEnd        = model.DateEnd,
