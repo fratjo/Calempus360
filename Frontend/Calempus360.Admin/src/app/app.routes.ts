@@ -15,6 +15,7 @@ import { AcademicYearEditFormComponent } from './features/academic-year/academic
 import { SiteListComponent } from './features/site/site-list/site-list.component';
 import { SiteAddFormComponent } from './features/site/site-add-form/site-add-form.component';
 import { SiteEditFormComponent } from './features/site/site-edit-form/site-edit-form.component';
+import { StudentGroupsComponent } from './features/student-groups/student-groups.component';
 
 export const routes: Routes = [
   {
@@ -78,7 +79,8 @@ export const routes: Routes = [
   },
   {
     path: 'groups',
-    component: StudentGroupsComponent
+    component: StudentGroupsComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
   },
   {
     path: 'groups',
