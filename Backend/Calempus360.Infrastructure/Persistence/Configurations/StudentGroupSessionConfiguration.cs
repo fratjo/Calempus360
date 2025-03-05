@@ -16,10 +16,10 @@ public class StudentGroupSessionConfiguration: IEntityTypeConfiguration<StudentG
         
         builder.HasOne(sgs => sgs.StudentGroupEntity)
             .WithMany(sg => sg.StudentGroupSessions)
-            .HasForeignKey(sgs => sgs.StudentGroupId);
+            .HasForeignKey(sgs => sgs.StudentGroupId).OnDelete(DeleteBehavior.Cascade);
         
         builder.HasOne(sgs => sgs.SessionEntity)
             .WithMany(s => s.StudentGroupSessions)
-            .HasForeignKey(sgs => sgs.SessionId);
+            .HasForeignKey(sgs => sgs.SessionId).OnDelete(DeleteBehavior.Cascade);
     }
 }

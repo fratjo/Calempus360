@@ -33,7 +33,7 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             builder
                 .HasOne(e => e.EquipmentTypeEntity)
                 .WithMany(e => e.Equipments)
-                .HasForeignKey(e => e.EquipmentTypeId);
+                .HasForeignKey(e => e.EquipmentTypeId).OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

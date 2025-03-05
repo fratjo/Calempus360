@@ -11,14 +11,8 @@
         
         // Navigation Properties
         
-        // SiteAcademicYear
-        public virtual List<SiteAcademicYearEntity> SiteAcademicYears { get; set; }
-        
         // SiteCourseSchedule
         public virtual List<SiteCourseScheduleEntity> SiteCourseSchedules { get; set; }
-        
-        // ClassroomAcademicYear
-        public virtual List<ClassroomAcademicYearEntity> ClassroomAcademicYears { get; set; }
         
         // StudentGroup
         public virtual List<StudentGroupEntity> StudentGroups { get; set; }

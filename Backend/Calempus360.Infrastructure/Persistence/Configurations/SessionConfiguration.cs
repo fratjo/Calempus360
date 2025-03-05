@@ -33,12 +33,12 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             builder
                 .HasOne(s => s.ClassroomEntity)
                 .WithMany(s => s.Sessions)
-                .HasForeignKey(s => s.ClassroomId);
+                .HasForeignKey(s => s.ClassroomId).OnDelete(DeleteBehavior.Cascade);
             
             builder
                 .HasOne(s => s.CourseEntity)
                 .WithMany(s => s.Sessions)
-                .HasForeignKey(s => s.CourseId);
+                .HasForeignKey(s => s.CourseId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

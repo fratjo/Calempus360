@@ -63,8 +63,23 @@ public class SiteService(ISiteRepository siteRepository) : ISiteService
         }
     }
 
-    public Task DeleteSiteAsync(Guid id)
+    public async Task<bool> DeleteSiteAsync(Guid id)
     {
-        return siteRepository.DeleteSiteAsync(id);
+        return await siteRepository.DeleteSiteAsync(id);
+    }
+
+    public async Task<bool> DeleteSiteByUniversityAsync(Guid id)
+    {
+        var sites = await this.GetSitesByUniversityAsync(id) as List<Site>;
+        
+        sites?.ForEach(async site =>
+        {
+            // delete children
+            // classrooms
+            // groups
+            
+        });
+        
+        return await siteRepository.DeleteSiteByUniversityAsync(id);
     }
 }

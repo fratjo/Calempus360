@@ -16,10 +16,10 @@ internal class EquipmentSessionConfiguration: IEntityTypeConfiguration<Equipment
         
         builder.HasOne(es => es.EquipmentEntity)
             .WithMany(e => e.EquipmentSessions)
-            .HasForeignKey(es => es.EquipmentId);
+            .HasForeignKey(es => es.EquipmentId).OnDelete(DeleteBehavior.Cascade);
         
         builder.HasOne(es => es.SessionEntity)
             .WithMany(s => s.EquipmentSessions)
-            .HasForeignKey(es => es.SessionId);
+            .HasForeignKey(es => es.SessionId).OnDelete(DeleteBehavior.Cascade);
     }
 }

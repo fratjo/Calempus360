@@ -30,7 +30,7 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             builder
                 .HasOne(c => c.SiteEntity)
                 .WithMany(c => c.Classrooms)
-                .HasForeignKey(c => c.SiteId);
+                .HasForeignKey(c => c.SiteId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

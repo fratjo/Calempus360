@@ -1,14 +1,19 @@
 using System.ComponentModel.DataAnnotations;
+using Calempus360.Core.Interfaces.Site;
 using Calempus360.Core.Interfaces.University;
 using Calempus360.Core.Models;
 using Calempus360.Errors;
 using Calempus360.Errors.Mappers;
+using Calempus360.Infrastructure.Repositories;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace Calempus360.Services.Services;
 
-public class UniversityService(IUniversityRepository universityRepository) : IUniversityService
+public class UniversityService(
+    IUniversityRepository universityRepository,
+    ISiteService sitesService
+) : IUniversityService
 {
     public async Task<IEnumerable<University>> GetAllAsync()
     {
@@ -58,8 +63,11 @@ public class UniversityService(IUniversityRepository universityRepository) : IUn
         }
     }
 
-    public Task DeleteUniversityAsync(Guid id)
+    public async Task<bool> DeleteUniversityAsync(Guid id)
     {
-        return universityRepository.DeleteUniversityAsync(id);
+        if(!await sitesService.DeleteSiteByUniversityAsync(id)) throw new InvalidOperationException("Error deleting sites");
+        
+        await universityRepository.DeleteUniversityAsync(id);
+        return true;
     }
 }

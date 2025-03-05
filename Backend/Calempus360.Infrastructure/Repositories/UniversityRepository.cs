@@ -72,7 +72,7 @@ public class UniversityRepository(Calempus360DbContext context) : IUniversityRep
         return entity.ToDomainModel();
     }
 
-    public async Task DeleteUniversityAsync(Guid id)
+    public async Task<bool> DeleteUniversityAsync(Guid id)
     {
         var entity = await context.Universities.FirstOrDefaultAsync(x => x.UniversityId == id);
         
@@ -82,6 +82,6 @@ public class UniversityRepository(Calempus360DbContext context) : IUniversityRep
         
         await context.SaveChangesAsync();
         
-        return;
+        return true;
     }
 }

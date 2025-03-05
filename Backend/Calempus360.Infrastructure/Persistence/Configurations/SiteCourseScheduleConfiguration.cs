@@ -32,7 +32,7 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             builder
                 .HasOne(scs => scs.SiteEntity)
                 .WithMany(scs => scs.SiteCourseSchedules)
-                .HasForeignKey(scs => scs.SiteId);
+                .HasForeignKey(scs => scs.SiteId).OnDelete(DeleteBehavior.Cascade);
             
             builder
                 .HasOne(scs => scs.AcademicYearEntity)

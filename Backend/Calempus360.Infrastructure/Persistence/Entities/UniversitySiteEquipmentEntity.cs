@@ -11,8 +11,8 @@
         public EquipmentEntity EquipmentEntity { get; set; } = null!;
         
         // Site
-        public Guid SiteId { get; set; }
-        public SiteEntity SiteEntity { get; set; }
+        public Guid?       SiteId     { get; set; }
+        public SiteEntity? SiteEntity { get; set; }
         
         // University
         public Guid UniversityId { get; set; }

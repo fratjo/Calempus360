@@ -29,7 +29,7 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             builder
                 .HasOne(a => a.AcademicYearEntity)
                 .WithMany(d => d.DaysWithoutCourses)
-                .HasForeignKey(d => d.AcademicYearId);
+                .HasForeignKey(d => d.AcademicYearId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 

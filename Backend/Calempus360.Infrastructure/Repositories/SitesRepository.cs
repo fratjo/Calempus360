@@ -20,14 +20,15 @@ public class SitesRepository(Calempus360DbContext dbContext) : ISiteRepository
         return sites.Select(s => s.ToDomainModel());
     }
 
-    public Task<IEnumerable<Site>> GetSitesByUniversityAsync(Guid universityId)
+    public async Task<IEnumerable<Site>> GetSitesByUniversityAsync(Guid universityId)
     {
-        var sites = dbContext.Sites
+        var sites = await dbContext.Sites
                              .Include(s => s.Classrooms)
                              .Include(s => s.Equipments)
-                             .Where(s => s.UniversityId == universityId);
+                             .Where(s => s.UniversityId == universityId)
+                             .ToListAsync();
 
-        return Task.FromResult<IEnumerable<Site>>((sites.Select(s => s.ToDomainModel())));
+        return sites.Select(s => s.ToDomainModel());
     }
 
     public async Task<Site> GetSiteByIdAsync(Guid id)
@@ -71,7 +72,7 @@ public class SitesRepository(Calempus360DbContext dbContext) : ISiteRepository
         return entity.ToDomainModel();
     }
 
-    public async Task DeleteSiteAsync(Guid id)
+    public async Task<bool> DeleteSiteAsync(Guid id)
     {
         var entity = await dbContext.Sites.FirstOrDefaultAsync(s => s.SiteId == id);
         
@@ -81,6 +82,17 @@ public class SitesRepository(Calempus360DbContext dbContext) : ISiteRepository
         
         await dbContext.SaveChangesAsync();
         
-        return;
+        return true;
+    }
+
+    public async Task<bool> DeleteSiteByUniversityAsync(Guid universityId)
+    {
+        var sites = await dbContext.Sites.Where(s => s.UniversityId == universityId).ToListAsync();
+        
+        dbContext.Sites.RemoveRange(sites);
+        
+        await dbContext.SaveChangesAsync();
+        
+        return true;
     }
 }

@@ -28,11 +28,6 @@ export class UniversityService {
 
   getUniversityById(id: string): Observable<University> {
     return this.http.get<University>(this.URL + `/${id}`);
-    // .pipe(
-    //   tap((u: University) => {
-    //     this.university$.next(u);
-    //   }),
-    // );
   }
 
   setUniversity(id: string) {
@@ -44,24 +39,24 @@ export class UniversityService {
   }
 
   updateUniversity(university: University) {
-    return this.http.put<University>(
-      this.URL + `/${university.id}`,
-      university,
-    );
-    // .pipe(
-    //   tap((u: University) => {
-    //     this.university$.next(u);
-    //   }),
-    // );
+    return this.http
+      .put<University>(this.URL + `/${university.id}`, university)
+      .pipe(
+        tap((u: University) => {
+          const universities = this.universities$.value;
+          const index = universities.findIndex((u) => u.id === university.id);
+          universities[index] = u;
+          this.universities$.next(universities);
+        }),
+      );
   }
 
   addUniversity(university: University) {
-    return this.http.post<University>(this.URL, university);
-    // .pipe(
-    //   tap((u: University) => {
-    //     this.university$.next(u);
-    //   }),
-    // );
+    return this.http.post<University>(this.URL, university).pipe(
+      tap((u: University) => {
+        this.universities$.next([...this.universities$.value, u]);
+      }),
+    );
   }
 
   deleteUniversity(id: string) {

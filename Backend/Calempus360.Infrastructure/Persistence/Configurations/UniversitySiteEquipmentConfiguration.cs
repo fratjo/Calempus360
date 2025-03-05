@@ -19,22 +19,22 @@ namespace Calempus360.Infrastructure.Persistence.Configurations
             builder
                 .HasOne(use => use.EquipmentEntity)
                 .WithOne(use => use.UniversitySiteEquipmentEntity)
-                .HasForeignKey<UniversitySiteEquipmentEntity>(use => use.EquipmentId);
+                .HasForeignKey<UniversitySiteEquipmentEntity>(use => use.EquipmentId).OnDelete(DeleteBehavior.Cascade);
             
             builder
                 .HasOne(use => use.UniversityEntity)
                 .WithMany(use => use.Equipments)
-                .HasForeignKey(use => use.UniversityId);
+                .HasForeignKey(use => use.UniversityId).OnDelete(DeleteBehavior.Cascade);
             
             builder
                 .HasOne(use => use.SiteEntity)
                 .WithMany(use => use.Equipments)
-                .HasForeignKey(use => use.SiteId);
+                .HasForeignKey(use => use.SiteId).OnDelete(DeleteBehavior.SetNull);
             
             builder
                 .HasOne(use => use.AcademicYearEntity)
                 .WithMany(use => use.UniversitySiteEquipments)
-                .HasForeignKey(use => use.AcademicYearId);
+                .HasForeignKey(use => use.AcademicYearId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -35,11 +35,6 @@ export class SiteService {
     const universityId = this.universityService.university$.value.id;
     const url = this.URL.replace('{universityId}', universityId!);
     return this.http.get<Site>(url + `/${id}`);
-    // .pipe(
-    //   tap((s: Site) => {
-    //     this.site$.next(s);
-    //   }),
-    // );
   }
 
   setSite(id: string) {
@@ -55,23 +50,24 @@ export class SiteService {
   updateSite(site: Site) {
     const universityId = this.universityService.university$.value.id;
     const url = this.URL.replace('{universityId}', universityId!);
-    return this.http.put<Site>(url + `/${site.id}`, site);
-    // .pipe(
-    //   tap((s: Site) => {
-    //     this.site$.next(s);
-    //   }),
-    // );
+    return this.http.put<Site>(url + `/${site.id}`, site).pipe(
+      tap((s: Site) => {
+        const sites = this.sites$.value;
+        const index = sites.findIndex((site) => site.id === s.id);
+        sites[index] = s;
+        this.sites$.next(sites);
+      }),
+    );
   }
 
   addSite(site: Site) {
     const universityId = this.universityService.university$.value.id;
     const url = this.URL.replace('{universityId}', universityId!);
-    return this.http.post<Site>(url, site);
-    // .pipe(
-    //   tap((s: Site) => {
-    //     this.site$.next(s);
-    //   }),
-    // );
+    return this.http.post<Site>(url, site).pipe(
+      tap((s: Site) => {
+        this.sites$.next([...this.sites$.value, s]);
+      }),
+    );
   }
 
   deleteSite(id: string) {

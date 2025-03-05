@@ -29,11 +29,6 @@ export class AcademicYearService {
 
   getAdademicYearById(id: string) {
     return this.http.get<AcademicYear>(this.URL + `/${id}`);
-    // .pipe(
-    //   tap((a: AcademicYear) => {
-    //     this.academicYear$.next(a);
-    //   }),
-    // );
   }
 
   setAcademicYear(id: string) {
@@ -45,24 +40,26 @@ export class AcademicYearService {
   }
 
   addAcademicYear(academicYear: AcademicYear) {
-    return this.http.post<AcademicYear>(this.URL, academicYear);
-    // .pipe(
-    //   tap((a: AcademicYear) => {
-    //     this.academicYear$.next(a);
-    //   }),
-    // );
+    return this.http.post<AcademicYear>(this.URL, academicYear).pipe(
+      tap((a: AcademicYear) => {
+        this.academicYears$.next([...this.academicYears$.value, a]);
+      }),
+    );
   }
 
   updateAcademicYear(academicYear: AcademicYear) {
-    return this.http.put<AcademicYear>(
-      this.URL + `/${academicYear.id}`,
-      academicYear,
-    );
-    // .pipe(
-    //   tap((a: AcademicYear) => {
-    //     this.academicYear$.next(a);
-    //   }),
-    // );
+    return this.http
+      .put<AcademicYear>(this.URL + `/${academicYear.id}`, academicYear)
+      .pipe(
+        tap((a: AcademicYear) => {
+          const academicYears = this.academicYears$.value;
+          const index = academicYears.findIndex(
+            (a) => a.id === academicYear.id,
+          );
+          academicYears[index] = a;
+          this.academicYears$.next(academicYears);
+        }),
+      );
   }
 
   deleteAcademicYear(id: string) {

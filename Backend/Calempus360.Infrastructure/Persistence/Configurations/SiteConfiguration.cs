@@ -35,7 +35,6 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             builder
                 .HasOne(s => s.UniversityEntity)
                 .WithMany(u => u.Sites)
-                .HasForeignKey(s => s.UniversityId);
-        }
+                .HasForeignKey(s => s.UniversityId).OnDelete(DeleteBehavior.ClientCascade);}
     }
 }

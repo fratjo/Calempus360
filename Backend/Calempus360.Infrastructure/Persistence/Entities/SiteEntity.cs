@@ -16,9 +16,6 @@
         public virtual Guid UniversityId { get; set; }
         public virtual UniversityEntity UniversityEntity { get; set; } = null!;
         
-        // SiteAcademicYear
-        public virtual List<SiteAcademicYearEntity> SiteAcademicYears { get; set; } 
-        
         // StudentGroup
         public virtual List<StudentGroupEntity> StudentGroups { get; set; }
         
