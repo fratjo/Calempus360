@@ -11,7 +11,9 @@ namespace Calempus360.Core.DTOs.Requests
     {
         public string Code { get; set; } = string.Empty;
         public int OptionGrade { get; set; }
+        public string Option { get; set; } = string.Empty;
         public int NumberOfStudents { get; set; }
+        public string Site { get; set; } = string.Empty;
     }
 
     public class StudentGroupRequestDtoValidator : AbstractValidator<StudentGroupRequestDto>

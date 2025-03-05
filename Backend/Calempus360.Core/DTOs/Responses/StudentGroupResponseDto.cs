@@ -26,6 +26,7 @@ namespace Calempus360.Core.DTOs.Responses
             return new StudentGroupResponseDto
             {
                 Id = studentGroup.Id,
+                Name = studentGroup.Na,
                 Code = studentGroup.Code,
                 OptionGrade = studentGroup.OptionGrade,
                 Option = studentGroup.Option?.MapToDto(),
