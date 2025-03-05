@@ -1,4 +1,4 @@
-﻿using Calempus360.Core.Interfaces.IOption;
+﻿using Calempus360.Core.Interfaces.Option;
 using Calempus360.Core.Models;
 using Calempus360.Infrastructure.Data;
 using Calempus360.Infrastructure.Persistence.Entities;
@@ -50,6 +50,16 @@ namespace Calempus360.Infrastructure.Repositories
         }
 
         public Task<bool> UpdateOptionAsync(Option option)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Option> IOptionRepository.AddOptionAsync(Option option)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Option> IOptionRepository.UpdateOptionAsync(Option option)
         {
             throw new NotImplementedException();
         }

@@ -7,14 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Calempus360.Core.Interfaces.IOption
+namespace Calempus360.Core.Interfaces.Option
 {
     public interface IOptionService
     {
-        Task<IEnumerable<OptionResponseDto>> GetAllOptionAsync();
-        Task<OptionResponseDto?> GetOptionByIdAsync(Guid id);
-        Task AddOptionAsync(OptionRequestDto option);
-        Task<bool> UpdateOptionAsync(UpdateOptionRequest option);
+        Task<IEnumerable<Models.Option>> GetAllOptionAsync();
+        Task<Models.Option?> GetOptionByIdAsync(Guid id);
+        Task AddOptionAsync(Models.Option option);
+        Task<bool> UpdateOptionAsync(Models.Option option);
         Task<bool> DeleteOptionAsync(Guid id);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Calempus360.Core.Interfaces.Group;
 using Calempus360.Core.Models;
+using Calempus360.Errors.CustomExceptions;
 using Calempus360.Infrastructure.Data;
 using Calempus360.Infrastructure.Persistence.Entities;
 using Calempus360.Infrastructure.Persistence.Mappers;
@@ -10,30 +11,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Calempus360.Infrastructure.Repositories
 {
     public class StudentGroupRepository : IStudentGroupRepository
     {
         private readonly Calempus360DbContext _context;
-        //TODO : Ajout Include dans Update et GetStudent
+
         public StudentGroupRepository(Calempus360DbContext context)
         {
             _context = context;
         }
 
-        public async Task AddStudentGroupAsync(StudentGroup studentGroup, string academicYear)
+        public async Task<StudentGroup> AddStudentGroupAsync(StudentGroup studentGroup, Guid academicYear, Guid option, Guid site)
         {
-            var siteEntity = await _context.Sites.FindAsync(studentGroup.Site.Id);
-            var optionEntity = await _context.Options.FindAsync(studentGroup.Option.Id);
+            var siteEntity = await _context.Sites.FindAsync(site);
+            var optionEntity = await _context.Options.FindAsync(option);
             var academicYearEntity = await _context.AcademicYears.FindAsync(academicYear);
             var entity = studentGroup.ToEntity();
 
-            entity.SiteEntity = siteEntity!;
-            entity.OptionEntity = optionEntity!;
-            entity.AcademicYearEntity = academicYearEntity!;
+            if(siteEntity == null) throw new NotFoundException("Site not found");
+            else entity.SiteEntity = siteEntity;
+            if (optionEntity == null) throw new NotFoundException("Option not found");
+            else entity.OptionEntity = optionEntity;
+            if (academicYearEntity == null) throw new NotFoundException("Academic Year not found");
+            else entity.AcademicYearEntity = academicYearEntity;
 
             await _context.StudentGroups.AddAsync(entity);
             await _context.SaveChangesAsync();
+
+            return entity.ToDomainModel();
         }
 
         public async Task<bool> DeleteStudentGroupByIdAsync(Guid id)
@@ -47,7 +54,7 @@ namespace Calempus360.Infrastructure.Repositories
             return false;
         }
 
-        public async Task<IEnumerable<StudentGroup>> GetAllStudentGroupAsync(string academicYear)
+        public async Task<IEnumerable<StudentGroup>> GetAllStudentGroupAsync(Guid academicYear)
         {
             var entities = await _context.StudentGroups
                 .Include(sg => sg.SiteEntity)
@@ -59,35 +66,43 @@ namespace Calempus360.Infrastructure.Repositories
             return entities.Select(e => e.ToDomainModel());
         }
 
-        public async Task<StudentGroup?> GetStudentGroupByIdAsync(Guid id, string academicYear)
+        public async Task<StudentGroup> GetStudentGroupByIdAsync(Guid id, Guid academicYear)
         {
             var entity = await _context.StudentGroups
                 .Include(sg => sg.SiteEntity)
                 .Include(sg => sg.AcademicYearEntity)
                 .Include(sg => sg.OptionEntity)
                 .FirstOrDefaultAsync(sg => sg.StudentGroupId == id && sg.AcademicYearId == academicYear);
-            return entity?.ToDomainModel();
+            if(entity == null) throw new NotFoundException("Student Group not found");
+            return entity.ToDomainModel();
         }
 
-        public async Task<bool> UpdateStudentGroupAsync(StudentGroup studentGroup, Guid id)
+        public async Task<StudentGroup> UpdateStudentGroupAsync(StudentGroup studentGroup, Guid option, Guid site)
         {
             var entity = await _context.StudentGroups
                 .Include(sg => sg.SiteEntity)
                 .Include(sg => sg.AcademicYearEntity)
                 .Include(sg => sg.OptionEntity)
                 .FirstOrDefaultAsync(sg => sg.StudentGroupId == studentGroup.Id);
-            if(entity != null)
-            {
-                entity.Code = studentGroup.Code;
-                entity.NumberOfStudents = studentGroup.NumberOfStudents;
-                entity.OptionGrade = studentGroup.OptionGrade;
-                entity.SiteId = studentGroup.Site.Id;
-                entity.OptionId = studentGroup.Option.Id;
-                entity.UpdatedAt = DateTime.Now;
 
-                return await _context.SaveChangesAsync() > 0;
-            }
-            return false;
+            if (entity == null) throw new NotFoundException("Student Group not found");
+
+            var siteEntity = await _context.Sites.FindAsync(site);
+            var optionEntity = await _context.Options.FindAsync(option);
+
+            if (siteEntity == null) throw new NotFoundException("Site not found");
+            if (optionEntity == null) throw new NotFoundException("Option not found");
+        
+            entity.Code = studentGroup.Code;
+            entity.NumberOfStudents = studentGroup.NumberOfStudents;
+            entity.OptionGrade = studentGroup.OptionGrade;
+            entity.SiteId = site;
+            entity.OptionId = option;
+            entity.UpdatedAt = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+            return entity.ToDomainModel();
+            
         }
 
         //----------Méthode pour certains tests

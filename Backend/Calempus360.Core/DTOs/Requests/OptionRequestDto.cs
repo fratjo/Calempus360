@@ -12,7 +12,6 @@ namespace Calempus360.Core.DTOs.Requests
         public string Name { get; set; } = string.Empty;
         public string Code { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public List<Guid> Courses { get; set; } = new List<Guid>();
 
     }
 
