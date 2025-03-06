@@ -24,12 +24,12 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             builder
                 .HasOne(ce => ce.ClassroomEntity)
                 .WithMany(ce => ce.ClassroomEquipments)
-                .HasForeignKey(ce => ce.EquipmentId).OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(ce => ce.ClassroomId).OnDelete(DeleteBehavior.Cascade);
             
             builder
                 .HasOne(ce => ce.EquipmentEntity)
-                .WithOne(ce => ce.ClassroomEquipmentEntity)
-                .HasForeignKey<ClassroomEquipmentEntity>(ce => ce.EquipmentId).OnDelete(DeleteBehavior.Cascade);
+                .WithMany(ce => ce.ClassroomEquipments)
+                .HasForeignKey(ce => ce.EquipmentId).OnDelete(DeleteBehavior.Cascade);
             
             builder
                 .HasOne(ce => ce.AcademicYearEntity)

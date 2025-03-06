@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Calempus360.API.Controllers
 {
-    [Route("api/university/{universityId:guid}/sites")]
+    [Route("api/universities/{universityId:guid}/sites")]
     [ApiController]
     public class SiteController(ISiteService siteService) : ControllerBase
     {

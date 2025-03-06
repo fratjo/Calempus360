@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Calempus360.Core.Interfaces.Classroom;
 using Calempus360.Core.Interfaces.Site;
 using Calempus360.Core.Models;
 using Calempus360.Errors.Mappers;
@@ -7,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Calempus360.Services.Services;
 
-public class SiteService(ISiteRepository siteRepository) : ISiteService
+public class SiteService(ISiteRepository siteRepository, IClassroomService classroomService) : ISiteService
 {
     public async Task<IEnumerable<Site>> GetSitesAsync()
     {
@@ -65,21 +66,24 @@ public class SiteService(ISiteRepository siteRepository) : ISiteService
 
     public async Task<bool> DeleteSiteAsync(Guid id)
     {
+        if(!await classroomService.DeleteClassroomsBySiteAsync(id))
+            throw new InvalidOperationException("Error deleting classrooms");
+        
         return await siteRepository.DeleteSiteAsync(id);
     }
 
     public async Task<bool> DeleteSiteByUniversityAsync(Guid id)
     {
-        var sites = await this.GetSitesByUniversityAsync(id) as List<Site>;
+        var sites = await this.GetSitesByUniversityAsync(id);
         
-        sites?.ForEach(async site =>
+        foreach (var site in sites)
         {
-            // delete children
-            // classrooms
-            // groups
+            if(!await classroomService.DeleteClassroomsBySiteAsync(site.Id))
+                throw new InvalidOperationException("Error deleting classrooms");
             
-        });
-        
-        return await siteRepository.DeleteSitesByUniversityAsync(id);
+            await siteRepository.DeleteSiteAsync(site.Id);
+        }
+
+        return true;
     }
 }

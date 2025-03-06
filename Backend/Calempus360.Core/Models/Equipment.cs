@@ -3,7 +3,7 @@ namespace Calempus360.Core.Models;
 
 public class Equipment(
     string         name,
-    string         code,
+    string         code,        
     string         brand,
     string         model,
     string         description,
@@ -21,4 +21,6 @@ public class Equipment(
     public DateTime       CreatedAt     { get; private set; } = createdAt ?? DateTime.Now;
     public DateTime       UpdatedAt     { get; private set; } = updatedAt ?? DateTime.Now;
     public EquipmentType? EquipmentType { get; private set; } = equipmentType;
+    
+    public void SetEquipmentType(EquipmentType equipmentType) => EquipmentType = equipmentType;
 }

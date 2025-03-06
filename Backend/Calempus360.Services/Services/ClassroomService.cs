@@ -9,15 +9,10 @@ namespace Calempus360.Services.Services;
 
 public class ClassroomService(IClassroomRepository classroomRepository) : IClassroomService
 {
-    public async Task<IEnumerable<Classroom>> GetClassroomsAsync()
-    {
-        var classrooms = await classroomRepository.GetClassroomsAsync();
-        return classrooms;
-    }
-
     public async Task<IEnumerable<Classroom>> GetClassroomsBySiteAsync(Guid siteId)
     {
         var classrooms = await classroomRepository.GetClassroomsBySiteAsync(siteId);
+        
         return classrooms;
     }
 
@@ -37,7 +32,7 @@ public class ClassroomService(IClassroomRepository classroomRepository) : IClass
         {
             if (e.InnerException is SqlException sqlException)
                 sqlException.MapSqlException();
-            throw new ValidationException("Site or one or more site's field already exists");
+            throw new ValidationException("Classroom or one or more classroom's field already exists");
         }
         catch (Exception e)
         {
@@ -55,7 +50,7 @@ public class ClassroomService(IClassroomRepository classroomRepository) : IClass
         {
             if (e.InnerException is SqlException sqlException)
                 sqlException.MapSqlException();
-            throw new ValidationException("Site or one or more site's field already exists");
+            throw new ValidationException("Classroom or one or more classroom's field already exists");
         }
         catch (Exception e)
         {
@@ -70,14 +65,13 @@ public class ClassroomService(IClassroomRepository classroomRepository) : IClass
 
     public async Task<bool> DeleteClassroomsBySiteAsync(Guid siteId)
     {
-        var classrooms = await classroomRepository.GetClassroomsBySiteAsync(siteId) as List<Classroom>;
+        var classrooms = await classroomRepository.GetClassroomsBySiteAsync(siteId);
         
-        classrooms?.ForEach(async classroom =>
+        foreach (var classroom in classrooms)
         {
-            // delete children
-            // ?
-        });
+            await classroomRepository.DeleteClassroomAsync(classroom.Id);
+        }
         
-        return await classroomRepository.DeleteClassroomsBySiteAsync(siteId);
+        return true;
     }
 }

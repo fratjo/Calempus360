@@ -1,6 +1,188 @@
+using Calempus360.Core.Interfaces.Equipment;
+using Calempus360.Core.Models;
+using Calempus360.Errors.CustomExceptions;
+using Calempus360.Infrastructure.Data;
+using Calempus360.Infrastructure.Persistence.Entities;
+using Calempus360.Infrastructure.Persistence.Mappers;
+using Microsoft.EntityFrameworkCore;
+
 namespace Calempus360.Infrastructure.Repositories;
 
-public class EquipmentRepository
+public class EquipmentRepository(Calempus360DbContext dbContext) : IEquipmentRepository
 {
+    #region EquipmentType
     
+    public async Task<IEnumerable<EquipmentType>> GetEquipmentTypesAsync()
+    {
+        var equipmentTypes = await dbContext.EquipmentTypes.ToListAsync();
+        
+        return equipmentTypes.Select(eqt => eqt.ToDomainModel());
+    }
+
+    public async Task<EquipmentType> GetEquipmentTypeByIdAsync(Guid id)
+    {
+        var equipmentType = await dbContext.EquipmentTypes.FirstOrDefaultAsync(eqt => eqt.EquipmentTypeId == id);
+        
+        if (equipmentType == null) throw new NotFoundException("EquipmentType type not found");
+
+        return equipmentType.ToDomainModel();
+    }
+
+    public async Task<EquipmentType> CreateEquipmentTypeAsync(EquipmentType equipmentType)
+    {
+        var entity = equipmentType.ToEntity();
+        
+        dbContext.EquipmentTypes.Add(entity);
+        
+        await dbContext.SaveChangesAsync();
+        
+        return entity.ToDomainModel();
+    }
+
+    public async Task<EquipmentType> UpdateEquipmentTypeAsync(EquipmentType equipmentType)
+    {
+        var equipmentTypeEntity = await dbContext.EquipmentTypes.FindAsync(equipmentType.Id);
+        
+        if (equipmentTypeEntity == null) throw new NotFoundException("Equipment type not found");
+        
+        equipmentTypeEntity.Name = equipmentType.Name;
+        equipmentTypeEntity.Code = equipmentType.Code;
+        equipmentTypeEntity.Description = equipmentType.Description;
+        equipmentTypeEntity.UpdatedAt = DateTime.Now;
+        
+        await dbContext.SaveChangesAsync();
+        
+        return equipmentTypeEntity.ToDomainModel();
+    }
+
+    public async Task<bool> DeleteEquipmentTypeByIdAsync(Guid id)
+    {
+        var equipmentType = await dbContext.EquipmentTypes.FindAsync(id);
+        
+        if (equipmentType == null) throw new NotFoundException("Equipment type not found");
+        
+        dbContext.EquipmentTypes.Remove(equipmentType);
+        
+        await dbContext.SaveChangesAsync();
+        
+        return true;
+    }
+    
+    #endregion
+    
+    #region Equipment
+
+    public async Task<IEnumerable<Equipment>> GetEquipmentsByUniversityAsync(Guid universityId)
+    {
+        var equipments = await dbContext.Equipments
+                                        //.Where(e => e.UniversitySiteEquipmentEntity.UniversityId == universityId)
+                                        .Include(eq => eq.EquipmentTypeEntity)
+                                        .Include(eq => eq.UniversitySiteEquipmentEntity)
+                                        .ToListAsync();
+
+        var res = equipments.Select(eq => eq.UniversitySiteEquipmentEntity.UniversityId == universityId).ToList();
+        
+        return equipments.Select(eq => eq.ToDomainModel());
+    }
+
+    public async Task<IEnumerable<Equipment>> GetEquipmentsBySiteAsync(Guid siteId)
+    {
+        var equipments = await dbContext.Equipments
+                                        .Include(eq => eq.EquipmentTypeEntity)
+                                        .Include(eq => eq.UniversitySiteEquipmentEntity)
+                                        .ToListAsync();
+
+        var res = equipments.Select(eq => eq.UniversitySiteEquipmentEntity.SiteId == siteId).ToList();
+        
+        return equipments.Select(eq => eq.ToDomainModel());
+    }
+
+    public async Task<IEnumerable<Equipment>> GetEquipmentsByClassroomIdAsync(Guid classroomId)
+    {
+        var equipments = await dbContext.Equipments
+                                        .Include(eq => eq.EquipmentTypeEntity)
+                                        .Include(eq => eq.ClassroomEquipments)
+                                        .ToListAsync();
+
+        var res = equipments.Select(eq => eq.ClassroomEquipments?.Where(ce => ce.ClassroomId == classroomId)).ToList();
+        
+        return equipments.Select(eq => eq.ToDomainModel());
+    }
+
+    public async Task<Equipment> GetEquipmentByIdAsync(Guid id)
+    {
+        var equipment = await dbContext.Equipments
+                                .Include(eq => eq.EquipmentTypeEntity)
+                                .FirstOrDefaultAsync(eq => eq.EquipmentId == id);
+        
+        if (equipment == null) throw new NotFoundException("Equipment not found");
+        
+        return equipment.ToDomainModel();
+    }
+
+    public async Task<Equipment> CreateEquipmentAsync(Equipment equipment, Guid siteId, Guid universityId)
+    {
+        var entity = equipment.ToEntity();
+        
+        entity.UniversitySiteEquipmentEntity = new UniversitySiteEquipmentEntity
+        {
+            SiteId = siteId,
+            UniversityId = universityId
+        };
+        
+        dbContext.Equipments.Add(entity);
+        
+        await dbContext.SaveChangesAsync();
+        
+        return entity.ToDomainModel();
+    }
+    
+    public async Task<Equipment> CreateEquipmentAsync(Equipment equipment, Guid universityId)
+    {
+        var entity = equipment.ToEntity();
+        
+        entity.UniversitySiteEquipmentEntity = new UniversitySiteEquipmentEntity
+        {
+            UniversityId = universityId
+        };
+        
+        dbContext.Equipments.Add(entity);
+        
+        await dbContext.SaveChangesAsync();
+        
+        return entity.ToDomainModel();
+    }
+
+    public async Task<Equipment> UpdateEquipmentAsync(Equipment equipment)
+    {
+        var entity = await dbContext.Equipments.FindAsync(equipment.Id);
+        
+        if (entity == null) throw new NotFoundException("Equipment not found");
+        
+        entity.Name = equipment.Name;
+        entity.Code = equipment.Code;
+        entity.Brand = equipment.Brand;
+        entity.Model = equipment.Model;
+        entity.Description = equipment.Description;
+        entity.UpdatedAt = DateTime.Now;
+        
+        await dbContext.SaveChangesAsync();
+        
+        return entity.ToDomainModel();
+    }
+
+    public async Task<bool> DeleteEquipmentAsync(Guid id)
+    {
+        var entity = await dbContext.Equipments.FindAsync(id);
+        
+        if (entity == null) throw new NotFoundException("Equipment not found");
+        
+        dbContext.Equipments.Remove(entity);
+        
+        await dbContext.SaveChangesAsync();
+        
+        return true;
+    }
+    
+    #endregion
 }

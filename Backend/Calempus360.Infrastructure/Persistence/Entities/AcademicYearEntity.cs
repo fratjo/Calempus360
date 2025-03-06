@@ -20,9 +20,6 @@
         // ClassroomEquipment
         public virtual List<ClassroomEquipmentEntity> ClassroomEquipments { get; set; }
         
-        // UniversitySiteEquipment
-        public virtual List<UniversitySiteEquipmentEntity> UniversitySiteEquipments { get; set; }
-        
         // CourseEquipmentType
         public virtual List<CourseEquipmentTypeEntity> CourseEquipmentTypes { get; set; }
         

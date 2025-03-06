@@ -21,9 +21,9 @@
         public virtual UniversitySiteEquipmentEntity UniversitySiteEquipmentEntity { get; set; } = null!;
         
         // ClassroomEquipment
-        public virtual ClassroomEquipmentEntity ClassroomEquipmentEntity { get; set; }
+        public List<ClassroomEquipmentEntity>? ClassroomEquipments { get; set; }
         
         // EquipmentSession
-        public virtual List<EquipmentSessionEntity> EquipmentSessions { get; set; }
+        public virtual List<EquipmentSessionEntity>? EquipmentSessions { get; set; }
     }
 }

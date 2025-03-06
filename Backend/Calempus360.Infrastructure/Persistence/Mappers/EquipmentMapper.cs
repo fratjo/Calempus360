@@ -24,15 +24,15 @@ public static class EquipmentMapper
     {
         return new EquipmentEntity
         {
-            EquipmentId                   = equipment.Id,
-            Name                          = equipment.Name,
-            Code                          = equipment.Code,
-            Brand                         = equipment.Brand,
-            Model                         = equipment.Model,
-            Description                   = equipment.Description,
-            CreatedAt                     = equipment.CreatedAt,
-            UpdatedAt                     = equipment.UpdatedAt,
-            EquipmentTypeEntity           = equipment.EquipmentType?.ToEntity() ?? null,
+            EquipmentId     = equipment.Id,
+            Name            = equipment.Name,
+            Code            = equipment.Code,
+            Brand           = equipment.Brand,
+            Model           = equipment.Model,
+            Description     = equipment.Description,
+            CreatedAt       = equipment.CreatedAt,
+            UpdatedAt       = equipment.UpdatedAt,
+            EquipmentTypeId = equipment.EquipmentType!.Id,
         };
     }
 }

@@ -12,7 +12,7 @@ public class Site(
     List<Schedule>?  schedules = null,
     List<Equipment>? equipments = null)
 {
-    public Guid?            Id         { get; private set; } = id ?? Guid.NewGuid();
+    public Guid            Id         { get; private set; } = id ?? Guid.NewGuid();
     public string           Name       { get; private set; } = name;
     public string           Code       { get; private set; } = code;
     public string           Address    { get; private set; } = address;

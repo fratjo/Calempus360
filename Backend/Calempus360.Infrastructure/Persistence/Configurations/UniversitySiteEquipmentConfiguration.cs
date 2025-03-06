@@ -8,11 +8,9 @@ namespace Calempus360.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<UniversitySiteEquipmentEntity> builder)
         {
-            builder.HasKey(use => new { use.EquipmentId, use.AcademicYearId });
+            builder.HasKey(use => use.EquipmentId);
             
             builder.Property(use => use.EquipmentId).IsRequired();
-            
-            builder.Property(use => use.AcademicYearId).IsRequired();
 
             builder.Property(use => use.UniversityId).IsRequired();
             
@@ -30,11 +28,6 @@ namespace Calempus360.Infrastructure.Persistence.Configurations
                 .HasOne(use => use.SiteEntity)
                 .WithMany(use => use.Equipments)
                 .HasForeignKey(use => use.SiteId).OnDelete(DeleteBehavior.SetNull);
-            
-            builder
-                .HasOne(use => use.AcademicYearEntity)
-                .WithMany(use => use.UniversitySiteEquipments)
-                .HasForeignKey(use => use.AcademicYearId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

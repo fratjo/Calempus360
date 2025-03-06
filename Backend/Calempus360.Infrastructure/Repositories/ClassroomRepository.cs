@@ -8,33 +8,19 @@ using Microsoft.EntityFrameworkCore;
 namespace Calempus360.Infrastructure.Repositories;
 
 public class ClassroomRepository(Calempus360DbContext dbContext) : IClassroomRepository
-{
-    public async Task<IEnumerable<Classroom>> GetClassroomsAsync()
-    {
-        var classrooms = await dbContext.Classrooms
-                                        .Include(c => c.ClassroomEquipments)!
-                                        .ThenInclude(ce => ce.ClassroomEntity)
-                                        .ToListAsync();
-
-        return classrooms.Select(c => c.ToDomainModel());
-    }
-
+{ 
     public async Task<IEnumerable<Classroom>> GetClassroomsBySiteAsync(Guid siteId)
     {
         var classrooms = await dbContext.Classrooms
-                                        .Include(c => c.ClassroomEquipments)!
-                                        .ThenInclude(ce => ce.ClassroomEntity)
                                         .Where(c => c.SiteId == siteId)
                                         .ToListAsync();
-
+        
         return classrooms.Select(c => c.ToDomainModel());
     }
 
     public async Task<Classroom> GetClassroomByIdAsync(Guid id)
     {
         var classroom = await dbContext.Classrooms
-                                      .Include(c => c.ClassroomEquipments)!
-                                      .ThenInclude(ce => ce.ClassroomEntity)
                                       .FirstOrDefaultAsync(c => c.ClassroomId == id);
         
         if (classroom == null) throw new NotFoundException("Classroom not found");

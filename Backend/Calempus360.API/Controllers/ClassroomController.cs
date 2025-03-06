@@ -7,21 +7,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Calempus360.API.Controllers
 {
-    [Route("api/university/{universityId:guid}/sites/{siteId:guid}/classrooms")]
+    [Route("api/universities/{universityId:guid}/sites/{siteId:guid}/classrooms")]
     [ApiController]
     public class ClassroomController(IClassroomService classroomService) : ControllerBase
     {
         #region GET
         
         [HttpGet]
-        public async Task<IActionResult> GetClassrooms(Guid universityId, Guid siteId)
+        public async Task<IActionResult> GetClassrooms(Guid siteId)
         {
             var classrooms = await classroomService.GetClassroomsBySiteAsync(siteId);
             return Ok(classrooms.Select(c => c.MapToDto()));
         }
         
         [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetClassroomById(Guid universityId, Guid siteId, Guid id)
+        public async Task<IActionResult> GetClassroomById(Guid id)
         {
             var classroom = await classroomService.GetClassroomByIdAsync(id);
             return Ok(classroom.MapToDto());
