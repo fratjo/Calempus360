@@ -11,7 +11,7 @@ namespace Calempus360.Core.Interfaces.Group
 {
     public interface IStudentGroupService
     {
-        Task<IEnumerable<StudentGroup>> GetAllStudentGroupAsync(Guid academicYear);
+        Task<IEnumerable<StudentGroup>> GetAllStudentGroupAsync(Guid academicYear, Guid universityId);
         Task<StudentGroup> GetStudentGroupByIdAsync(Guid id, Guid academicYear);
         Task<StudentGroup> AddStudentGroupAsync(StudentGroup studentGroup, Guid academicYear, Guid Option, Guid Site);
         Task<StudentGroup> UpdateStudentGroupAsync(StudentGroup studentGroup, Guid option, Guid site);

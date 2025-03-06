@@ -51,13 +51,15 @@ namespace Calempus360.Infrastructure.Repositories
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<IEnumerable<StudentGroup>> GetAllStudentGroupAsync(Guid academicYear)
+        public async Task<IEnumerable<StudentGroup>> GetAllStudentGroupAsync(Guid academicYear, Guid universityId)
         {
+            var sitesEntity = await _context.Sites.Where(s => s.UniversityId == universityId).ToListAsync();
+            if (sitesEntity == null) throw new NotFoundException("This university has no sites");
             var entities = await _context.StudentGroups
                 .Include(sg => sg.SiteEntity)
                 .Include(sg => sg.AcademicYearEntity)
                 .Include(sg => sg.OptionEntity)
-                .Where(sg => sg.AcademicYearId == academicYear)
+                .Where(sg => sg.AcademicYearId == academicYear && sitesEntity.Select(s => s.UniversityId).Contains(universityId))
                 .ToListAsync();
 
             return entities.Select(e => e.ToDomainModel());

@@ -35,9 +35,9 @@ namespace Calempus360.Services.Services
             return isDeleted;
         }
 
-        public async Task<IEnumerable<StudentGroup>> GetAllStudentGroupAsync(Guid academicYear)
+        public async Task<IEnumerable<StudentGroup>> GetAllStudentGroupAsync(Guid academicYear, Guid universityId)
         {
-            return await _studentGroupRepository.GetAllStudentGroupAsync(academicYear);
+            return await _studentGroupRepository.GetAllStudentGroupAsync(academicYear, universityId);
         }
 
         public async Task<StudentGroup> GetStudentGroupByIdAsync(Guid id, Guid academicYear)

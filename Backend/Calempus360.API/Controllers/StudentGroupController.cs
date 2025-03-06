@@ -7,7 +7,7 @@ using NuGet.Protocol;
 namespace Calempus360.API.Controllers
 {
     [ApiController]
-    [Route("api/groups")]
+    [Route("api/university/{universityId:guid}/groups")]
     public class StudentGroupController : ControllerBase
     {
         private readonly IStudentGroupService _studentGroupService;
@@ -18,9 +18,9 @@ namespace Calempus360.API.Controllers
         }
         #region GET
         [HttpGet]
-        public async Task<IActionResult> GetAllStudentGroups(Guid academicYear)
+        public async Task<IActionResult> GetAllStudentGroups(Guid academicYear, Guid universityId)
         {
-            var studentGroups = await _studentGroupService.GetAllStudentGroupAsync(academicYear);
+            var studentGroups = await _studentGroupService.GetAllStudentGroupAsync(academicYear,universityId);
 
             return Ok(studentGroups.Select(sg => sg.MapToDto()));
         }
@@ -48,7 +48,7 @@ namespace Calempus360.API.Controllers
 
         #region PUT
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdateStudentGroup(StudentGroupRequestDto studentGroupRequest, Guid id, Guid option, Guid site)
+        public async Task<IActionResult> UpdateStudentGroup([FromBody] StudentGroupRequestDto studentGroupRequest, Guid id, Guid option, Guid site)
         {
             var studentGroup = await _studentGroupService.UpdateStudentGroupAsync(new Core.Models.StudentGroup
                 (
