@@ -72,7 +72,7 @@ namespace Calempus360.API.Controllers
         public async Task<IActionResult> DeleteOption(Guid id)
         {
             var response = await _optionService.DeleteOptionAsync(id);
-            return Ok($"Option with id : {id} deleted");
+            return Ok(new {message = $"Option with id : {id} deleted" });
         } 
         #endregion
     }

@@ -22,7 +22,7 @@ import { StudentGroupsService } from '../../../core/services/student-groups.serv
 })
 export class StudentGroupAddFormComponent implements OnInit{
   private readonly router = inject(Router);
-  public studentGroupForm: FormGroup;
+  studentGroupForm: FormGroup;
   formBuilder = inject(FormBuilder);
   private readonly siteService = inject(SiteService);
   private readonly studentGroupService = inject(StudentGroupsService);
@@ -40,9 +40,7 @@ export class StudentGroupAddFormComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.siteService.getSites().subscribe({
-      
-    });
+    this.siteService.getSites().subscribe({});
   }
 
   onSave(){

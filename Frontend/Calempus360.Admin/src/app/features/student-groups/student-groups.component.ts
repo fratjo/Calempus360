@@ -25,6 +25,10 @@ export class StudentGroupsComponent implements OnInit{
     this.updateUI();
   }
 
+  onEdit(id: string){
+    this.router.navigate(['/groups/edit',id]);
+  }
+
   onDelete(id: string){
     this.studentGroupService.deleteStudentGroup(id).subscribe({
       next: () => {

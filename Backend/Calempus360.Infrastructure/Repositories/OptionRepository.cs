@@ -109,6 +109,7 @@ namespace Calempus360.Infrastructure.Repositories
                         OptionEntity = entity,
                     });
             }
+            await _context.SaveChangesAsync();
             return entity.ToDomainModel();
         }
     }

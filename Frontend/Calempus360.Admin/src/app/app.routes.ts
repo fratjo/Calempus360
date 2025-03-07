@@ -18,6 +18,9 @@ import { SiteEditFormComponent } from './features/site/site-edit-form/site-edit-
 import { StudentGroupsComponent } from './features/student-groups/student-groups.component';
 import { StudentGroupAddFormComponent } from './features/student-groups/student-group-add-form/student-group-add-form.component';
 import { StudentGroupEditFormComponent } from './features/student-groups/student-group-edit-form/student-group-edit-form.component';
+import { OptionComponent } from './features/option/option.component';
+import { OptionAddFormComponent } from './features/option/option-add-form/option-add-form.component';
+import { OptionEditFormComponent } from './features/option/option-edit-form/option-edit-form.component';
 
 export const routes: Routes = [
   {
@@ -90,8 +93,23 @@ export const routes: Routes = [
     canActivate: [univeristyGuard, academicYearGuard],
   },
   {
-    path: 'groups/edit',
+    path: 'groups/edit/:id',
     component: StudentGroupEditFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'options',
+    component: OptionComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'options/add',
+    component: OptionAddFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'options/edit/:id',
+    component: OptionEditFormComponent,
     canActivate: [univeristyGuard, academicYearGuard],
   },
   {
