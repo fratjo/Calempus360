@@ -20,7 +20,7 @@ namespace Calempus360.API.Controllers
             return Ok(classrooms.Select(c => c.MapToDto()));
         }
         
-        [HttpGet("{id:guid}")]
+        [HttpGet("/api/classrooms/{id:guid}")]
         public async Task<IActionResult> GetClassroomById(Guid id)
         {
             var classroom = await classroomService.GetClassroomByIdAsync(id);
@@ -42,6 +42,13 @@ namespace Calempus360.API.Controllers
             ), siteId);
             
             return Ok(classroom.MapToDto());
+        }
+        
+        [HttpPost("/api/classrooms/{id:guid}/equipments/add/{equipmentId:guid}")]
+        public async Task<IActionResult> AddEquipmentToClassroom(Guid id, Guid equipmentId, [FromQuery] Guid academicYearId)
+        {
+            var result = await classroomService.AddEquipmentToClassroomAsync(id, equipmentId, academicYearId);
+            return Ok(result);
         }
         
         #endregion
@@ -70,6 +77,13 @@ namespace Calempus360.API.Controllers
         public async Task<IActionResult> DeleteClassroom(Guid id)
         {
             var result = await classroomService.DeleteClassroomAsync(id);
+            return Ok(result);
+        }
+        
+        [HttpDelete("/api/classrooms/{id:guid}/equipments/remove/{equipmentId:guid}")]
+        public async Task<IActionResult> RemoveEquipmentFromClassroom(Guid id, Guid equipmentId, [FromQuery] Guid academicYearId)
+        {
+            var result = await classroomService.RemoveEquipmentFromClassroomAsync(id, equipmentId, academicYearId);
             return Ok(result);
         }
         

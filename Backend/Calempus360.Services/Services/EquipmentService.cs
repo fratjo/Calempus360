@@ -164,6 +164,12 @@ public class EquipmentService(IEquipmentRepository equipmentRepository) : IEquip
         }
     }
 
+    public async Task<bool> ChangeEquipmentClassroomAsync(Guid equipmentId, Guid classroomId, Guid academciYearId)
+    {
+        var result = await equipmentRepository.ChangeEquipmentClassroomAsync(equipmentId, classroomId, academciYearId);
+        return result;
+    }
+
     public async Task<bool> DeleteEquipmentAsync(Guid id)
     {
         return await equipmentRepository.DeleteEquipmentAsync(id);

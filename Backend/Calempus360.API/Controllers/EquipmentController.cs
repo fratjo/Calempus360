@@ -163,6 +163,13 @@ namespace Calempus360.API.Controllers
             return Ok(updatedEquipment.MapToDto());
         }
         
+        [HttpPut("{equipmentId:guid}/classrooms/change/{classroomId:guid}")]
+        public async Task<IActionResult> ChangeEquipmentClassroom(Guid equipmentId, Guid classroomId, [FromQuery] Guid academicYearId)
+        {
+            var result = await equipmentService.ChangeEquipmentClassroomAsync(equipmentId, classroomId, academicYearId);
+            return Ok(result);
+        }
+        
         #endregion
         
         #region Delete

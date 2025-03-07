@@ -40,6 +40,25 @@ public class ClassroomService(IClassroomRepository classroomRepository) : IClass
         }
     }
 
+    public async Task<bool> AddEquipmentToClassroomAsync(Guid classroomId, Guid equipmentId, Guid academicYearId)
+    {
+        try
+        {
+            return await classroomRepository.AddEquipmentToClassroomAsync(classroomId, equipmentId, academicYearId);
+        } 
+        catch (DbUpdateException e)
+        {
+            if (e.InnerException is SqlException sqlException)
+                sqlException.MapSqlException();
+            throw new ValidationException("Equipment already exists in classroom for this academic year");
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+        
+    }
+
     public async Task<Classroom> UpdateClassroomAsync(Classroom classroom)
     {
         try
@@ -73,5 +92,10 @@ public class ClassroomService(IClassroomRepository classroomRepository) : IClass
         }
         
         return true;
+    }
+
+    public async Task<bool> RemoveEquipmentFromClassroomAsync(Guid classroomId, Guid equipmentId, Guid academicYearId)
+    {
+        return await classroomRepository.RemoveEquipmentFromClassroomAsync(classroomId, equipmentId, academicYearId);
     }
 }
