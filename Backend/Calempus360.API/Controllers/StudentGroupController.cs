@@ -68,7 +68,7 @@ namespace Calempus360.API.Controllers
         public async Task<IActionResult> DeleteStudentGroup(Guid id)
         {
             var response = await _studentGroupService.DeleteStudentGroupByIdAsync(id);
-            return Ok($"Student Group with id : {id} deleted");
+            return Ok(new { message = $"Student Group with id: {id} deleted" });
         }
 
         #endregion

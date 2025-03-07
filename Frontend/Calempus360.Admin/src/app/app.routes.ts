@@ -16,6 +16,8 @@ import { SiteListComponent } from './features/site/site-list/site-list.component
 import { SiteAddFormComponent } from './features/site/site-add-form/site-add-form.component';
 import { SiteEditFormComponent } from './features/site/site-edit-form/site-edit-form.component';
 import { StudentGroupsComponent } from './features/student-groups/student-groups.component';
+import { StudentGroupAddFormComponent } from './features/student-groups/student-group-add-form/student-group-add-form.component';
+import { StudentGroupEditFormComponent } from './features/student-groups/student-group-edit-form/student-group-edit-form.component';
 
 export const routes: Routes = [
   {
@@ -83,8 +85,14 @@ export const routes: Routes = [
     canActivate: [univeristyGuard, academicYearGuard],
   },
   {
-    path: 'groups',
-    component: StudentGroupsComponent
+    path: 'groups/add',
+    component: StudentGroupAddFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'groups/edit',
+    component: StudentGroupEditFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
   },
   {
     path: '**',

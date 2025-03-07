@@ -22,7 +22,18 @@ export class StudentGroupsComponent implements OnInit{
   
 
   ngOnInit(): void {
-    this.studentGroupService.getStudentGroups().subscribe();
+    this.updateUI();
   }
 
+  onDelete(id: string){
+    this.studentGroupService.deleteStudentGroup(id).subscribe({
+      next: () => {
+        this.updateUI();
+      }
+    }); 
+  }
+  
+  updateUI(){
+    this.studentGroupService.getStudentGroups();
+  }
 }

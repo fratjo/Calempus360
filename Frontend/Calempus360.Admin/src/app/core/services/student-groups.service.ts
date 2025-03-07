@@ -23,17 +23,16 @@ export class StudentGroupsService {
   isStudentGroup(): boolean {
     return !!this.studentGroup$.value && !!this.studentGroup$.value.id;
   }
-
+  //Changer Avec method du get
   getStudentGroups(){
     const universityId = JSON.parse(sessionStorage.getItem('university')!);
     const academicYearId = JSON.parse(sessionStorage.getItem('academicYear')!);
     const url = this.URL.replace('{universityId}', universityId) + `?academicYear=${academicYearId}`;
     console.log(url);
-    return this.http.get<StudentGroup[]>(url).pipe(
-      tap((sg: StudentGroup[]) => {
-        this.studentGroups$.next(sg);
-      }),
-    );
+    const response = this.http.get<StudentGroup[]>(url).subscribe({
+      next: (groups) => this.studentGroups$.next(groups),
+    });
+    //console.log(response.closed);
   }
 
   getStudentGroupById(id: string){
@@ -46,12 +45,20 @@ export class StudentGroupsService {
   addStudentGroup(studentGroup: StudentGroup,siteId: string, optionId: string){
     const universityId = JSON.parse(sessionStorage.getItem('university')!);
     const academicYearId = JSON.parse(sessionStorage.getItem('academicYear')!);
+    const url = this.URL.replace('{universityId}', universityId) +`?option=${optionId}&site=${siteId}&academicYear=${academicYearId}`;
+    return this.http.post<StudentGroup>(url,studentGroup);
   }
 
   updateStudentGroup(studentGroup: StudentGroup, siteId: string, optionId: string){
     const universityId = JSON.parse(sessionStorage.getItem('university')!);
     const url = this.URL.replace('{universityId}', universityId) + `/${studentGroup.id}` +`?option=${optionId}?site=${siteId}`;
     return this.http.put<StudentGroup>(url,studentGroup);
+  }
+
+  deleteStudentGroup(id: string){
+    const universityId = JSON.parse(sessionStorage.getItem('university')!);
+    const url = this.URL.replace('{universityId}', universityId) + `/${id}`;
+    return this.http.delete<StudentGroup>(url);
   }
 
 

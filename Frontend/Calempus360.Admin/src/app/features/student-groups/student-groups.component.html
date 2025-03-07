@@ -33,7 +33,7 @@
                   <button mat-icon-button >
                     <mat-icon fontIcon="edit"></mat-icon>
                   </button>
-                  <button mat-icon-button >
+                  <button mat-icon-button (click)="onDelete(studentGroup.id!)">
                     <mat-icon fontIcon="delete"></mat-icon>
                   </button>
                 </td>
@@ -45,7 +45,7 @@
             }
             <tr>
               <td colspan="7" class="text-center">
-                <button routerLink="/sites/add" class="btn btn-primary mr-1 p-1">
+                <button routerLink="/groups/add" class="btn btn-primary mr-1 p-1">
                   <mat-icon fontIcon="add"></mat-icon>
                 </button>
               </td>
