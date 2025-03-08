@@ -35,6 +35,7 @@ export class AcademicYearService {
     return this.http.get<AcademicYear>(this.URL + `/${id}`).pipe(
       tap((a: AcademicYear) => {
         this.academicYear$.next(a);
+        sessionStorage.setItem('academicYear', JSON.stringify(a.id));
       }),
     );
   }

@@ -34,6 +34,7 @@ export class UniversityService {
     return this.http.get<University>(this.URL + `/${id}`).pipe(
       tap((u: University) => {
         this.university$.next(u);
+        sessionStorage.setItem('university', JSON.stringify(u.id));
       }),
     );
   }

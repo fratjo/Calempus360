@@ -1,0 +1,57 @@
+@if (studentGroups$ | async; as studentGroups) {
+    <div class="rounded-box bg-base-100">
+      <div
+        class="rounded-box border-base-content/5 bg-base-100 border-base-content overflow-x-auto"
+      >
+        <table class="table-pin-rows table w-full">
+          <thead>
+            <tr class="pt-2 pb-2">
+              <th></th>
+              <th>Code</th>
+              <th>Option</th>
+              <th>Grade</th>
+              <th>Site Principal</th>
+              <th>Nbre d'étudiants</th>
+              <th class="">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (studentGroup of studentGroups; track studentGroup?.id; let i = $index) {
+              <tr
+                class="hover:bg-primary hover:text-primary-content hover:rounded"
+              >
+                <th>{{ i }}</th>
+                <td>{{ studentGroup?.code }}</td>
+                <td>{{ studentGroup?.option }}</td>
+                <td class="pl-7">{{ studentGroup?.optionGrade }}</td>
+                <td class="pl-7">{{ studentGroup?.site?.name }}</td>
+                <td class="pl-14">{{ studentGroup?.numberOfStudents }}</td>
+                <td class="space-x-2">
+                  <button mat-icon-button >
+                    <mat-icon fontIcon="edit" (click)="onEdit(studentGroup.id!)"></mat-icon>
+                  </button>
+                  <button mat-icon-button (click)="onDelete(studentGroup.id!)">
+                    <mat-icon fontIcon="delete"></mat-icon>
+                  </button>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="7" class="text-center">No student group!</td>
+              </tr>
+            }
+            <tr>
+              <td colspan="7" class="text-center">
+                <button routerLink="/groups/add" class="btn btn-primary mr-1 p-1">
+                  <mat-icon fontIcon="add"></mat-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  } @else {
+    <p>Student Group not found!</p>
+  }
+  
