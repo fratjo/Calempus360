@@ -8,7 +8,8 @@ import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { University } from '../../core/models/university.interface';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
+import { SiteListComponent } from '../site/site-list/site-list.component';
 
 @Component({
   selector: 'app-university',
@@ -20,6 +21,8 @@ import { AsyncPipe } from '@angular/common';
     FormsModule,
     ReactiveFormsModule,
     AsyncPipe,
+    CommonModule,
+    SiteListComponent,
   ],
   templateUrl: './university.component.html',
   styleUrl: './university.component.scss',
@@ -65,7 +68,6 @@ export class UniversityComponent {
   save() {
     this.editMode = !this.editMode;
     if (this.universityForm.valid) {
-      //console.log('New University:', this.universityForm.value);
       this.universityService
         .updateUniversity(this.universityForm.value)
         .subscribe();

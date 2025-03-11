@@ -2,6 +2,7 @@ namespace Calempus360.Core.Interfaces.Classroom;
 
 public interface IClassroomRepository
 {
+    Task<IEnumerable<Models.Classroom>> GetClassroomsAsync(Guid universityId);
     Task<IEnumerable<Models.Classroom>> GetClassroomsBySiteAsync(Guid         siteId);
     Task<Models.Classroom>              GetClassroomByIdAsync(Guid            id);
     Task<Models.Classroom>              CreateClassroomAsync(Models.Classroom classroom, Guid siteId);

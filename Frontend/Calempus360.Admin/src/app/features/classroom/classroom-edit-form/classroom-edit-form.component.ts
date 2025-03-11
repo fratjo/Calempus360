@@ -61,7 +61,7 @@ export class ClassroomEditFormComponent implements OnInit {
 
   cancel() {
     this.siteService.site$.value.id;
-    this.router.navigate(['/site', this.siteService.site$.value.id]);
+    this.router.navigate(['classrooms']);
   }
 
   save() {
@@ -75,8 +75,8 @@ export class ClassroomEditFormComponent implements OnInit {
         }),
       )
       .subscribe(() => {
-        this.router.navigate(['/site', this.siteService.site$.value.id]);
+        this.router.navigate(['classrooms']);
       });
-    this.router.navigate(['/site', this.siteService.site$.value.id]);
+    this.router.navigate(['classrooms']);
   }
 }

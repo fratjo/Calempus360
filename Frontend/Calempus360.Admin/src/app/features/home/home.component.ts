@@ -4,7 +4,6 @@ import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-home',
-  imports: [AsyncPipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })

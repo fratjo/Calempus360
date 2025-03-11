@@ -13,8 +13,16 @@ namespace Calempus360.API.Controllers
     {
         #region GET
         
+        [HttpGet("/api/universities/{universityId:guid}/classrooms")]
+        public async Task<IActionResult> GetClassroomsById(Guid universityId)
+        {
+            var classrooms = await classroomService.GetClassroomsAsync(universityId);
+            return Ok(classrooms.Select(c => c.MapToDto()));
+        }
+        
+        
         [HttpGet]
-        public async Task<IActionResult> GetClassrooms(Guid siteId)
+        public async Task<IActionResult> GetClassroomsBySite(Guid siteId)
         {
             var classrooms = await classroomService.GetClassroomsBySiteAsync(siteId);
             return Ok(classrooms.Select(c => c.MapToDto()));

@@ -9,6 +9,12 @@ namespace Calempus360.Services.Services;
 
 public class ClassroomService(IClassroomRepository classroomRepository) : IClassroomService
 {
+    public async Task<IEnumerable<Classroom>> GetClassroomsAsync(Guid universityId)
+    {
+        var classrooms = await classroomRepository.GetClassroomsAsync(universityId);
+        return classrooms;
+    }
+
     public async Task<IEnumerable<Classroom>> GetClassroomsBySiteAsync(Guid siteId)
     {
         var classrooms = await classroomRepository.GetClassroomsBySiteAsync(siteId);

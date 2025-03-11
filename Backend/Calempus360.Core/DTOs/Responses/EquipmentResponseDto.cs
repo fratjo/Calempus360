@@ -13,6 +13,7 @@ public class EquipmentResponseDto
     public DateTime? CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
     public EquipmentTypeResponseDto? EquipmentType { get; set; }
+    public ClassroomResponseDto? Classroom { get; set; }
 }
 
 public static partial class DtoMapper
@@ -29,7 +30,8 @@ public static partial class DtoMapper
             Description = equipment.Description,
             CreatedAt = equipment.CreatedAt,
             UpdatedAt = equipment.UpdatedAt,
-            EquipmentType = equipment.EquipmentType?.MapToDto()
+            EquipmentType = equipment.EquipmentType?.MapToDto(),
+            Classroom = equipment.Classroom?.MapToDto()
         };
     }
 }

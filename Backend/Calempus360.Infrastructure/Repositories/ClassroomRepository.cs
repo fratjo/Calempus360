@@ -9,7 +9,16 @@ using Microsoft.EntityFrameworkCore;
 namespace Calempus360.Infrastructure.Repositories;
 
 public class ClassroomRepository(Calempus360DbContext dbContext) : IClassroomRepository
-{ 
+{
+    public async Task<IEnumerable<Classroom>> GetClassroomsAsync(Guid universityId)
+    {
+        var classrooms = await dbContext.Classrooms
+                                        .Where(c => c.SiteEntity!.UniversityId == universityId)
+                                        .ToListAsync();
+        
+        return classrooms.Select(c => c.ToDomainModel());
+    }
+
     public async Task<IEnumerable<Classroom>> GetClassroomsBySiteAsync(Guid siteId)
     {
         var classrooms = await dbContext.Classrooms

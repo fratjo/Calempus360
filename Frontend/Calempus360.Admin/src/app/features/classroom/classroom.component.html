@@ -1,1 +1,33 @@
-<p>classroom works!</p>
+<div class="flex w-full flex-col gap-2">
+  @if (classroom$ | async; as classroom) {
+    <div class="flex w-full flex-row gap-4">
+      <div class="card bg-base-100 w-full shadow-sm">
+        <figure>
+          <h2 class="mt-10 text-3xl">{{ classroom.name }}</h2>
+        </figure>
+        <div class="card-body">
+          <div class="stats border-primary border shadow">
+            <div class="stat">
+              <div class="stat-title">Classrooms</div>
+              <div class="stat-value">{{ classroom.equipment?.length }}</div>
+            </div>
+
+            <div class="stat">
+              <div class="stat-title">Capacity</div>
+              <div class="stat-value">{{ classroom.capacity }}</div>
+              <div class="stat-desc">Number of seats</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <fieldset
+        class="fieldset bg-base-100 border-primary rounded-box mb-2 flex h-full w-full flex-auto flex-col gap-4 border p-2"
+      >
+        <legend class="fieldset-legend">Classrooms</legend>
+        equipment-list
+      </fieldset>
+    </div>
+  }
+</div>

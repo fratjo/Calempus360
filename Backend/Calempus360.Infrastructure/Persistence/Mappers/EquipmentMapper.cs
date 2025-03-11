@@ -16,7 +16,8 @@ public static class EquipmentMapper
             description: equipmentEntity.Description,
             createdAt: equipmentEntity.CreatedAt,
             updatedAt: equipmentEntity.UpdatedAt,
-            equipmentType: equipmentEntity.EquipmentTypeEntity?.ToDomainModel()
+            equipmentType: equipmentEntity.EquipmentTypeEntity?.ToDomainModel(),
+            classroom: equipmentEntity.ClassroomEquipments?.FirstOrDefault()?.ClassroomEntity?.ToDomainModel()
         );
     }
 

@@ -1,0 +1,21 @@
+<fieldset
+  class="fieldset bg-base-100 border-base-300 rounded-box w-full border p-4 shadow-lg"
+>
+  <legend class="fieldset-legend pt-0">Filters</legend>
+  <fieldset class="fieldset">
+    <legend class="fieldset-legend">Site</legend>
+    <select
+      class="select focus:outline-none"
+      (change)="onSiteChange($event)"
+      placeholder="Choose a site"
+    >
+      <option [value]="0">All</option>
+      @if (sites$ | async; as sites) {
+        @for (site of sites; track site?.id; let i = $index) {
+          <option [value]="site.id">{{ site.name }}</option>
+        }
+      }
+    </select>
+    <span class="fieldset-label">Optional</span>
+  </fieldset>
+</fieldset>

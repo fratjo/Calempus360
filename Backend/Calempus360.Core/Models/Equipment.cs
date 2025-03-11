@@ -10,7 +10,9 @@ public class Equipment(
     Guid?          id            = null,
     DateTime?      createdAt     = null,
     DateTime?      updatedAt     = null,
-    EquipmentType? equipmentType = null)
+    EquipmentType? equipmentType = null,
+    Classroom?     classroom     = null
+    )
 {
     public Guid           Id            { get; private set; } = id ?? Guid.NewGuid();
     public string         Name          { get; private set; } = name;
@@ -21,6 +23,8 @@ public class Equipment(
     public DateTime       CreatedAt     { get; private set; } = createdAt ?? DateTime.Now;
     public DateTime       UpdatedAt     { get; private set; } = updatedAt ?? DateTime.Now;
     public EquipmentType? EquipmentType { get; private set; } = equipmentType;
+    public Classroom?     Classroom     { get; private set; } = classroom;
     
     public void SetEquipmentType(EquipmentType equipmentType) => EquipmentType = equipmentType;
+    public void SetClassroom(Classroom classroom) => Classroom = classroom;
 }

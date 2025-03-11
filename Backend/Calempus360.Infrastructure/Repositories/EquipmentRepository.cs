@@ -75,9 +75,10 @@ public class EquipmentRepository(Calempus360DbContext dbContext) : IEquipmentRep
     public async Task<IEnumerable<Equipment>> GetEquipmentsByUniversityAsync(Guid universityId)
     {
         var equipments = await dbContext.Equipments
-                                         //.Where(e => e.UniversitySiteEquipmentEntity.UniversityId == universityId)
                                         .Include(eq => eq.EquipmentTypeEntity)
                                         .Include(eq => eq.UniversitySiteEquipmentEntity)
+                                        .Include(eq => eq.ClassroomEquipments)
+                                            .ThenInclude(ce => ce.ClassroomEntity)
                                         .ToListAsync();
 
         var res = equipments.Select(eq => eq.UniversitySiteEquipmentEntity.UniversityId == universityId).ToList();
@@ -90,6 +91,8 @@ public class EquipmentRepository(Calempus360DbContext dbContext) : IEquipmentRep
         var equipments = await dbContext.Equipments
                                         .Include(eq => eq.EquipmentTypeEntity)
                                         .Include(eq => eq.UniversitySiteEquipmentEntity)
+                                        .Include(eq => eq.ClassroomEquipments)
+                                        .ThenInclude(ce => ce.ClassroomEntity)
                                         .ToListAsync();
 
         var res = equipments.Select(eq => eq.UniversitySiteEquipmentEntity.SiteId == siteId).ToList();
@@ -102,6 +105,8 @@ public class EquipmentRepository(Calempus360DbContext dbContext) : IEquipmentRep
         var equipments = await dbContext.Equipments
                                         .Include(eq => eq.EquipmentTypeEntity)
                                         .Include(eq => eq.ClassroomEquipments)
+                                        .Include(eq => eq.ClassroomEquipments)
+                                        .ThenInclude(ce => ce.ClassroomEntity)
                                         .ToListAsync();
 
         var res = equipments.Select(eq => eq.ClassroomEquipments?.Where(ce => ce.ClassroomId == classroomId)).ToList();
@@ -113,6 +118,8 @@ public class EquipmentRepository(Calempus360DbContext dbContext) : IEquipmentRep
     {
         var equipment = await dbContext.Equipments
                                        .Include(eq => eq.EquipmentTypeEntity)
+                                       .Include(eq => eq.ClassroomEquipments)
+                                       .ThenInclude(ce => ce.ClassroomEntity)
                                        .FirstOrDefaultAsync(eq => eq.EquipmentId == id);
 
         if (equipment == null) throw new NotFoundException("Equipment not found");

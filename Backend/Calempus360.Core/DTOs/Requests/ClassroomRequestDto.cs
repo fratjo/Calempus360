@@ -17,6 +17,6 @@ public class ClassroomRequestDtoValidator : AbstractValidator<ClassroomRequestDt
         RuleFor(x => x.Name).NotEmpty().WithMessage("Classroom Name is required");
         RuleFor(x => x.Code).NotEmpty().WithMessage("Classroom Code is required");
         RuleFor(x => x.Capacity).NotEmpty().WithMessage("Classroom Capacity is required");
-        RuleFor(x => x.Capacity).GreaterThan(20).WithMessage("Classroom Capacity must be greater than 20");
+        RuleFor(x => x.Capacity).GreaterThanOrEqualTo(20).WithMessage("Classroom Capacity must be greater than 20");
     }
 }

@@ -22,14 +22,29 @@ export class ClassroomService {
     return !!this.classroom$.value && !!this.classroom$.value.id;
   }
 
-  getClassrooms() {
+  getClassroomsByUniversity() {
+    const url =
+      'http://localhost:5257/api/universities/{universityId}/classrooms'.replace(
+        '{universityId}',
+        JSON.parse(sessionStorage.getItem('university')!),
+      );
+
+    return this.http.get<Classrooms>(url).pipe(
+      tap((s: Classrooms) => {
+        this.classrooms$.next(s);
+      }),
+    );
+  }
+
+  getClassroomsBySite(siteId: string | null = null) {
     const url = this.URL.replace(
       '{universityId}',
       JSON.parse(sessionStorage.getItem('university')!),
     );
+
     const siteUrl = url.replace(
       '{siteId}',
-      JSON.parse(sessionStorage.getItem('site')!),
+      siteId === null ? JSON.parse(sessionStorage.getItem('site')!) : siteId,
     );
 
     console.log(siteUrl);
@@ -42,29 +57,15 @@ export class ClassroomService {
   }
 
   getClassroomById(id: string) {
-    const url = this.URL.replace(
-      '{universityId}',
-      JSON.parse(sessionStorage.getItem('university')!),
-    );
-    const siteUrl = url.replace(
-      '{siteId}',
-      JSON.parse(sessionStorage.getItem('site')!),
-    );
+    const url = 'http://localhost:5257/api/classrooms';
 
-    return this.http.get<Classroom>(siteUrl + `/${id}`);
+    return this.http.get<Classroom>(url + `/${id}`);
   }
 
   setClassroom(id: string) {
-    const url = this.URL.replace(
-      '{universityId}',
-      JSON.parse(sessionStorage.getItem('university')!),
-    );
-    const siteUrl = url.replace(
-      '{siteId}',
-      JSON.parse(sessionStorage.getItem('site')!),
-    );
+    const url = 'http://localhost:5257/api/classrooms';
 
-    return this.http.get<Classroom>(siteUrl + `/${id}`).pipe(
+    return this.http.get<Classroom>(url + `/${id}`).pipe(
       tap((s: Classroom) => {
         this.classroom$.next(s);
         sessionStorage.setItem('classroom', JSON.stringify(s.id));
@@ -99,16 +100,19 @@ export class ClassroomService {
       '{universityId}',
       JSON.parse(sessionStorage.getItem('university')!),
     );
-    const siteUrl = url.replace(
-      '{siteId}',
-      JSON.parse(sessionStorage.getItem('site')!),
-    );
+    const siteUrl = url.replace('{siteId}', classroom.siteId!);
 
-    return this.http.post<Classroom>(siteUrl, classroom).pipe(
-      tap((s: Classroom) => {
-        this.classrooms$.next([...this.classrooms$.value, s]);
-      }),
-    );
+    return this.http
+      .post<Classroom>(siteUrl, {
+        name: classroom.name,
+        code: classroom.code,
+        capacity: Number(classroom.capacity),
+      })
+      .pipe(
+        tap((s: Classroom) => {
+          this.classrooms$.next([...this.classrooms$.value, s]);
+        }),
+      );
   }
 
   deleteClassroom(id: string) {

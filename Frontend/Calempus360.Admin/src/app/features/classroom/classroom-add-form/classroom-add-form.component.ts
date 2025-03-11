@@ -11,7 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule, Router } from '@angular/router';
-import { catchError, of } from 'rxjs';
+import { catchError, of, retry } from 'rxjs';
 import { SiteService } from '../../../core/services/site.service';
 import { UniversityService } from '../../../core/services/university.service';
 import { ClassroomService } from '../../../core/services/classroom.service';
@@ -32,22 +32,25 @@ import { ClassroomService } from '../../../core/services/classroom.service';
 })
 export class ClassroomAddFormComponent {
   private readonly router = inject(Router);
-  private universityService = inject(UniversityService);
   private siteService = inject(SiteService);
   private classroomService = inject(ClassroomService);
+
+  public sites$ = this.siteService.sites$;
+
   public classroomForm: FormGroup;
 
   constructor(public fb: FormBuilder) {
     this.classroomForm = this.fb.group({
+      siteId: ['', Validators.required],
       name: ['', Validators.required],
       code: ['', Validators.required],
-      capacity: ['', Validators.required],
+      capacity: ['20', [Validators.required]],
     });
   }
 
   cancel() {
     this.siteService.site$.value.id;
-    this.router.navigate(['/site', this.siteService.site$.value.id]);
+    this.router.navigate(['classrooms']);
   }
 
   save() {
@@ -61,8 +64,8 @@ export class ClassroomAddFormComponent {
         }),
       )
       .subscribe(() => {
-        this.router.navigate(['/site', this.siteService.site$.value.id]);
+        this.router.navigate(['classrooms']);
       });
-    this.router.navigate(['/site', this.siteService.site$.value.id]);
+    this.router.navigate(['classrooms']);
   }
 }
