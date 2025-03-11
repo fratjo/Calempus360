@@ -97,6 +97,7 @@ namespace Calempus360.Infrastructure.Repositories
             entity.Name = option.Name;
             entity.Code = option.Code;
             entity.Description = option.Description;
+            entity.UpdatedAt = DateTime.Now;
             foreach (var id in courses)
             {
                 var courseEntity = await _context.Courses.FindAsync(id);
