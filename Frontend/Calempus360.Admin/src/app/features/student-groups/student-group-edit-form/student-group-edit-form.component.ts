@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { SiteService } from '../../../core/services/site.service';
+import { OptionService } from '../../../core/services/option.service';
 
 @Component({
   selector: 'app-student-group-edit-form',
@@ -26,17 +27,23 @@ export class StudentGroupEditFormComponent implements OnInit {
   studentGroupForm: FormGroup;
   private readonly siteService = inject(SiteService);
   private readonly studentGroupService = inject(StudentGroupsService);
+  private readonly optionService = inject(OptionService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+
+
   studentGroup: StudentGroup | null = null;
+
   siteList$ = this.siteService.sites$;
+  optionList$ = this.optionService.options$;
+
   constructor () {
       this.studentGroupForm = this.formBuilder.group({
           code: ['',Validators.required],
           numberOfStudents: ['',Validators.required],
           optionGrade: ['',Validators.required],
           site: [null,Validators.required],
-          option:['']
+          option:[null,Validators.required]
       });
     }
 
@@ -47,13 +54,15 @@ export class StudentGroupEditFormComponent implements OnInit {
           this.studentGroup = e;
           this.studentGroupForm.patchValue({
             ...this.studentGroup,
-            site: this.studentGroup.site?.id
+            site: this.studentGroup.site?.id,
+            option: this.studentGroup.option?.id
           });
         },
         error: (e) => alert("Problem while editing the Group")
       });
     })
     this.siteService.getSites().subscribe();
+    this.optionService.getOptions();
   }
 
   onSave(){
@@ -62,7 +71,7 @@ export class StudentGroupEditFormComponent implements OnInit {
       id: this.studentGroup?.id
     }
     const siteId = this.studentGroupForm.get('site')?.value;
-    const optionId = this.studentGroupForm.get('option')?.value; //Pour test apres faudra changer quand on aura le option
+    const optionId = this.studentGroupForm.get('option')?.value;
     this.studentGroupService.updateStudentGroup(studentGroup,siteId,optionId).subscribe({
       next: (v) => console.log(v),
       error: (e) => {

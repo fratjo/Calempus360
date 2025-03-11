@@ -1,3 +1,4 @@
+import { Option } from "./option.interface"
 import { Site } from "./site.interface"
 
 export type StudentGroup = {
@@ -6,6 +7,6 @@ export type StudentGroup = {
     numberOfStudents?: number,
     optionGrade?: number,
     site?: Site,
-    option?: any
+    option?: Option
 }
 
