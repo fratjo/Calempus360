@@ -9,11 +9,7 @@ public class Program
         List<Class> classes = new()
         {
             new("1A", "A", 60, null),
-
-            new("2A", "A", 40,
-                new List<Equipement>
-                    { new Equipement("A", "Science Kit", Guid.NewGuid()) }),
-
+            
             new("2A", "A", 60,
                 new List<Equipement>
                     { new Equipement("A", "Science Kit", Guid.NewGuid()) }),
@@ -28,8 +24,8 @@ public class Program
             new("1C", "C", 60,
                 new List<Equipement>
                 {
-                    new Equipement("C", "TV",         Guid.NewGuid()),
-                    new Equipement("C", "Microphone", Guid.NewGuid())
+                    //new Equipement("C", "TV",         Guid.NewGuid()),
+                    //new Equipement("C", "Microphone", Guid.NewGuid())
                 }),
         };
 
