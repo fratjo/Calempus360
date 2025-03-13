@@ -21,6 +21,9 @@ import { StudentGroupEditFormComponent } from './features/student-groups/student
 import { OptionComponent } from './features/option/option.component';
 import { OptionAddFormComponent } from './features/option/option-add-form/option-add-form.component';
 import { OptionEditFormComponent } from './features/option/option-edit-form/option-edit-form.component';
+import { CourseComponent } from './features/course/course.component';
+import { CourseAddFormComponent } from './features/course/course-add-form/course-add-form.component';
+import { CourseEditFormComponent } from './features/course/course-edit-form/course-edit-form.component';
 
 export const routes: Routes = [
   {
@@ -110,6 +113,21 @@ export const routes: Routes = [
   {
     path: 'options/edit/:id',
     component: OptionEditFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'courses',
+    component: CourseComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'courses/add',
+    component: CourseAddFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'courses/edit/:id',
+    component: CourseEditFormComponent,
     canActivate: [univeristyGuard, academicYearGuard],
   },
   {

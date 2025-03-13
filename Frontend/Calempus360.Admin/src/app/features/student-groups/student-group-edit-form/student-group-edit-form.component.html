@@ -29,7 +29,7 @@
       'border-primary':
       studentGroupForm.controls['numberOfStudents'].touched && studentGroupForm.controls['numberOfStudents'].valid,
       }"
-      type="text"
+      type="number"
       placeholder="Nbr. of Students"
       class="input focus:ring-none focus:border-secondary focus:outline-none"
       formControlName="numberOfStudents"
@@ -43,7 +43,7 @@
       'border-primary':
       studentGroupForm.controls['optionGrade'].touched && studentGroupForm.controls['optionGrade'].valid,
     }"
-      type="text"
+      type="number"
       placeholder="Option Grade"
       class="input focus:ring-none focus:border-secondary focus:outline-none"
       formControlName="optionGrade"
@@ -59,7 +59,7 @@
     }"
     formControlName="option" id="option" class="select focus:ring-none focus:border-secondary focus:outline-none">
         <option [ngValue]="null" disabled>Option</option>
-        <option *ngFor="let option of optionList$ | async as sites" [value]="option.id">
+        <option *ngFor="let option of optionList$ | async" [value]="option.id">
           {{ option.name }}
         </option>
       </select>
@@ -74,7 +74,7 @@
     }"
     formControlName="site" id="site" class="select focus:ring-none focus:border-secondary focus:outline-none">
         <option disabled>Site</option>
-        <option *ngFor="let site of siteList$ | async as sites" [value]="site.id">
+        <option *ngFor="let site of siteList$ | async" [value]="site.id">
           {{ site.name }}
         </option>
       </select>

@@ -33,7 +33,7 @@ namespace Calempus360.Infrastructure.Repositories
             {
                 foreach (var equipmentTypeId in equipmentType)
                 {
-                    var equipmentEntity = await _context.EquipmentTypes.FindAsync(equipmentTypeId);
+                    var equipmentEntity = await _context.EquipmentTypes.FindAsync(equipmentTypeId.Key);
                     if (equipmentEntity == null) throw new NotFoundException("Equipment Type not found!");
                     entity.EquipmentTypes.Add(
                         new CourseEquipmentTypeEntity
@@ -120,13 +120,20 @@ namespace Calempus360.Infrastructure.Repositories
             entity.Credits = course.Credits;
             entity.UpdatedAt = DateTime.Now;
 
-            if (course.EquipmentTypes is not null)
+            
+
+            if (equipmentType is not null)
             {
+                //Clear les relations plus valides
+                entity.EquipmentTypes.RemoveAll(et => !equipmentType.Keys.Contains(et.EquipmentTypeEntity.EquipmentTypeId));
                 foreach (var equipmentTypeId in equipmentType)
                 {
-                    var equipmentEntity = await _context.EquipmentTypes.FindAsync(equipmentTypeId);
+                    var equipmentEntity = await _context.EquipmentTypes.FindAsync(equipmentTypeId.Key);
                     if (equipmentEntity == null) throw new NotFoundException("Equipment Type not found!");
-                    entity.EquipmentTypes.Add(
+
+                    if (!entity.EquipmentTypes.ToList().Any(et => et.EquipmentTypeEntity.EquipmentTypeId == equipmentTypeId.Key))
+                    {
+                        entity.EquipmentTypes.Add(
                         new CourseEquipmentTypeEntity
                         {
                             AcademicYearEntity = academicYearEntity,
@@ -135,6 +142,8 @@ namespace Calempus360.Infrastructure.Repositories
                             UniversityEntity = universityEntity,
                             Quantity = equipmentTypeId.Value
                         });
+                    }
+                    
                 }
             }
 

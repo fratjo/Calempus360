@@ -13,7 +13,7 @@ namespace Calempus360.Core.DTOs.Responses
         public string Code { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public int TotalHours { get; set; }
-        public int WeeklyHour { get; set; }
+        public int WeeklyHours { get; set; }
         public string Semester { get; set; } = string.Empty;
         public int Credits { get; set; }
         public string EquipmentType {  get; set; } = string.Empty; //TODO : Remplacer par DTO equipmentType
@@ -32,7 +32,7 @@ namespace Calempus360.Core.DTOs.Responses
                 Code = course.Code,
                 Description = course.Description,
                 TotalHours = course.TotalHours,
-                WeeklyHour = course.WeeklyHours,
+                WeeklyHours = course.WeeklyHours,
                 Semester = course.Semester,
                 Credits = course.Credits,
                 EquipmentType = "",//TODO : Remplacer quand on a le DTO

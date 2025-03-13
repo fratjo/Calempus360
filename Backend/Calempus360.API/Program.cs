@@ -12,6 +12,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Calempus360.Core.Interfaces.Option;
+using Calempus360.Core.Interfaces.Course;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,12 +40,14 @@ builder.Services.AddScoped<IUniversityService, UniversityService>();
 builder.Services.AddScoped<IAcademicYearService, AcademicYearService>();
 builder.Services.AddScoped<ISiteService, SiteService>();
 builder.Services.AddScoped<IOptionService, OptionService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
 // repositories
 builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();
 builder.Services.AddScoped<IAcademicYearRepository, AcademicYearRepository>();
 builder.Services.AddScoped<ISiteRepository, SitesRepository>();
 builder.Services.AddScoped<IStudentGroupRepository, StudentGroupRepository>();
 builder.Services.AddScoped<IOptionRepository, OptionRepository>();
+builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 // handlers
 builder.Services.AddExceptionHandler<ExistingEntityExceptionHandler>();
 builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();

@@ -33,9 +33,8 @@ export class OptionComponent {
 
   onDelete(id: string){
     this.optionService.deleteOption(id).subscribe({
-      next: () => {
-        this.updateUI();
-      }
+      next: () => this.updateUI(),
+      error: (e) => alert("Suppression impossible ! L'option est liée à une autre entité !")
     }); 
   }
 

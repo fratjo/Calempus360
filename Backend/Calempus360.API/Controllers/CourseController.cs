@@ -26,7 +26,7 @@ namespace Calempus360.API.Controllers
                     code: courseRequest.Code,
                     description: courseRequest.Description,
                     totalHours: courseRequest.TotalHours,
-                    weeklyHours: courseRequest.WeeklyHour,
+                    weeklyHours: courseRequest.WeeklyHours,
                     semester: courseRequest.Semester,
                     credits: courseRequest.Credits
                 ), academicYear, universityId, courseRequest.EquipmentType);
@@ -54,18 +54,19 @@ namespace Calempus360.API.Controllers
 
         #region PUT
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdateCourse(CourseRequestDto courseRequest,Guid academicYear, Guid universityId)
+        public async Task<IActionResult> UpdateCourse(Guid id, CourseRequestDto courseRequest,Guid academicYear, Guid universityId)
         {
             var course = await _courseService.UpdateCourseAsync(new Core.Models.Course
                 (
+                    id: id,
                     name: courseRequest.Name,
                     code: courseRequest.Code,
                     description: courseRequest.Description,
                     totalHours: courseRequest.TotalHours,
-                    weeklyHours: courseRequest.WeeklyHour,
+                    weeklyHours: courseRequest.WeeklyHours,
                     semester: courseRequest.Semester,
                     credits: courseRequest.Credits
-                ),academicYear,courseRequest.EquipmentType,universityId);
+                ), academicYear, courseRequest.EquipmentType, universityId);
             return Ok(course.MapToDto());
         }
         #endregion
