@@ -21,6 +21,7 @@ import { ClassroomEditFormComponent } from './features/classroom/classroom-edit-
 import { ClassroomListComponent } from './features/classroom/classroom-list/classroom-list.component';
 import { ClassroomListPageComponent } from './features/classroom/classroom-list-page/classroom-list-page.component';
 import { SiteListPageComponent } from './features/site/site-list-page/site-list-page.component';
+import { EquipmentListPageComponent } from './features/equipment/equipment-list-page/equipment-list-page.component';
 
 export const routes: Routes = [
   {
@@ -100,6 +101,11 @@ export const routes: Routes = [
   {
     path: 'classrooms/edit/:id',
     component: ClassroomEditFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'equipments',
+    component: EquipmentListPageComponent,
     canActivate: [univeristyGuard, academicYearGuard],
   },
   {

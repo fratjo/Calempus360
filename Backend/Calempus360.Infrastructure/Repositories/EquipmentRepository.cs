@@ -77,8 +77,8 @@ public class EquipmentRepository(Calempus360DbContext dbContext) : IEquipmentRep
         var equipments = await dbContext.Equipments
                                         .Include(eq => eq.EquipmentTypeEntity)
                                         .Include(eq => eq.UniversitySiteEquipmentEntity)
-                                        .Include(eq => eq.ClassroomEquipments)
-                                            .ThenInclude(ce => ce.ClassroomEntity)
+                                        .Include(eq => eq.ClassroomEquipments)!
+                                        .ThenInclude(ce => ce.ClassroomEntity)
                                         .ToListAsync();
 
         var res = equipments.Select(eq => eq.UniversitySiteEquipmentEntity.UniversityId == universityId).ToList();
@@ -91,7 +91,7 @@ public class EquipmentRepository(Calempus360DbContext dbContext) : IEquipmentRep
         var equipments = await dbContext.Equipments
                                         .Include(eq => eq.EquipmentTypeEntity)
                                         .Include(eq => eq.UniversitySiteEquipmentEntity)
-                                        .Include(eq => eq.ClassroomEquipments)
+                                        .Include(eq => eq.ClassroomEquipments)!
                                         .ThenInclude(ce => ce.ClassroomEntity)
                                         .ToListAsync();
 
@@ -100,16 +100,17 @@ public class EquipmentRepository(Calempus360DbContext dbContext) : IEquipmentRep
         return equipments.Select(eq => eq.ToDomainModel());
     }
 
-    public async Task<IEnumerable<Equipment>> GetEquipmentsByClassroomIdAsync(Guid classroomId)
+    public async Task<IEnumerable<Equipment>> GetEquipmentsByClassroomIdAsync(Guid classroomId, Guid? academicYearId)
     {
         var equipments = await dbContext.Equipments
                                         .Include(eq => eq.EquipmentTypeEntity)
-                                        .Include(eq => eq.ClassroomEquipments)
-                                        .Include(eq => eq.ClassroomEquipments)
+                                        .Include(eq => eq.ClassroomEquipments)!
                                         .ThenInclude(ce => ce.ClassroomEntity)
                                         .ToListAsync();
 
-        var res = equipments.Select(eq => eq.ClassroomEquipments?.Where(ce => ce.ClassroomId == classroomId)).ToList();
+        var res = equipments.Select(eq => eq.ClassroomEquipments?.Where(ce => 
+                                                                                ce.ClassroomId    == classroomId && (academicYearId == null ||
+                                                                                ce.AcademicYearId == academicYearId))).ToList();
 
         return equipments.Select(eq => eq.ToDomainModel());
     }
@@ -118,7 +119,7 @@ public class EquipmentRepository(Calempus360DbContext dbContext) : IEquipmentRep
     {
         var equipment = await dbContext.Equipments
                                        .Include(eq => eq.EquipmentTypeEntity)
-                                       .Include(eq => eq.ClassroomEquipments)
+                                       .Include(eq => eq.ClassroomEquipments)!
                                        .ThenInclude(ce => ce.ClassroomEntity)
                                        .FirstOrDefaultAsync(eq => eq.EquipmentId == id);
 
@@ -188,21 +189,17 @@ public class EquipmentRepository(Calempus360DbContext dbContext) : IEquipmentRep
             throw new NotFoundException("Academic year not found");
 
         var entity = await dbContext.ClassroomsEquipments.Where(ce => ce.EquipmentId == equipmentId && ce.AcademicYearId == academciYearId).FirstOrDefaultAsync();
+        
+        dbContext.ClassroomsEquipments.Remove(entity);
 
-        if (entity is null)
-        {
-            entity = new ClassroomEquipmentEntity
+        entity = new ClassroomEquipmentEntity
             {
                 EquipmentId     = equipmentId,
                 ClassroomId     = classroomId,
                 AcademicYearId  = academciYearId,
             };
-            dbContext.ClassroomsEquipments.Add(entity);
-            
-        } else
-        {
-            entity.ClassroomId = classroomId;
-        }
+        
+        dbContext.ClassroomsEquipments.Add(entity);
         
         await dbContext.SaveChangesAsync();
         

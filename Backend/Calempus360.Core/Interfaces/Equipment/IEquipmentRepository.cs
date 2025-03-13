@@ -12,7 +12,7 @@ public interface IEquipmentRepository
 
     Task<IEnumerable<Models.Equipment>> GetEquipmentsByUniversityAsync(Guid universityId);
     Task<IEnumerable<Models.Equipment>> GetEquipmentsBySiteAsync(Guid siteId);
-    Task<IEnumerable<Models.Equipment>> GetEquipmentsByClassroomIdAsync(Guid classroomId);
+    Task<IEnumerable<Models.Equipment>> GetEquipmentsByClassroomIdAsync(Guid classroomId, Guid? academicYearId);
     Task<Models.Equipment> GetEquipmentByIdAsync(Guid id);
     Task<Models.Equipment> CreateEquipmentAsync(Models.Equipment equipment, Guid siteId, Guid universityId);
     Task<Models.Equipment> CreateEquipmentAsync(Models.Equipment equipment, Guid universityId);

@@ -87,10 +87,12 @@ export class ClassroomService {
       .put<Classroom>(siteUrl + `/${classroom.id}`, classroom)
       .pipe(
         tap((s: Classroom) => {
-          const sites = this.classrooms$.value;
-          const index = sites.findIndex((classroom) => classroom.id === s.id);
-          sites[index] = s;
-          this.classrooms$.next(sites);
+          const classrooms = this.classrooms$.value;
+          const index = classrooms.findIndex(
+            (classroom) => classroom.id === s.id,
+          );
+          classrooms[index] = s;
+          this.classrooms$.next(classrooms);
         }),
       );
   }

@@ -1,4 +1,4 @@
-@if (equipmentList$ | async; as equipments) {
+@if (equipmentTypeList$ | async; as equipmentTypes) {
   <div class="rounded-box bg-base-100">
     <div
       class="rounded-box border-base-content/5 bg-base-100 border-base-content overflow-x-auto"
@@ -9,37 +9,35 @@
             <th></th>
             <th>Name</th>
             <th>Code</th>
-            <th>Model</th>
-            <th>Brand</th>
-            <th>Type</th>
             <th class="">Actions</th>
           </tr>
         </thead>
         <tbody>
-          @for (equipment of equipments; track equipment?.id; let i = $index) {
+          @for (
+            equipmentType of equipmentTypes;
+            track equipmentType?.id;
+            let i = $index
+          ) {
             <tr class="hover:bg-base-200 group hover:rounded-box">
               <th>{{ i + 1 }}</th>
-              <td>{{ equipment?.name }}</td>
-              <td>{{ equipment?.code }}</td>
-              <td>{{ equipment?.model }}</td>
-              <td>{{ equipment?.brand }}</td>
-              <td>{{ equipment?.equipmentType?.code }}</td>
+              <td>{{ equipmentType?.name }}</td>
+              <td>{{ equipmentType?.code }}</td>
               <td class="space-x-2">
                 <button
                   class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-blue-400 hover:border-blue-400 hover:bg-blue-100"
-                  (click)="onSelect(equipment.id!)"
+                  (click)="onSelect(equipmentType.id!)"
                 >
                   view
                 </button>
                 <button
                   class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-green-400 hover:border-green-400 hover:bg-green-100"
-                  (click)="onEdit(equipment.id!)"
+                  (click)="onEdit(equipmentType.id!)"
                 >
                   edit
                 </button>
                 <button
                   class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-red-400 hover:border-red-400 hover:bg-red-100"
-                  (click)="onDelete(equipment.id!)"
+                  (click)="onDelete(equipmentType.id!)"
                 >
                   delete
                 </button>
@@ -51,12 +49,12 @@
             </tr>
           }
           <tr>
-            <td colspan="7" class="text-center">
+            <td colspan="6" class="text-center">
               <button
-                routerLink="/equipments/add"
+                routerLink="/equipmentTypes/add"
                 class="rounded-box cursor-pointer border border-green-400 px-3 py-1 text-green-400 hover:bg-green-100 hover:text-green-500"
               >
-                + Add a new equipment
+                + Add a new equipmentType
               </button>
             </td>
           </tr>
@@ -65,5 +63,5 @@
     </div>
   </div>
 } @else {
-  <p>Equipment not found!</p>
+  <p>EquipmentType not found!</p>
 }

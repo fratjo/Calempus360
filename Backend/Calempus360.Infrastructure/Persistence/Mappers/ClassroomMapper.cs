@@ -5,7 +5,7 @@ namespace Calempus360.Infrastructure.Persistence.Mappers;
 
 public static class ClassroomMapper
 {
-    public static Classroom ToDomainModel(this ClassroomEntity entity)
+    public static Classroom ToDomainModel(this ClassroomEntity entity, bool includeEquipments = false)
     {
         return new Classroom(
             id: entity.ClassroomId,
@@ -14,9 +14,9 @@ public static class ClassroomMapper
             capacity: entity.Capacity,
             createdAt: entity.CreatedAt,
             updatedAt: entity.UpdatedAt,
-            equipments: entity.ClassroomEquipments?
+            equipments: includeEquipments ? entity.ClassroomEquipments?
                               .Select(ce => ce.EquipmentEntity.ToDomainModel())
-                              .ToList()
+                              .ToList() : null
         );
     }
 

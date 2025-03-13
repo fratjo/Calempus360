@@ -84,9 +84,9 @@ public class EquipmentService(IEquipmentRepository equipmentRepository) : IEquip
         return equipments;
     }
 
-    public async Task<IEnumerable<Equipment>> GetEquipmentsByClassroomIdAsync(Guid classroomId)
+    public async Task<IEnumerable<Equipment>> GetEquipmentsByClassroomIdAsync(Guid classroomId, Guid? academicYearId)
     {
-        var equipments = await equipmentRepository.GetEquipmentsByClassroomIdAsync(classroomId);
+        var equipments = await equipmentRepository.GetEquipmentsByClassroomIdAsync(classroomId, academicYearId);
 
         return equipments;
     }

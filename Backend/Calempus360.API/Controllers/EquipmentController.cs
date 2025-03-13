@@ -81,24 +81,24 @@ namespace Calempus360.API.Controllers
         
         #region Get
 
-        [HttpGet("/api/universities/{universityId:guid}/equipments")]
+        [HttpGet("/api/equipments/universities/{universityId:guid}")]
         public async Task<IActionResult> GetEquipmentsByUniversity(Guid universityId)
         {
             var equipments = await equipmentService.GetEquipmentsByUniversityAsync(universityId);
             return Ok(equipments.Select(e => e.MapToDto()));
         }
         
-        [HttpGet("/api/universities/{universityId:guid}/sites/{siteId:guid}/equipments")]
+        [HttpGet("/api/equipments/sites/{siteId:guid}")]
         public async Task<IActionResult> GetEquipmentsBySite(Guid siteId)
         {
             var equipments = await equipmentService.GetEquipmentsBySiteAsync(siteId);
             return Ok(equipments.Select(e => e.MapToDto()));
         }
         
-        [HttpGet("/api/universities/{universityId:guid}/sites/{siteId:guid}/classrooms/{classroomId:guid}/equipments")]
-        public async Task<IActionResult> GetEquipmentsByClassroomId(Guid classroomId)
+        [HttpGet("/api/equipments/classrooms/{classroomId:guid}")]
+        public async Task<IActionResult> GetEquipmentsByClassroomId(Guid classroomId, [FromQuery] Guid? academicYearId)
         {
-            var equipments = await equipmentService.GetEquipmentsByClassroomIdAsync(classroomId);
+            var equipments = await equipmentService.GetEquipmentsByClassroomIdAsync(classroomId, academicYearId);
             return Ok(equipments.Select(e => e.MapToDto()));
         }
         
@@ -113,7 +113,7 @@ namespace Calempus360.API.Controllers
         
         #region Post
 
-        [HttpPost("/api/universities/{universityId:guid}/sites/{siteId:guid}/equipments")]
+        [HttpPost("/api/equipments/universities/{universityId:guid}/sites/{siteId:guid}")]
         public async Task<IActionResult> CreateEquipment(Guid universityId, Guid siteId, [FromBody] EquipmentRequestDto equipmentRequestDto)
         {
             var equipment = new Equipment(
