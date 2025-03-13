@@ -1,0 +1,11 @@
+export type Course = {
+    id?: string,
+    name?: string,
+    code?: string,
+    description?: string,
+    totalHours?: number,
+    weeklyHours?: number,
+    semester?: string,
+    credits?: number,
+    equipmentType?: { [key: string]: number };//TODO Corriger quand y a equipmentType
+}

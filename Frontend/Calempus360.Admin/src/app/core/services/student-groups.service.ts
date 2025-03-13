@@ -20,7 +20,6 @@ export class StudentGroupsService {
 
 
   
-  //Changer Avec method du get
   getStudentGroups(){
     const universityId = JSON.parse(sessionStorage.getItem('university')!);
     const academicYearId = JSON.parse(sessionStorage.getItem('academicYear')!);
@@ -29,7 +28,6 @@ export class StudentGroupsService {
     const response = this.http.get<StudentGroup[]>(url).subscribe({
       next: (groups) => this.studentGroups$.next(groups),
     });
-    //console.log(response.closed);
   }
 
   getStudentGroupById(id: string){

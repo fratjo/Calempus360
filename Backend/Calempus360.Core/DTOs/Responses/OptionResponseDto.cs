@@ -13,7 +13,7 @@ namespace Calempus360.Core.DTOs.Responses
         public string Name { get; set; } = string.Empty;
         public string Code { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public List<string> Courses { get; set; } = new List<string>(); //Remplacer par DTO Courses au lieu de string
+        public List<CourseResponseDto>? Courses { get; set; }
     }
     public static partial class DtoMapper
     {
@@ -25,7 +25,7 @@ namespace Calempus360.Core.DTOs.Responses
                 Name = option.Name,
                 Code = option.Code,
                 Description = option.Description,
-                Courses = new List<string>()
+                Courses = option.Courses?.Select(c => c.MapToDto()).ToList()
             };
         }
     }

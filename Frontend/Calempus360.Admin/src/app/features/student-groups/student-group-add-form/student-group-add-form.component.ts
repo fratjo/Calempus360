@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { SiteService } from '../../../core/services/site.service';
 import { StudentGroupsService } from '../../../core/services/student-groups.service';
+import { OptionService } from '../../../core/services/option.service';
 
 @Component({
   selector: 'app-student-group-add-form',
@@ -26,8 +27,10 @@ export class StudentGroupAddFormComponent implements OnInit{
   formBuilder = inject(FormBuilder);
   private readonly siteService = inject(SiteService);
   private readonly studentGroupService = inject(StudentGroupsService);
+  private readonly optionService = inject(OptionService);
 
   siteList$ = this.siteService.sites$;
+  optionList$ = this.optionService.options$;
 
   constructor () {
     this.studentGroupForm = this.formBuilder.group({
@@ -35,19 +38,19 @@ export class StudentGroupAddFormComponent implements OnInit{
         numberOfStudents: ['',Validators.required],
         optionGrade: ['',Validators.required],
         site: [null,Validators.required],
-        option:['']
+        option:[null,Validators.required]
     });
   }
 
   ngOnInit(): void {
     this.siteService.getSites().subscribe({});
+    this.optionService.getOptions();
   }
 
   onSave(){
     const studentGroup = this.studentGroupForm.value;
     const siteId = this.studentGroupForm.get('site')?.value;
-    console.log(siteId);
-    const optionId = this.studentGroupForm.get('option')?.value; //Pour test apres faudra changer quand on aura le option
+    const optionId = this.studentGroupForm.get('option')?.value;
     this.studentGroupService.addStudentGroup(studentGroup,siteId,optionId).subscribe({
       next: (v) => console.log(v),
       error: (e) => {

@@ -23,7 +23,10 @@
                 <td>{{ option?.name }}</td>
                 <td>{{ option?.code }}</td>
                 <td>{{ option?.description }}</td>
-                <td>{{ option?.courses }}</td>
+                <td>@for(course of option?.courses; track course?.id;){
+                      {{ course.name }}
+                    }
+                </td>
                 <td class="space-x-2">
                   <button mat-icon-button >
                     <mat-icon fontIcon="edit" (click)="onEdit(option.id!)"></mat-icon>

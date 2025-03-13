@@ -19,9 +19,9 @@
         public virtual List<OptionCourseEntity> OptionsCourses { get; set; } = new();
         
         // CourseEquipmentType
-        public virtual List<CourseEquipmentTypeEntity> EquipmentTypes { get; set; }
-        
+        public virtual List<CourseEquipmentTypeEntity> EquipmentTypes { get; set; } = new();
+
         // Session
-        public virtual List<SessionEntity> Sessions { get; set; }
+        public virtual List<SessionEntity> Sessions { get; set; } = new();
     }
 }

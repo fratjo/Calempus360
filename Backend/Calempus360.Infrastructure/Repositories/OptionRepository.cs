@@ -48,8 +48,18 @@ namespace Calempus360.Infrastructure.Repositories
 
         public async Task<bool> DeleteOptionAsync(Guid id)
         {
-            var entity = await _context.Options.FindAsync(id);
+            var entity = await _context.Options
+                        .Include(o => o.OptionCourses)
+                            .ThenInclude(oc => oc.CourseEntity)
+                        .Include(o => o.OptionCourses)
+                            .ThenInclude(oc => oc.AcademicYearEntity)
+                        .Include(o => o.StudentGroups)
+                        .FirstOrDefaultAsync(o => o.OptionId == id);
             if (entity == null) throw new NotFoundException("Option not found");
+
+            //Clear les relations présents dans la table de liaison
+            entity.OptionCourses.RemoveAll(oc => oc.OptionId == id);
+
             _context.Remove(entity);
             return await _context.SaveChangesAsync() > 0;
         }
@@ -97,17 +107,26 @@ namespace Calempus360.Infrastructure.Repositories
             entity.Name = option.Name;
             entity.Code = option.Code;
             entity.Description = option.Description;
+            entity.UpdatedAt = DateTime.Now;
+
+            //Clear les relations plus valides
+            entity.OptionCourses.RemoveAll(oc => !courses.Contains(oc.CourseEntity.CourseId));
+
             foreach (var id in courses)
             {
                 var courseEntity = await _context.Courses.FindAsync(id);
                 if (courseEntity == null) throw new NotFoundException("Course not found !");
-                entity.OptionCourses.Add(
+
+                if(!entity.OptionCourses.ToList().Any(oc =>  oc.CourseEntity.CourseId == id))
+                {
+                    entity.OptionCourses.Add(
                     new OptionCourseEntity
                     {
                         AcademicYearEntity = academicYearEntity,
                         CourseEntity = courseEntity,
                         OptionEntity = entity,
                     });
+                } 
             }
             await _context.SaveChangesAsync();
             return entity.ToDomainModel();
