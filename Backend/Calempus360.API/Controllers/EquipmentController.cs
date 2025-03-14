@@ -89,34 +89,6 @@ namespace Calempus360.API.Controllers
             return Ok(equipments.Select(e => e.MapToDto()));
         }
 
-        [HttpGet("/api/equipments/universities/{universityId:guid}")]
-        public async Task<IActionResult> GetEquipmentsByUniversity(Guid universityId)
-        {
-            var equipments = await equipmentService.GetEquipmentsByUniversityAsync(universityId);
-            return Ok(equipments.Select(e => e.MapToDto()));
-        }
-
-        [HttpGet("/api/equipments/sites/{siteId:guid}")]
-        public async Task<IActionResult> GetEquipmentsBySite(Guid siteId)
-        {
-            var equipments = await equipmentService.GetEquipmentsBySiteAsync(siteId);
-            return Ok(equipments.Select(e => e.MapToDto()));
-        }
-
-        [HttpGet("/api/equipments/classrooms/{classroomId:guid}")]
-        public async Task<IActionResult> GetEquipmentsByClassroomId(Guid classroomId, [FromQuery] Guid? academicYearId)
-        {
-            var equipments = await equipmentService.GetEquipmentsByClassroomAsync(classroomId, academicYearId);
-            return Ok(equipments.Select(e => e.MapToDto()));
-        }
-
-        [HttpGet("/api/equipments/equipment-types/{equipment-type:guid}")]
-        public async Task<IActionResult> GetEquipmentsByEquipmentTypeId(Guid equipmentTypeId)
-        {
-            var equipments = await equipmentService.GetEquipmentsByEquipmentTypeAsync(equipmentTypeId);
-            return Ok(equipments.Select(e => e.MapToDto()));
-        }
-
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetEquipmentById(Guid id)
         {
