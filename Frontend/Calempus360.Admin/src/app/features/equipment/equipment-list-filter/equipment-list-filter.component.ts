@@ -16,6 +16,8 @@ export class EquipmentListFilterComponent implements OnInit {
   public equipmentTypes$ = this.equipmentService.equipmentTypes$;
   public classrooms$ = this.classroomService.classrooms$;
 
+  params = {};
+
   ngOnInit(): void {
     this.classroomService.getClassroomsByUniversity().subscribe();
     this.equipmentService.getEquipmentTypes().subscribe();
@@ -23,15 +25,21 @@ export class EquipmentListFilterComponent implements OnInit {
 
   onClassroomChange(event: any) {
     const classroomId = event.target.value;
-    this.equipmentService
-      .getEquipments({ classroomId: classroomId })
-      .subscribe();
+
+    this.params = { ...this.params, classroomId: classroomId };
+
+    console.log(this.params);
+
+    this.equipmentService.getEquipments(this.params).subscribe();
   }
 
   onEquipmentTypeChange(event: any) {
     const equipmentTypeId = event.target.value;
-    this.equipmentService
-      .getEquipments({ equipmentTypeId: equipmentTypeId })
-      .subscribe();
+
+    this.params = { ...this.params, equipmentTypeId: equipmentTypeId };
+
+    console.log(this.params);
+
+    this.equipmentService.getEquipments(this.params).subscribe();
   }
 }
