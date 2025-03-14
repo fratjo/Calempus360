@@ -72,6 +72,23 @@ public class EquipmentRepository(Calempus360DbContext dbContext) : IEquipmentRep
 
     #region Equipment
 
+    public async Task<IEnumerable<Equipment>> GetEquipmentsAsync(Guid? universityId, Guid? siteId, Guid? classroomId, Guid? equipmentTypeId)
+    {
+        var equipments = from eq in await dbContext.Equipments
+                                    .Include(eq => eq.EquipmentTypeEntity)
+                                    .Include(eq => eq.ClassroomEquipments)!
+                                        .ThenInclude(ce => ce.ClassroomEntity)
+                                    .Include(eq => eq.UniversitySiteEquipmentEntity)
+                                    .ToListAsync()
+                         where (universityId == null || eq.UniversitySiteEquipmentEntity.UniversityId == universityId) &&
+                               (siteId == null || eq.UniversitySiteEquipmentEntity.SiteId == siteId) &&
+                               (classroomId == null || eq.ClassroomEquipments!.Any(ce => ce.ClassroomId == classroomId)) &&
+                               (equipmentTypeId == null || eq.EquipmentTypeEntity!.EquipmentTypeId == equipmentTypeId)
+                         select eq;
+
+        return equipments.Select(eq => eq.ToDomainModel());
+    }
+
     public async Task<IEnumerable<Equipment>> GetEquipmentsByUniversityAsync(Guid universityId)
     {
         var equipments = await dbContext.Equipments

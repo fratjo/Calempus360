@@ -139,18 +139,16 @@ export class EquipmentService {
   }
 
   getEquipmentsByClassroom(id: string | null = null) {
-    const url = '/api/equipments/classrooms/{classroomId}';
+    const classroomId =
+      id === null ? JSON.parse(sessionStorage.getItem('classroom')!) : id;
 
-    const parsedUrl = url.replace(
-      '{classroomId}',
-      id === null ? JSON.parse(sessionStorage.getItem('classroom')!) : id,
-    );
-
-    return this.http.get<Equipments>(this.URl_BASE + parsedUrl).pipe(
-      tap((s: Equipments) => {
-        this.equipments$.next(s);
-      }),
-    );
+    return this.http
+      .get<Equipments>(`${this.URl_BASE + this.URL}?classroomId=${classroomId}`)
+      .pipe(
+        tap((s: Equipments) => {
+          this.equipments$.next(s);
+        }),
+      );
   }
 
   getEquipmentsByEquipmentType(id: string | null = null) {

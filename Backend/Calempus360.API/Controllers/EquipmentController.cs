@@ -82,6 +82,13 @@ namespace Calempus360.API.Controllers
 
         #region Get
 
+        [HttpGet]
+        public async Task<IActionResult> GetEquipments([FromQuery] Guid? universityId, [FromQuery] Guid? siteId, [FromQuery] Guid? classroomId, [FromQuery] Guid? equipmentTypeId)
+        {
+            var equipments = await equipmentService.GetEquipmentsAsync(universityId, siteId, classroomId, equipmentTypeId);
+            return Ok(equipments.Select(e => e.MapToDto()));
+        }
+
         [HttpGet("/api/equipments/universities/{universityId:guid}")]
         public async Task<IActionResult> GetEquipmentsByUniversity(Guid universityId)
         {

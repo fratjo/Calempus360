@@ -77,6 +77,12 @@ public class EquipmentService(IEquipmentRepository equipmentRepository) : IEquip
 
     #region Equipment
 
+    public Task<IEnumerable<Equipment>> GetEquipmentsAsync(Guid? universityId, Guid? siteId, Guid? classroomId, Guid? equipmentTypeId)
+    {
+        var equipments = equipmentRepository.GetEquipmentsAsync(universityId, siteId, classroomId, equipmentTypeId);
+
+        return equipments;
+    }
     public async Task<IEnumerable<Equipment>> GetEquipmentsByUniversityAsync(Guid universityId)
     {
         var equipments = await equipmentRepository.GetEquipmentsByUniversityAsync(universityId);
@@ -212,6 +218,7 @@ public class EquipmentService(IEquipmentRepository equipmentRepository) : IEquip
 
         return true;
     }
+
 
     #endregion
 }

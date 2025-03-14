@@ -10,6 +10,7 @@ public interface IEquipmentRepository
     Task<Models.EquipmentType> UpdateEquipmentTypeAsync(Models.EquipmentType equipmentType);
     Task<bool> DeleteEquipmentTypeByIdAsync(Guid id);
 
+    Task<IEnumerable<Models.Equipment>> GetEquipmentsAsync(Guid? universityId, Guid? siteId, Guid? classroomId, Guid? equipmentTypeId);
     Task<IEnumerable<Models.Equipment>> GetEquipmentsByUniversityAsync(Guid universityId);
     Task<IEnumerable<Models.Equipment>> GetEquipmentsBySiteAsync(Guid siteId);
     Task<IEnumerable<Models.Equipment>> GetEquipmentsByClassroomAsync(Guid classroomId, Guid? academicYearId);
