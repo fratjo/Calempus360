@@ -63,6 +63,13 @@ public class EquipmentService(IEquipmentRepository equipmentRepository) : IEquip
 
     public async Task<bool> DeleteEquipmentTypeByIdAsync(Guid id)
     {
+        // check if one or more equipment is using this equipment type
+        var equipments = await equipmentRepository.GetEquipmentsByEquipmentTypeAsync(id);
+
+        if (equipments.Any())
+            throw new ValidationException("One or more equipment is using this equipment type");
+
+
         return await equipmentRepository.DeleteEquipmentTypeByIdAsync(id);
     }
 
@@ -84,9 +91,9 @@ public class EquipmentService(IEquipmentRepository equipmentRepository) : IEquip
         return equipments;
     }
 
-    public async Task<IEnumerable<Equipment>> GetEquipmentsByClassroomIdAsync(Guid classroomId, Guid? academicYearId)
+    public async Task<IEnumerable<Equipment>> GetEquipmentsByClassroomAsync(Guid classroomId, Guid? academicYearId)
     {
-        var equipments = await equipmentRepository.GetEquipmentsByClassroomIdAsync(classroomId, academicYearId);
+        var equipments = await equipmentRepository.GetEquipmentsByClassroomAsync(classroomId, academicYearId);
 
         return equipments;
     }
@@ -98,14 +105,21 @@ public class EquipmentService(IEquipmentRepository equipmentRepository) : IEquip
         return equipment;
     }
 
-    public async Task<Equipment> CreateEquipmentAsync(Equipment equipment, Guid equipmentTypeId, Guid siteId, Guid universityId)
+    public async Task<IEnumerable<Equipment>> GetEquipmentsByEquipmentTypeAsync(Guid equipmentTypeId)
+    {
+        var equipments = await equipmentRepository.GetEquipmentsByEquipmentTypeAsync(equipmentTypeId);
+
+        return equipments;
+    }
+
+    public async Task<Equipment> CreateEquipmentAsync(Equipment equipment, Guid equipmentTypeId, Guid? siteId, Guid universityId)
     {
         try
         {
             var equipmentType = await equipmentRepository.GetEquipmentTypeByIdAsync(equipmentTypeId)!;
-            
+
             equipment.SetEquipmentType(equipmentType);
-            
+
             return await equipmentRepository.CreateEquipmentAsync(equipment, siteId, universityId);
         }
         catch (DbUpdateException e)
@@ -125,9 +139,9 @@ public class EquipmentService(IEquipmentRepository equipmentRepository) : IEquip
         try
         {
             var equipmentType = await equipmentRepository.GetEquipmentTypeByIdAsync(equipmentTypeId)!;
-            
+
             equipment.SetEquipmentType(equipmentType);
-            
+
             return await equipmentRepository.CreateEquipmentAsync(equipment, universityId);
         }
         catch (DbUpdateException e)
@@ -141,15 +155,15 @@ public class EquipmentService(IEquipmentRepository equipmentRepository) : IEquip
             throw new Exception(e.Message);
         }
     }
-    
+
     public async Task<Equipment> UpdateEquipmentAsync(Equipment equipment, Guid equipmentTypeId)
     {
         try
         {
             var equipmentType = await equipmentRepository.GetEquipmentTypeByIdAsync(equipmentTypeId)!;
-            
+
             equipment.SetEquipmentType(equipmentType);
-            
+
             return await equipmentRepository.UpdateEquipmentAsync(equipment);
         }
         catch (DbUpdateException e)
@@ -174,28 +188,28 @@ public class EquipmentService(IEquipmentRepository equipmentRepository) : IEquip
     {
         return await equipmentRepository.DeleteEquipmentAsync(id);
     }
-    
+
     public async Task<bool> DeleteEquipmentsByUniversityAsync(Guid universityId)
     {
         var equipments = await equipmentRepository.GetEquipmentsByUniversityAsync(universityId);
-        
+
         foreach (var equipment in equipments)
         {
             await equipmentRepository.DeleteEquipmentAsync(equipment.Id);
         }
-        
+
         return true;
     }
 
     public async Task<bool> DeleteEquipmentsBySiteAsync(Guid siteId)
     {
         var equipments = await equipmentRepository.GetEquipmentsBySiteAsync(siteId);
-        
+
         foreach (var equipment in equipments)
         {
             await equipmentRepository.DeleteEquipmentAsync(equipment.Id);
         }
-        
+
         return true;
     }
 

@@ -15,16 +15,16 @@ export class EquipmentTypeListComponent {
   equipmentTypeList$ = this.equipmentService.equipmentTypes$;
 
   onSelect(equipmentTypeId: string) {
-    this.equipmentService.setEquipment(equipmentTypeId).subscribe();
-    sessionStorage.setItem('equipment', JSON.stringify(equipmentTypeId));
-    this.router.navigate(['equipment', equipmentTypeId]);
+    this.equipmentService.setEquipmentType(equipmentTypeId).subscribe();
+    sessionStorage.setItem('equipment-type', JSON.stringify(equipmentTypeId));
+    this.router.navigate(['equipment-type', equipmentTypeId]);
   }
 
   onEdit(equipmentTypeId: string) {
-    this.router.navigate(['equipment/edit', equipmentTypeId]);
+    this.router.navigate(['equipment-types/edit', equipmentTypeId]);
   }
 
   onDelete(equipmentTypeId: string) {
-    this.equipmentService.deleteEquipment(equipmentTypeId).subscribe();
+    this.equipmentService.deleteEquipmentType(equipmentTypeId).subscribe();
   }
 }

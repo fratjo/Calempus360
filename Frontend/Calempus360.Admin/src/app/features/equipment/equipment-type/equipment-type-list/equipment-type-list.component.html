@@ -6,10 +6,10 @@
       <table class="table-pin-rows table w-full">
         <thead>
           <tr class="pt-2 pb-2">
-            <th></th>
-            <th>Name</th>
-            <th>Code</th>
-            <th class="">Actions</th>
+            <th colspan="1"></th>
+            <th colspan="2">Name</th>
+            <th colspan="2">Code</th>
+            <th colspan="3" class="">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -19,10 +19,10 @@
             let i = $index
           ) {
             <tr class="hover:bg-base-200 group hover:rounded-box">
-              <th>{{ i + 1 }}</th>
-              <td>{{ equipmentType?.name }}</td>
-              <td>{{ equipmentType?.code }}</td>
-              <td class="space-x-2">
+              <th colspan="1">{{ i + 1 }}</th>
+              <td colspan="2">{{ equipmentType?.name }}</td>
+              <td colspan="2">{{ equipmentType?.code }}</td>
+              <td colspan="3" class="space-x-2">
                 <button
                   class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-blue-400 hover:border-blue-400 hover:bg-blue-100"
                   (click)="onSelect(equipmentType.id!)"
@@ -51,7 +51,7 @@
           <tr>
             <td colspan="6" class="text-center">
               <button
-                routerLink="/equipmentTypes/add"
+                routerLink="/equipment-types/add"
                 class="rounded-box cursor-pointer border border-green-400 px-3 py-1 text-green-400 hover:bg-green-100 hover:text-green-500"
               >
                 + Add a new equipmentType

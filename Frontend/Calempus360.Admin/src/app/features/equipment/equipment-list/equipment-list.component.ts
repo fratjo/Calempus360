@@ -21,7 +21,7 @@ export class EquipmentListComponent {
   }
 
   onEdit(equipmentId: string) {
-    this.router.navigate(['equipment/edit', equipmentId]);
+    this.router.navigate(['equipments/edit', equipmentId]);
   }
 
   onDelete(equipmentId: string) {

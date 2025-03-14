@@ -22,6 +22,13 @@ import { ClassroomListComponent } from './features/classroom/classroom-list/clas
 import { ClassroomListPageComponent } from './features/classroom/classroom-list-page/classroom-list-page.component';
 import { SiteListPageComponent } from './features/site/site-list-page/site-list-page.component';
 import { EquipmentListPageComponent } from './features/equipment/equipment-list-page/equipment-list-page.component';
+import { EquipmentAddFormComponent } from './features/equipment/equipment-add-form/equipment-add-form.component';
+import { EquipmentEditFormComponent } from './features/equipment/equipment-edit-form/equipment-edit-form.component';
+import { EquipmentComponent } from './features/equipment/equipment.component';
+import { EquipmentTypeAddFormComponent } from './features/equipment/equipment-type/equipment-type-add-form/equipment-type-add-form.component';
+import { EquipmentTypeEditFormComponent } from './features/equipment/equipment-type/equipment-type-edit-form/equipment-type-edit-form.component';
+import { EquipmentTypeListPageComponent } from './features/equipment/equipment-type/equipment-type-list-page/equipment-type-list-page.component';
+import { EquipmentTypeComponent } from './features/equipment/equipment-type/equipment-type.component';
 
 export const routes: Routes = [
   {
@@ -106,6 +113,41 @@ export const routes: Routes = [
   {
     path: 'equipments',
     component: EquipmentListPageComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'equipment/:id',
+    component: EquipmentComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'equipments/add',
+    component: EquipmentAddFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'equipments/edit/:id',
+    component: EquipmentEditFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'equipment-types',
+    component: EquipmentTypeListPageComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'equipment-type/:id',
+    component: EquipmentTypeComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'equipment-types/add',
+    component: EquipmentTypeAddFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'equipment-types/edit/:id',
+    component: EquipmentTypeEditFormComponent,
     canActivate: [univeristyGuard, academicYearGuard],
   },
   {

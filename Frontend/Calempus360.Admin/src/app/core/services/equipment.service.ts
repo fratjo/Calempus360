@@ -106,7 +106,7 @@ export class EquipmentService {
       );
   }
 
-  // Equipment
+  // Equipment //
 
   getEquipmentsByUniversity() {
     const url = '/api/equipments/universities/{universityId}';
@@ -153,7 +153,21 @@ export class EquipmentService {
     );
   }
 
-  getEquipmentsById(id: string) {
+  getEquipmentsByEquipmentType(id: string | null = null) {
+    const url = '/api/equipments/equipment-types/{equipmentTypeId}';
+    const parsedUrl = url.replace(
+      '{equipmentTypeId}',
+      id === null ? JSON.parse(sessionStorage.getItem('equipmentType')!) : id,
+    );
+
+    return this.http.get<Equipments>(this.URl_BASE + parsedUrl).pipe(
+      tap((s: Equipments) => {
+        this.equipments$.next(s);
+      }),
+    );
+  }
+
+  getEquipmentById(id: string) {
     return this.http.get<Equipment>(this.URl_BASE + this.URL + `/${id}`).pipe(
       tap((s: Equipment) => {
         this.equipment$.next(s);
@@ -171,14 +185,12 @@ export class EquipmentService {
   }
 
   addEquipment(equipment: Equipment) {
-    const url = '/api/equipments/universities/{universityId}/sites/{siteId}';
+    const url = '/api/equipments/universities/{universityId}';
 
-    const parsedUrl = url
-      .replace(
-        '{universityId}',
-        JSON.parse(sessionStorage.getItem('university')!),
-      )
-      .replace('{siteId}', equipment.siteId!);
+    const parsedUrl = url.replace(
+      '{universityId}',
+      JSON.parse(sessionStorage.getItem('university')!),
+    );
 
     return this.http.post<Equipment>(this.URl_BASE + parsedUrl, equipment).pipe(
       tap((s: Equipment) => {

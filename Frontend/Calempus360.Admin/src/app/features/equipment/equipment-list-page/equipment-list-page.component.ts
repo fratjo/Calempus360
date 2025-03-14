@@ -3,6 +3,7 @@ import { EquipmentListComponent } from '../equipment-list/equipment-list.compone
 import { EquipmentTypeListComponent } from '../equipment-type/equipment-type-list/equipment-type-list.component';
 import { EquipmentListFilterComponent } from '../equipment-list-filter/equipment-list-filter.component';
 import { EquipmentService } from '../../../core/services/equipment.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-equipment-list-page',
@@ -10,6 +11,7 @@ import { EquipmentService } from '../../../core/services/equipment.service';
     EquipmentListComponent,
     EquipmentTypeListComponent,
     EquipmentListFilterComponent,
+    RouterLink,
   ],
   templateUrl: './equipment-list-page.component.html',
   styleUrl: './equipment-list-page.component.scss',

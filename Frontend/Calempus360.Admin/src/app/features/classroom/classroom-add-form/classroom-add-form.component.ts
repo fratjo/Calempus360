@@ -49,7 +49,6 @@ export class ClassroomAddFormComponent {
   }
 
   cancel() {
-    this.siteService.site$.value.id;
     this.router.navigate(['classrooms']);
   }
 

@@ -10,11 +10,11 @@
     <select
       [ngClass]="{
         'border-error':
-          classroomForm.controls['name'].touched &&
-          classroomForm.controls['name'].invalid,
+          classroomForm.controls['siteId'].touched &&
+          classroomForm.controls['siteId'].invalid,
         'border-success':
-          classroomForm.controls['name'].touched &&
-          classroomForm.controls['name'].valid,
+          classroomForm.controls['siteId'].touched &&
+          classroomForm.controls['siteId'].valid,
       }"
       class="select focus:outline-none"
       placeholder="Choose a site"
