@@ -149,7 +149,7 @@ namespace Calempus360.API.Controllers
                 model: equipmentRequestDto.Model,
                 description: equipmentRequestDto.Description
             );
-            var updatedEquipment = await equipmentService.UpdateEquipmentAsync(equipment, equipmentRequestDto.EquipmentTypeId);
+            var updatedEquipment = await equipmentService.UpdateEquipmentAsync(equipment, equipmentRequestDto.EquipmentTypeId, equipmentRequestDto.ClassroomId);
             return Ok(updatedEquipment.MapToDto());
         }
 

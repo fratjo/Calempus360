@@ -1,5 +1,5 @@
 <fieldset
-  class="fieldset bg-base-100 border-base-300 rounded-box w-full border p-4 shadow-lg"
+  class="fieldset bg-base-100 border-base-300 rounded-box h-full w-full border p-4 shadow-lg"
 >
   <legend class="fieldset-legend pt-0">Equipment</legend>
   @if (editMode) {
@@ -105,6 +105,33 @@
             }
           }
         </select>
+        <select
+          [ngClass]="{
+            'border-error':
+              equipmentForm.controls['classroomId'].touched &&
+              equipmentForm.controls['classroomId'].invalid,
+            'border-success':
+              equipmentForm.controls['classroomId'].touched &&
+              equipmentForm.controls['classroomId'].valid,
+          }"
+          class="select focus:outline-none"
+          formControlName="classroomId"
+          id="classroomId"
+          class="select focus:outline-none"
+          placeholder="Choose a classroom"
+        >
+          @if (classrooms$ | async; as classrooms) {
+            @for (
+              classroom of classrooms;
+              track classroom?.id;
+              let i = $index
+            ) {
+              <option [value]="classroom.id">
+                {{ classroom.name }} - {{ classroom.code }}
+              </option>
+            }
+          }
+        </select>
         <div class="flex justify-between space-x-4">
           <button
             (click)="cancel()"
@@ -143,6 +170,10 @@
           </h3>
           <h3 class="text-base-content flex flex-row gap-4 text-lg">
             Description : {{ equipment.description }}
+          </h3>
+          <h3 class="text-base-content flex flex-row gap-4 text-lg">
+            Classroom : {{ equipment.classroom?.name }} -
+            {{ equipment.classroom?.code }}
           </h3>
         </div>
         <button

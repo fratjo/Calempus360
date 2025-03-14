@@ -11,6 +11,7 @@ import { Equipment } from '../../core/models/equipment.interface';
 import { EquipmentService } from '../../core/services/equipment.service';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { ClassroomService } from '../../core/services/classroom.service';
 
 @Component({
   selector: 'app-equipment',
@@ -20,9 +21,11 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class EquipmentComponent {
   private equipmentService = inject(EquipmentService);
+  private classroomService = inject(ClassroomService);
 
   public equipment$ = this.equipmentService.equipment$;
   public equipmentTypes$ = this.equipmentService.equipmentTypes$;
+  public classrooms$ = this.classroomService.classrooms$;
 
   public editMode = false;
   public equipmentForm: FormGroup;
@@ -36,6 +39,7 @@ export class EquipmentComponent {
       model: ['', Validators.required],
       description: ['', [Validators.required]],
       equipmentTypeId: ['', Validators.required],
+      classroomId: ['', Validators.required],
     });
   }
 
@@ -62,6 +66,19 @@ export class EquipmentComponent {
             this.equipmentForm
               .get('equipmentTypeId')!
               .setValue(equipmentTypes[index].id);
+          }
+        });
+
+        // select options : set the selected value
+        this.classrooms$.subscribe((classroom) => {
+          if (classroom.length) {
+            const index = classroom.findIndex(
+              (x) => x.id === equipment.classroom?.id,
+            );
+
+            this.equipmentForm
+              .get('classroomId')!
+              .setValue(classroom[index].id);
           }
         });
       });

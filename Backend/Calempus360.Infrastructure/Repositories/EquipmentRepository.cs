@@ -1,3 +1,4 @@
+using System.Runtime.ConstrainedExecution;
 using Calempus360.Core.Interfaces.Equipment;
 using Calempus360.Core.Models;
 using Calempus360.Errors.CustomExceptions;
@@ -190,7 +191,12 @@ public class EquipmentRepository(Calempus360DbContext dbContext) : IEquipmentRep
 
     public async Task<Equipment> UpdateEquipmentAsync(Equipment equipment)
     {
-        var entity = await dbContext.Equipments.FindAsync(equipment.Id);
+        var entity = await dbContext.Equipments
+                            .Include(e => e.ClassroomEquipments)
+                            .Include(e => e.EquipmentTypeEntity)
+                            .Include(e => e.UniversitySiteEquipmentEntity)
+                            .Where(e => e.EquipmentId == equipment.Id)
+                            .FirstOrDefaultAsync();
 
         if (entity == null) throw new NotFoundException("Equipment not found");
 
@@ -200,6 +206,29 @@ public class EquipmentRepository(Calempus360DbContext dbContext) : IEquipmentRep
         entity.Model = equipment.Model;
         entity.Description = equipment.Description;
         entity.UpdatedAt = DateTime.Now;
+
+        entity.EquipmentTypeEntity = await dbContext.EquipmentTypes.FindAsync(equipment.EquipmentType!.Id);
+
+        var classroomEquipments = entity.ClassroomEquipments.Where(ce => ce.EquipmentId == equipment.Id).FirstOrDefault();
+
+        // If exists, remove the current classroom equipment
+        if (classroomEquipments != null)
+        {
+            dbContext.ClassroomsEquipments.Remove(classroomEquipments);
+        }
+
+        // If the equipment has a classroom, add the new classroom equipment
+        if (equipment.Classroom != null)
+        {
+            var newClassroomEquipment = new ClassroomEquipmentEntity
+            {
+                EquipmentId = equipment.Id,
+                ClassroomId = equipment.Classroom.Id,
+                AcademicYearId = Guid.Parse("5068f7e9-eb74-45e4-a13c-2d5d95548c23")
+            };
+
+            dbContext.ClassroomsEquipments.Add(newClassroomEquipment);
+        }
 
         await dbContext.SaveChangesAsync();
 

@@ -22,7 +22,7 @@ public interface IEquipmentService
         Guid universityId);
 
     Task<Models.Equipment> CreateEquipmentAsync(Models.Equipment equipment, Guid equipmentTypeId, Guid universityId);
-    Task<Models.Equipment> UpdateEquipmentAsync(Models.Equipment equipment, Guid equipmentTypeId);
+    Task<Models.Equipment> UpdateEquipmentAsync(Models.Equipment equipment, Guid equipmentTypeId, Guid? classroomId);
     Task<bool> ChangeEquipmentClassroomAsync(Guid equipmentId, Guid classroomId, Guid academciYearId);
     Task<bool> DeleteEquipmentAsync(Guid id);
     Task<bool> DeleteEquipmentsByUniversityAsync(Guid universityId);

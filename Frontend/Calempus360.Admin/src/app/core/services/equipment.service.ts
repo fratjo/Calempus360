@@ -174,6 +174,8 @@ export class EquipmentService {
   }
 
   updateEquipment(equipment: Equipment) {
+    console.log(equipment);
+
     return this.http
       .put<Equipment>(this.URl_BASE + this.URL + `/${equipment.id}`, equipment)
       .pipe(
@@ -181,6 +183,7 @@ export class EquipmentService {
           this.equipments$.next(
             this.equipments$.value.map((e) => (e.id === s.id ? s : e)),
           );
+          this.equipment$.next(s);
         }),
       );
   }

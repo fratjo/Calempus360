@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Calempus360.Core.Interfaces.Classroom;
 using Calempus360.Core.Interfaces.Equipment;
 using Calempus360.Core.Models;
 using Calempus360.Errors.Mappers;
@@ -7,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Calempus360.Services.Services;
 
-public class EquipmentService(IEquipmentRepository equipmentRepository) : IEquipmentService
+public class EquipmentService(IEquipmentRepository equipmentRepository, IClassroomService classroomService) : IEquipmentService
 {
     # region EquipmentType
 
@@ -162,13 +163,21 @@ public class EquipmentService(IEquipmentRepository equipmentRepository) : IEquip
         }
     }
 
-    public async Task<Equipment> UpdateEquipmentAsync(Equipment equipment, Guid equipmentTypeId)
+    public async Task<Equipment> UpdateEquipmentAsync(Equipment equipment, Guid equipmentTypeId, Guid? classroomId)
     {
         try
         {
             var equipmentType = await equipmentRepository.GetEquipmentTypeByIdAsync(equipmentTypeId)!;
 
             equipment.SetEquipmentType(equipmentType);
+
+            if (classroomId != null)
+            {
+                var classroom = await classroomService.GetClassroomByIdAsync(classroomId!.Value);
+
+                if (classroom != null)
+                    equipment.SetClassroom(classroom);
+            }
 
             return await equipmentRepository.UpdateEquipmentAsync(equipment);
         }

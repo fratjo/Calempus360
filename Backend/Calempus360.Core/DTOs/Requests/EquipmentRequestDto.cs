@@ -4,12 +4,13 @@ namespace Calempus360.Core.DTOs.Requests;
 
 public class EquipmentRequestDto
 {
-    public string Name            { get; set; } = string.Empty;
-    public string Code            { get; set; } = string.Empty;
-    public string Brand           { get; set; } = string.Empty;
-    public string Model           { get; set; } = string.Empty;
-    public string Description     { get; set; } = string.Empty;
-    public Guid   EquipmentTypeId { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Code { get; set; } = string.Empty;
+    public string Brand { get; set; } = string.Empty;
+    public string Model { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public Guid EquipmentTypeId { get; set; }
+    public Guid? ClassroomId { get; set; } = null;
 }
 
 public class EquipmentRequestDtoValidator : AbstractValidator<EquipmentRequestDto>
@@ -27,8 +28,8 @@ public class EquipmentRequestDtoValidator : AbstractValidator<EquipmentRequestDt
 
 public class EquipmentTypeRequestDto
 {
-    public string Name        { get; set; } = string.Empty;
-    public string Code        { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string Code { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
 }
 
