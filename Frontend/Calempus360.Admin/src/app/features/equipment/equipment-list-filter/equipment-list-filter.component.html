@@ -1,1 +1,41 @@
-<p>equipment-list-filter works!</p>
+<fieldset
+  class="fieldset bg-base-100 border-base-300 rounded-box w-full border p-4 shadow-lg"
+>
+  <legend class="fieldset-legend pt-0">Filters</legend>
+  <fieldset class="fieldset">
+    <legend class="fieldset-legend">Classroom</legend>
+    <select
+      class="select focus:outline-none"
+      (change)="onClassroomChange($event)"
+      placeholder="Choose a site"
+    >
+      <option [value]="0">All</option>
+      @if (classrooms$ | async; as classrooms) {
+        @for (classroom of classrooms; track classroom?.id; let i = $index) {
+          <option [value]="classroom.id">{{ classroom.name }}</option>
+        }
+      }
+    </select>
+    <span class="fieldset-label">Optional</span>
+  </fieldset>
+  <fieldset class="fieldset">
+    <legend class="fieldset-legend">Equipment Type</legend>
+    <select
+      class="select focus:outline-none"
+      (change)="onEquipmentTypeChange($event)"
+      placeholder="Choose a site"
+    >
+      <option [value]="0">All</option>
+      @if (equipmentTypes$ | async; as equipmentTypes) {
+        @for (
+          equipmentType of equipmentTypes;
+          track equipmentType?.id;
+          let i = $index
+        ) {
+          <option [value]="equipmentType.id">{{ equipmentType.name }}</option>
+        }
+      }
+    </select>
+    <span class="fieldset-label">Optional</span>
+  </fieldset>
+</fieldset>

@@ -104,7 +104,7 @@ namespace Calempus360.API.Controllers
         }
 
         [HttpGet("/api/equipments/equipment-types/{equipment-type:guid}")]
-        public async Task<IActionResult> GetEquipmentsByClassroomId(Guid equipmentTypeId)
+        public async Task<IActionResult> GetEquipmentsByEquipmentTypeId(Guid equipmentTypeId)
         {
             var equipments = await equipmentService.GetEquipmentsByEquipmentTypeAsync(equipmentTypeId);
             return Ok(equipments.Select(e => e.MapToDto()));
