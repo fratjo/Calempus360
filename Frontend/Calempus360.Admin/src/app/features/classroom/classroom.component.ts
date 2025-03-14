@@ -29,7 +29,7 @@ export class ClassroomComponent implements OnInit {
     this.classroom$.subscribe((classroom) => {
       if (classroom) {
         this.equipmentService
-          .getEquipmentsByClassroom(classroom.id)
+          .getEquipments({ classroomId: classroom.id })
           .subscribe();
       }
     });

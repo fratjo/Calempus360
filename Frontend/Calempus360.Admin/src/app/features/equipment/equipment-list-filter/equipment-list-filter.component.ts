@@ -23,13 +23,15 @@ export class EquipmentListFilterComponent implements OnInit {
 
   onClassroomChange(event: any) {
     const classroomId = event.target.value;
-    this.equipmentService.getEquipmentsByClassroom(classroomId).subscribe();
+    this.equipmentService
+      .getEquipments({ classroomId: classroomId })
+      .subscribe();
   }
 
   onEquipmentTypeChange(event: any) {
     const equipmentTypeId = event.target.value;
     this.equipmentService
-      .getEquipmentsByEquipmentType(equipmentTypeId)
+      .getEquipments({ equipmentTypeId: equipmentTypeId })
       .subscribe();
   }
 }

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, tap } from 'rxjs';
 import {
@@ -108,57 +108,33 @@ export class EquipmentService {
 
   // Equipment //
 
-  getEquipmentsByUniversity() {
-    const url = '/api/equipments/universities/{universityId}';
+  getEquipments({
+    universityId,
+    siteId,
+    classroomId,
+    equipmentTypeId,
+  }: {
+    universityId?: string;
+    siteId?: string;
+    classroomId?: string;
+    equipmentTypeId?: string;
+  } = {}) {
+    let params = new HttpParams();
 
-    const parsedUrl = url.replace(
-      '{universityId}',
-      JSON.parse(sessionStorage.getItem('university')!),
-    );
+    if (universityId) {
+      params = params.set('universityId', universityId);
+    }
+    if (siteId) {
+      params = params.set('siteId', siteId);
+    }
+    if (classroomId) {
+      params = params.set('classroomId', classroomId);
+    }
+    if (equipmentTypeId) {
+      params = params.set('equipmentTypeId', equipmentTypeId);
+    }
 
-    return this.http.get<Equipments>(this.URl_BASE + parsedUrl).pipe(
-      tap((s: Equipments) => {
-        this.equipments$.next(s);
-      }),
-    );
-  }
-
-  getEquipmentsBySite(id: string | null = null) {
-    const url = '/api/equipments/sites/{siteId}';
-
-    const parsedUrl = url.replace(
-      '{siteId}',
-      id === null ? JSON.parse(sessionStorage.getItem('site')!) : id,
-    );
-
-    return this.http.get<Equipments>(this.URl_BASE + parsedUrl).pipe(
-      tap((s: Equipments) => {
-        this.equipments$.next(s);
-      }),
-    );
-  }
-
-  getEquipmentsByClassroom(id: string | null = null) {
-    const classroomId =
-      id === null ? JSON.parse(sessionStorage.getItem('classroom')!) : id;
-
-    return this.http
-      .get<Equipments>(`${this.URl_BASE + this.URL}?classroomId=${classroomId}`)
-      .pipe(
-        tap((s: Equipments) => {
-          this.equipments$.next(s);
-        }),
-      );
-  }
-
-  getEquipmentsByEquipmentType(id: string | null = null) {
-    const url = '/api/equipments/equipment-types/{equipmentTypeId}';
-    const parsedUrl = url.replace(
-      '{equipmentTypeId}',
-      id === null ? JSON.parse(sessionStorage.getItem('equipmentType')!) : id,
-    );
-
-    return this.http.get<Equipments>(this.URl_BASE + parsedUrl).pipe(
+    return this.http.get<Equipments>(this.URl_BASE + this.URL, { params }).pipe(
       tap((s: Equipments) => {
         this.equipments$.next(s);
       }),
