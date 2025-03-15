@@ -208,11 +208,18 @@ namespace ScheduleGenerator
                     // -------------------------------------------------------- //
                     // Constraint: Place the equipments required for the course //
                     // -------------------------------------------------------- //
-                    var flyingEquipmentsRequired = new List<Equipement>();
+                    var flyingEquipmentsRequired = new List<Equipement?>();
 
                     if (currentRequiredFlyingEquipments is not null && currentRequiredFlyingEquipments.Any())
                     {
-                        flyingEquipmentsRequired = availableEq.Where(e => currentRequiredFlyingEquipments.Any(ce => ce.Type == e.Type)).ToList();
+                        // if the class has equipments, we must have the flying equipments that are not in the class
+                        // Need to take the first available flying equipments for each type
+                        flyingEquipmentsRequired = currentRequiredFlyingEquipments
+                                                  .Select(e => 
+                                                              availableEq
+                                                                 .FirstOrDefault(ae => 
+                                                                      ae.Type == e.Type))
+                                                  .Where(e => e != null).ToList();
                     }
 
                     // ------------------------- //
@@ -331,18 +338,27 @@ namespace ScheduleGenerator
 
             if (requiredEquipment is not null && requiredEquipment.Any())
             {
+                // si la classe possède des équipements alors on doit avoir les équipements volants qui ne sont pas dans la classe
                 if (currentClass.Equipments is not null && currentClass.Equipments.Any())
                 {
+                    // on récupère les équipements volants qui ne sont pas dans la classe
                     currentRequiredFlyingEquipments = requiredEquipment.Where(e => !currentClass.Equipments.Any(ce => e.Type == ce.Type)).ToList();
-
+                    
+                    // si la classe possède des équipements volants alors on doit avoir les équipements volants qui ne sont pas dans la classe
                     if (currentRequiredFlyingEquipments.Any())
                     {
                         if (!currentRequiredFlyingEquipments.All(e => aEq.Any(eq => eq.Type == e.Type))) return false;
                     }
                 }
+                // si la classe ne possède pas d'équipements alors on doit avoir les équipements volants
                 else
                 {
+                    // si la classe ne possède pas d'équipements alors on doit avoir les équipements volants
+                    // si tous les équipements volants ne sont pas disponibles
                     if (!requiredEquipment.All(e => aEq.Any(eq => eq.Type == e.Type))) return false;
+                    
+                    // on récupère les équipements volants qui ne sont pas dans la classe
+                    currentRequiredFlyingEquipments = requiredEquipment.ToList();
                 }
             }
 
@@ -556,7 +572,8 @@ namespace ScheduleGenerator
             var s = schedule.OrderBy(s => s.Key.Day)
                                 .ThenBy(s => s.Key.TimeSlot.StartHour)
                                 .ThenBy(s => s.Key.Location.Site)
-                                .ThenBy(s => s.Key.Location.Classroom);
+                                .ThenBy(s => s.Key.Location.Classroom)
+                                .ToList();
 
             foreach (var item in s)
             {

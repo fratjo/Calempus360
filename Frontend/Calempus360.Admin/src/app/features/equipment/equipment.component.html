@@ -1,0 +1,181 @@
+<fieldset
+  class="fieldset bg-base-100 border-base-300 rounded-box h-full w-full border p-4 shadow-lg"
+>
+  <legend class="fieldset-legend pt-0">Equipment</legend>
+  @if (editMode) {
+    <div>
+      <form
+        [formGroup]="equipmentForm"
+        (ngSubmit)="save()"
+        class="card-body flex w-64 flex-col space-y-4"
+      >
+        <input
+          [ngClass]="{
+            'border-error':
+              equipmentForm.controls['name'].touched &&
+              equipmentForm.controls['name'].invalid,
+            'border-success':
+              equipmentForm.controls['name'].touched &&
+              equipmentForm.controls['name'].valid,
+          }"
+          type="text"
+          placeholder="Equipment Name"
+          class="input focus:ring-none focus:border-secondary focus:outline-none"
+          formControlName="name"
+        />
+        <input
+          [ngClass]="{
+            'border-error':
+              equipmentForm.controls['code'].touched &&
+              equipmentForm.controls['code'].invalid,
+            'border-success':
+              equipmentForm.controls['code'].touched &&
+              equipmentForm.controls['code'].valid,
+          }"
+          type="text"
+          placeholder="Equipment Code"
+          class="input focus:ring-none focus:border-secondary focus:outline-none"
+          formControlName="code"
+        />
+        <input
+          [ngClass]="{
+            'border-error':
+              equipmentForm.controls['brand'].touched &&
+              equipmentForm.controls['brand'].invalid,
+            'border-success':
+              equipmentForm.controls['brand'].touched &&
+              equipmentForm.controls['brand'].valid,
+          }"
+          type="text"
+          placeholder="Equipment Brand"
+          class="input focus:ring-none focus:border-secondary focus:outline-none"
+          formControlName="brand"
+        />
+        <input
+          [ngClass]="{
+            'border-error':
+              equipmentForm.controls['model'].touched &&
+              equipmentForm.controls['model'].invalid,
+            'border-success':
+              equipmentForm.controls['model'].touched &&
+              equipmentForm.controls['model'].valid,
+          }"
+          type="text"
+          placeholder="Equipment Model"
+          class="input focus:ring-none focus:border-secondary focus:outline-none"
+          formControlName="model"
+        />
+        <input
+          [ngClass]="{
+            'border-error':
+              equipmentForm.controls['description'].touched &&
+              equipmentForm.controls['description'].invalid,
+            'border-success':
+              equipmentForm.controls['description'].touched &&
+              equipmentForm.controls['description'].valid,
+          }"
+          type="text"
+          placeholder="Equipment Description"
+          class="input focus:ring-none focus:border-secondary focus:outline-none"
+          formControlName="description"
+        />
+        <select
+          [ngClass]="{
+            'border-error':
+              equipmentForm.controls['equipmentTypeId'].touched &&
+              equipmentForm.controls['equipmentTypeId'].invalid,
+            'border-success':
+              equipmentForm.controls['equipmentTypeId'].touched &&
+              equipmentForm.controls['equipmentTypeId'].valid,
+          }"
+          class="select focus:outline-none"
+          placeholder="Choose a site"
+          formControlName="equipmentTypeId"
+          id="equipmentTypeId"
+        >
+          @if (equipmentTypes$ | async; as equipmentTypes) {
+            @for (
+              equipmentType of equipmentTypes;
+              track equipmentType?.id;
+              let i = $index
+            ) {
+              <option [value]="equipmentType.id">
+                {{ equipmentType.name }}
+              </option>
+            }
+          }
+        </select>
+        <select
+          class="select focus:outline-none"
+          formControlName="classroomId"
+          id="classroomId"
+          class="select focus:outline-none"
+          placeholder="Choose a classroom"
+        >
+          @if (classrooms$ | async; as classrooms) {
+            <option [value]="'00000000-0000-0000-0000-000000000000'"></option>
+            @for (
+              classroom of classrooms;
+              track classroom?.id;
+              let i = $index
+            ) {
+              <option [value]="classroom.id">
+                {{ classroom.name }} - {{ classroom.code }}
+              </option>
+            }
+          }
+        </select>
+        <div class="flex justify-between space-x-4">
+          <button
+            (click)="cancel()"
+            type="reset"
+            class="rounded-box h-8 cursor-pointer border border-red-400 px-3 py-1 text-red-400 hover:bg-red-100 hover:text-red-500"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            [disabled]="!equipmentForm.valid"
+            class="rounded-box h-8 cursor-pointer border border-blue-400 px-3 py-1 text-blue-400 hover:bg-blue-100 hover:text-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  } @else {
+    @if (equipment$ | async; as equipment) {
+      <div class="flex flex-row justify-between gap-4">
+        <div class="flex flex-col gap-4">
+          <h3 class="text-base-content font-semi text-2xl">
+            {{ equipment.name }} (<span>{{ equipment.code }}</span
+            >)
+          </h3>
+          <h3 class="text-base-content flex flex-row gap-4 text-lg">
+            Brand : {{ equipment.brand }}
+          </h3>
+          <h3 class="text-base-content flex flex-row gap-4 text-lg">
+            Model : {{ equipment.model }}
+          </h3>
+          <h3 class="text-base-content flex flex-row gap-4 text-lg">
+            Type : {{ equipment.equipmentType?.name }} -
+            {{ equipment.equipmentType?.code }}
+          </h3>
+          <h3 class="text-base-content flex flex-row gap-4 text-lg">
+            Description : {{ equipment.description }}
+          </h3>
+          <h3 class="text-base-content flex flex-row gap-4 text-lg">
+            Classroom : {{ equipment.classroom?.name }} -
+            {{ equipment.classroom?.code }}
+          </h3>
+        </div>
+        <button
+          (click)="edit()"
+          class="rounded-box h-8 cursor-pointer border border-green-400 px-3 py-1 text-green-400 hover:bg-green-100 hover:text-green-500"
+        >
+          Edit
+        </button>
+      </div>
+    }
+  }
+</fieldset>

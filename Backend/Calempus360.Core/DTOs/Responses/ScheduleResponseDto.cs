@@ -9,7 +9,7 @@ public class ScheduleResponseDto
 
 public static partial class DtoMapper
 {
-    public static ScheduleResponseDto MapToDTO(this Schedule schedule)
+    public static ScheduleResponseDto MapToDto(this Schedule schedule)
     {
         return new ScheduleResponseDto
         {

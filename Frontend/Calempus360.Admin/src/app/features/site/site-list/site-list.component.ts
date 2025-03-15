@@ -22,6 +22,7 @@ export class SiteListComponent implements OnInit {
 
   onSelect(siteId: string) {
     this.siteService.setSite(siteId).subscribe();
+    sessionStorage.setItem('site', JSON.stringify(siteId));
     this.router.navigate(['site', siteId]);
   }
 

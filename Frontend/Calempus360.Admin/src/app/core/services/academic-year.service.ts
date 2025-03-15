@@ -69,6 +69,10 @@ export class AcademicYearService {
         this.academicYears$.next(
           this.academicYears$.value.filter((a) => a.id !== id),
         );
+        if (this.academicYear$.value.id === id) {
+          this.academicYear$.next({});
+          sessionStorage.removeItem('academicYear');
+        }
       }),
     );
   }

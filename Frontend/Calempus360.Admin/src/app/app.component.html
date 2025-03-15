@@ -1,7 +1,10 @@
 <div class="flex h-screen flex-col bg-slate-100">
   <app-top-bar></app-top-bar>
-  <div class="flex-grow p-2">
-    <router-outlet></router-outlet>
+  <div class="flex w-full flex-grow flex-row gap-2 p-2">
+    <app-side-menu></app-side-menu>
+    <div class="w-full flex-grow">
+      <router-outlet></router-outlet>
+    </div>
   </div>
-  <app-dock-bar></app-dock-bar>
+  <!-- <app-dock-bar></app-dock-bar> -->
 </div>

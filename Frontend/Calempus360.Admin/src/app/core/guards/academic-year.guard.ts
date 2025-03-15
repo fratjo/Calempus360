@@ -6,9 +6,12 @@ export const academicYearGuard: CanActivateFn = () => {
   const academicYearService = inject(AcademicYearService);
   const route = inject(Router);
 
-  if (!academicYearService.isAcademicYear()) {
+  if (
+    !academicYearService.isAcademicYear() &&
+    !sessionStorage.getItem('academicYear') === null
+  ) {
     console.log(
-      'No academic year found, redirecting to academic year change page'
+      'No academic year found, redirecting to academic year change page',
     );
     route.navigate(['academic-year/change']);
     return false;

@@ -1,47 +1,121 @@
-<div>
-  <h1>University</h1>
+<fieldset
+  class="fieldset bg-base-100 border-base-300 rounded-box w-full border p-4 shadow-lg"
+>
+  <legend class="fieldset-legend pt-0">University</legend>
   @if (editMode) {
     <div>
-      <form [formGroup]="universityForm" (ngSubmit)="save()">
-        <mat-form-field>
-          <input matInput placeholder="Name" formControlName="name" />
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="Code" formControlName="code" />
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="Address" formControlName="address" />
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="Phone" formControlName="phone" />
-        </mat-form-field>
-        <div>
-          <button mat-button (click)="cancel()" type="reset">
-            <mat-icon fontIcon="cancel"></mat-icon>Cancel
+      <form
+        [formGroup]="universityForm"
+        (ngSubmit)="save()"
+        class="flex flex-col gap-4"
+      >
+        <input
+          [ngClass]="{
+            'input-error':
+              universityForm.controls['name'].touched &&
+              universityForm.controls['name'].invalid,
+            'input-success':
+              universityForm.controls['name'].touched &&
+              universityForm.controls['name'].valid,
+          }"
+          type="text"
+          placeholder="Type here"
+          class="input focus:ring-none focus:border-secondary focus:outline-none"
+          placeholder="Name"
+          formControlName="name"
+        />
+        <input
+          [ngClass]="{
+            'input-error':
+              universityForm.controls['name'].touched &&
+              universityForm.controls['name'].invalid,
+            'input-success':
+              universityForm.controls['name'].touched &&
+              universityForm.controls['name'].valid,
+          }"
+          type="text"
+          placeholder="Type here"
+          class="input focus:ring-none focus:border-secondary focus:outline-none"
+          placeholder="Code"
+          formControlName="code"
+        />
+        <input
+          [ngClass]="{
+            'input-error':
+              universityForm.controls['name'].touched &&
+              universityForm.controls['name'].invalid,
+            'input-success':
+              universityForm.controls['name'].touched &&
+              universityForm.controls['name'].valid,
+          }"
+          type="text"
+          placeholder="Type here"
+          class="input focus:ring-none focus:border-secondary focus:outline-none"
+          placeholder="Address"
+          formControlName="address"
+        />
+        <input
+          [ngClass]="{
+            'input-error':
+              universityForm.controls['name'].touched &&
+              universityForm.controls['name'].invalid,
+            'input-success':
+              universityForm.controls['name'].touched &&
+              universityForm.controls['name'].valid,
+          }"
+          type="text"
+          placeholder="Type here"
+          class="input focus:ring-none focus:border-secondary focus:outline-none"
+          placeholder="Phone"
+          formControlName="phone"
+        />
+        <div class="flex gap-4">
+          <button
+            (click)="cancel()"
+            type="reset"
+            class="rounded-box h-8 cursor-pointer border border-red-400 px-3 py-1 text-red-400 hover:bg-red-100 hover:text-red-500"
+          >
+            Cancel
           </button>
-          <button mat-button type="submit" [disabled]="!universityForm.valid">
-            <mat-icon fontIcon="save"></mat-icon>Save
+          <button
+            type="submit"
+            [disabled]="!universityForm.valid || !universityForm.dirty"
+            class="rounded-box h-8 cursor-pointer border border-blue-400 px-3 py-1 text-blue-400 hover:bg-blue-100 hover:text-blue-500"
+          >
+            Save
           </button>
         </div>
       </form>
     </div>
   } @else {
     @if (university$ | async; as university) {
-      <div>
-        <h3>Name :</h3>
-        <p>{{ university.name }}</p>
-        <h3>Code :</h3>
-        <p>{{ university.code }}</p>
-        <h3>Address :</h3>
-        <p>{{ university.address }}</p>
-        <h3>Phone :</h3>
-        <p>{{ university.phone }}</p>
-        <button mat-button (click)="edit()">
-          <mat-icon fontIcon="edit"></mat-icon>Edit
+      <div class="flex flex-row justify-between gap-4">
+        <div class="flex flex-col gap-4">
+          <h3 class="text-base-content font-semi text-2xl">
+            {{ university.name }} (<span>{{ university.code }}</span
+            >)
+          </h3>
+          <h3 class="text-base-content flex flex-row gap-4 text-lg">
+            <mat-icon fontIcon="location_on"></mat-icon>{{ university.address }}
+          </h3>
+          <h3 class="text-base-content flex flex-row gap-4 text-lg">
+            <mat-icon fontIcon="phone"></mat-icon>{{ university.phone }}
+          </h3>
+        </div>
+        <button
+          (click)="edit()"
+          class="rounded-box h-8 cursor-pointer border border-green-400 px-3 py-1 text-green-400 hover:bg-green-100 hover:text-green-500"
+        >
+          Edit
         </button>
       </div>
-    } @else {
-      <p>University not found!</p>
     }
   }
-</div>
+</fieldset>
+
+<fieldset
+  class="fieldset bg-base-100 border-base-300 rounded-box w-full border p-4 shadow-lg"
+>
+  <legend class="fieldset-legend">Sites</legend>
+  <app-site-list></app-site-list>
+</fieldset>

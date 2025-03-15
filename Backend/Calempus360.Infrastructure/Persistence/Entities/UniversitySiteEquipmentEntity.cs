@@ -2,10 +2,6 @@
 {
     public class UniversitySiteEquipmentEntity
     {
-        // AcademicYear
-        public Guid AcademicYearId { get; set; }
-        public AcademicYearEntity AcademicYearEntity { get; set; } = null!;
-        
         // Equipment
         public Guid EquipmentId { get; set; }
         public EquipmentEntity EquipmentEntity { get; set; } = null!;

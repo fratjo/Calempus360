@@ -15,6 +15,20 @@ import { AcademicYearEditFormComponent } from './features/academic-year/academic
 import { SiteListComponent } from './features/site/site-list/site-list.component';
 import { SiteAddFormComponent } from './features/site/site-add-form/site-add-form.component';
 import { SiteEditFormComponent } from './features/site/site-edit-form/site-edit-form.component';
+import { ClassroomComponent } from './features/classroom/classroom.component';
+import { ClassroomAddFormComponent } from './features/classroom/classroom-add-form/classroom-add-form.component';
+import { ClassroomEditFormComponent } from './features/classroom/classroom-edit-form/classroom-edit-form.component';
+import { ClassroomListComponent } from './features/classroom/classroom-list/classroom-list.component';
+import { ClassroomListPageComponent } from './features/classroom/classroom-list-page/classroom-list-page.component';
+import { SiteListPageComponent } from './features/site/site-list-page/site-list-page.component';
+import { EquipmentListPageComponent } from './features/equipment/equipment-list-page/equipment-list-page.component';
+import { EquipmentAddFormComponent } from './features/equipment/equipment-add-form/equipment-add-form.component';
+import { EquipmentEditFormComponent } from './features/equipment/equipment-edit-form/equipment-edit-form.component';
+import { EquipmentComponent } from './features/equipment/equipment.component';
+import { EquipmentTypeAddFormComponent } from './features/equipment/equipment-type/equipment-type-add-form/equipment-type-add-form.component';
+import { EquipmentTypeEditFormComponent } from './features/equipment/equipment-type/equipment-type-edit-form/equipment-type-edit-form.component';
+import { EquipmentTypeListPageComponent } from './features/equipment/equipment-type/equipment-type-list-page/equipment-type-list-page.component';
+import { EquipmentTypeComponent } from './features/equipment/equipment-type/equipment-type.component';
 import { StudentGroupsComponent } from './features/student-groups/student-groups.component';
 import { StudentGroupAddFormComponent } from './features/student-groups/student-group-add-form/student-group-add-form.component';
 import { StudentGroupEditFormComponent } from './features/student-groups/student-group-edit-form/student-group-edit-form.component';
@@ -67,7 +81,7 @@ export const routes: Routes = [
   },
   {
     path: 'sites',
-    component: SiteListComponent,
+    component: SiteListPageComponent,
     canActivate: [univeristyGuard, academicYearGuard],
   },
   {
@@ -84,6 +98,65 @@ export const routes: Routes = [
     path: 'sites/edit/:id',
     component: SiteEditFormComponent,
     canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'classrooms',
+    component: ClassroomListPageComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'classroom/:id',
+    component: ClassroomComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'classrooms/add',
+    component: ClassroomAddFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'classrooms/edit/:id',
+    component: ClassroomEditFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'equipments',
+    component: EquipmentListPageComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'equipment/:id',
+    component: EquipmentComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'equipments/add',
+    component: EquipmentAddFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'equipments/edit/:id',
+    component: EquipmentEditFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'equipment-types',
+    component: EquipmentTypeListPageComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'equipment-type/:id',
+    component: EquipmentTypeComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'equipment-types/add',
+    component: EquipmentTypeAddFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'equipment-types/edit/:id',
+    component: EquipmentTypeEditFormComponent,
   },
   {
     path: 'groups',

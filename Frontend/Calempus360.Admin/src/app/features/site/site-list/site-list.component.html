@@ -16,23 +16,30 @@
         </thead>
         <tbody>
           @for (site of sites; track site?.id; let i = $index) {
-            <tr
-              class="hover:bg-primary hover:text-primary-content hover:rounded"
-            >
-              <th>{{ i }}</th>
+            <tr class="hover:bg-base-200 group hover:rounded-box">
+              <th>{{ i + 1 }}</th>
               <td>{{ site?.name }}</td>
               <td>{{ site?.code }}</td>
               <td>{{ site?.address }}</td>
               <td>{{ site?.phone }}</td>
               <td class="space-x-2">
-                <button mat-icon-button (click)="onSelect(site.id!)">
-                  <mat-icon fontIcon="visibility"></mat-icon>
+                <button
+                  class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-blue-400 hover:border-blue-400 hover:bg-blue-100"
+                  (click)="onSelect(site.id!)"
+                >
+                  view
                 </button>
-                <button mat-icon-button (click)="onEdit(site.id!)">
-                  <mat-icon fontIcon="edit"></mat-icon>
+                <button
+                  class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-green-400 hover:border-green-400 hover:bg-green-100"
+                  (click)="onEdit(site.id!)"
+                >
+                  edit
                 </button>
-                <button mat-icon-button (click)="onDelete(site.id!)">
-                  <mat-icon fontIcon="delete"></mat-icon>
+                <button
+                  class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-red-400 hover:border-red-400 hover:bg-red-100"
+                  (click)="onDelete(site.id!)"
+                >
+                  delete
                 </button>
               </td>
             </tr>
@@ -43,8 +50,11 @@
           }
           <tr>
             <td colspan="6" class="text-center">
-              <button routerLink="/sites/add" class="btn btn-primary mr-1 p-1">
-                <mat-icon fontIcon="add"></mat-icon>
+              <button
+                routerLink="/sites/add"
+                class="rounded-box cursor-pointer border border-green-400 px-3 py-1 text-green-400 hover:bg-green-100 hover:text-green-500"
+              >
+                + Add a new site
               </button>
             </td>
           </tr>

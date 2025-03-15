@@ -13,16 +13,17 @@ export class SiteService {
   public site$ = new BehaviorSubject<Site>({});
   public sites$ = new BehaviorSubject<Sites>([]);
 
-  URL = 'http://localhost:5257/api/university/{universityId}/sites';
+  URL = 'http://localhost:5257/api/universities/{universityId}/sites';
 
   isSite(): boolean {
     return !!this.site$.value && !!this.site$.value.id;
   }
 
   getSites() {
-    const universityId = this.universityService.university$.value.id;
-    const url = this.URL.replace('{universityId}', universityId!);
-    console.log(url);
+    const url = this.URL.replace(
+      '{universityId}',
+      JSON.parse(sessionStorage.getItem('university')!),
+    );
 
     return this.http.get<Sites>(url).pipe(
       tap((s: Sites) => {
@@ -32,24 +33,51 @@ export class SiteService {
   }
 
   getSiteById(id: string) {
-    const universityId = this.universityService.university$.value.id;
-    const url = this.URL.replace('{universityId}', universityId!);
+    const url = this.URL.replace(
+      '{universityId}',
+      JSON.parse(sessionStorage.getItem('university')!),
+    );
     return this.http.get<Site>(url + `/${id}`);
   }
 
+  getSiteByEquipmentId(id: string) {
+    const url =
+      'http://localhost:5257/api/equipments/{equipmentId}/site'.replace(
+        '{equipmentId}',
+        id,
+      );
+
+    return this.http.get<Site>(url).pipe(
+      tap({
+        next: (s: Site) => {
+          console.log(s);
+          this.site$.next(s);
+        },
+        error: (err) => {
+          console.error('Error fetching site by equipment ID:', err);
+        },
+      }),
+    );
+  }
+
   setSite(id: string) {
-    const universityId = this.universityService.university$.value.id;
-    const url = this.URL.replace('{universityId}', universityId!);
+    const url = this.URL.replace(
+      '{universityId}',
+      JSON.parse(sessionStorage.getItem('university')!),
+    );
     return this.http.get<Site>(url + `/${id}`).pipe(
       tap((s: Site) => {
         this.site$.next(s);
+        sessionStorage.setItem('site', JSON.stringify(s.id));
       }),
     );
   }
 
   updateSite(site: Site) {
-    const universityId = this.universityService.university$.value.id;
-    const url = this.URL.replace('{universityId}', universityId!);
+    const url = this.URL.replace(
+      '{universityId}',
+      JSON.parse(sessionStorage.getItem('university')!),
+    );
     return this.http.put<Site>(url + `/${site.id}`, site).pipe(
       tap((s: Site) => {
         const sites = this.sites$.value;
@@ -61,8 +89,10 @@ export class SiteService {
   }
 
   addSite(site: Site) {
-    const universityId = this.universityService.university$.value.id;
-    const url = this.URL.replace('{universityId}', universityId!);
+    const url = this.URL.replace(
+      '{universityId}',
+      JSON.parse(sessionStorage.getItem('university')!),
+    );
     return this.http.post<Site>(url, site).pipe(
       tap((s: Site) => {
         this.sites$.next([...this.sites$.value, s]);
@@ -71,11 +101,17 @@ export class SiteService {
   }
 
   deleteSite(id: string) {
-    const universityId = this.universityService.university$.value.id;
-    const url = this.URL.replace('{universityId}', universityId!);
+    const url = this.URL.replace(
+      '{universityId}',
+      JSON.parse(sessionStorage.getItem('university')!),
+    );
     return this.http.delete<Site>(url + `/${id}`).pipe(
       tap((s: Site) => {
         this.sites$.next(this.sites$.value.filter((site) => site.id !== id));
+        if (this.site$.value.id === id) {
+          this.site$.next({});
+          sessionStorage.removeItem('site');
+        }
       }),
     );
   }

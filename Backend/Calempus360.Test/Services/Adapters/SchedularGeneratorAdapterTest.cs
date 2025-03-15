@@ -56,7 +56,7 @@ public class SchedularGeneratorAdapterTest
         classroomEquipment.ClassroomEntity = classroom;
         classroomEquipment.ClassroomId = classroom.ClassroomId;
         
-        equipment.ClassroomEquipmentEntity = classroomEquipment;
+        equipment.ClassroomEquipments = new (){ classroomEquipment };
         classroom.ClassroomEquipments = new (){ classroomEquipment };
         
         #endregion

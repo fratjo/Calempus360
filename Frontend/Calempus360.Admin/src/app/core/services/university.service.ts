@@ -48,6 +48,7 @@ export class UniversityService {
           const index = universities.findIndex((u) => u.id === university.id);
           universities[index] = u;
           this.universities$.next(universities);
+          this.university$.next(u);
         }),
       );
   }
@@ -66,6 +67,10 @@ export class UniversityService {
         this.universities$.next(
           this.universities$.value.filter((u) => u.id !== id),
         );
+        if (this.university$.value.id === id) {
+          this.university$.next({});
+          sessionStorage.removeItem('university');
+        }
       }),
     );
   }

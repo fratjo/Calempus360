@@ -22,13 +22,14 @@ public class SitesRepository(Calempus360DbContext dbContext) : ISiteRepository
 
     public async Task<IEnumerable<Site>> GetSitesByUniversityAsync(Guid universityId)
     {
-        var sites = await dbContext.Sites
+        var sites = from s in await dbContext.Sites
                              .Include(s => s.Classrooms)
                              .Include(s => s.Equipments)
-                             .Where(s => s.UniversityId == universityId)
-                             .ToListAsync();
+                             .ToListAsync()
+                    where s.UniversityId == universityId
+                    select s;
 
-        return sites.Select(s => s.ToDomainModel());
+        return sites.Select(s => s?.ToDomainModel());
     }
 
     public async Task<Site> GetSiteByIdAsync(Guid id)
@@ -61,10 +62,10 @@ public class SitesRepository(Calempus360DbContext dbContext) : ISiteRepository
 
         if (entity == null) throw new NotFoundException("Site not found");
 
-        entity.Name      = site.Name;
-        entity.Code      = site.Code;
-        entity.Address   = site.Address;
-        entity.Phone     = site.Phone;
+        entity.Name = site.Name;
+        entity.Code = site.Code;
+        entity.Address = site.Address;
+        entity.Phone = site.Phone;
         entity.UpdatedAt = site.UpdatedAt;
 
         await dbContext.SaveChangesAsync();
@@ -75,24 +76,24 @@ public class SitesRepository(Calempus360DbContext dbContext) : ISiteRepository
     public async Task<bool> DeleteSiteAsync(Guid id)
     {
         var entity = await dbContext.Sites.FirstOrDefaultAsync(s => s.SiteId == id);
-        
+
         if (entity == null) throw new NotFoundException("Site not found");
-        
+
         dbContext.Sites.Remove(entity);
-        
+
         await dbContext.SaveChangesAsync();
-        
+
         return true;
     }
 
-    public async Task<bool> DeleteSiteByUniversityAsync(Guid universityId)
+    public async Task<bool> DeleteSitesByUniversityAsync(Guid universityId)
     {
         var sites = await dbContext.Sites.Where(s => s.UniversityId == universityId).ToListAsync();
-        
+
         dbContext.Sites.RemoveRange(sites);
-        
+
         await dbContext.SaveChangesAsync();
-        
+
         return true;
     }
 }

@@ -1,9 +1,7 @@
 <div
-  class="card bg-base-100 flex flex-col items-center justify-center rounded-lg"
+  class="card bg-base-100 rounded-box flex h-full flex-col items-center justify-center shadow-lg"
 >
-  <h1 class="card-title mt-4">
-    Edit University : {{ (university$ | async)!.name }}
-  </h1>
+  <h1 class="card-title mt-4">Edit University</h1>
   <form
     [formGroup]="universityForm"
     (ngSubmit)="save()"
@@ -14,7 +12,7 @@
         'border-error':
           universityForm.controls['name'].touched &&
           universityForm.controls['name'].invalid,
-        'border-primary':
+        'border-success':
           universityForm.controls['name'].touched &&
           universityForm.controls['name'].valid,
       }"
@@ -28,7 +26,7 @@
         'border-error':
           universityForm.controls['code'].touched &&
           universityForm.controls['code'].invalid,
-        'border-primary':
+        'border-success':
           universityForm.controls['code'].touched &&
           universityForm.controls['code'].valid,
       }"
@@ -42,7 +40,7 @@
         'border-error':
           universityForm.controls['address'].touched &&
           universityForm.controls['address'].invalid,
-        'border-primary':
+        'border-success':
           universityForm.controls['address'].touched &&
           universityForm.controls['address'].valid,
       }"
@@ -56,7 +54,7 @@
         'border-error':
           universityForm.controls['phone'].touched &&
           universityForm.controls['phone'].invalid,
-        'border-primary':
+        'border-success':
           universityForm.controls['phone'].touched &&
           universityForm.controls['phone'].valid,
       }"
@@ -69,16 +67,16 @@
       <button
         (click)="cancel()"
         type="reset"
-        class="bg-warning btn flex flex-row space-x-2 rounded p-2 text-white"
+        class="rounded-box h-8 cursor-pointer border border-red-400 px-3 py-1 text-red-400 hover:bg-red-100 hover:text-red-500"
       >
-        <mat-icon fontIcon="cancel"></mat-icon>Cancel
+        Cancel
       </button>
       <button
         type="submit"
         [disabled]="!universityForm.valid || !universityForm.dirty"
-        class="bg-success btn flex flex-row rounded p-2 text-white disabled:opacity-50"
+        class="rounded-box h-8 cursor-pointer border border-blue-400 px-3 py-1 text-blue-400 hover:bg-blue-100 hover:text-blue-500"
       >
-        <mat-icon fontIcon="save"></mat-icon>Add
+        Save
       </button>
     </div>
   </form>

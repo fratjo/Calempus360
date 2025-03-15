@@ -29,9 +29,9 @@ public static partial class DtoMapper
             Phone      = site.Phone,
             CreatedAt  = site.CreatedAt,
             UpdatedAt  = site.UpdatedAt,
-            Classrooms = site.Classrooms?.Select(classroom => classroom.MapToDTO()).ToList(),
-            Schedules  = site.Schedules?.Select(schedule => schedule.MapToDTO()).ToList(),
-            Equipments = site.Equipments?.Select(equipment => equipment.MapToDTO()).ToList()
+            Classrooms = site.Classrooms?.Select(classroom => classroom.MapToDto()).ToList(),
+            Schedules  = site.Schedules?.Select(schedule => schedule.MapToDto()).ToList(),
+            Equipments = site.Equipments?.Select(equipment => equipment.MapToDto()).ToList()
         };
     }
 }

@@ -6,7 +6,10 @@ export const univeristyGuard: CanActivateFn = () => {
   const universityService = inject(UniversityService);
   const route = inject(Router);
 
-  if (!universityService.isUniversity()) {
+  if (
+    !universityService.isUniversity() &&
+    sessionStorage.getItem('university') === null
+  ) {
     console.log('No university found, redirecting to university change page');
     route.navigate(['/university/change']);
     return false;

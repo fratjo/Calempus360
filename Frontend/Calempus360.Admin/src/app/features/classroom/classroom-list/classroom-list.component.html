@@ -1,0 +1,65 @@
+@if (classroomList$ | async; as classrooms) {
+  <div class="rounded-box bg-base-100">
+    <div
+      class="rounded-box border-base-content/5 bg-base-100 border-base-content overflow-x-auto"
+    >
+      <table class="table-pin-rows table w-full">
+        <thead>
+          <tr class="pt-2 pb-2">
+            <th></th>
+            <th>Name</th>
+            <th>Code</th>
+            <th>Capacity</th>
+            <th class="">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (classroom of classrooms; track classroom?.id; let i = $index) {
+            <tr class="hover:bg-base-200 group hover:rounded-box">
+              <th>{{ i + 1 }}</th>
+              <td>{{ classroom?.name }}</td>
+              <td>{{ classroom?.code }}</td>
+              <td>{{ classroom?.capacity }}</td>
+              <td class="space-x-2">
+                <button
+                  class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-blue-400 hover:border-blue-400 hover:bg-blue-100"
+                  (click)="onSelect(classroom.id!)"
+                >
+                  view
+                </button>
+                <button
+                  class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-green-400 hover:border-green-400 hover:bg-green-100"
+                  (click)="onEdit(classroom.id!)"
+                >
+                  edit
+                </button>
+                <button
+                  class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-red-400 hover:border-red-400 hover:bg-red-100"
+                  (click)="onDelete(classroom.id!)"
+                >
+                  delete
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="text-center">Classroom empty!</td>
+            </tr>
+          }
+          <tr>
+            <td colspan="6" class="text-center">
+              <button
+                routerLink="/classrooms/add"
+                class="rounded-box cursor-pointer border border-green-400 px-3 py-1 text-green-400 hover:bg-green-100 hover:text-green-500"
+              >
+                + Add a new classroom
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+} @else {
+  <p>Classroom not found!</p>
+}
