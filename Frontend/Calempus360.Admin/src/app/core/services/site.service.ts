@@ -40,6 +40,26 @@ export class SiteService {
     return this.http.get<Site>(url + `/${id}`);
   }
 
+  getSiteByEquipmentId(id: string) {
+    const url =
+      'http://localhost:5257/api/equipments/{equipmentId}/site'.replace(
+        '{equipmentId}',
+        id,
+      );
+
+    return this.http.get<Site>(url).pipe(
+      tap({
+        next: (s: Site) => {
+          console.log(s);
+          this.site$.next(s);
+        },
+        error: (err) => {
+          console.error('Error fetching site by equipment ID:', err);
+        },
+      }),
+    );
+  }
+
   setSite(id: string) {
     const url = this.URL.replace(
       '{universityId}',

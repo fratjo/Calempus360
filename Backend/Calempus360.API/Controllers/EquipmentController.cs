@@ -80,7 +80,7 @@ namespace Calempus360.API.Controllers
 
         #region Equipment
 
-        #region Get
+        #region Gte
 
         [HttpGet]
         public async Task<IActionResult> GetEquipments([FromQuery] Guid? universityId, [FromQuery] Guid? siteId, [FromQuery] Guid? classroomId, [FromQuery] Guid? equipmentTypeId)
@@ -94,6 +94,13 @@ namespace Calempus360.API.Controllers
         {
             var equipment = await equipmentService.GetEquipmentByIdAsync(id);
             return Ok(equipment.MapToDto());
+        }
+
+        [HttpGet("{id:guid}/site")]
+        public async Task<IActionResult> GetEquipmentSite(Guid id)
+        {
+            var site = await equipmentService.GetEquipmentSiteAsync(id);
+            return Ok(site.MapToDto());
         }
 
         #endregion
@@ -118,28 +125,12 @@ namespace Calempus360.API.Controllers
             return CreatedAtAction(nameof(GetEquipmentById), new { id = createdEquipment.Id }, createdEquipment.MapToDto());
         }
 
-        [HttpPost("/api/equipments/universities/{universityId:guid}")]
-        public async Task<IActionResult> CreateEquipment(Guid universityId, [FromBody] EquipmentRequestDto equipmentRequestDto)
-        {
-            var equipment = new Equipment(
-                name: equipmentRequestDto.Name,
-                code: equipmentRequestDto.Code,
-                brand: equipmentRequestDto.Brand,
-                model: equipmentRequestDto.Model,
-                description: equipmentRequestDto.Description
-            );
-
-            var createdEquipment =
-                await equipmentService.CreateEquipmentAsync(equipment, equipmentRequestDto.EquipmentTypeId, universityId);
-            return CreatedAtAction(nameof(GetEquipmentById), new { id = createdEquipment.Id }, createdEquipment.MapToDto());
-        }
-
         #endregion
 
         #region Put
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdateEquipment(Guid id, [FromBody] EquipmentRequestDto equipmentRequestDto)
+        public async Task<IActionResult> UpdateEquipment(Guid id, [FromBody] EquipmentRequestDto equipmentRequestDto, [FromQuery] Guid academicYearId)
         {
             var equipment = new Equipment(
                 id: id,
@@ -149,7 +140,10 @@ namespace Calempus360.API.Controllers
                 model: equipmentRequestDto.Model,
                 description: equipmentRequestDto.Description
             );
-            var updatedEquipment = await equipmentService.UpdateEquipmentAsync(equipment, equipmentRequestDto.EquipmentTypeId, equipmentRequestDto.ClassroomId);
+
+            if (equipmentRequestDto.ClassroomId.ToString().IsNullOrEmpty() || equipmentRequestDto.ClassroomId == Guid.Empty) equipmentRequestDto.ClassroomId = null;
+
+            var updatedEquipment = await equipmentService.UpdateEquipmentAsync(equipment, equipmentRequestDto.EquipmentTypeId, equipmentRequestDto.ClassroomId, academicYearId);
             return Ok(updatedEquipment.MapToDto());
         }
 

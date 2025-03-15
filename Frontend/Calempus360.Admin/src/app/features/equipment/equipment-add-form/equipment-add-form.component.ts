@@ -9,6 +9,7 @@ import {
 import { Router } from '@angular/router';
 import { catchError, of } from 'rxjs';
 import { EquipmentService } from '../../../core/services/equipment.service';
+import { SiteService } from '../../../core/services/site.service';
 
 @Component({
   selector: 'app-equipment-add-form',
@@ -19,7 +20,9 @@ import { EquipmentService } from '../../../core/services/equipment.service';
 export class EquipmentAddFormComponent {
   private readonly router = inject(Router);
   private equipmentService = inject(EquipmentService);
+  private siteService = inject(SiteService);
   public equipmentTypes$ = this.equipmentService.equipmentTypes$;
+  public sites$ = this.siteService.sites$;
   public equipmentForm: FormGroup;
 
   constructor(public fb: FormBuilder) {
@@ -30,6 +33,7 @@ export class EquipmentAddFormComponent {
       model: ['', Validators.required],
       description: ['', [Validators.required]],
       equipmentTypeId: ['', Validators.required],
+      siteId: ['', Validators.required],
     });
   }
 

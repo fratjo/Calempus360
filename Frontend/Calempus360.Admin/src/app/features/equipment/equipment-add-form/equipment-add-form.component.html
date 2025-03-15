@@ -100,6 +100,25 @@
         }
       }
     </select>
+    <select
+      [ngClass]="{
+        'border-error':
+          equipmentForm.controls['siteId'].touched &&
+          equipmentForm.controls['siteId'].invalid,
+        'border-success':
+          equipmentForm.controls['siteId'].touched &&
+          equipmentForm.controls['siteId'].valid,
+      }"
+      class="select focus:outline-none"
+      placeholder="Choose a site"
+      formControlName="siteId"
+    >
+      @if (sites$ | async; as sites) {
+        @for (site of sites; track site?.id; let i = $index) {
+          <option [value]="site.id">{{ site.name }}</option>
+        }
+      }
+    </select>
     <div class="flex justify-between space-x-4">
       <button
         (click)="cancel()"

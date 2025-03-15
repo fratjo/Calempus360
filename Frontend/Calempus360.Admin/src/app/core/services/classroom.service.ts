@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Classroom, Classrooms } from '../models/classroom.interface';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, tap } from 'rxjs';
 import { SiteService } from './site.service';
 import { UniversityService } from './university.service';
@@ -22,34 +22,25 @@ export class ClassroomService {
     return !!this.classroom$.value && !!this.classroom$.value.id;
   }
 
-  getClassroomsByUniversity() {
-    const url =
-      'http://localhost:5257/api/universities/{universityId}/classrooms'.replace(
-        '{universityId}',
-        JSON.parse(sessionStorage.getItem('university')!),
-      );
+  getClassrooms({
+    universityId,
+    siteId,
+  }: {
+    universityId?: string;
+    siteId?: string;
+  }) {
+    let params = new HttpParams();
+    const url = 'http://localhost:5257/api/classrooms';
 
-    return this.http.get<Classrooms>(url).pipe(
-      tap((s: Classrooms) => {
-        this.classrooms$.next(s);
-      }),
-    );
-  }
+    if (universityId) {
+      params = params.append('universityId', universityId);
+    }
 
-  getClassroomsBySite(siteId: string | null = null) {
-    const url = this.URL.replace(
-      '{universityId}',
-      JSON.parse(sessionStorage.getItem('university')!),
-    );
+    if (siteId) {
+      params = params.append('siteId', siteId);
+    }
 
-    const siteUrl = url.replace(
-      '{siteId}',
-      siteId === null ? JSON.parse(sessionStorage.getItem('site')!) : siteId,
-    );
-
-    console.log(siteUrl);
-
-    return this.http.get<Classrooms>(siteUrl).pipe(
+    return this.http.get<Classrooms>(url, { params }).pipe(
       tap((s: Classrooms) => {
         this.classrooms$.next(s);
       }),
@@ -102,7 +93,7 @@ export class ClassroomService {
       '{universityId}',
       JSON.parse(sessionStorage.getItem('university')!),
     );
-    const siteUrl = url.replace('{siteId}', classroom.siteId!);
+    const siteUrl = url.replace('{siteId}', classroom.site!);
 
     return this.http
       .post<Classroom>(siteUrl, {

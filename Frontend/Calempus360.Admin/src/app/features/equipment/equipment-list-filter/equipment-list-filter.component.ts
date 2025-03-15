@@ -33,7 +33,11 @@ export class EquipmentListFilterComponent implements OnInit {
 
   ngOnInit(): void {
     this.siteService.getSites().subscribe();
-    this.classroomService.getClassroomsByUniversity().subscribe();
+    this.classroomService
+      .getClassrooms({
+        universityId: JSON.parse(sessionStorage.getItem('university')!),
+      })
+      .subscribe();
     this.equipmentService.getEquipmentTypes().subscribe();
   }
 
@@ -77,8 +81,8 @@ export class EquipmentListFilterComponent implements OnInit {
     console.log(this.params);
 
     this.equipmentService.getEquipments(this.params).subscribe();
-    this.classrooms$ = this.classroomService.getClassroomsBySite(
-      siteId,
-    ) as BehaviorSubject<Classrooms>;
+    this.classrooms$ = this.classroomService.getClassrooms({
+      siteId: siteId,
+    }) as BehaviorSubject<Classrooms>;
   }
 }

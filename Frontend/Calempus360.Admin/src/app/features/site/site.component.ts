@@ -21,7 +21,7 @@ export class SiteComponent implements OnInit {
 
   ngOnInit() {
     this.classroomService
-      .getClassroomsBySite(JSON.parse(sessionStorage.getItem('site')!))
+      .getClassrooms({ siteId: JSON.parse(sessionStorage.getItem('site')!) })
       .subscribe();
   }
 }

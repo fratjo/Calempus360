@@ -4,7 +4,7 @@ export interface Classroom {
   code?: string;
   capacity?: number;
   equipment?: any[];
-  siteId?: string;
+  site?: string;
 }
 
 export type Classrooms = Classroom[];

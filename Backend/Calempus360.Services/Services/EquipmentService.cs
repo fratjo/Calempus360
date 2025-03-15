@@ -65,7 +65,7 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IClassro
     public async Task<bool> DeleteEquipmentTypeByIdAsync(Guid id)
     {
         // check if one or more equipment is using this equipment type
-        var equipments = await equipmentRepository.GetEquipmentsByEquipmentTypeAsync(id);
+        var equipments = await equipmentRepository.GetEquipmentsAsync(null, null, null, id);
 
         if (equipments.Any())
             throw new ValidationException("One or more equipment is using this equipment type");
@@ -84,26 +84,6 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IClassro
 
         return equipments;
     }
-    public async Task<IEnumerable<Equipment>> GetEquipmentsByUniversityAsync(Guid universityId)
-    {
-        var equipments = await equipmentRepository.GetEquipmentsByUniversityAsync(universityId);
-
-        return equipments;
-    }
-
-    public async Task<IEnumerable<Equipment>> GetEquipmentsBySiteAsync(Guid siteId)
-    {
-        var equipments = await equipmentRepository.GetEquipmentsBySiteAsync(siteId);
-
-        return equipments;
-    }
-
-    public async Task<IEnumerable<Equipment>> GetEquipmentsByClassroomAsync(Guid classroomId, Guid? academicYearId)
-    {
-        var equipments = await equipmentRepository.GetEquipmentsByClassroomAsync(classroomId, academicYearId);
-
-        return equipments;
-    }
 
     public async Task<Equipment> GetEquipmentByIdAsync(Guid id)
     {
@@ -112,14 +92,14 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IClassro
         return equipment;
     }
 
-    public async Task<IEnumerable<Equipment>> GetEquipmentsByEquipmentTypeAsync(Guid equipmentTypeId)
+    public async Task<Site> GetEquipmentSiteAsync(Guid id)
     {
-        var equipments = await equipmentRepository.GetEquipmentsByEquipmentTypeAsync(equipmentTypeId);
+        var equipments = await equipmentRepository.GetEquipmentSiteAsync(id);
 
         return equipments;
     }
 
-    public async Task<Equipment> CreateEquipmentAsync(Equipment equipment, Guid equipmentTypeId, Guid? siteId, Guid universityId)
+    public async Task<Equipment> CreateEquipmentAsync(Equipment equipment, Guid? equipmentTypeId, Guid? siteId, Guid universityId)
     {
         try
         {
@@ -141,29 +121,7 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IClassro
         }
     }
 
-    public async Task<Equipment> CreateEquipmentAsync(Equipment equipment, Guid equipmentTypeId, Guid universityId)
-    {
-        try
-        {
-            var equipmentType = await equipmentRepository.GetEquipmentTypeByIdAsync(equipmentTypeId)!;
-
-            equipment.SetEquipmentType(equipmentType);
-
-            return await equipmentRepository.CreateEquipmentAsync(equipment, universityId);
-        }
-        catch (DbUpdateException e)
-        {
-            if (e.InnerException is SqlException sqlException)
-                sqlException.MapSqlException();
-            throw new ValidationException("Equipment or one or more equipment's field already exists");
-        }
-        catch (Exception e)
-        {
-            throw new Exception(e.Message);
-        }
-    }
-
-    public async Task<Equipment> UpdateEquipmentAsync(Equipment equipment, Guid equipmentTypeId, Guid? classroomId)
+    public async Task<Equipment> UpdateEquipmentAsync(Equipment equipment, Guid? equipmentTypeId, Guid? classroomId, Guid academicYearId)
     {
         try
         {
@@ -179,7 +137,7 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IClassro
                     equipment.SetClassroom(classroom);
             }
 
-            return await equipmentRepository.UpdateEquipmentAsync(equipment);
+            return await equipmentRepository.UpdateEquipmentAsync(equipment, academicYearId);
         }
         catch (DbUpdateException e)
         {
@@ -206,7 +164,7 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IClassro
 
     public async Task<bool> DeleteEquipmentsByUniversityAsync(Guid universityId)
     {
-        var equipments = await equipmentRepository.GetEquipmentsByUniversityAsync(universityId);
+        var equipments = await equipmentRepository.GetEquipmentsAsync(universityId, null, null, null);
 
         foreach (var equipment in equipments)
         {
@@ -218,7 +176,7 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IClassro
 
     public async Task<bool> DeleteEquipmentsBySiteAsync(Guid siteId)
     {
-        var equipments = await equipmentRepository.GetEquipmentsBySiteAsync(siteId);
+        var equipments = await equipmentRepository.GetEquipmentsAsync(null, siteId, null, null);
 
         foreach (var equipment in equipments)
         {

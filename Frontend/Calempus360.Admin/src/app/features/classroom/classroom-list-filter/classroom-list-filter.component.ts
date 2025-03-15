@@ -21,9 +21,13 @@ export class ClassroomListFilterComponent implements OnInit {
 
   public onSiteChange(event: any): void {
     if (event.target.value == 0) {
-      this.ClassroomService.getClassroomsByUniversity().subscribe();
+      this.ClassroomService.getClassrooms({
+        universityId: JSON.parse(sessionStorage.getItem('university')!),
+      }).subscribe();
     } else {
-      this.ClassroomService.getClassroomsBySite(event.target.value).subscribe();
+      this.ClassroomService.getClassrooms({
+        siteId: event.target.value,
+      }).subscribe();
     }
   }
 }

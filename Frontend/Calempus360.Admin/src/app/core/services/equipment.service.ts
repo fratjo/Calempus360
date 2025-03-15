@@ -159,12 +159,14 @@ export class EquipmentService {
   }
 
   addEquipment(equipment: Equipment) {
-    const url = '/api/equipments/universities/{universityId}';
+    const url = '/api/equipments/universities/{universityId}/sites/{siteId}';
 
-    const parsedUrl = url.replace(
-      '{universityId}',
-      JSON.parse(sessionStorage.getItem('university')!),
-    );
+    const parsedUrl = url
+      .replace(
+        '{universityId}',
+        JSON.parse(sessionStorage.getItem('university')!),
+      )
+      .replace('{siteId}', equipment.siteId!);
 
     return this.http.post<Equipment>(this.URl_BASE + parsedUrl, equipment).pipe(
       tap((s: Equipment) => {
@@ -174,10 +176,17 @@ export class EquipmentService {
   }
 
   updateEquipment(equipment: Equipment) {
-    console.log(equipment);
+    let params = new HttpParams().set(
+      'academicYearId',
+      JSON.parse(sessionStorage.getItem('academicYear')!),
+    );
 
     return this.http
-      .put<Equipment>(this.URl_BASE + this.URL + `/${equipment.id}`, equipment)
+      .put<Equipment>(
+        this.URl_BASE + this.URL + `/${equipment.id}`,
+        equipment,
+        { params },
+      )
       .pipe(
         tap((s: Equipment) => {
           this.equipments$.next(

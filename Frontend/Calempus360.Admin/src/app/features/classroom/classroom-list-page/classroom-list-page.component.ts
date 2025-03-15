@@ -13,6 +13,10 @@ export class ClassroomListPageComponent implements OnInit {
   private readonly classroomService = inject(ClassroomService);
 
   ngOnInit(): void {
-    this.classroomService.getClassroomsByUniversity().subscribe();
+    this.classroomService
+      .getClassrooms({
+        universityId: JSON.parse(sessionStorage.getItem('university')!),
+      })
+      .subscribe();
   }
 }

@@ -106,14 +106,6 @@
           }
         </select>
         <select
-          [ngClass]="{
-            'border-error':
-              equipmentForm.controls['classroomId'].touched &&
-              equipmentForm.controls['classroomId'].invalid,
-            'border-success':
-              equipmentForm.controls['classroomId'].touched &&
-              equipmentForm.controls['classroomId'].valid,
-          }"
           class="select focus:outline-none"
           formControlName="classroomId"
           id="classroomId"
@@ -121,6 +113,7 @@
           placeholder="Choose a classroom"
         >
           @if (classrooms$ | async; as classrooms) {
+            <option [value]="'00000000-0000-0000-0000-000000000000'"></option>
             @for (
               classroom of classrooms;
               track classroom?.id;

@@ -9,8 +9,8 @@ public class EquipmentRequestDto
     public string Brand { get; set; } = string.Empty;
     public string Model { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
-    public Guid EquipmentTypeId { get; set; }
-    public Guid? ClassroomId { get; set; } = null;
+    public Guid? EquipmentTypeId { get; set; }
+    public Guid? ClassroomId { get; set; }
 }
 
 public class EquipmentRequestDtoValidator : AbstractValidator<EquipmentRequestDto>
@@ -22,7 +22,6 @@ public class EquipmentRequestDtoValidator : AbstractValidator<EquipmentRequestDt
         RuleFor(x => x.Brand).NotEmpty();
         RuleFor(x => x.Model).NotEmpty();
         RuleFor(x => x.Description).NotEmpty();
-        RuleFor(x => x.EquipmentTypeId).NotEmpty();
     }
 }
 

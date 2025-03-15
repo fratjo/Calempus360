@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormGroup,
   FormBuilder,
@@ -12,6 +12,7 @@ import { EquipmentService } from '../../core/services/equipment.service';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { ClassroomService } from '../../core/services/classroom.service';
+import { SiteService } from '../../core/services/site.service';
 
 @Component({
   selector: 'app-equipment',
@@ -22,6 +23,7 @@ import { ClassroomService } from '../../core/services/classroom.service';
 export class EquipmentComponent {
   private equipmentService = inject(EquipmentService);
   private classroomService = inject(ClassroomService);
+  private siteService = inject(SiteService);
 
   public equipment$ = this.equipmentService.equipment$;
   public equipmentTypes$ = this.equipmentService.equipmentTypes$;
@@ -39,7 +41,7 @@ export class EquipmentComponent {
       model: ['', Validators.required],
       description: ['', [Validators.required]],
       equipmentTypeId: ['', Validators.required],
-      classroomId: ['', Validators.required],
+      classroomId: [''],
     });
   }
 
@@ -70,6 +72,23 @@ export class EquipmentComponent {
         });
 
         // select options : set the selected value
+        if (equipment.classroom) {
+          this.classroomService
+            .getClassroomById(equipment.classroom?.id!)
+            .subscribe((classroom) => {
+              this.classroomService
+                .getClassrooms({ siteId: classroom.site })
+                .subscribe();
+            });
+        } else {
+          this.siteService
+            .getSiteByEquipmentId(equipment.id!)
+            .subscribe((site) => {
+              this.classroomService
+                .getClassrooms({ siteId: site.id })
+                .subscribe();
+            });
+        }
         this.classrooms$.subscribe((classroom) => {
           if (classroom.length) {
             const index = classroom.findIndex(
@@ -92,6 +111,8 @@ export class EquipmentComponent {
   save() {
     this.editMode = !this.editMode;
     if (this.equipmentForm.valid) {
+      console.log(this.equipmentForm.value);
+
       this.equipmentService
         .updateEquipment(this.equipmentForm.value)
         .subscribe();

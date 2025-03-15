@@ -9,19 +9,12 @@ namespace Calempus360.Services.Services;
 
 public class ClassroomService(IClassroomRepository classroomRepository) : IClassroomService
 {
-    public async Task<IEnumerable<Classroom>> GetClassroomsAsync(Guid universityId)
+
+    public Task<IEnumerable<Classroom>> GetClassroomsAsync(Guid? universityId, Guid? siteId)
     {
-        var classrooms = await classroomRepository.GetClassroomsAsync(universityId);
+        var classrooms = classroomRepository.GetClassroomsAsync(universityId, siteId);
         return classrooms;
     }
-
-    public async Task<IEnumerable<Classroom>> GetClassroomsBySiteAsync(Guid siteId)
-    {
-        var classrooms = await classroomRepository.GetClassroomsBySiteAsync(siteId);
-        
-        return classrooms;
-    }
-
     public async Task<Classroom> GetClassroomByIdAsync(Guid id)
     {
         var classroom = await classroomRepository.GetClassroomByIdAsync(id);
@@ -51,7 +44,7 @@ public class ClassroomService(IClassroomRepository classroomRepository) : IClass
         try
         {
             return await classroomRepository.AddEquipmentToClassroomAsync(classroomId, equipmentId, academicYearId);
-        } 
+        }
         catch (DbUpdateException e)
         {
             if (e.InnerException is SqlException sqlException)
@@ -62,7 +55,7 @@ public class ClassroomService(IClassroomRepository classroomRepository) : IClass
         {
             throw new Exception(e.Message);
         }
-        
+
     }
 
     public async Task<Classroom> UpdateClassroomAsync(Classroom classroom)
@@ -90,13 +83,13 @@ public class ClassroomService(IClassroomRepository classroomRepository) : IClass
 
     public async Task<bool> DeleteClassroomsBySiteAsync(Guid siteId)
     {
-        var classrooms = await classroomRepository.GetClassroomsBySiteAsync(siteId);
-        
+        var classrooms = await classroomRepository.GetClassroomsAsync(null, siteId);
+
         foreach (var classroom in classrooms)
         {
             await classroomRepository.DeleteClassroomAsync(classroom.Id);
         }
-        
+
         return true;
     }
 
@@ -104,4 +97,6 @@ public class ClassroomService(IClassroomRepository classroomRepository) : IClass
     {
         return await classroomRepository.RemoveEquipmentFromClassroomAsync(classroomId, equipmentId, academicYearId);
     }
+
+
 }
