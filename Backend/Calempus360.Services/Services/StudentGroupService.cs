@@ -3,7 +3,6 @@ using Calempus360.Core.DTOs.Responses;
 using Calempus360.Core.Interfaces.Group;
 using Calempus360.Core.Models;
 using Calempus360.Errors;
-using Calempus360.Errors.StudentGroup;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -25,8 +24,8 @@ namespace Calempus360.Services.Services
 
         public async Task<StudentGroup> AddStudentGroupAsync(StudentGroup studentGroup, Guid academicYear, Guid option, Guid site)
         {
-            return await _studentGroupRepository.AddStudentGroupAsync(studentGroup, academicYear,option,site);
-            
+            return await _studentGroupRepository.AddStudentGroupAsync(studentGroup, academicYear, option, site);
+
         }
 
         public async Task<bool> DeleteStudentGroupByIdAsync(Guid id)
@@ -46,8 +45,8 @@ namespace Calempus360.Services.Services
         }
 
         public async Task<StudentGroup> UpdateStudentGroupAsync(StudentGroup studentGroup, Guid option, Guid site)
-        { 
-            return await _studentGroupRepository.UpdateStudentGroupAsync(studentGroup,option,site);
+        {
+            return await _studentGroupRepository.UpdateStudentGroupAsync(studentGroup, option, site);
         }
 
 
