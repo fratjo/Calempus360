@@ -14,8 +14,8 @@ public static class StudentGroupMapper
             optionGrade: entity.OptionGrade,
             createdAt: entity.CreatedAt,
             updatedAt: entity.UpdatedAt,
-            site: entity.SiteEntity.ToDomainModel(),
-            option: entity.OptionEntity.ToDomainModel()
+            site: entity.SiteEntity?.ToDomainModel(),
+            option: entity.OptionEntity?.ToDomainModel()
         );
     }
 
@@ -29,8 +29,8 @@ public static class StudentGroupMapper
             OptionGrade      = model.OptionGrade,
             CreatedAt        = model.CreatedAt,
             UpdatedAt        = model.UpdatedAt,
-            SiteEntity       = model.Site.ToEntity(),
-            OptionEntity     = model.Option.ToEntity()
+            SiteEntity       = model.Site?.ToEntity(),
+            OptionEntity     = model.Option?.ToEntity()
         };
     }
 }

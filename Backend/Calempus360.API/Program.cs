@@ -6,12 +6,15 @@ using Calempus360.Core.Interfaces.Classroom;
 using Calempus360.Core.Interfaces.Equipment;
 using Calempus360.Core.Interfaces.Site;
 using Calempus360.Core.Interfaces.University;
+using Calempus360.Core.Interfaces.Group;
 using Calempus360.Infrastructure.Data;
 using Calempus360.Infrastructure.Repositories;
 using Calempus360.Services.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Calempus360.Core.Interfaces.Option;
+using Calempus360.Core.Interfaces.Course;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,17 +37,24 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 // DI Configuration
 // services
+builder.Services.AddScoped<IStudentGroupService,StudentGroupService>();
 builder.Services.AddScoped<IUniversityService, UniversityService>();
 builder.Services.AddScoped<IAcademicYearService, AcademicYearService>();
 builder.Services.AddScoped<ISiteService, SiteService>();
 builder.Services.AddScoped<IClassroomService, ClassroomService>();
 builder.Services.AddScoped<IEquipmentService, EquipmentService>();
+builder.Services.AddScoped<IOptionService, OptionService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
 // repositories
 builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();
 builder.Services.AddScoped<IAcademicYearRepository, AcademicYearRepository>();
-builder.Services.AddScoped<ISiteRepository, SitesRepository>();
+builder.Services.AddScoped<ISiteRepository, SitesRepository>()
 builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
 builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
+builder.Services.AddScoped<IStudentGroupRepository, StudentGroupRepository>();
+builder.Services.AddScoped<IOptionRepository, OptionRepository>();
+builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+
 // handlers
 builder.Services.AddExceptionHandler<ExistingEntityExceptionHandler>();
 builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();

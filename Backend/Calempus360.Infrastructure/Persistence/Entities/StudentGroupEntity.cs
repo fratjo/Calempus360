@@ -16,12 +16,12 @@ public class StudentGroupEntity
     public virtual AcademicYearEntity AcademicYearEntity { get; set; } = null!;
     
     // Site
-    public Guid SiteId { get; set; }
-    public virtual SiteEntity SiteEntity { get; set; } = null!;
+    public Guid? SiteId { get; set; }
+    public virtual SiteEntity? SiteEntity { get; set; } = null!;
     
     // Option
     public Guid OptionId { get; set; }
-    public virtual OptionEntity OptionEntity { get; set; } = null!;
+    public virtual OptionEntity? OptionEntity { get; set; } = null!;
     
     // StudentGroupSessions
     public virtual List<StudentGroupSessionEntity> StudentGroupSessions { get; set; } 

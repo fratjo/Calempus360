@@ -29,6 +29,15 @@ import { EquipmentTypeAddFormComponent } from './features/equipment/equipment-ty
 import { EquipmentTypeEditFormComponent } from './features/equipment/equipment-type/equipment-type-edit-form/equipment-type-edit-form.component';
 import { EquipmentTypeListPageComponent } from './features/equipment/equipment-type/equipment-type-list-page/equipment-type-list-page.component';
 import { EquipmentTypeComponent } from './features/equipment/equipment-type/equipment-type.component';
+import { StudentGroupsComponent } from './features/student-groups/student-groups.component';
+import { StudentGroupAddFormComponent } from './features/student-groups/student-group-add-form/student-group-add-form.component';
+import { StudentGroupEditFormComponent } from './features/student-groups/student-group-edit-form/student-group-edit-form.component';
+import { OptionComponent } from './features/option/option.component';
+import { OptionAddFormComponent } from './features/option/option-add-form/option-add-form.component';
+import { OptionEditFormComponent } from './features/option/option-edit-form/option-edit-form.component';
+import { CourseComponent } from './features/course/course.component';
+import { CourseAddFormComponent } from './features/course/course-add-form/course-add-form.component';
+import { CourseEditFormComponent } from './features/course/course-edit-form/course-edit-form.component';
 
 export const routes: Routes = [
   {
@@ -148,6 +157,50 @@ export const routes: Routes = [
   {
     path: 'equipment-types/edit/:id',
     component: EquipmentTypeEditFormComponent,
+  },
+  {
+    path: 'groups',
+    component: StudentGroupsComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'groups/add',
+    component: StudentGroupAddFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'groups/edit/:id',
+    component: StudentGroupEditFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'options',
+    component: OptionComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'options/add',
+    component: OptionAddFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'options/edit/:id',
+    component: OptionEditFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'courses',
+    component: CourseComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'courses/add',
+    component: CourseAddFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'courses/edit/:id',
+    component: CourseEditFormComponent,
     canActivate: [univeristyGuard, academicYearGuard],
   },
   {

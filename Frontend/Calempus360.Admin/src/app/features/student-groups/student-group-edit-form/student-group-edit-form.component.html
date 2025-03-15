@@ -1,0 +1,98 @@
+<div
+  class="card bg-base-100 flex flex-col items-center justify-center rounded-lg"
+>
+  <h1 class="card-title mt-4">Edit Student Group</h1>
+  <form
+    [formGroup]="studentGroupForm"
+    (ngSubmit)="onSave()"
+    class="card-body flex w-64 flex-col space-y-4"
+  >
+    <input
+    [ngClass]="{
+      'border-error':
+      studentGroupForm.controls['code'].touched &&
+      studentGroupForm.controls['code'].invalid,
+      'border-primary':
+      studentGroupForm.controls['code'].touched && studentGroupForm.controls['code'].valid,
+  }"
+      type="text"
+      placeholder="Code"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="code"
+    />
+    
+    <input
+    [ngClass]="{
+      'border-error':
+      studentGroupForm.controls['numberOfStudents'].touched &&
+      studentGroupForm.controls['numberOfStudents'].invalid,
+      'border-primary':
+      studentGroupForm.controls['numberOfStudents'].touched && studentGroupForm.controls['numberOfStudents'].valid,
+      }"
+      type="number"
+      placeholder="Nbr. of Students"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="numberOfStudents"
+    />
+
+    <input
+    [ngClass]="{
+      'border-error':
+      studentGroupForm.controls['optionGrade'].touched &&
+      studentGroupForm.controls['optionGrade'].invalid,
+      'border-primary':
+      studentGroupForm.controls['optionGrade'].touched && studentGroupForm.controls['optionGrade'].valid,
+    }"
+      type="number"
+      placeholder="Option Grade"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="optionGrade"
+    />
+
+    <select 
+    [ngClass]="{
+      'border-error':
+      studentGroupForm.controls['option'].touched &&
+      studentGroupForm.controls['option'].invalid,
+      'border-primary':
+      studentGroupForm.controls['option'].touched && studentGroupForm.controls['option'].valid,
+    }"
+    formControlName="option" id="option" class="select focus:ring-none focus:border-secondary focus:outline-none">
+        <option [ngValue]="null" disabled>Option</option>
+        <option *ngFor="let option of optionList$ | async" [value]="option.id">
+          {{ option.name }}
+        </option>
+      </select>
+
+    <select 
+    [ngClass]="{
+      'border-error':
+      studentGroupForm.controls['site'].touched &&
+      studentGroupForm.controls['site'].invalid,
+      'border-primary':
+      studentGroupForm.controls['site'].touched && studentGroupForm.controls['site'].valid,
+    }"
+    formControlName="site" id="site" class="select focus:ring-none focus:border-secondary focus:outline-none">
+        <option disabled>Site</option>
+        <option *ngFor="let site of siteList$ | async" [value]="site.id">
+          {{ site.name }}
+        </option>
+      </select>
+    <div class="flex justify-between space-x-4">
+      <button
+        (click)="onCancel()"
+        type="reset"
+        class="bg-warning btn flex flex-row space-x-2 rounded p-2 text-white"
+      >
+        <mat-icon fontIcon="cancel"></mat-icon>Cancel
+      </button>
+      <button
+        type="submit"
+        [disabled]="studentGroupForm.invalid"
+        class="bg-success btn flex flex-row rounded p-2 text-white disabled:opacity-50">
+        <mat-icon fontIcon="save"></mat-icon>Edit
+      </button>
+    </div>
+  </form>
+</div>
+

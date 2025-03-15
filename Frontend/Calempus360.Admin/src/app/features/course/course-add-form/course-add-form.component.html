@@ -1,0 +1,119 @@
+<div
+  class="card bg-base-100 flex flex-col items-center justify-center rounded-lg"
+>
+  <h1 class="card-title mt-4">Add Course</h1>
+  <form
+    [formGroup]="courseForm"
+    (ngSubmit)="onSave()"
+    class="card-body flex w-64 flex-col space-y-4"
+  >
+    <input
+        [ngClass]="{
+            'border-error':
+            courseForm.controls['name'].touched &&
+            courseForm.controls['name'].invalid,
+            'border-primary':
+            courseForm.controls['name'].touched && courseForm.controls['name'].valid,
+        }"
+      type="text"
+      placeholder="Nom"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="name"
+    />
+    <input
+    [ngClass]="{
+        'border-error':
+        courseForm.controls['code'].touched &&
+        courseForm.controls['code'].invalid,
+        'border-primary':
+        courseForm.controls['code'].touched && courseForm.controls['code'].valid,
+    }"
+      type="text"
+      placeholder="Code"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="code"
+    />
+    <input
+    [ngClass]="{
+        'border-error':
+        courseForm.controls['description'].touched &&
+        courseForm.controls['description'].invalid,
+        'border-primary':
+        courseForm.controls['description'].touched && courseForm.controls['description'].valid,
+    }"
+      type="text"
+      placeholder="Description"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="description"
+    />
+    <input
+    [ngClass]="{
+        'border-error':
+        courseForm.controls['totalHours'].touched &&
+        courseForm.controls['totalHours'].invalid,
+        'border-primary':
+        courseForm.controls['totalHours'].touched && courseForm.controls['totalHours'].valid,
+    }"
+      type="number"
+      placeholder="Total Hours"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="totalHours"
+    />
+    <input
+    [ngClass]="{
+        'border-error':
+        courseForm.controls['weeklyHours'].touched &&
+        courseForm.controls['weeklyHours'].invalid,
+        'border-primary':
+        courseForm.controls['weeklyHours'].touched && courseForm.controls['weeklyHours'].valid,
+    }"
+      type="number"
+      placeholder="Weekly Hours"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="weeklyHours"
+    />
+    <input
+    [ngClass]="{
+        'border-error':
+        courseForm.controls['semester'].touched &&
+        courseForm.controls['semester'].invalid,
+        'border-primary':
+        courseForm.controls['semester'].touched && courseForm.controls['semester'].valid,
+    }"
+      type="text"
+      placeholder="Semester"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="semester"
+    />
+    <input
+    [ngClass]="{
+        'border-error':
+        courseForm.controls['credits'].touched &&
+        courseForm.controls['credits'].invalid,
+        'border-primary':
+        courseForm.controls['credits'].touched && courseForm.controls['credits'].valid,
+    }"
+      type="number"
+      placeholder="Credits"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="credits"
+    />
+    <div class="flex justify-between space-x-4">
+      <button
+        (click)="onCancel()"
+        type="reset"
+        class="bg-warning btn flex flex-row space-x-2 rounded p-2 text-white"
+      >
+        <mat-icon fontIcon="cancel"></mat-icon>Cancel
+      </button>
+      <button
+        type="submit"
+        [disabled]="courseForm.invalid"
+        class="bg-success btn flex flex-row rounded p-2 text-white disabled:opacity-50">
+        <mat-icon fontIcon="save"></mat-icon>Add
+      </button>
+    </div>
+  </form>
+</div>
+
+
