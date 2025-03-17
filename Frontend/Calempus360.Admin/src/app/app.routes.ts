@@ -38,6 +38,8 @@ import { OptionEditFormComponent } from './features/option/option-edit-form/opti
 import { CourseComponent } from './features/course/course.component';
 import { CourseAddFormComponent } from './features/course/course-add-form/course-add-form.component';
 import { CourseEditFormComponent } from './features/course/course-edit-form/course-edit-form.component';
+import { StudentGroupViewComponent } from './features/student-groups/student-group-view/student-group-view.component';
+import { OptionViewComponent } from './features/option/option-view/option-view.component';
 
 export const routes: Routes = [
   {
@@ -164,6 +166,11 @@ export const routes: Routes = [
     canActivate: [univeristyGuard, academicYearGuard],
   },
   {
+    path: 'groups/view/:id',
+    component: StudentGroupViewComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
     path: 'groups/add',
     component: StudentGroupAddFormComponent,
     canActivate: [univeristyGuard, academicYearGuard],
@@ -181,6 +188,11 @@ export const routes: Routes = [
   {
     path: 'options/add',
     component: OptionAddFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'options/view/:id',
+    component: OptionViewComponent,
     canActivate: [univeristyGuard, academicYearGuard],
   },
   {

@@ -1,3 +1,24 @@
+<div class="flex w-full flex-col gap-2">
+  <app-legend-card [legend]="'Filters'">
+    <div class="space-x-[6px] border-none flex w-full flex-row">
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Course</legend>
+      <select
+        class="select focus:outline-none"
+        (change)="onCourseChange($event)"
+      >
+        <option [value]="0">All</option>
+        @if (course$ | async; as courses) {
+          @for (course of courses; track course?.id; let i = $index) {
+            <option [value]="course.id">{{ course.name }}</option>
+          }
+        }
+      </select>
+      <span class="fieldset-label">Optional</span>
+    </fieldset>
+  </div>
+  </app-legend-card>
+  <app-legend-card [legend]="'Options'">
 @if (options$ | async; as options) {
     <div class="rounded-box bg-base-100">
       <div
@@ -17,7 +38,7 @@
           <tbody>
             @for (option of options; track option?.id; let i = $index) {
               <tr
-                class="hover:bg-primary hover:text-primary-content hover:rounded"
+                class="hover:bg-base-200 group hover:rounded-box"
               >
                 <th>{{ i }}</th>
                 <td>{{ option?.name }}</td>
@@ -28,11 +49,18 @@
                     }
                 </td>
                 <td class="space-x-2">
-                  <button mat-icon-button >
-                    <mat-icon fontIcon="edit" (click)="onEdit(option.id!)"></mat-icon>
+                  <button
+                  class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-blue-400 hover:border-blue-400 hover:bg-blue-100"
+                  (click)="onSelect(option.id!)">
+                  view
+                </button>
+                  <button class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-green-400 hover:border-green-400 hover:bg-green-100"
+                  (click)="onEdit(option.id!)">
+                  edit
                   </button>
-                  <button mat-icon-button (click)="onDelete(option.id!)">
-                    <mat-icon fontIcon="delete"></mat-icon>
+                  <button class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-red-400 hover:border-red-400 hover:bg-red-100" 
+                  (click)="onDelete(option.id!)">
+                    delete
                   </button>
                 </td>
               </tr>
@@ -43,9 +71,11 @@
             }
             <tr>
               <td colspan="7" class="text-center">
-                <button routerLink="/options/add" class="btn btn-primary mr-1 p-1">
-                  <mat-icon fontIcon="add"></mat-icon>
-                </button>
+                <button
+                routerLink="/options/add"
+                class="rounded-box cursor-pointer border border-green-400 px-3 py-1 text-green-400 hover:bg-green-100 hover:text-green-500">
+                + Add a new option
+              </button>
               </td>
             </tr>
           </tbody>
@@ -55,5 +85,6 @@
   } @else {
     <p>Option not found!</p>
   }
-  
+</app-legend-card>
+</div>
 

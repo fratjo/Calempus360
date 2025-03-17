@@ -84,12 +84,18 @@ export class StudentGroupEditFormComponent implements OnInit {
           alert("Problem while editing the Group")
         }
       },
-      complete: () => this.router.navigate(['/groups'])
+      complete: () => this.goBack()
     });
   }
 
   onCancel(){
-    this.router.navigate(['/groups']);
+    this.goBack();
+  }
+
+  goBack(){
+    const origin = this.route.snapshot.queryParamMap.get('from');
+    if(origin === 'details') this.router.navigate(['/groups/view',this.studentGroup?.id]);
+    else this.router.navigate(['/groups']);
   }
 
 }

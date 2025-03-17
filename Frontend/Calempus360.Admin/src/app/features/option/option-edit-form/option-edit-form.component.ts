@@ -75,12 +75,12 @@ export class OptionEditFormComponent implements OnInit{
         .join('\n');
         alert(errorMessages);
       },
-      complete: () => this.router.navigate(['/options'])
+      complete: () => this.goBack()
     })
   }
 
   onCancel(){
-    this.router.navigate(['/options']);
+    this.goBack();
   }
 
   selectCourse(course: Course, event: Event){
@@ -99,6 +99,12 @@ export class OptionEditFormComponent implements OnInit{
         const formArray = control as FormArray;
         return formArray.length >= 1 ? null : { required: true };
       };
+    }
+
+    goBack(){
+      const origin = this.route.snapshot.queryParamMap.get('from');
+      if(origin === 'details') this.router.navigate(['/options/view',this.option?.id]);
+      else this.router.navigate(['/options']);
     }
 
 }
