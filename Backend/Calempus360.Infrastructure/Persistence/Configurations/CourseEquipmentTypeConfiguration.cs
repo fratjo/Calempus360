@@ -15,34 +15,37 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
         {
             builder.HasKey(ce => new
             {
-                ce.EquipmentTypeId, ce.CourseId, ce.UniversityId, ce.AcademicYearId
+                ce.EquipmentTypeId,
+                ce.CourseId,
+                ce.UniversityId,
+                ce.AcademicYearId
             });
-            
+
             builder.Property(ce => ce.UniversityId).IsRequired();
-            
+
             builder.Property(ce => ce.CourseId).IsRequired();
-            
+
             builder.Property(ce => ce.EquipmentTypeId).IsRequired();
-            
+
             builder.Property(ce => ce.AcademicYearId).IsRequired();
-            
-            builder.Property(ce => ce.Quantity).IsRequired();
-            
+
+            builder.Property(ce => ce.Quantity).IsRequired(); // TODO : Remove
+
             builder
                 .HasOne(ce => ce.EquipmentTypeEntity)
                 .WithMany(ce => ce.CourseEquipmentTypes)
                 .HasForeignKey(ce => ce.EquipmentTypeId).OnDelete(DeleteBehavior.Cascade);
-            
+
             builder
                 .HasOne(ce => ce.CourseEntity)
                 .WithMany(ce => ce.EquipmentTypes)
                 .HasForeignKey(ce => ce.CourseId).OnDelete(DeleteBehavior.Cascade);
-            
+
             builder
                 .HasOne(ce => ce.UniversityEntity)
                 .WithMany(ce => ce.CourseEquipmentTypes)
                 .HasForeignKey(ce => ce.UniversityId).OnDelete(DeleteBehavior.Cascade);
-            
+
             builder
                 .HasOne(ce => ce.AcademicYearEntity)
                 .WithMany(ce => ce.CourseEquipmentTypes)

@@ -16,14 +16,14 @@ namespace Calempus360.API.Controllers
 
         #region Get
 
-        [HttpGet("equipment-types")]
+        [HttpGet("types")]
         public async Task<IActionResult> GetEquipmentTypes()
         {
             var equipmentTypes = await equipmentService.GetEquipmentTypesAsync();
             return Ok(equipmentTypes.Select(et => et.MapToDto()));
         }
 
-        [HttpGet("equipment-types/{id:guid}")]
+        [HttpGet("types/{id:guid}")]
         public async Task<IActionResult> GetEquipmentTypeById(Guid id)
         {
             var equipmentType = await equipmentService.GetEquipmentTypeByIdAsync(id);
@@ -34,7 +34,7 @@ namespace Calempus360.API.Controllers
 
         #region Post
 
-        [HttpPost("equipment-types")]
+        [HttpPost("types")]
         public async Task<IActionResult> CreateEquipmentType([FromBody] EquipmentTypeRequestDto equipmentTypeRequestDto)
         {
             var equipmentType = new EquipmentType(
@@ -50,7 +50,7 @@ namespace Calempus360.API.Controllers
 
         #region Put
 
-        [HttpPut("equipment-types/{id:guid}")]
+        [HttpPut("types/{id:guid}")]
         public async Task<IActionResult> UpdateEquipmentType(Guid id, [FromBody] EquipmentTypeRequestDto equipmentTypeRequestDto)
         {
             var equipmentType = new EquipmentType(
@@ -67,7 +67,7 @@ namespace Calempus360.API.Controllers
 
         #region Delete
 
-        [HttpDelete("equipment-types/{id:guid}")]
+        [HttpDelete("types/{id:guid}")]
         public async Task<IActionResult> DeleteEquipmentType(Guid id)
         {
             var isDeleted = await equipmentService.DeleteEquipmentTypeByIdAsync(id);
@@ -107,8 +107,8 @@ namespace Calempus360.API.Controllers
 
         #region Post
 
-        [HttpPost("/api/equipments/universities/{universityId:guid}/sites/{siteId:guid}")]
-        public async Task<IActionResult> CreateEquipment(Guid universityId, [FromBody] EquipmentRequestDto equipmentRequestDto, Guid? siteId = null)
+        [HttpPost()]
+        public async Task<IActionResult> CreateEquipment([FromQuery] Guid universityId, [FromBody] EquipmentRequestDto equipmentRequestDto, [FromQuery] Guid? siteId = null)
         {
             var equipment = new Equipment(
                 name: equipmentRequestDto.Name,
@@ -147,7 +147,7 @@ namespace Calempus360.API.Controllers
             return Ok(updatedEquipment.MapToDto());
         }
 
-        [HttpPut("{equipmentId:guid}/classrooms/change/{classroomId:guid}")]
+        [HttpPut("{equipmentId:guid}/classrooms/{classroomId:guid}")]
         public async Task<IActionResult> ChangeEquipmentClassroom(Guid equipmentId, Guid classroomId, [FromQuery] Guid academicYearId)
         {
             var result = await equipmentService.ChangeEquipmentClassroomAsync(equipmentId, classroomId, academicYearId);
