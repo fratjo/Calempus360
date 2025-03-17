@@ -17,7 +17,7 @@ namespace Calempus360.Services.Services
             _courseRepository = courseRepository;
         }
 
-        public async Task<Course> AddCourseAsync(Course course, Guid academicYear, Guid universityId, Dictionary<Guid, int> equipmentType)
+        public async Task<Course> AddCourseAsync(Course course, Guid academicYear, Guid universityId, List<Guid> equipmentType)
         {
             return await _courseRepository.AddCourseAsync(course,academicYear, universityId, equipmentType);
         }
@@ -37,7 +37,7 @@ namespace Calempus360.Services.Services
             return await _courseRepository.GetCourseByIdAsync(id);
         }
 
-        public async Task<Course> UpdateCourseAsync(Course course, Guid academicYear, Dictionary<Guid, int> equipmentType, Guid universityId)
+        public async Task<Course> UpdateCourseAsync(Course course, Guid academicYear, List<Guid> equipmentType, Guid universityId)
         {
             return await _courseRepository.UpdateCourseAsync(course, academicYear, equipmentType, universityId);
         }

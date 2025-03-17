@@ -16,7 +16,7 @@ namespace Calempus360.Core.DTOs.Requests
         public int WeeklyHours {  get; set; }
         public string Semester { get; set; } = string.Empty; 
         public int Credits { get; set; }
-        public Dictionary<Guid,int>? EquipmentType { get; set; } = new Dictionary<Guid,int>();
+        public List<Guid> EquipmentType { get; set; } = new List<Guid>();
     }
 
     public class CourseRequestDtoValidator : AbstractValidator<CourseRequestDto>
@@ -30,7 +30,6 @@ namespace Calempus360.Core.DTOs.Requests
             RuleFor(c => c.TotalHours).GreaterThan(0).WithMessage("Course Total Hours must be greater than 0 !");
             RuleFor(c => c.WeeklyHours).GreaterThan(0).WithMessage("Course Weekly Hour must be greater than 0 !");
             RuleFor(c => c.Credits).GreaterThan(0).WithMessage("Course Credits must be greater than 0 !");
-            RuleForEach(c => c.EquipmentType).Must(et => et.Value > 0).WithMessage("All Equipment quantities must be greater than 0 !");
         }
     }
 }

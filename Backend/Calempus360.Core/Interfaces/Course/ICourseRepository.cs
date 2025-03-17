@@ -11,8 +11,8 @@ namespace Calempus360.Core.Interfaces.Course
     {
         Task<IEnumerable<Models.Course>> GetAllCoursesAsync();
         Task<Models.Course?> GetCourseByIdAsync(Guid id);
-        Task<Models.Course> AddCourseAsync(Models.Course course, Guid academicYear, Guid universityId, Dictionary<Guid, int> equipmentType);
-        Task<Models.Course> UpdateCourseAsync(Models.Course course, Guid academicYear, Dictionary<Guid, int> equipmentType, Guid universityId);
+        Task<Models.Course> AddCourseAsync(Models.Course course, Guid academicYear, Guid universityId, List<Guid> equipmentType);
+        Task<Models.Course> UpdateCourseAsync(Models.Course course, Guid academicYear, List<Guid> equipmentType, Guid universityId);
         Task<bool> DeleteCourseAsync(Guid id);
 
     }
