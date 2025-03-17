@@ -8,7 +8,7 @@ export const academicYearGuard: CanActivateFn = () => {
 
   if (
     !academicYearService.isAcademicYear() &&
-    !sessionStorage.getItem('academicYear') === null
+    sessionStorage.getItem('academicYear') === null
   ) {
     console.log(
       'No academic year found, redirecting to academic year change page',

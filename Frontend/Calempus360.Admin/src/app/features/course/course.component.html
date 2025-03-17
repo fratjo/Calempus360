@@ -1,3 +1,4 @@
+<app-legend-card [legend]="'Courses'">
 @if (courseList$ | async; as courses) {
     <div class="rounded-box bg-base-100">
       <div
@@ -21,7 +22,7 @@
           <tbody>
             @for (course of courses; track course?.id; let i = $index) {
               <tr
-                class="hover:bg-primary hover:text-primary-content hover:rounded"
+                class="hover:bg-base-200 group hover:rounded-box"
               >
                 <th>{{ i }}</th>
                 <td>{{ course?.name }}</td>
@@ -31,29 +32,38 @@
                 <td class="pl-14">{{ course?.weeklyHours }}</td>
                 <td class="pl-10">{{ course?.semester }}</td>
                 <td class="pl-9">{{ course?.credits }}</td>
-                <td>@for(equipment of course.equipmentType | keyvalue; track equipment.key;){
-                      {{ equipment.key }}
+                <td>@for(equipment of course.equipmentType ; track equipment.id;){
+                      {{ equipment.name }}
                     }
                 </td>
                 <td class="space-x-2">
-                  <button mat-icon-button >
-                    <mat-icon fontIcon="edit" (click)="onEdit(course.id!)"></mat-icon>
+                  <button
+                  class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-blue-400 hover:border-blue-400 hover:bg-blue-100"
+                  (click)="onSelect(course.id!)">
+                  view
+                </button>
+                  <button class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-green-400 hover:border-green-400 hover:bg-green-100"
+                  (click)="onEdit(course)">
+                  edit
                   </button>
-                  <button mat-icon-button (click)="onDelete(course.id!)">
-                    <mat-icon fontIcon="delete"></mat-icon>
+                  <button class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-red-400 hover:border-red-400 hover:bg-red-100" 
+                  (click)="onDelete(course.id!)">
+                    delete
                   </button>
                 </td>
               </tr>
             } @empty {
               <tr>
-                <td colspan="7" class="text-center">No Courses!</td>
+                <td colspan="10" class="text-center">No Courses!</td>
               </tr>
             }
             <tr>
               <td colspan="10" class="text-center">
-                <button routerLink="/courses/add" class="btn btn-primary mr-1 p-1">
-                  <mat-icon fontIcon="add"></mat-icon>
-                </button>
+                <button
+                routerLink="/courses/add"
+                class="rounded-box cursor-pointer border border-green-400 px-3 py-1 text-green-400 hover:bg-green-100 hover:text-green-500">
+                + Add a new course
+              </button>
               </td>
             </tr>
           </tbody>
@@ -63,6 +73,7 @@
   } @else {
     <p>Course not found!</p>
   }
+</app-legend-card>
   
 
 

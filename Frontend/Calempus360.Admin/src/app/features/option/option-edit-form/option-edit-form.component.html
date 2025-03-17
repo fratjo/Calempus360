@@ -47,7 +47,8 @@
       formControlName="description"
     />
     <details class="dropdown">
-      <summary 
+      <summary
+      (click)="this.optionForm.controls['courses'].markAsTouched();"
       [ngClass]="{
         'border-error':
         coursesArray.touched &&
@@ -59,7 +60,7 @@
         <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
           <li *ngFor="let course of courseList$ | async" [value]="course.id">
             <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" [value]="course.id" (change)="selectCourse(course,$event)"
+              <input type="checkbox" [value]="course.id"  (change)="selectCourse(course,$event)"
                  class="checkbox checkbox-primary" [checked]="selectedCourses.includes(course.id!)"/>
               <span>{{ course.name }}</span>
             </label>

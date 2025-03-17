@@ -12,15 +12,15 @@ public class StudentGroupEntity
     // Navigation Properties
     
     // AcademicYear
-    public Guid AcademicYearId { get; set; }
-    public virtual AcademicYearEntity AcademicYearEntity { get; set; } = null!;
+    public Guid? AcademicYearId { get; set; }
+    public virtual AcademicYearEntity? AcademicYearEntity { get; set; } = null!;
     
     // Site
     public Guid? SiteId { get; set; }
     public virtual SiteEntity? SiteEntity { get; set; } = null!;
     
     // Option
-    public Guid OptionId { get; set; }
+    public Guid? OptionId { get; set; }
     public virtual OptionEntity? OptionEntity { get; set; } = null!;
     
     // StudentGroupSessions

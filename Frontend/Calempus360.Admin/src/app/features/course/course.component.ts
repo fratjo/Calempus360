@@ -5,10 +5,13 @@ import { AsyncPipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
+import { LegendCardComponent } from "../../shared/components/legend-card/legend-card.component";
+import { EquipmentService } from '../../core/services/equipment.service';
+import { Course } from '../../core/models/course.interface';
 
 @Component({
   selector: 'app-course',
-  imports: [RouterLink, AsyncPipe, MatIconModule, MatButtonModule, CommonModule],
+  imports: [RouterLink, AsyncPipe, MatIconModule, MatButtonModule, CommonModule, LegendCardComponent],
   templateUrl: './course.component.html',
   styleUrl: './course.component.scss'
 })
@@ -16,7 +19,7 @@ export class CourseComponent implements OnInit{
   
   private readonly router = inject(Router);
   private readonly courseService = inject(CourseService);
-
+  private readonly equipmentTypeService = inject(EquipmentService);
   courseList$ = this.courseService.courses$;
 
   ngOnInit(): void {
@@ -27,8 +30,13 @@ export class CourseComponent implements OnInit{
     this.courseService.getCourses();
   }
 
-  onEdit(id: string){
-    this.router.navigate(['/courses/edit',id]);
+  onSelect(id: string){
+
+  }
+
+  onEdit(id: Course){
+    console.log(id);
+    this.router.navigate(['/courses/edit',id.id]);
   }
 
   onDelete(id: string){

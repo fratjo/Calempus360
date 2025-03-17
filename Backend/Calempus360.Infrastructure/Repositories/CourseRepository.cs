@@ -29,21 +29,18 @@ namespace Calempus360.Infrastructure.Repositories
             if (academicYearEntity == null) throw new NotFoundException("Academic Year not found!");
             var entity = course.ToEntity();
 
-            if(course.EquipmentTypes is not null)
+            foreach (var equipmentTypeId in equipmentType)
             {
-                foreach (var equipmentTypeId in equipmentType)
-                {
-                    var equipmentEntity = await _context.EquipmentTypes.FindAsync(equipmentTypeId);
-                    if (equipmentEntity == null) throw new NotFoundException("Equipment Type not found!");
-                    entity.EquipmentTypes.Add(
-                        new CourseEquipmentTypeEntity
-                        {
-                            AcademicYearEntity = academicYearEntity,
-                            CourseEntity = entity,
-                            EquipmentTypeEntity = equipmentEntity,
-                            UniversityEntity = universityEntity,
-                        });
-                }
+                var equipmentEntity = await _context.EquipmentTypes.FindAsync(equipmentTypeId);
+                if (equipmentEntity == null) throw new NotFoundException("Equipment Type not found!");
+                entity.EquipmentTypes.Add(
+                    new CourseEquipmentTypeEntity
+                    {
+                        AcademicYearEntity = academicYearEntity,
+                        CourseEntity = entity,
+                        EquipmentTypeEntity = equipmentEntity,
+                        UniversityEntity = universityEntity,
+                    });
             }
 
             await _context.Courses.AddAsync(entity);

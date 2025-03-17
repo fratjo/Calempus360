@@ -50,9 +50,5 @@ public class Calempus360DbContext(DbContextOptions<Calempus360DbContext> options
         modelBuilder.ApplyConfiguration(new EquipmentSessionConfiguration());
         modelBuilder.ApplyConfiguration(new StudentGroupSessionConfiguration());
 
-        foreach (var fk in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
-        {
-            fk.DeleteBehavior = DeleteBehavior.NoAction;
-        }
     }
 }
