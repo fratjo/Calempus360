@@ -22,33 +22,26 @@ export class EquipmentService {
   public equipmentType$ = new BehaviorSubject<Equipment>({});
   public equipmentTypes$ = new BehaviorSubject<Equipments>([]);
 
-  URL = '/api/equipments';
-  URl_BASE = 'http://localhost:5257';
+  URL = 'http://localhost:5257/api/equipments';
 
   isEquipment(): boolean {
     return !!this.equipment$.value && !!this.equipment$.value.id;
   }
 
   getEquipmentTypes() {
-    return this.http
-      .get<EquipmentTypes>(this.URl_BASE + this.URL + '/equipment-types')
-      .pipe(
-        tap((s: EquipmentTypes) => {
-          this.equipmentTypes$.next(s);
-        }),
-      );
+    return this.http.get<EquipmentTypes>(this.URL + '/types').pipe(
+      tap((s: EquipmentTypes) => {
+        this.equipmentTypes$.next(s);
+      }),
+    );
   }
 
   getEquipmentTypeById(id: string) {
-    return this.http
-      .get<EquipmentType>(
-        this.URl_BASE + this.URL + '/equipment-types' + `/${id}`,
-      )
-      .pipe(
-        tap((s: EquipmentType) => {
-          this.equipmentType$.next(s);
-        }),
-      );
+    return this.http.get<EquipmentType>(this.URL + '/types' + `/${id}`).pipe(
+      tap((s: EquipmentType) => {
+        this.equipmentType$.next(s);
+      }),
+    );
   }
 
   setEquipmentType(id: string) {
@@ -62,10 +55,7 @@ export class EquipmentService {
 
   addEquipmentType(equipmentType: EquipmentType) {
     return this.http
-      .post<EquipmentType>(
-        this.URl_BASE + this.URL + '/equipment-types',
-        equipmentType,
-      )
+      .post<EquipmentType>(this.URL + '/types', equipmentType)
       .pipe(
         tap((s: EquipmentType) => {
           this.equipmentTypes$.next([...this.equipmentTypes$.value, s]);
@@ -76,7 +66,7 @@ export class EquipmentService {
   updateEquipmentType(equipmentType: EquipmentType) {
     return this.http
       .put<EquipmentType>(
-        this.URl_BASE + this.URL + '/equipment-types' + `/${equipmentType.id}`,
+        this.URL + '/types' + `/${equipmentType.id}`,
         equipmentType,
       )
       .pipe(
@@ -89,21 +79,17 @@ export class EquipmentService {
   }
 
   deleteEquipmentType(id: string) {
-    return this.http
-      .delete<EquipmentType>(
-        this.URl_BASE + this.URL + '/equipment-types' + `/${id}`,
-      )
-      .pipe(
-        tap(() => {
-          this.equipmentTypes$.next(
-            this.equipmentTypes$.value.filter((e) => e.id !== id),
-          );
-          if (this.equipmentType$.value.id === id) {
-            this.equipmentType$.next({});
-            sessionStorage.removeItem('equipmentType');
-          }
-        }),
-      );
+    return this.http.delete<EquipmentType>(this.URL + '/types' + `/${id}`).pipe(
+      tap(() => {
+        this.equipmentTypes$.next(
+          this.equipmentTypes$.value.filter((e) => e.id !== id),
+        );
+        if (this.equipmentType$.value.id === id) {
+          this.equipmentType$.next({});
+          sessionStorage.removeItem('equipmentType');
+        }
+      }),
+    );
   }
 
   // Equipment //
@@ -134,7 +120,7 @@ export class EquipmentService {
       params = params.set('equipmentTypeId', equipmentTypeId);
     }
 
-    return this.http.get<Equipments>(this.URl_BASE + this.URL, { params }).pipe(
+    return this.http.get<Equipments>(this.URL, { params }).pipe(
       tap((s: Equipments) => {
         this.equipments$.next(s);
       }),
@@ -142,7 +128,7 @@ export class EquipmentService {
   }
 
   getEquipmentById(id: string) {
-    return this.http.get<Equipment>(this.URl_BASE + this.URL + `/${id}`).pipe(
+    return this.http.get<Equipment>(this.URL + `/${id}`).pipe(
       tap((s: Equipment) => {
         this.equipment$.next(s);
       }),
@@ -150,7 +136,7 @@ export class EquipmentService {
   }
 
   setEquipment(id: string) {
-    return this.http.get<Equipment>(this.URl_BASE + this.URL + `/${id}`).pipe(
+    return this.http.get<Equipment>(this.URL + `/${id}`).pipe(
       tap((s: Equipment) => {
         this.equipment$.next(s);
         sessionStorage.setItem('equipment', JSON.stringify(s.id));
@@ -159,16 +145,11 @@ export class EquipmentService {
   }
 
   addEquipment(equipment: Equipment) {
-    const url = '/api/equipments/universities/{universityId}/sites/{siteId}';
+    let params = new HttpParams()
+      .set('universityId', JSON.parse(sessionStorage.getItem('university')!))
+      .set('siteId', equipment.siteId!);
 
-    const parsedUrl = url
-      .replace(
-        '{universityId}',
-        JSON.parse(sessionStorage.getItem('university')!),
-      )
-      .replace('{siteId}', equipment.siteId!);
-
-    return this.http.post<Equipment>(this.URl_BASE + parsedUrl, equipment).pipe(
+    return this.http.post<Equipment>(this.URL, equipment, { params }).pipe(
       tap((s: Equipment) => {
         this.equipments$.next([...this.equipments$.value, s]);
       }),
@@ -182,11 +163,7 @@ export class EquipmentService {
     );
 
     return this.http
-      .put<Equipment>(
-        this.URl_BASE + this.URL + `/${equipment.id}`,
-        equipment,
-        { params },
-      )
+      .put<Equipment>(this.URL + `/${equipment.id}`, equipment, { params })
       .pipe(
         tap((s: Equipment) => {
           this.equipments$.next(
@@ -198,18 +175,16 @@ export class EquipmentService {
   }
 
   deleteEquipment(id: string) {
-    return this.http
-      .delete<Equipment>(this.URl_BASE + this.URL + `/${id}`)
-      .pipe(
-        tap(() => {
-          this.equipments$.next(
-            this.equipments$.value.filter((e) => e.id !== id),
-          );
-          if (this.equipment$.value.id === id) {
-            this.equipment$.next({});
-            sessionStorage.removeItem('equipment');
-          }
-        }),
-      );
+    return this.http.delete<Equipment>(this.URL + `/${id}`).pipe(
+      tap(() => {
+        this.equipments$.next(
+          this.equipments$.value.filter((e) => e.id !== id),
+        );
+        if (this.equipment$.value.id === id) {
+          this.equipment$.next({});
+          sessionStorage.removeItem('equipment');
+        }
+      }),
+    );
   }
 }

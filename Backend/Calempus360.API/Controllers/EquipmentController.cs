@@ -80,7 +80,7 @@ namespace Calempus360.API.Controllers
 
         #region Equipment
 
-        #region Gte
+        #region Get
 
         [HttpGet]
         public async Task<IActionResult> GetEquipments([FromQuery] Guid? universityId, [FromQuery] Guid? siteId, [FromQuery] Guid? classroomId, [FromQuery] Guid? equipmentTypeId)
