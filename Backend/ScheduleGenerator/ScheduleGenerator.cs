@@ -35,6 +35,37 @@ namespace ScheduleGenerator
             var groupsCapacity = courseGroups.Sum(c => c.GetCapacity());
             System.Console.WriteLine("Groups capacity: " + groupsCapacity);
 
+            // ---------------------------------------------------------------- //
+            // Pre condition: Check if there are any classes available to place //
+            // ---------------------------------------------------------------- //
+            if (classes.Count == 0)
+            {
+                throw new Exception("No schedule possible: no classes available.");
+            }
+
+            // ----------------------------------------------------------------- //
+            // Pre condition: Check if there are any course groups to schedule  //
+            // ----------------------------------------------------------------- //
+            if (courseGroups.Count == 0)
+            {
+                throw new Exception("No schedule possible: no course groups available.");
+            }
+
+            // ----------------------------------------------------------------- //
+            // Pre condition: Check if there are any days of the week available  //
+            // ----------------------------------------------------------------- //
+            if (daysOfWeek.Count == 0)
+            {
+                throw new Exception("No schedule possible: no days of the week available.");
+            }
+
+            // ----------------------------------------------------------------- //
+            // Pre condition: Check if there are any hours available             //
+            // ----------------------------------------------------------------- //
+            if (hours.Count == 0)
+            {
+                throw new Exception("No schedule possible: no hours available.");
+            }
             // -------------------------------------------------------------------------------------- //
             // Pre conditions : Check if there is enough time slots and capacity to place all groups  // 
             // -------------------------------------------------------------------------------------- //
@@ -215,11 +246,11 @@ namespace ScheduleGenerator
                         // if the class has equipments, we must have the flying equipments that are not in the class
                         // Need to take the first available flying equipments for each type
                         flyingEquipmentsRequired = currentRequiredFlyingEquipments
-                                                  .Select(e => 
-                                                              availableEq
-                                                                 .FirstOrDefault(ae => 
-                                                                      ae.Type == e.Type))
-                                                  .Where(e => e != null).ToList();
+                                                    .Select(e =>
+                                                        availableEq
+                                                        .FirstOrDefault(ae =>
+                                                                        ae.Type == e.Type))
+                                                    .Where(e => e != null).ToList();
                     }
 
                     // ------------------------- //
@@ -325,12 +356,12 @@ namespace ScheduleGenerator
         {
             var currentSiteFlyingEquipments = flyingEquipments.Where(f => f.Site == currentClass.Site).Select(f => f).ToList();
 
-            List<Equipement> takenEq = schedule.Where(s =>
+            List<Equipement?> takenEq = schedule.Where(s =>
                                                 s.Key.Day == currentDay &&
                                                 IsSameTimeSlot(s.Key.TimeSlot, timeSlot) &&
                                                 s.Key.Location.Site == currentClass.Site).SelectMany(s => s.Value.FlyingEquipments).ToList();
 
-            availableEq = currentSiteFlyingEquipments.Where(e => !takenEq.Any(eq => eq.Code == e.Code)).ToList();
+            availableEq = currentSiteFlyingEquipments.Where(e => !takenEq.Any(eq => eq is not null && eq.Code == e.Code)).ToList();
 
             var aEq = availableEq;
 
@@ -343,7 +374,7 @@ namespace ScheduleGenerator
                 {
                     // on récupère les équipements volants qui ne sont pas dans la classe
                     currentRequiredFlyingEquipments = requiredEquipment.Where(e => !currentClass.Equipments.Any(ce => e.Type == ce.Type)).ToList();
-                    
+
                     // si la classe possède des équipements volants alors on doit avoir les équipements volants qui ne sont pas dans la classe
                     if (currentRequiredFlyingEquipments.Any())
                     {
@@ -356,7 +387,7 @@ namespace ScheduleGenerator
                     // si la classe ne possède pas d'équipements alors on doit avoir les équipements volants
                     // si tous les équipements volants ne sont pas disponibles
                     if (!requiredEquipment.All(e => aEq.Any(eq => eq.Type == e.Type))) return false;
-                    
+
                     // on récupère les équipements volants qui ne sont pas dans la classe
                     currentRequiredFlyingEquipments = requiredEquipment.ToList();
                 }
@@ -514,7 +545,7 @@ namespace ScheduleGenerator
                 if (currentSum <= capacity && currentSum > bestCombinaisonCapacity)
                 {
                     bestCombinaisonCapacity = currentSum;
-                    bestCombinaison = [.. currentCombinaison];
+                    bestCombinaison = new(currentCombinaison);
                 }
 
 
@@ -594,7 +625,7 @@ namespace ScheduleGenerator
                     Console.ForegroundColor = ConsoleColor.White;
                 }
 
-                Console.WriteLine($"Site {item.Key.Location.Site}, classroom {item.Key.Location.Classroom} : {item.Key.Day} {item.Key.TimeSlot.StartHour}-{item.Key.TimeSlot.EndHour} : {item.Value.Course} ({string.Join(",", item.Value.Groups)}) - ({string.Join(",", item.Value.FlyingEquipments.Select(e => e.Type + " " + e.Code))})");
+                Console.WriteLine($"Site {item.Key.Location.Site}, classroom {item.Key.Location.Classroom} : {item.Key.Day} {item.Key.TimeSlot.StartHour}-{item.Key.TimeSlot.EndHour} : {item.Value.Course} ({string.Join(",", item.Value.Groups)}) - ({string.Join(",", item.Value.FlyingEquipments.Select(e => (e is not null ? e.Type + " " + e.Code : "")))})");
 
                 Console.ResetColor();
             }

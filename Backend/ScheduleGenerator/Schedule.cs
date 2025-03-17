@@ -3,7 +3,7 @@ namespace ScheduleGenerator
     public class Schedule : Dictionary<ScheduleKey, ScheduleEntry>
     {
         public void AddEntry(string site, string classroom, string day, int startHour, int endHour,
-                        string course, List<string> groups, List<Equipement> flyingEquipments)
+                        string course, List<string> groups, List<Equipement?> flyingEquipments)
         {
             var key = new ScheduleKey((site, classroom), day, (startHour, endHour));
             var entry = new ScheduleEntry(course, groups, flyingEquipments);
@@ -45,8 +45,8 @@ namespace ScheduleGenerator
     {
         public string Course { get; set; }
         public List<string> Groups { get; set; }
-        public List<Equipement> FlyingEquipments { get; set; }
-        public ScheduleEntry(string course, List<string> groups, List<Equipement> flyingEquipments)
+        public List<Equipement?> FlyingEquipments { get; set; }
+        public ScheduleEntry(string course, List<string> groups, List<Equipement?> flyingEquipments)
         {
             Course = course;
             Groups = groups;
