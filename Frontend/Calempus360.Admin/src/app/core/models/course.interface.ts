@@ -1,3 +1,5 @@
+import { EquipmentType } from "./equipment.interface"
+
 export type Course = {
     id?: string,
     name?: string,
@@ -7,5 +9,5 @@ export type Course = {
     weeklyHours?: number,
     semester?: string,
     credits?: number,
-    equipmentType?: { [key: string]: number };//TODO Corriger quand y a equipmentType
+    equipmentType?: any[],
 }

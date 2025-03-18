@@ -1,3 +1,24 @@
+<div class="flex w-full flex-col gap-2">
+  <app-legend-card [legend]="'Filters'">
+    <div class="space-x-[6px] border-none flex w-full flex-row">
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Course</legend>
+      <select
+        class="select focus:outline-none"
+        (change)="onEquipmentTypeChange($event)"
+      >
+        <option [value]="0">All</option>
+        @if (equipmentTypeList$ | async; as equipmentTypes) {
+          @for (equipmentType of equipmentTypes; track equipmentType?.id; let i = $index) {
+            <option [value]="equipmentType.id">{{ equipmentType.name }}</option>
+          }
+        }
+      </select>
+      <span class="fieldset-label">Optional</span>
+    </fieldset>
+  </div>
+  </app-legend-card>
+<app-legend-card [legend]="'Courses'">
 @if (courseList$ | async; as courses) {
     <div class="rounded-box bg-base-100">
       <div
@@ -10,10 +31,7 @@
               <th>Name</th>
               <th>Code</th>
               <th>Description</th>
-              <th>Total Hours</th>
-              <th>Weekly Hours</th>
               <th>Semester</th>
-              <th>Credits</th>
               <th>Equipment Type</th>
               <th class="">Actions</th>
             </tr>
@@ -21,39 +39,45 @@
           <tbody>
             @for (course of courses; track course?.id; let i = $index) {
               <tr
-                class="hover:bg-primary hover:text-primary-content hover:rounded"
+                class="hover:bg-base-200 group hover:rounded-box"
               >
                 <th>{{ i }}</th>
                 <td>{{ course?.name }}</td>
                 <td>{{ course?.code }}</td>
                 <td>{{ course?.description }}</td>
-                <td class="pl-10">{{ course?.totalHours }}</td>
-                <td class="pl-14">{{ course?.weeklyHours }}</td>
                 <td class="pl-10">{{ course?.semester }}</td>
-                <td class="pl-9">{{ course?.credits }}</td>
-                <td>@for(equipment of course.equipmentType | keyvalue; track equipment.key;){
-                      {{ equipment.key }}
-                    }
+                <td>@for(equipment of course.equipmentType ; track equipment.length;){
+                      {{ equipment.name}}
+                }
                 </td>
                 <td class="space-x-2">
-                  <button mat-icon-button >
-                    <mat-icon fontIcon="edit" (click)="onEdit(course.id!)"></mat-icon>
+                  <button
+                  class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-blue-400 hover:border-blue-400 hover:bg-blue-100"
+                  (click)="onSelect(course.id!)">
+                  view
+                </button>
+                  <button class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-green-400 hover:border-green-400 hover:bg-green-100"
+                  (click)="onEdit(course.id!)">
+                  edit
                   </button>
-                  <button mat-icon-button (click)="onDelete(course.id!)">
-                    <mat-icon fontIcon="delete"></mat-icon>
+                  <button class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-red-400 hover:border-red-400 hover:bg-red-100" 
+                  (click)="onDelete(course.id!)">
+                    delete
                   </button>
                 </td>
               </tr>
             } @empty {
               <tr>
-                <td colspan="7" class="text-center">No Courses!</td>
+                <td colspan="10" class="text-center">No Courses!</td>
               </tr>
             }
             <tr>
               <td colspan="10" class="text-center">
-                <button routerLink="/courses/add" class="btn btn-primary mr-1 p-1">
-                  <mat-icon fontIcon="add"></mat-icon>
-                </button>
+                <button
+                routerLink="/courses/add"
+                class="rounded-box cursor-pointer border border-green-400 px-3 py-1 text-green-400 hover:bg-green-100 hover:text-green-500">
+                + Add a new course
+              </button>
               </td>
             </tr>
           </tbody>
@@ -63,6 +87,7 @@
   } @else {
     <p>Course not found!</p>
   }
+</app-legend-card>
   
 
 

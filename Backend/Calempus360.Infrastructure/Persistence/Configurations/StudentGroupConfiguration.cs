@@ -23,7 +23,7 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
             
             builder.Property(g => g.OptionGrade).IsRequired();
             
-            builder.Property(g => g.AcademicYearId).IsRequired();
+            builder.Property(g => g.AcademicYearId).IsRequired(false);
             
             builder.Property(g => g.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
             

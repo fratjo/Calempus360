@@ -29,8 +29,6 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
 
             builder.Property(ce => ce.AcademicYearId).IsRequired();
 
-            builder.Property(ce => ce.Quantity).IsRequired(); // TODO : Remove
-
             builder
                 .HasOne(ce => ce.EquipmentTypeEntity)
                 .WithMany(ce => ce.CourseEquipmentTypes)

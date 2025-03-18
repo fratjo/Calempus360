@@ -1,0 +1,21 @@
+<app-legend-card [legend]="'Student Group'">
+    
+    <div class="relative flex items-center gap-4">
+        <header>
+        <mat-icon [inline]="true" fontIcon="groups" class="icon"></mat-icon>        
+        </header>
+        <section class="text-lg space-y-2">
+            <h1 class="text-2xl">Student Group : {{student?.code}}</h1>
+            <p>Grade : {{student?.optionGrade}}</p>
+            <p>Number of Students : {{student?.numberOfStudents}}</p>
+            <p>Option : {{student?.option?.name}}</p>
+            <p>Main Site : {{student?.site?.name}}</p>
+        </section>
+        <button
+            class="absolute top-0 right-0 rounded-box h-8 cursor-pointer border border-green-400 px-3 py-1 text-green-400 hover:bg-green-100 hover:text-green-500"
+            (click)="onEdit(student?.id!)"
+            >
+            Edit
+        </button>
+    </div>
+</app-legend-card>

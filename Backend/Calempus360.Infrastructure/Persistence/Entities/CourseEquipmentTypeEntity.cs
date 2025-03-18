@@ -17,10 +17,5 @@
         // University
         public Guid UniversityId { get; set; }
         public virtual UniversityEntity UniversityEntity { get; set; } = null!;
-
-        // Quantity
-        public int Quantity { get; set; } = 1; // TODO : Remove 
-
-
     }
 }

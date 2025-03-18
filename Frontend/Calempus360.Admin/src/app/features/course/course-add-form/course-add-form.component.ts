@@ -7,6 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CourseService } from '../../../core/services/course.service';
 import { Course } from '../../../core/models/course.interface';
+import { EquipmentService } from '../../../core/services/equipment.service';
+import { EquipmentType } from '../../../core/models/equipment.interface';
 
 @Component({
   selector: 'app-course-add-form',
@@ -22,9 +24,11 @@ import { Course } from '../../../core/models/course.interface';
 })
 export class CourseAddFormComponent implements OnInit{
   private readonly courseService = inject(CourseService);
+  private readonly equipmentTypeService = inject(EquipmentService);
   private readonly router = inject(Router);
   courseForm: FormGroup;
   formBuilder = inject(FormBuilder);
+  equipmentTypeList$ = this.equipmentTypeService.equipmentTypes$;
 
   constructor(){
     this.courseForm = this.formBuilder.group({
@@ -35,15 +39,16 @@ export class CourseAddFormComponent implements OnInit{
       weeklyHours:['',Validators.required],
       semester:['',Validators.required],
       credits:['',Validators.required],
-      equipmentType:[null,null]//TODO Changer quand on a equipmentType service(Faire un Dialog pour ajouter quantité et equipment)
+      equipmentType: this.formBuilder.array([], null),
     });
   }
   ngOnInit(): void {
-    //TODO : Fetch tous les equipment type dispo
+    this.equipmentTypeService.getEquipmentTypes().subscribe();
   }
 
   onSave(){
     const course = this.courseForm.value;
+    console.log(course);
     this.courseService.addCourse(course).subscribe({
       next: (v) => console.log(v),
       error: (e) => {
@@ -56,9 +61,26 @@ export class CourseAddFormComponent implements OnInit{
     })
   }
 
+  get equipmentTypeArray() {
+    return this.courseForm.get('equipmentType') as FormArray;
+  }
+
+  get selectedEquipmentType(): string[]{
+    return this.equipmentTypeArray.value.map((arr: { id: string; }) => arr.id);
+  }
+
   onCancel(){
     this.router.navigate(['/courses']);
   }
 
-  
+  selectEquipment(equipmentType: EquipmentType, event: any){
+    const checked = event.target.checked;
+    const indexEquipmentType = this.selectedEquipmentType.indexOf(equipmentType.id!);
+    if (checked) {   
+      this.equipmentTypeArray.push(this.formBuilder.control(equipmentType.id));
+    } else {
+      this.equipmentTypeArray.removeAt(indexEquipmentType);
+    }
+    this.courseForm.controls['equipmentType'].markAsTouched();
+  } 
 }

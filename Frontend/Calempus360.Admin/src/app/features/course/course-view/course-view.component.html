@@ -1,0 +1,32 @@
+<app-legend-card [legend]="'Course'">
+    <div class="relative flex items-center gap-4">
+        <header>
+        <mat-icon [inline]="true" fontIcon="history_edu" class="icon"></mat-icon>        
+        </header>
+        <section class="text-lg space-y-2">
+            <h1 class="text-2xl">Name : {{course?.name}}</h1>
+            <p>Code : {{course?.code}}</p>
+            <p>Description : {{course?.description}}</p>
+            <p>Total Hours : {{course?.totalHours}} heure(s)</p>
+            <p>Weekly Hours : {{course?.weeklyHours}} heure(s)</p>
+            <p>Semester : {{course?.semester}}</p>
+            <p>Credits : {{course?.credits}}</p>
+            @if(equipmentTypeList$ | async; as equipmentTypes){
+            <div class="flex-col gap-1" *ngIf="course?.equipmentType?.length">
+                <p>Equipment Type : {{ equipmentTypes[0].name }}</p>
+                <div *ngIf="course!.equipmentType!.length > 1" class="pl-35">
+                    <p *ngFor="let equipmentType of equipmentTypes.slice(1)">{{ equipmentType.name }}</p>
+                </div>
+            </div>
+        }
+        </section>
+        <button
+            class="absolute top-0 right-0 rounded-box h-8 cursor-pointer border border-green-400 px-3 py-1 text-green-400 hover:bg-green-100 hover:text-green-500"
+            (click)="onEdit(course?.id!)"
+            >
+            Edit
+        </button>
+    </div>
+</app-legend-card>
+
+

@@ -21,7 +21,7 @@ namespace Calempus360.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<Course> AddCourseAsync(Course course, Guid academicYear, Guid universityId, Dictionary<Guid, int> equipmentType)
+        public async Task<Course> AddCourseAsync(Course course, Guid academicYear, Guid universityId, List<Guid> equipmentType)
         {
             var universityEntity = await _context.Universities.FindAsync(universityId);
             if (universityEntity == null) throw new NotFoundException("University not found!");
@@ -29,22 +29,18 @@ namespace Calempus360.Infrastructure.Repositories
             if (academicYearEntity == null) throw new NotFoundException("Academic Year not found!");
             var entity = course.ToEntity();
 
-            if(course.EquipmentTypes is not null)
+            foreach (var equipmentTypeId in equipmentType)
             {
-                foreach (var equipmentTypeId in equipmentType)
-                {
-                    var equipmentEntity = await _context.EquipmentTypes.FindAsync(equipmentTypeId.Key);
-                    if (equipmentEntity == null) throw new NotFoundException("Equipment Type not found!");
-                    entity.EquipmentTypes.Add(
-                        new CourseEquipmentTypeEntity
-                        {
-                            AcademicYearEntity = academicYearEntity,
-                            CourseEntity = entity,
-                            EquipmentTypeEntity = equipmentEntity,
-                            UniversityEntity = universityEntity,
-                            Quantity = equipmentTypeId.Value
-                        });
-                }
+                var equipmentEntity = await _context.EquipmentTypes.FindAsync(equipmentTypeId);
+                if (equipmentEntity == null) throw new NotFoundException("Equipment Type not found!");
+                entity.EquipmentTypes.Add(
+                    new CourseEquipmentTypeEntity
+                    {
+                        AcademicYearEntity = academicYearEntity,
+                        CourseEntity = entity,
+                        EquipmentTypeEntity = equipmentEntity,
+                        UniversityEntity = universityEntity,
+                    });
             }
 
             await _context.Courses.AddAsync(entity);
@@ -92,7 +88,7 @@ namespace Calempus360.Infrastructure.Repositories
             return entity.ToDomainModel();
         }
 
-        public async Task<Course> UpdateCourseAsync(Course course, Guid academicYear, Dictionary<Guid, int> equipmentType, Guid universityId)
+        public async Task<Course> UpdateCourseAsync(Course course, Guid academicYear, List<Guid> equipmentType, Guid universityId)
         {
             var entity = await _context.Courses
                         .Include(c => c.OptionsCourses)
@@ -125,13 +121,13 @@ namespace Calempus360.Infrastructure.Repositories
             if (equipmentType is not null)
             {
                 //Clear les relations plus valides
-                entity.EquipmentTypes.RemoveAll(et => !equipmentType.Keys.Contains(et.EquipmentTypeEntity.EquipmentTypeId));
+                entity.EquipmentTypes.RemoveAll(et => !equipmentType.Contains(et.EquipmentTypeEntity.EquipmentTypeId));
                 foreach (var equipmentTypeId in equipmentType)
                 {
-                    var equipmentEntity = await _context.EquipmentTypes.FindAsync(equipmentTypeId.Key);
+                    var equipmentEntity = await _context.EquipmentTypes.FindAsync(equipmentTypeId);
                     if (equipmentEntity == null) throw new NotFoundException("Equipment Type not found!");
 
-                    if (!entity.EquipmentTypes.ToList().Any(et => et.EquipmentTypeEntity.EquipmentTypeId == equipmentTypeId.Key))
+                    if (!entity.EquipmentTypes.ToList().Any(et => et.EquipmentTypeEntity.EquipmentTypeId == equipmentTypeId))
                     {
                         entity.EquipmentTypes.Add(
                         new CourseEquipmentTypeEntity
@@ -140,7 +136,6 @@ namespace Calempus360.Infrastructure.Repositories
                             CourseEntity = entity,
                             EquipmentTypeEntity = equipmentEntity,
                             UniversityEntity = universityEntity,
-                            Quantity = equipmentTypeId.Value
                         });
                     }
                     
