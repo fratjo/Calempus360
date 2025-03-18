@@ -36,7 +36,7 @@ export class OptionEditFormComponent implements OnInit{
             name: ['',Validators.required],
             code: ['',Validators.required],
             description: ['',Validators.required],
-            courses: this.formBuilder.array([], this.coursesSelectedCheckboxValidator()),
+            courses: this.formBuilder.array([], null),
         });
       }
 
@@ -94,12 +94,6 @@ export class OptionEditFormComponent implements OnInit{
     this.optionForm.controls['courses'].markAsTouched();
   }
 
-  coursesSelectedCheckboxValidator(){
-      return (control: AbstractControl) => {
-        const formArray = control as FormArray;
-        return formArray.length >= 1 ? null : { required: true };
-      };
-    }
 
     goBack(){
       const origin = this.route.snapshot.queryParamMap.get('from');

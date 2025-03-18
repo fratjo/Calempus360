@@ -8,6 +8,8 @@ import { CommonModule } from '@angular/common';
 import { LegendCardComponent } from "../../shared/components/legend-card/legend-card.component";
 import { EquipmentService } from '../../core/services/equipment.service';
 import { Course } from '../../core/models/course.interface';
+import { map, Observable } from 'rxjs';
+import { EquipmentType } from '../../core/models/equipment.interface';
 
 @Component({
   selector: 'app-course',
@@ -20,10 +22,12 @@ export class CourseComponent implements OnInit{
   private readonly router = inject(Router);
   private readonly courseService = inject(CourseService);
   private readonly equipmentTypeService = inject(EquipmentService);
-  courseList$ = this.courseService.courses$;
+  courseList$: Observable<Course[]> = this.courseService.courses$;
+  equipmentTypeList$ = this.equipmentTypeService.equipmentTypes$;
 
   ngOnInit(): void {
     this.updateUI();
+    this.equipmentTypeService.getEquipmentTypes().subscribe();
   }
 
   updateUI(){
@@ -31,12 +35,22 @@ export class CourseComponent implements OnInit{
   }
 
   onSelect(id: string){
-
+    this.router.navigate(['/courses/view',id]);
   }
 
-  onEdit(id: Course){
-    console.log(id);
-    this.router.navigate(['/courses/edit',id.id]);
+  onEdit(id: string){
+    this.router.navigate(['/courses/edit',id]);
+  }
+
+  onEquipmentTypeChange(event: any){
+    if(event.target.value != 0){
+          this.courseList$ = this.courseList$.pipe(
+            map((courses: Course[]) => 
+              courses.filter(course => 
+                course.equipmentType?.some((equipmentType) => equipmentType.id == event.target.value))));
+        } else {
+          this.courseList$ = this.courseService.courses$;
+        }
   }
 
   onDelete(id: string){
@@ -45,5 +59,4 @@ export class CourseComponent implements OnInit{
       error: (e) => alert("Suppression impossible ! Le cours est liée à une autre entité !")
     })
   }
-
 }

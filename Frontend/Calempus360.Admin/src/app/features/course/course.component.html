@@ -1,3 +1,23 @@
+<div class="flex w-full flex-col gap-2">
+  <app-legend-card [legend]="'Filters'">
+    <div class="space-x-[6px] border-none flex w-full flex-row">
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Course</legend>
+      <select
+        class="select focus:outline-none"
+        (change)="onEquipmentTypeChange($event)"
+      >
+        <option [value]="0">All</option>
+        @if (equipmentTypeList$ | async; as equipmentTypes) {
+          @for (equipmentType of equipmentTypes; track equipmentType?.id; let i = $index) {
+            <option [value]="equipmentType.id">{{ equipmentType.name }}</option>
+          }
+        }
+      </select>
+      <span class="fieldset-label">Optional</span>
+    </fieldset>
+  </div>
+  </app-legend-card>
 <app-legend-card [legend]="'Courses'">
 @if (courseList$ | async; as courses) {
     <div class="rounded-box bg-base-100">
@@ -11,10 +31,7 @@
               <th>Name</th>
               <th>Code</th>
               <th>Description</th>
-              <th>Total Hours</th>
-              <th>Weekly Hours</th>
               <th>Semester</th>
-              <th>Credits</th>
               <th>Equipment Type</th>
               <th class="">Actions</th>
             </tr>
@@ -28,13 +45,10 @@
                 <td>{{ course?.name }}</td>
                 <td>{{ course?.code }}</td>
                 <td>{{ course?.description }}</td>
-                <td class="pl-10">{{ course?.totalHours }}</td>
-                <td class="pl-14">{{ course?.weeklyHours }}</td>
                 <td class="pl-10">{{ course?.semester }}</td>
-                <td class="pl-9">{{ course?.credits }}</td>
-                <td>@for(equipment of course.equipmentType ; track equipment.id;){
-                      {{ equipment.name }}
-                    }
+                <td>@for(equipment of course.equipmentType ; track equipment.length;){
+                      {{ equipment.name}}
+                }
                 </td>
                 <td class="space-x-2">
                   <button
@@ -43,7 +57,7 @@
                   view
                 </button>
                   <button class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-green-400 hover:border-green-400 hover:bg-green-100"
-                  (click)="onEdit(course)">
+                  (click)="onEdit(course.id!)">
                   edit
                   </button>
                   <button class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-red-400 hover:border-red-400 hover:bg-red-100" 

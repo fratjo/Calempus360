@@ -9,5 +9,5 @@ export type Course = {
     weeklyHours?: number,
     semester?: string,
     credits?: number,
-    equipmentType?: EquipmentType[],
+    equipmentType?: any[],
 }

@@ -28,7 +28,6 @@ export class CourseAddFormComponent implements OnInit{
   private readonly router = inject(Router);
   courseForm: FormGroup;
   formBuilder = inject(FormBuilder);
-  equipmentTypeAdded: boolean = false;
   equipmentTypeList$ = this.equipmentTypeService.equipmentTypes$;
 
   constructor(){
@@ -40,7 +39,7 @@ export class CourseAddFormComponent implements OnInit{
       weeklyHours:['',Validators.required],
       semester:['',Validators.required],
       credits:['',Validators.required],
-      equipmentType: this.formBuilder.array<string>([], null),
+      equipmentType: this.formBuilder.array([], null),
     });
   }
   ngOnInit(): void {
@@ -68,16 +67,6 @@ export class CourseAddFormComponent implements OnInit{
 
   get selectedEquipmentType(): string[]{
     return this.equipmentTypeArray.value.map((arr: { id: string; }) => arr.id);
-  }
-
-  onAddEquipmentType(){
-    if(this.equipmentTypeList$.value.length <= 0) 
-    this.equipmentTypeAdded = true;
-  }
-
-  onDeleteEquipmentType(){
-    this.equipmentTypeAdded = false;
-    this.equipmentTypeArray.clear();
   }
 
   onCancel(){

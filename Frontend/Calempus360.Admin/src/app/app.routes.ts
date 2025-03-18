@@ -40,6 +40,7 @@ import { CourseAddFormComponent } from './features/course/course-add-form/course
 import { CourseEditFormComponent } from './features/course/course-edit-form/course-edit-form.component';
 import { StudentGroupViewComponent } from './features/student-groups/student-group-view/student-group-view.component';
 import { OptionViewComponent } from './features/option/option-view/option-view.component';
+import { CourseViewComponent } from './features/course/course-view/course-view.component';
 
 export const routes: Routes = [
   {
@@ -203,6 +204,11 @@ export const routes: Routes = [
   {
     path: 'courses',
     component: CourseComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'courses/view/:id',
+    component: CourseViewComponent,
     canActivate: [univeristyGuard, academicYearGuard],
   },
   {

@@ -98,6 +98,27 @@
       class="input focus:ring-none focus:border-secondary focus:outline-none"
       formControlName="credits"
     />
+    <details class="dropdown">
+      <summary 
+      (click)="this.courseForm.controls['equipmentType'].markAsTouched();"
+      [ngClass]="{
+        'border-error':
+        equipmentTypeArray.touched &&
+        equipmentTypeArray.invalid,
+        'border-primary':
+        equipmentTypeArray.touched && equipmentTypeArray.valid,
+      }"
+      class="select focus:ring-none focus:border-secondary focus:outline-none">Equipment Type</summary>
+        <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+          <li *ngFor="let equipmentType of equipmentTypeList$ | async" [value]="equipmentType.id">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" [value]="equipmentType.id" (change)="selectEquipment(equipmentType,$event)"
+                 [checked]="this.selectedEquipmentType.includes(equipmentType.id!)" class="checkbox checkbox-primary" />
+              <span>{{ equipmentType.name }}</span>
+            </label>
+          </li>
+        </ul>
+    </details>
     <div class="flex justify-between space-x-4">
       <button
         (click)="onCancel()"
