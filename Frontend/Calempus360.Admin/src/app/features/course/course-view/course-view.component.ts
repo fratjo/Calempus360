@@ -46,7 +46,4 @@ export class CourseViewComponent implements OnInit{
     this.router.navigate(['/courses/edit',id], {queryParams: {from: 'details'}});
   }
 
-
-
-
 }
