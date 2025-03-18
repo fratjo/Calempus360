@@ -47,9 +47,9 @@ namespace Calempus360.API.Controllers
         }
 
         #endregion
-        
+
         #region Put
-        
+
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UniversityRequestDto requestDto)
         {
@@ -65,18 +65,18 @@ namespace Calempus360.API.Controllers
 
             return Ok(u.MapToDto());
         }
-        
+
         #endregion
-        
+
         #region Delete
-        
+
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             await universityService.DeleteUniversityAsync(id);
             return NoContent();
         }
-        
+
         #endregion
     }
 }

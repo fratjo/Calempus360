@@ -15,8 +15,7 @@ export class ClassroomService {
   public classroom$ = new BehaviorSubject<Classroom>({});
   public classrooms$ = new BehaviorSubject<Classrooms>([]);
 
-  URL =
-    'http://localhost:5257/api/universities/{universityId}/sites/{siteId}/classrooms';
+  URL = 'http://localhost:5257/api/classrooms';
 
   isClassroom(): boolean {
     return !!this.classroom$.value && !!this.classroom$.value.id;
@@ -30,7 +29,6 @@ export class ClassroomService {
     siteId?: string;
   }) {
     let params = new HttpParams();
-    const url = 'http://localhost:5257/api/classrooms';
 
     if (universityId) {
       params = params.append('universityId', universityId);
@@ -40,7 +38,7 @@ export class ClassroomService {
       params = params.append('siteId', siteId);
     }
 
-    return this.http.get<Classrooms>(url, { params }).pipe(
+    return this.http.get<Classrooms>(this.URL, { params }).pipe(
       tap((s: Classrooms) => {
         this.classrooms$.next(s);
       }),
@@ -48,15 +46,11 @@ export class ClassroomService {
   }
 
   getClassroomById(id: string) {
-    const url = 'http://localhost:5257/api/classrooms';
-
-    return this.http.get<Classroom>(url + `/${id}`);
+    return this.http.get<Classroom>(this.URL + `/${id}`);
   }
 
   setClassroom(id: string) {
-    const url = 'http://localhost:5257/api/classrooms';
-
-    return this.http.get<Classroom>(url + `/${id}`).pipe(
+    return this.http.get<Classroom>(this.URL + `/${id}`).pipe(
       tap((s: Classroom) => {
         this.classroom$.next(s);
         sessionStorage.setItem('classroom', JSON.stringify(s.id));
@@ -65,17 +59,8 @@ export class ClassroomService {
   }
 
   updateClassroom(classroom: Classroom) {
-    const url = this.URL.replace(
-      '{universityId}',
-      JSON.parse(sessionStorage.getItem('university')!),
-    );
-    const siteUrl = url.replace(
-      '{siteId}',
-      JSON.parse(sessionStorage.getItem('site')!),
-    );
-
     return this.http
-      .put<Classroom>(siteUrl + `/${classroom.id}`, classroom)
+      .put<Classroom>(this.URL + `/${classroom.id}`, classroom)
       .pipe(
         tap((s: Classroom) => {
           const classrooms = this.classrooms$.value;
@@ -89,18 +74,18 @@ export class ClassroomService {
   }
 
   addClassroom(classroom: Classroom) {
-    const url = this.URL.replace(
-      '{universityId}',
-      JSON.parse(sessionStorage.getItem('university')!),
-    );
-    const siteUrl = url.replace('{siteId}', classroom.site!);
+    let params = new HttpParams().set('siteId', classroom.site!);
 
     return this.http
-      .post<Classroom>(siteUrl, {
-        name: classroom.name,
-        code: classroom.code,
-        capacity: Number(classroom.capacity),
-      })
+      .post<Classroom>(
+        this.URL,
+        {
+          name: classroom.name,
+          code: classroom.code,
+          capacity: Number(classroom.capacity),
+        },
+        { params },
+      )
       .pipe(
         tap((s: Classroom) => {
           this.classrooms$.next([...this.classrooms$.value, s]);

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, tap } from 'rxjs';
 import { Site, Sites } from '../models/site.interface';
@@ -13,19 +13,17 @@ export class SiteService {
   public site$ = new BehaviorSubject<Site>({});
   public sites$ = new BehaviorSubject<Sites>([]);
 
-  URL = 'http://localhost:5257/api/universities/{universityId}/sites';
+  URL = 'http://localhost:5257/api/sites';
 
   isSite(): boolean {
     return !!this.site$.value && !!this.site$.value.id;
   }
 
   getSites() {
-    const url = this.URL.replace(
-      '{universityId}',
-      JSON.parse(sessionStorage.getItem('university')!),
-    );
+    const universityId = JSON.parse(sessionStorage.getItem('university')!);
+    const params = new HttpParams().set('universityId', universityId);
 
-    return this.http.get<Sites>(url).pipe(
+    return this.http.get<Sites>(this.URL, { params }).pipe(
       tap((s: Sites) => {
         this.sites$.next(s);
       }),
@@ -33,11 +31,12 @@ export class SiteService {
   }
 
   getSiteById(id: string) {
-    const url = this.URL.replace(
-      '{universityId}',
-      JSON.parse(sessionStorage.getItem('university')!),
+    return this.http.get<Site>(this.URL + `/${id}`).pipe(
+      tap((s: Site) => {
+        this.site$.next(s);
+        sessionStorage.setItem('site', JSON.stringify(s.id));
+      }),
     );
-    return this.http.get<Site>(url + `/${id}`);
   }
 
   getSiteByEquipmentId(id: string) {
@@ -61,11 +60,7 @@ export class SiteService {
   }
 
   setSite(id: string) {
-    const url = this.URL.replace(
-      '{universityId}',
-      JSON.parse(sessionStorage.getItem('university')!),
-    );
-    return this.http.get<Site>(url + `/${id}`).pipe(
+    return this.http.get<Site>(this.URL + `/${id}`).pipe(
       tap((s: Site) => {
         this.site$.next(s);
         sessionStorage.setItem('site', JSON.stringify(s.id));
@@ -74,11 +69,7 @@ export class SiteService {
   }
 
   updateSite(site: Site) {
-    const url = this.URL.replace(
-      '{universityId}',
-      JSON.parse(sessionStorage.getItem('university')!),
-    );
-    return this.http.put<Site>(url + `/${site.id}`, site).pipe(
+    return this.http.put<Site>(this.URL + `/${site.id}`, site).pipe(
       tap((s: Site) => {
         const sites = this.sites$.value;
         const index = sites.findIndex((site) => site.id === s.id);
@@ -89,11 +80,9 @@ export class SiteService {
   }
 
   addSite(site: Site) {
-    const url = this.URL.replace(
-      '{universityId}',
-      JSON.parse(sessionStorage.getItem('university')!),
-    );
-    return this.http.post<Site>(url, site).pipe(
+    const universityId = JSON.parse(sessionStorage.getItem('university')!);
+    const params = new HttpParams().set('universityId', universityId);
+    return this.http.post<Site>(this.URL, site, { params }).pipe(
       tap((s: Site) => {
         this.sites$.next([...this.sites$.value, s]);
       }),
@@ -101,11 +90,7 @@ export class SiteService {
   }
 
   deleteSite(id: string) {
-    const url = this.URL.replace(
-      '{universityId}',
-      JSON.parse(sessionStorage.getItem('university')!),
-    );
-    return this.http.delete<Site>(url + `/${id}`).pipe(
+    return this.http.delete<Site>(this.URL + `/${id}`).pipe(
       tap((s: Site) => {
         this.sites$.next(this.sites$.value.filter((site) => site.id !== id));
         if (this.site$.value.id === id) {

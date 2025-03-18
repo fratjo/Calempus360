@@ -15,8 +15,8 @@ public static class ClassroomMapper
             createdAt: entity.CreatedAt,
             updatedAt: entity.UpdatedAt,
             equipments: includeEquipments ? entity.ClassroomEquipments?
-                              .Select(ce => ce.EquipmentEntity.ToDomainModel())
-                              .ToList() : null,
+                            .Select(ce => ce.EquipmentEntity.ToDomainModel())
+                            .ToList() : new(),
             site: entity.SiteId
         );
     }

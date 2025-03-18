@@ -1,49 +1,52 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Course } from '../models/course.interface';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CourseService {
-
   courses$ = new BehaviorSubject<Course[]>([]);
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  URL = 'http://localhost:5257/api/university/{universityId}/courses';
+  URL = 'http://localhost:5257/api/courses';
 
-  getCourses(){
+  getCourses() {
     const universityId = JSON.parse(sessionStorage.getItem('university')!);
-    const url = this.URL.replace('{universityId}', universityId);
-    return this.http.get<Course[]>(url).subscribe({
-      next: (courses) => this.courses$.next(courses)
-    })
+    let params = new HttpParams();
+    params = params.append('universityId', universityId);
+    return this.http.get<Course[]>(this.URL, { params }).subscribe({
+      next: (courses) => this.courses$.next(courses),
+    });
   }
 
-  getCourseById(id: string){
+  getCourseById(id: string) {
     const universityId = JSON.parse(sessionStorage.getItem('university')!);
-    const url = this.URL.replace('{universityId}', universityId) + `/${id}`;
-    return this.http.get<Course>(url);
+    let params = new HttpParams();
+    params = params.append('universityId', universityId);
+    return this.http.get<Course>(this.URL + `/${id}`, { params });
   }
 
-  addCourse(course: Course){
+  addCourse(course: Course) {
     const universityId = JSON.parse(sessionStorage.getItem('university')!);
     const academicYearId = JSON.parse(sessionStorage.getItem('academicYear')!);
-    const url = this.URL.replace('{universityId}', universityId) + `?academicYear=${academicYearId}`;
-    return this.http.post<Course>(url,course);
+    let params = new HttpParams();
+    params = params.append('academicYear', academicYearId);
+    params = params.append('universityId', universityId);
+    return this.http.post<Course>(this.URL, course, { params });
   }
 
-  updateCourse(course: Course){
+  updateCourse(course: Course) {
     const universityId = JSON.parse(sessionStorage.getItem('university')!);
     const academicYearId = JSON.parse(sessionStorage.getItem('academicYear')!);
-    const url = this.URL.replace('{universityId}', universityId) + `/${course.id}` + `?academicYear=${academicYearId}` ;
-    return this.http.put<Course>(url,course);
+    let params = new HttpParams();
+    params = params.append('academicYear', academicYearId);
+    params = params.append('universityId', universityId);
+    return this.http.post<Course>(this.URL, course, { params });
   }
 
-  deleteCourse(id:string){
-    const universityId = JSON.parse(sessionStorage.getItem('university')!);
-    const url = this.URL.replace('{universityId}', universityId) + `/${id}`;
-    return this.http.delete<Course>(url);
+  deleteCourse(id: string) {
+    return this.http.delete<Course>(this.URL + `/${id}`);
   }
 }
