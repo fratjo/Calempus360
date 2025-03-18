@@ -14,11 +14,11 @@ export class EquipmentTypeListComponent {
   private readonly equipmentService = inject(EquipmentService);
   equipmentTypeList$ = this.equipmentService.equipmentTypes$;
 
-  onSelect(equipmentTypeId: string) {
+  /*onSelect(equipmentTypeId: string) {
     this.equipmentService.setEquipmentType(equipmentTypeId).subscribe();
     sessionStorage.setItem('equipment-type', JSON.stringify(equipmentTypeId));
     this.router.navigate(['equipment-type', equipmentTypeId]);
-  }
+  }*/
 
   onEdit(equipmentTypeId: string) {
     this.router.navigate(['equipment-types/edit', equipmentTypeId]);
