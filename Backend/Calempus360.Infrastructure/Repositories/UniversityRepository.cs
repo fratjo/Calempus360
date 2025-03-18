@@ -13,30 +13,30 @@ public class UniversityRepository(Calempus360DbContext context) : IUniversityRep
     public async Task<IEnumerable<University>> GetAllAsync()
     {
         var list = await context.Universities
-                                 .Include(u => u.Sites)
-                                 .ToListAsync();
-        
+                                .Include(u => u.Sites)
+                                .ToListAsync();
+
         return list.Select(x => x.ToDomainModel());
     }
 
     public async Task<University> GetUniversityByIdAsync(Guid id)
     {
         var u = await context.Universities
-                              .Include(u => u.Sites)
-                              .FirstOrDefaultAsync(u => u.UniversityId == id);
-        
+                            .Include(u => u.Sites)
+                            .FirstOrDefaultAsync(u => u.UniversityId == id);
+
         if (u == null) throw new NotFoundException("University not found");
-        
+
         return u.ToDomainModel();
     }
 
     public async Task<University> GetUniversityByNameAsync(string name)
     {
         var u = await context.Universities
-                             .FirstOrDefaultAsync(u => u.Name.ToLower() == name.ToLower());
+                            .FirstOrDefaultAsync(u => u.Name.ToLower() == name.ToLower());
 
         if (u == null) throw new NotFoundException("University not found");
-        
+
         return u.ToDomainModel();
     }
 
@@ -61,10 +61,10 @@ public class UniversityRepository(Calempus360DbContext context) : IUniversityRep
             throw new NotFoundException($"University with id {entity.UniversityId} not found");
         }
 
-        existing.Name      = university.Name;
-        existing.Code      = university.Code;
-        existing.Phone     = university.Phone;
-        existing.Address   = university.Address;
+        existing.Name = university.Name;
+        existing.Code = university.Code;
+        existing.Phone = university.Phone;
+        existing.Address = university.Address;
         existing.UpdatedAt = DateTime.Now;
 
         await context.SaveChangesAsync();
@@ -75,13 +75,13 @@ public class UniversityRepository(Calempus360DbContext context) : IUniversityRep
     public async Task<bool> DeleteUniversityAsync(Guid id)
     {
         var entity = await context.Universities.FirstOrDefaultAsync(x => x.UniversityId == id);
-        
+
         if (entity == null) throw new NotFoundException("University not found");
-        
+
         context.Universities.Remove(entity);
-        
+
         await context.SaveChangesAsync();
-        
+
         return true;
     }
 }

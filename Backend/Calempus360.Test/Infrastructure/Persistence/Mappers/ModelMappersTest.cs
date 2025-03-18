@@ -17,11 +17,11 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         var equipmentTypeEntity = new EquipmentTypeEntity
         {
             EquipmentTypeId = Guid.NewGuid(),
-            Name            = "Projector",
-            Code            = "PRJ",
-            Description     = "Projector",
-            CreatedAt       = DateTime.Now,
-            UpdatedAt       = DateTime.Now
+            Name = "Projector",
+            Code = "PRJ",
+            Description = "Projector",
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
         };
 
         // Act
@@ -34,11 +34,11 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
 
         Assert.NotNull(equipmentType);
         Assert.Equal(equipmentTypeEntity.EquipmentTypeId, equipmentType.Id);
-        Assert.Equal(equipmentTypeEntity.Name,            equipmentType.Name);
-        Assert.Equal(equipmentTypeEntity.Code,            equipmentType.Code);
-        Assert.Equal(equipmentTypeEntity.Description,     equipmentType.Description);
-        Assert.Equal(equipmentTypeEntity.CreatedAt,       equipmentType.CreatedAt);
-        Assert.Equal(equipmentTypeEntity.UpdatedAt,       equipmentType.UpdatedAt);
+        Assert.Equal(equipmentTypeEntity.Name, equipmentType.Name);
+        Assert.Equal(equipmentTypeEntity.Code, equipmentType.Code);
+        Assert.Equal(equipmentTypeEntity.Description, equipmentType.Description);
+        Assert.Equal(equipmentTypeEntity.CreatedAt, equipmentType.CreatedAt);
+        Assert.Equal(equipmentTypeEntity.UpdatedAt, equipmentType.UpdatedAt);
     }
 
     [Fact]
@@ -64,12 +64,12 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         // Assert
 
         Assert.NotNull(equipmentTypeEntity);
-        Assert.Equal(equipmentType.Id,          equipmentTypeEntity.EquipmentTypeId);
-        Assert.Equal(equipmentType.Name,        equipmentTypeEntity.Name);
-        Assert.Equal(equipmentType.Code,        equipmentTypeEntity.Code);
+        Assert.Equal(equipmentType.Id, equipmentTypeEntity.EquipmentTypeId);
+        Assert.Equal(equipmentType.Name, equipmentTypeEntity.Name);
+        Assert.Equal(equipmentType.Code, equipmentTypeEntity.Code);
         Assert.Equal(equipmentType.Description, equipmentTypeEntity.Description);
-        Assert.Equal(equipmentType.CreatedAt,   equipmentTypeEntity.CreatedAt);
-        Assert.Equal(equipmentType.UpdatedAt,   equipmentTypeEntity.UpdatedAt);
+        Assert.Equal(equipmentType.CreatedAt, equipmentTypeEntity.CreatedAt);
+        Assert.Equal(equipmentType.UpdatedAt, equipmentTypeEntity.UpdatedAt);
     }
 
     [Fact]
@@ -80,23 +80,23 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         var equipmentTypeEntity = new EquipmentTypeEntity
         {
             EquipmentTypeId = Guid.NewGuid(),
-            Name            = "Projector",
-            Code            = "PRJ",
-            Description     = "Projector",
-            CreatedAt       = DateTime.Now,
-            UpdatedAt       = DateTime.Now
+            Name = "Projector",
+            Code = "PRJ",
+            Description = "Projector",
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
         };
 
         var equipmentEntity = new EquipmentEntity
         {
-            EquipmentId         = Guid.NewGuid(),
-            Name                = "Projector 1",
-            Code                = "PRJ1",
-            Brand               = "Brand 1",
-            Model               = "Model 1",
-            Description         = "Projector 1",
-            CreatedAt           = DateTime.Now,
-            UpdatedAt           = DateTime.Now,
+            EquipmentId = Guid.NewGuid(),
+            Name = "Projector 1",
+            Code = "PRJ1",
+            Brand = "Brand 1",
+            Model = "Model 1",
+            Description = "Projector 1",
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now,
             EquipmentTypeEntity = equipmentTypeEntity
         };
 
@@ -110,13 +110,13 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
 
         Assert.NotNull(equipment);
         Assert.Equal(equipmentEntity.EquipmentId, equipment.Id);
-        Assert.Equal(equipmentEntity.Name,        equipment.Name);
-        Assert.Equal(equipmentEntity.Code,        equipment.Code);
-        Assert.Equal(equipmentEntity.Brand,       equipment.Brand);
-        Assert.Equal(equipmentEntity.Model,       equipment.Model);
+        Assert.Equal(equipmentEntity.Name, equipment.Name);
+        Assert.Equal(equipmentEntity.Code, equipment.Code);
+        Assert.Equal(equipmentEntity.Brand, equipment.Brand);
+        Assert.Equal(equipmentEntity.Model, equipment.Model);
         Assert.Equal(equipmentEntity.Description, equipment.Description);
-        Assert.Equal(equipmentEntity.CreatedAt,   equipment.CreatedAt);
-        Assert.Equal(equipmentEntity.UpdatedAt,   equipment.UpdatedAt);
+        Assert.Equal(equipmentEntity.CreatedAt, equipment.CreatedAt);
+        Assert.Equal(equipmentEntity.UpdatedAt, equipment.UpdatedAt);
         Assert.NotNull(equipment.EquipmentType);
         Assert.Equal(equipmentTypeEntity.EquipmentTypeId, equipment.EquipmentType.Id);
     }
@@ -156,16 +156,15 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         // Assert
 
         Assert.NotNull(equipmentEntity);
-        Assert.Equal(equipment.Id,          equipmentEntity.EquipmentId);
-        Assert.Equal(equipment.Name,        equipmentEntity.Name);
-        Assert.Equal(equipment.Code,        equipmentEntity.Code);
-        Assert.Equal(equipment.Brand,       equipmentEntity.Brand);
-        Assert.Equal(equipment.Model,       equipmentEntity.Model);
+        Assert.Equal(equipment.Id, equipmentEntity.EquipmentId);
+        Assert.Equal(equipment.Name, equipmentEntity.Name);
+        Assert.Equal(equipment.Code, equipmentEntity.Code);
+        Assert.Equal(equipment.Brand, equipmentEntity.Brand);
+        Assert.Equal(equipment.Model, equipmentEntity.Model);
         Assert.Equal(equipment.Description, equipmentEntity.Description);
-        Assert.Equal(equipment.CreatedAt,   equipmentEntity.CreatedAt);
-        Assert.Equal(equipment.UpdatedAt,   equipmentEntity.UpdatedAt);
-        Assert.NotNull(equipmentEntity.EquipmentTypeEntity);
-        Assert.Equal(equipmentType.Id, equipmentEntity.EquipmentTypeEntity.EquipmentTypeId);
+        Assert.Equal(equipment.CreatedAt, equipmentEntity.CreatedAt);
+        Assert.Equal(equipment.UpdatedAt, equipmentEntity.UpdatedAt);
+        Assert.Equal(equipmentType.Id, equipmentEntity.EquipmentTypeId);
     }
 
     [Fact]
@@ -176,34 +175,34 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         var equipmentTypeEntity = new EquipmentTypeEntity
         {
             EquipmentTypeId = Guid.NewGuid(),
-            Name            = "Projector",
-            Code            = "PRJ",
-            Description     = "Projector",
-            CreatedAt       = DateTime.Now,
-            UpdatedAt       = DateTime.Now
+            Name = "Projector",
+            Code = "PRJ",
+            Description = "Projector",
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
         };
 
         var equipmentEntity = new EquipmentEntity
         {
-            EquipmentId         = Guid.NewGuid(),
-            Name                = "Projector 1",
-            Code                = "PRJ1",
-            Brand               = "Brand 1",
-            Model               = "Model 1",
-            Description         = "Projector 1",
-            CreatedAt           = DateTime.Now,
-            UpdatedAt           = DateTime.Now,
+            EquipmentId = Guid.NewGuid(),
+            Name = "Projector 1",
+            Code = "PRJ1",
+            Brand = "Brand 1",
+            Model = "Model 1",
+            Description = "Projector 1",
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now,
             EquipmentTypeEntity = equipmentTypeEntity
         };
 
         var classroomEntity = new ClassroomEntity
         {
             ClassroomId = Guid.NewGuid(),
-            Name        = "Classroom 1",
-            Code        = "CR1",
-            Capacity    = 50,
-            CreatedAt   = DateTime.Now,
-            UpdatedAt   = DateTime.Now,
+            Name = "Classroom 1",
+            Code = "CR1",
+            Capacity = 50,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now,
             ClassroomEquipments = new List<ClassroomEquipmentEntity>
             {
                 new ClassroomEquipmentEntity
@@ -215,7 +214,7 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
 
         // Act
 
-        var classroom = classroomEntity.ToDomainModel();
+        var classroom = classroomEntity.ToDomainModel(true);
 
         testOutputHelper.WriteLine(JsonConvert.SerializeObject(classroom));
 
@@ -223,12 +222,12 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
 
         Assert.NotNull(classroom);
         Assert.Equal(classroomEntity.ClassroomId, classroom.Id);
-        Assert.Equal(classroomEntity.Name,        classroom.Name);
-        Assert.Equal(classroomEntity.Code,        classroom.Code);
-        Assert.Equal(classroomEntity.Capacity,    classroom.Capacity);
-        Assert.Equal(classroomEntity.CreatedAt,   classroom.CreatedAt);
-        Assert.Equal(classroomEntity.UpdatedAt,   classroom.UpdatedAt);
-        Assert.NotNull(classroom.Equipments);
+        Assert.Equal(classroomEntity.Name, classroom.Name);
+        Assert.Equal(classroomEntity.Code, classroom.Code);
+        Assert.Equal(classroomEntity.Capacity, classroom.Capacity);
+        Assert.Equal(classroomEntity.CreatedAt, classroom.CreatedAt);
+        Assert.Equal(classroomEntity.UpdatedAt, classroom.UpdatedAt);
+        Assert.NotNull(classroom.Equipments!);
         Assert.Single(classroom.Equipments);
         Assert.Equal(equipmentEntity.EquipmentId, classroom.Equipments.First().Id);
     }
@@ -281,10 +280,10 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         // Assert
 
         Assert.NotNull(classroomEntity);
-        Assert.Equal(classroom.Id,        classroomEntity.ClassroomId);
-        Assert.Equal(classroom.Name,      classroomEntity.Name);
-        Assert.Equal(classroom.Code,      classroomEntity.Code);
-        Assert.Equal(classroom.Capacity,  classroomEntity.Capacity);
+        Assert.Equal(classroom.Id, classroomEntity.ClassroomId);
+        Assert.Equal(classroom.Name, classroomEntity.Name);
+        Assert.Equal(classroom.Code, classroomEntity.Code);
+        Assert.Equal(classroom.Capacity, classroomEntity.Capacity);
         Assert.Equal(classroom.CreatedAt, classroomEntity.CreatedAt);
         Assert.Equal(classroom.UpdatedAt, classroomEntity.UpdatedAt);
     }
@@ -297,25 +296,25 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         var equipmentTypeEntity = new EquipmentTypeEntity
         {
             EquipmentTypeId = Guid.NewGuid(),
-            Name            = "Projector",
-            Code            = "PRJ",
-            Description     = "Projector",
-            CreatedAt       = DateTime.Now,
-            UpdatedAt       = DateTime.Now
+            Name = "Projector",
+            Code = "PRJ",
+            Description = "Projector",
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
         };
 
         var courseEntity = new CourseEntity
         {
-            CourseId    = Guid.NewGuid(),
-            Name        = "Course 1",
-            Code        = "C1",
+            CourseId = Guid.NewGuid(),
+            Name = "Course 1",
+            Code = "C1",
             Description = "Course 1",
             WeeklyHours = 3,
-            TotalHours  = 15,
-            Semester    = "1",
-            Credits     = 3,
-            CreatedAt   = DateTime.Now,
-            UpdatedAt   = DateTime.Now,
+            TotalHours = 15,
+            Semester = "1",
+            Credits = 3,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now,
             EquipmentTypes = new List<CourseEquipmentTypeEntity>
             {
                 new CourseEquipmentTypeEntity
@@ -334,16 +333,16 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         // Assert
 
         Assert.NotNull(course);
-        Assert.Equal(courseEntity.CourseId,    course.Id);
-        Assert.Equal(courseEntity.Name,        course.Name);
-        Assert.Equal(courseEntity.Code,        course.Code);
+        Assert.Equal(courseEntity.CourseId, course.Id);
+        Assert.Equal(courseEntity.Name, course.Name);
+        Assert.Equal(courseEntity.Code, course.Code);
         Assert.Equal(courseEntity.Description, course.Description);
         Assert.Equal(courseEntity.WeeklyHours, course.WeeklyHours);
-        Assert.Equal(courseEntity.TotalHours,  course.TotalHours);
-        Assert.Equal(courseEntity.Semester,    course.Semester);
-        Assert.Equal(courseEntity.Credits,     course.Credits);
-        Assert.Equal(courseEntity.CreatedAt,   course.CreatedAt);
-        Assert.Equal(courseEntity.UpdatedAt,   course.UpdatedAt);
+        Assert.Equal(courseEntity.TotalHours, course.TotalHours);
+        Assert.Equal(courseEntity.Semester, course.Semester);
+        Assert.Equal(courseEntity.Credits, course.Credits);
+        Assert.Equal(courseEntity.CreatedAt, course.CreatedAt);
+        Assert.Equal(courseEntity.UpdatedAt, course.UpdatedAt);
         Assert.NotNull(course.EquipmentTypes);
         Assert.Single(course.EquipmentTypes);
         Assert.Equal(equipmentTypeEntity.EquipmentTypeId, course.EquipmentTypes.First().Id);
@@ -377,16 +376,16 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         // Assert
 
         Assert.NotNull(courseEntity);
-        Assert.Equal(course.Id,          courseEntity.CourseId);
-        Assert.Equal(course.Name,        courseEntity.Name);
-        Assert.Equal(course.Code,        courseEntity.Code);
+        Assert.Equal(course.Id, courseEntity.CourseId);
+        Assert.Equal(course.Name, courseEntity.Name);
+        Assert.Equal(course.Code, courseEntity.Code);
         Assert.Equal(course.Description, courseEntity.Description);
         Assert.Equal(course.WeeklyHours, courseEntity.WeeklyHours);
-        Assert.Equal(course.TotalHours,  courseEntity.TotalHours);
-        Assert.Equal(course.Semester,    courseEntity.Semester);
-        Assert.Equal(course.Credits,     courseEntity.Credits);
-        Assert.Equal(course.CreatedAt,   courseEntity.CreatedAt);
-        Assert.Equal(course.UpdatedAt,   courseEntity.UpdatedAt);
+        Assert.Equal(course.TotalHours, courseEntity.TotalHours);
+        Assert.Equal(course.Semester, courseEntity.Semester);
+        Assert.Equal(course.Credits, courseEntity.Credits);
+        Assert.Equal(course.CreatedAt, courseEntity.CreatedAt);
+        Assert.Equal(course.UpdatedAt, courseEntity.UpdatedAt);
     }
 
     [Fact]
@@ -397,25 +396,25 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         var equipmentTypeEntity = new EquipmentTypeEntity
         {
             EquipmentTypeId = Guid.NewGuid(),
-            Name            = "Projector",
-            Code            = "PRJ",
-            Description     = "Projector",
-            CreatedAt       = DateTime.Now,
-            UpdatedAt       = DateTime.Now
+            Name = "Projector",
+            Code = "PRJ",
+            Description = "Projector",
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
         };
 
         var courseEntity = new CourseEntity
         {
-            CourseId    = Guid.NewGuid(),
-            Name        = "Course 1",
-            Code        = "C1",
+            CourseId = Guid.NewGuid(),
+            Name = "Course 1",
+            Code = "C1",
             Description = "Course 1",
             WeeklyHours = 3,
-            TotalHours  = 15,
-            Semester    = "1",
-            Credits     = 3,
-            CreatedAt   = DateTime.Now,
-            UpdatedAt   = DateTime.Now,
+            TotalHours = 15,
+            Semester = "1",
+            Credits = 3,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now,
             EquipmentTypes = new List<CourseEquipmentTypeEntity>
             {
                 new CourseEquipmentTypeEntity
@@ -427,12 +426,12 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
 
         var optionEntity = new OptionEntity
         {
-            OptionId    = Guid.NewGuid(),
-            Name        = "Option 1",
-            Code        = "O1",
+            OptionId = Guid.NewGuid(),
+            Name = "Option 1",
+            Code = "O1",
             Description = "Option 1",
-            CreatedAt   = DateTime.Now,
-            UpdatedAt   = DateTime.Now,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now,
             OptionCourses = new List<OptionCourseEntity>
             {
                 new OptionCourseEntity
@@ -451,12 +450,12 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         // Assert
 
         Assert.NotNull(option);
-        Assert.Equal(optionEntity.OptionId,    option.Id);
-        Assert.Equal(optionEntity.Name,        option.Name);
-        Assert.Equal(optionEntity.Code,        option.Code);
+        Assert.Equal(optionEntity.OptionId, option.Id);
+        Assert.Equal(optionEntity.Name, option.Name);
+        Assert.Equal(optionEntity.Code, option.Code);
         Assert.Equal(optionEntity.Description, option.Description);
-        Assert.Equal(optionEntity.CreatedAt,   option.CreatedAt);
-        Assert.Equal(optionEntity.UpdatedAt,   option.UpdatedAt);
+        Assert.Equal(optionEntity.CreatedAt, option.CreatedAt);
+        Assert.Equal(optionEntity.UpdatedAt, option.UpdatedAt);
         Assert.NotNull(option.Courses);
         Assert.Single(option.Courses);
         Assert.Equal(courseEntity.CourseId, option.Courses.First().Id);
@@ -503,12 +502,12 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         // Assert
 
         Assert.NotNull(optionEntity);
-        Assert.Equal(option.Id,          optionEntity.OptionId);
-        Assert.Equal(option.Name,        optionEntity.Name);
-        Assert.Equal(option.Code,        optionEntity.Code);
+        Assert.Equal(option.Id, optionEntity.OptionId);
+        Assert.Equal(option.Name, optionEntity.Name);
+        Assert.Equal(option.Code, optionEntity.Code);
         Assert.Equal(option.Description, optionEntity.Description);
-        Assert.Equal(option.CreatedAt,   optionEntity.CreatedAt);
-        Assert.Equal(option.UpdatedAt,   optionEntity.UpdatedAt);
+        Assert.Equal(option.CreatedAt, optionEntity.CreatedAt);
+        Assert.Equal(option.UpdatedAt, optionEntity.UpdatedAt);
     }
 
     [Fact]
@@ -518,35 +517,35 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
 
         var optionEntity = new OptionEntity
         {
-            OptionId    = Guid.NewGuid(),
-            Name        = "Option 1",
-            Code        = "O1",
+            OptionId = Guid.NewGuid(),
+            Name = "Option 1",
+            Code = "O1",
             Description = "Option 1",
-            CreatedAt   = DateTime.Now,
-            UpdatedAt   = DateTime.Now
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
         };
 
         var siteEntity = new SiteEntity
         {
-            SiteId    = Guid.NewGuid(),
-            Name      = "Site 1",
-            Code      = "S1",
-            Address   = "Address 1",
-            Phone     = "1234567890",
+            SiteId = Guid.NewGuid(),
+            Name = "Site 1",
+            Code = "S1",
+            Address = "Address 1",
+            Phone = "1234567890",
             CreatedAt = DateTime.Now,
             UpdatedAt = DateTime.Now
         };
 
         var studentGroupEntity = new StudentGroupEntity
         {
-            StudentGroupId   = Guid.NewGuid(),
-            Code             = "G1",
+            StudentGroupId = Guid.NewGuid(),
+            Code = "G1",
             NumberOfStudents = 50,
-            OptionGrade      = 1,
-            CreatedAt        = DateTime.Now,
-            UpdatedAt        = DateTime.Now,
-            OptionEntity     = optionEntity,
-            SiteEntity       = siteEntity
+            OptionGrade = 1,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now,
+            OptionEntity = optionEntity,
+            SiteEntity = siteEntity
         };
 
         // Act
@@ -558,12 +557,12 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         // Assert
 
         Assert.NotNull(studentGroup);
-        Assert.Equal(studentGroupEntity.StudentGroupId,   studentGroup.Id);
-        Assert.Equal(studentGroupEntity.Code,             studentGroup.Code);
+        Assert.Equal(studentGroupEntity.StudentGroupId, studentGroup.Id);
+        Assert.Equal(studentGroupEntity.Code, studentGroup.Code);
         Assert.Equal(studentGroupEntity.NumberOfStudents, studentGroup.NumberOfStudents);
-        Assert.Equal(studentGroupEntity.OptionGrade,      studentGroup.OptionGrade);
-        Assert.Equal(studentGroupEntity.CreatedAt,        studentGroup.CreatedAt);
-        Assert.Equal(studentGroupEntity.UpdatedAt,        studentGroup.UpdatedAt);
+        Assert.Equal(studentGroupEntity.OptionGrade, studentGroup.OptionGrade);
+        Assert.Equal(studentGroupEntity.CreatedAt, studentGroup.CreatedAt);
+        Assert.Equal(studentGroupEntity.UpdatedAt, studentGroup.UpdatedAt);
         Assert.NotNull(studentGroup.Site);
         Assert.Equal(siteEntity.SiteId, studentGroup.Site.Id);
         Assert.NotNull(studentGroup.Option);
@@ -618,12 +617,12 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         // Assert
 
         Assert.NotNull(studentGroupEntity);
-        Assert.Equal(studentGroup.Id,               studentGroupEntity.StudentGroupId);
-        Assert.Equal(studentGroup.Code,             studentGroupEntity.Code);
+        Assert.Equal(studentGroup.Id, studentGroupEntity.StudentGroupId);
+        Assert.Equal(studentGroup.Code, studentGroupEntity.Code);
         Assert.Equal(studentGroup.NumberOfStudents, studentGroupEntity.NumberOfStudents);
-        Assert.Equal(studentGroup.OptionGrade,      studentGroupEntity.OptionGrade);
-        Assert.Equal(studentGroup.CreatedAt,        studentGroupEntity.CreatedAt);
-        Assert.Equal(studentGroup.UpdatedAt,        studentGroupEntity.UpdatedAt);
+        Assert.Equal(studentGroup.OptionGrade, studentGroupEntity.OptionGrade);
+        Assert.Equal(studentGroup.CreatedAt, studentGroupEntity.CreatedAt);
+        Assert.Equal(studentGroup.UpdatedAt, studentGroupEntity.UpdatedAt);
     }
 
     [Fact]
@@ -633,92 +632,92 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
 
         var courseEntity = new CourseEntity
         {
-            CourseId    = Guid.NewGuid(),
-            Name        = "Course 1",
-            Code        = "C1",
+            CourseId = Guid.NewGuid(),
+            Name = "Course 1",
+            Code = "C1",
             Description = "Course 1",
             WeeklyHours = 3,
-            TotalHours  = 15,
-            Semester    = "1",
-            Credits     = 3,
-            CreatedAt   = DateTime.Now,
-            UpdatedAt   = DateTime.Now
+            TotalHours = 15,
+            Semester = "1",
+            Credits = 3,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
         };
 
         var classroomEntity = new ClassroomEntity
         {
             ClassroomId = Guid.NewGuid(),
-            Name        = "Classroom 1",
-            Code        = "CR1",
-            Capacity    = 50,
-            CreatedAt   = DateTime.Now,
-            UpdatedAt   = DateTime.Now
+            Name = "Classroom 1",
+            Code = "CR1",
+            Capacity = 50,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
         };
 
         var equipmentTypeEntity = new EquipmentTypeEntity
         {
             EquipmentTypeId = Guid.NewGuid(),
-            Name            = "Projector",
-            Code            = "PRJ",
-            Description     = "Projector",
-            CreatedAt       = DateTime.Now,
-            UpdatedAt       = DateTime.Now
+            Name = "Projector",
+            Code = "PRJ",
+            Description = "Projector",
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
         };
 
         var equipmentEntity = new EquipmentEntity
         {
-            EquipmentId         = Guid.NewGuid(),
-            Name                = "Projector 1",
-            Code                = "PRJ1",
-            Brand               = "Brand 1",
-            Model               = "Model 1",
-            Description         = "Projector 1",
-            CreatedAt           = DateTime.Now,
-            UpdatedAt           = DateTime.Now,
+            EquipmentId = Guid.NewGuid(),
+            Name = "Projector 1",
+            Code = "PRJ1",
+            Brand = "Brand 1",
+            Model = "Model 1",
+            Description = "Projector 1",
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now,
             EquipmentTypeEntity = equipmentTypeEntity
         };
 
         var siteEntity = new SiteEntity
         {
-            SiteId    = Guid.NewGuid(),
-            Name      = "Site 1",
-            Code      = "S1",
-            Address   = "Address 1",
-            Phone     = "1234567890",
+            SiteId = Guid.NewGuid(),
+            Name = "Site 1",
+            Code = "S1",
+            Address = "Address 1",
+            Phone = "1234567890",
             CreatedAt = DateTime.Now,
             UpdatedAt = DateTime.Now
         };
 
         var optionEntity = new OptionEntity
         {
-            OptionId    = Guid.NewGuid(),
-            Name        = "Option 1",
-            Code        = "O1",
+            OptionId = Guid.NewGuid(),
+            Name = "Option 1",
+            Code = "O1",
             Description = "Option 1",
-            CreatedAt   = DateTime.Now,
-            UpdatedAt   = DateTime.Now
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
         };
 
         var studentGroupEntity = new StudentGroupEntity
         {
-            StudentGroupId   = Guid.NewGuid(),
-            Code             = "G1",
+            StudentGroupId = Guid.NewGuid(),
+            Code = "G1",
             NumberOfStudents = 50,
-            OptionGrade      = 1,
-            CreatedAt        = DateTime.Now,
-            UpdatedAt        = DateTime.Now,
-            OptionEntity     = optionEntity,
-            SiteEntity       = siteEntity
+            OptionGrade = 1,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now,
+            OptionEntity = optionEntity,
+            SiteEntity = siteEntity
         };
 
         var sessionEntity = new SessionEntity
         {
-            SessionId       = Guid.NewGuid(),
-            DatetimeStart   = DateTime.Now,
-            DatetimeEnd     = DateTime.Now,
-            CreatedAt       = DateTime.Now,
-            UpdatedAt       = DateTime.Now,
-            CourseEntity    = courseEntity,
+            SessionId = Guid.NewGuid(),
+            DatetimeStart = DateTime.Now,
+            DatetimeEnd = DateTime.Now,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now,
+            CourseEntity = courseEntity,
             ClassroomEntity = classroomEntity,
             EquipmentSessions = new List<EquipmentSessionEntity>
             {
@@ -745,11 +744,11 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         // Assert
 
         Assert.NotNull(session);
-        Assert.Equal(sessionEntity.SessionId,     session.Id);
+        Assert.Equal(sessionEntity.SessionId, session.Id);
         Assert.Equal(sessionEntity.DatetimeStart, session.DateTimeStart);
-        Assert.Equal(sessionEntity.DatetimeEnd,   session.DateTimeEnd);
-        Assert.Equal(sessionEntity.CreatedAt,     session.CreatedAt);
-        Assert.Equal(sessionEntity.UpdatedAt,     session.UpdatedAt);
+        Assert.Equal(sessionEntity.DatetimeEnd, session.DateTimeEnd);
+        Assert.Equal(sessionEntity.CreatedAt, session.CreatedAt);
+        Assert.Equal(sessionEntity.UpdatedAt, session.UpdatedAt);
         Assert.NotNull(session.Course);
         Assert.Equal(courseEntity.CourseId, session.Course.Id);
         Assert.NotNull(session.Classroom);
@@ -874,11 +873,11 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         // Assert
 
         Assert.NotNull(sessionEntity);
-        Assert.Equal(session.Id,            sessionEntity.SessionId);
+        Assert.Equal(session.Id, sessionEntity.SessionId);
         Assert.Equal(session.DateTimeStart, sessionEntity.DatetimeStart);
-        Assert.Equal(session.DateTimeEnd,   sessionEntity.DatetimeEnd);
-        Assert.Equal(session.CreatedAt,     sessionEntity.CreatedAt);
-        Assert.Equal(session.UpdatedAt,     sessionEntity.UpdatedAt);
+        Assert.Equal(session.DateTimeEnd, sessionEntity.DatetimeEnd);
+        Assert.Equal(session.CreatedAt, sessionEntity.CreatedAt);
+        Assert.Equal(session.UpdatedAt, sessionEntity.UpdatedAt);
     }
 
     [Fact]
@@ -889,10 +888,10 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         var scheduleEntity = new CourseScheduleEntity
         {
             ScheduleId = Guid.NewGuid(),
-            HourStart  = TimeOnly.FromDateTime(DateTime.Now),
-            HourEnd    = TimeOnly.FromDateTime(DateTime.Now.AddHours(1)),
-            CreatedAt  = DateTime.Now,
-            UpdatedAt  = DateTime.Now
+            HourStart = TimeOnly.FromDateTime(DateTime.Now),
+            HourEnd = TimeOnly.FromDateTime(DateTime.Now.AddHours(1)),
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
         };
 
         // Act
@@ -905,8 +904,8 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
 
         Assert.NotNull(schedule);
         Assert.Equal(scheduleEntity.ScheduleId, schedule.Id);
-        Assert.Equal(scheduleEntity.HourStart,  schedule.TimeStart);
-        Assert.Equal(scheduleEntity.HourEnd,    schedule.TimeEnd);
+        Assert.Equal(scheduleEntity.HourStart, schedule.TimeStart);
+        Assert.Equal(scheduleEntity.HourEnd, schedule.TimeEnd);
     }
 
     [Fact]
@@ -930,10 +929,10 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         // Assert
 
         Assert.NotNull(scheduleEntity);
-        Assert.Equal(schedule.Id,             scheduleEntity.ScheduleId);
+        Assert.Equal(schedule.Id, scheduleEntity.ScheduleId);
         Assert.Equal((int)schedule.DayOfWeek, scheduleEntity.DayOfTheWeek);
-        Assert.Equal(schedule.TimeStart,      scheduleEntity.HourStart);
-        Assert.Equal(schedule.TimeEnd,        scheduleEntity.HourEnd);
+        Assert.Equal(schedule.TimeStart, scheduleEntity.HourStart);
+        Assert.Equal(schedule.TimeEnd, scheduleEntity.HourEnd);
     }
 
     [Fact]
@@ -942,11 +941,11 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         // Arrange
         var siteEntity = new SiteEntity
         {
-            SiteId    = Guid.NewGuid(),
-            Name      = "Site 1",
-            Code      = "S1",
-            Address   = "Address 1",
-            Phone     = "1234567890",
+            SiteId = Guid.NewGuid(),
+            Name = "Site 1",
+            Code = "S1",
+            Address = "Address 1",
+            Phone = "1234567890",
             CreatedAt = DateTime.Now,
             UpdatedAt = DateTime.Now
         };
@@ -958,11 +957,11 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
 
         // Assert
         Assert.NotNull(site);
-        Assert.Equal(siteEntity.SiteId,    site.Id);
-        Assert.Equal(siteEntity.Name,      site.Name);
-        Assert.Equal(siteEntity.Code,      site.Code);
-        Assert.Equal(siteEntity.Address,   site.Address);
-        Assert.Equal(siteEntity.Phone,     site.Phone);
+        Assert.Equal(siteEntity.SiteId, site.Id);
+        Assert.Equal(siteEntity.Name, site.Name);
+        Assert.Equal(siteEntity.Code, site.Code);
+        Assert.Equal(siteEntity.Address, site.Address);
+        Assert.Equal(siteEntity.Phone, site.Phone);
         Assert.Equal(siteEntity.CreatedAt, site.CreatedAt);
         Assert.Equal(siteEntity.UpdatedAt, site.UpdatedAt);
     }
@@ -991,11 +990,11 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
 
         // Assert
         Assert.NotNull(siteEntity);
-        Assert.Equal(site.Id,        siteEntity.SiteId);
-        Assert.Equal(site.Name,      siteEntity.Name);
-        Assert.Equal(site.Code,      siteEntity.Code);
-        Assert.Equal(site.Address,   siteEntity.Address);
-        Assert.Equal(site.Phone,     siteEntity.Phone);
+        Assert.Equal(site.Id, siteEntity.SiteId);
+        Assert.Equal(site.Name, siteEntity.Name);
+        Assert.Equal(site.Code, siteEntity.Code);
+        Assert.Equal(site.Address, siteEntity.Address);
+        Assert.Equal(site.Phone, siteEntity.Phone);
         Assert.Equal(site.CreatedAt, siteEntity.CreatedAt);
         Assert.Equal(site.UpdatedAt, siteEntity.UpdatedAt);
     }
@@ -1007,12 +1006,12 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         var universityEntity = new UniversityEntity
         {
             UniversityId = Guid.NewGuid(),
-            Name         = "University 1",
-            Code         = "U1",
-            Address      = "Address 1",
-            Phone        = "1234567890",
-            CreatedAt    = DateTime.Now,
-            UpdatedAt    = DateTime.Now
+            Name = "University 1",
+            Code = "U1",
+            Address = "Address 1",
+            Phone = "1234567890",
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
         };
 
         // Act
@@ -1023,12 +1022,12 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         // Assert
         Assert.NotNull(university);
         Assert.Equal(universityEntity.UniversityId, university.Id);
-        Assert.Equal(universityEntity.Name,         university.Name);
-        Assert.Equal(universityEntity.Code,         university.Code);
-        Assert.Equal(universityEntity.Address,      university.Address);
-        Assert.Equal(universityEntity.Phone,        university.Phone);
-        Assert.Equal(universityEntity.CreatedAt,    university.CreatedAt);
-        Assert.Equal(universityEntity.UpdatedAt,    university.UpdatedAt);
+        Assert.Equal(universityEntity.Name, university.Name);
+        Assert.Equal(universityEntity.Code, university.Code);
+        Assert.Equal(universityEntity.Address, university.Address);
+        Assert.Equal(universityEntity.Phone, university.Phone);
+        Assert.Equal(universityEntity.CreatedAt, university.CreatedAt);
+        Assert.Equal(universityEntity.UpdatedAt, university.UpdatedAt);
     }
 
     [Fact]
@@ -1054,11 +1053,11 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
 
         // Assert
         Assert.NotNull(universityEntity);
-        Assert.Equal(university.Id,        universityEntity.UniversityId);
-        Assert.Equal(university.Name,      universityEntity.Name);
-        Assert.Equal(university.Code,      universityEntity.Code);
-        Assert.Equal(university.Address,   universityEntity.Address);
-        Assert.Equal(university.Phone,     universityEntity.Phone);
+        Assert.Equal(university.Id, universityEntity.UniversityId);
+        Assert.Equal(university.Name, universityEntity.Name);
+        Assert.Equal(university.Code, universityEntity.Code);
+        Assert.Equal(university.Address, universityEntity.Address);
+        Assert.Equal(university.Phone, universityEntity.Phone);
         Assert.Equal(university.CreatedAt, universityEntity.CreatedAt);
         Assert.Equal(university.UpdatedAt, universityEntity.UpdatedAt);
     }
@@ -1070,9 +1069,9 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         var dayWithoutCourseEntity = new DayWithoutCourseEntity
         {
             DayWithoutCourseId = Guid.NewGuid(),
-            Date               = DateOnly.FromDateTime(DateTime.Now),
-            CreatedAt          = DateTime.Now,
-            UpdatedAt          = DateTime.Now
+            Date = DateOnly.FromDateTime(DateTime.Now),
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
         };
 
         // Act
@@ -1083,9 +1082,9 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         // Assert
         Assert.NotNull(dayWithoutCourse);
         Assert.Equal(dayWithoutCourseEntity.DayWithoutCourseId, dayWithoutCourse.Id);
-        Assert.Equal(dayWithoutCourseEntity.Date,               dayWithoutCourse.Date);
-        Assert.Equal(dayWithoutCourseEntity.CreatedAt,          dayWithoutCourse.CreatedAt);
-        Assert.Equal(dayWithoutCourseEntity.UpdatedAt,          dayWithoutCourse.UpdatedAt);
+        Assert.Equal(dayWithoutCourseEntity.Date, dayWithoutCourse.Date);
+        Assert.Equal(dayWithoutCourseEntity.CreatedAt, dayWithoutCourse.CreatedAt);
+        Assert.Equal(dayWithoutCourseEntity.UpdatedAt, dayWithoutCourse.UpdatedAt);
     }
 
     [Fact]
@@ -1107,8 +1106,8 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
 
         // Assert
         Assert.NotNull(dayWithoutCourseEntity);
-        Assert.Equal(dayWithoutCourse.Id,        dayWithoutCourseEntity.DayWithoutCourseId);
-        Assert.Equal(dayWithoutCourse.Date,      dayWithoutCourseEntity.Date);
+        Assert.Equal(dayWithoutCourse.Id, dayWithoutCourseEntity.DayWithoutCourseId);
+        Assert.Equal(dayWithoutCourse.Date, dayWithoutCourseEntity.Date);
         Assert.Equal(dayWithoutCourse.CreatedAt, dayWithoutCourseEntity.CreatedAt);
         Assert.Equal(dayWithoutCourse.UpdatedAt, dayWithoutCourseEntity.UpdatedAt);
     }
@@ -1117,23 +1116,23 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
     public void AcademicYear_ToDomain_Test()
     {
         // Arrange
-        
+
         var dayWithoutCourseEntity = new DayWithoutCourseEntity
         {
             DayWithoutCourseId = Guid.NewGuid(),
-            Date               = DateOnly.FromDateTime(DateTime.Now),
-            CreatedAt          = DateTime.Now,
-            UpdatedAt          = DateTime.Now
+            Date = DateOnly.FromDateTime(DateTime.Now),
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
         };
-        
+
         var academicYearEntity = new AcademicYearEntity
         {
             AcademicYearId = Guid.NewGuid(),
             AcademicYearCode = "2023-2024",
             DateStart = DateOnly.FromDateTime(DateTime.Now),
-            DateEnd   = DateOnly.FromDateTime(DateTime.Now.AddYears(1)),
-            CreatedAt      = DateTime.Now,
-            UpdatedAt      = DateTime.Now,
+            DateEnd = DateOnly.FromDateTime(DateTime.Now.AddYears(1)),
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now,
             DaysWithoutCourses = new List<DayWithoutCourseEntity>
             {
                 dayWithoutCourseEntity
@@ -1141,19 +1140,19 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         };
 
         // Act
-        
+
         var academicYear = academicYearEntity.ToDomainModel();
 
         testOutputHelper.WriteLine(JsonConvert.SerializeObject(academicYear));
 
         // Assert
-        
+
         Assert.NotNull(academicYear);
         Assert.Equal(academicYearEntity.AcademicYearId, academicYear.Id);
-        Assert.Equal(academicYearEntity.DateStart,      academicYear.DateStart);
-        Assert.Equal(academicYearEntity.DateEnd,        academicYear.DateEnd);
-        Assert.Equal(academicYearEntity.CreatedAt,      academicYear.CreatedAt);
-        Assert.Equal(academicYearEntity.UpdatedAt,      academicYear.UpdatedAt);
+        Assert.Equal(academicYearEntity.DateStart, academicYear.DateStart);
+        Assert.Equal(academicYearEntity.DateEnd, academicYear.DateEnd);
+        Assert.Equal(academicYearEntity.CreatedAt, academicYear.CreatedAt);
+        Assert.Equal(academicYearEntity.UpdatedAt, academicYear.UpdatedAt);
         Assert.NotNull(academicYear.DaysWithoutCourses);
         Assert.Single(academicYear.DaysWithoutCourses);
         Assert.Equal(dayWithoutCourseEntity.DayWithoutCourseId, academicYear.DaysWithoutCourses.First().Id);
@@ -1163,7 +1162,7 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
     public void AcademicYear_ToEntity_Test()
     {
         // Arrange
-        
+
         var academicYear = new AcademicYear(
             code: "2023-2024",
             dateStart: DateOnly.FromDateTime(DateTime.Now),
@@ -1174,18 +1173,18 @@ public class ModelMappersTest(ITestOutputHelper testOutputHelper)
         );
 
         // Act
-        
+
         var academicYearEntity = academicYear.ToEntity();
 
         testOutputHelper.WriteLine(JsonConvert.SerializeObject(academicYearEntity));
 
         // Assert
-        
+
         Assert.NotNull(academicYearEntity);
-        Assert.Equal(academicYear.Id,        academicYearEntity.AcademicYearId);
-        Assert.Equal(academicYear.Code,      academicYearEntity.AcademicYearCode);
+        Assert.Equal(academicYear.Id, academicYearEntity.AcademicYearId);
+        Assert.Equal(academicYear.Code, academicYearEntity.AcademicYearCode);
         Assert.Equal(academicYear.DateStart, academicYearEntity.DateStart);
-        Assert.Equal(academicYear.DateEnd,   academicYearEntity.DateEnd);
+        Assert.Equal(academicYear.DateEnd, academicYearEntity.DateEnd);
         Assert.Equal(academicYear.CreatedAt, academicYearEntity.CreatedAt);
         Assert.Equal(academicYear.UpdatedAt, academicYearEntity.UpdatedAt);
     }

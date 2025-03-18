@@ -7,7 +7,7 @@ using NuGet.Protocol;
 namespace Calempus360.API.Controllers
 {
     [ApiController]
-    [Route("api/university/{universityId:guid}/groups")]
+    [Route("api/groups")]
     public class StudentGroupController : ControllerBase
     {
         private readonly IStudentGroupService _studentGroupService;
@@ -18,14 +18,14 @@ namespace Calempus360.API.Controllers
         }
         #region GET
         [HttpGet]
-        public async Task<IActionResult> GetAllStudentGroups(Guid academicYear, Guid universityId)
+        public async Task<IActionResult> GetAllStudentGroups([FromQuery] Guid academicYearId, [FromQuery] Guid universityId)
         {
-            var studentGroups = await _studentGroupService.GetAllStudentGroupAsync(academicYear,universityId);
+            var studentGroups = await _studentGroupService.GetAllStudentGroupAsync(academicYearId, universityId);
 
             return Ok(studentGroups.Select(sg => sg.MapToDto()));
         }
         [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetStudentGroupById(Guid id, Guid academicYear)
+        public async Task<IActionResult> GetStudentGroupById(Guid id, [FromQuery] Guid academicYear)
         {
             var studentGroup = await _studentGroupService.GetStudentGroupByIdAsync(id, academicYear);
             return Ok(studentGroup.MapToDto());
@@ -34,21 +34,21 @@ namespace Calempus360.API.Controllers
 
         #region POST
         [HttpPost]
-        public async Task<IActionResult> AddStudentGroup([FromBody] StudentGroupRequestDto studentGroupRequest, Guid academicYear, Guid option, Guid site)
+        public async Task<IActionResult> AddStudentGroup([FromBody] StudentGroupRequestDto studentGroupRequest, [FromQuery] Guid academicYear, [FromQuery] Guid option, [FromQuery] Guid site)
         {
             var studentGroup = await _studentGroupService.AddStudentGroupAsync(new Core.Models.StudentGroup
                 (
                     code: studentGroupRequest.Code,
                     numberOfStudents: studentGroupRequest.NumberOfStudents,
                     optionGrade: studentGroupRequest.OptionGrade
-                ), academicYear,option,site);
+                ), academicYear, option, site);
             return Ok(studentGroup.MapToDto());
         }
         #endregion
 
         #region PUT
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdateStudentGroup([FromBody] StudentGroupRequestDto studentGroupRequest, Guid id, Guid option, Guid site)
+        public async Task<IActionResult> UpdateStudentGroup([FromBody] StudentGroupRequestDto studentGroupRequest, Guid id, [FromQuery] Guid option, [FromQuery] Guid site)
         {
             var studentGroup = await _studentGroupService.UpdateStudentGroupAsync(new Core.Models.StudentGroup
                 (
@@ -56,7 +56,7 @@ namespace Calempus360.API.Controllers
                     numberOfStudents: studentGroupRequest.NumberOfStudents,
                     optionGrade: studentGroupRequest.OptionGrade,
                     id: id
-                ),option,site);
+                ), option, site);
             return Ok(studentGroup.MapToDto());
         }
 

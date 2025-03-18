@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Calempus360.API.Controllers
 {
     [ApiController]
-    [Route("api/university/{universityId:guid}/courses")]
+    [Route("api/courses")]
     public class CourseController : ControllerBase
     {
         private readonly ICourseService _courseService;
@@ -18,7 +18,7 @@ namespace Calempus360.API.Controllers
 
         #region POST
         [HttpPost]
-        public async Task<IActionResult> AddCourse([FromBody] CourseRequestDto courseRequest, Guid academicYear, Guid universityId)
+        public async Task<IActionResult> AddCourse([FromBody] CourseRequestDto courseRequest, [FromQuery] Guid academicYear, [FromQuery] Guid universityId)
         {
             var course = await _courseService.AddCourseAsync(new Core.Models.Course
                 (
@@ -29,9 +29,9 @@ namespace Calempus360.API.Controllers
                     weeklyHours: courseRequest.WeeklyHours,
                     semester: courseRequest.Semester,
                     credits: courseRequest.Credits
-                ), academicYear, universityId, courseRequest.EquipmentType);
+                ), academicYear, universityId, courseRequest.EquipmentType!);
 
-                return Ok(course.MapToDto());
+            return Ok(course.MapToDto());
         }
         #endregion
 
@@ -47,14 +47,14 @@ namespace Calempus360.API.Controllers
         public async Task<IActionResult> GetCourseById(Guid id)
         {
             var course = await _courseService.GetCourseByIdAsync(id);
-            return Ok(course.MapToDto());
+            return Ok(course!.MapToDto());
         }
 
         #endregion
 
         #region PUT
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdateCourse(Guid id, CourseRequestDto courseRequest,Guid academicYear, Guid universityId)
+        public async Task<IActionResult> UpdateCourse(Guid id, CourseRequestDto courseRequest, [FromQuery] Guid academicYear, [FromQuery] Guid universityId)
         {
             var course = await _courseService.UpdateCourseAsync(new Core.Models.Course
                 (
@@ -66,7 +66,7 @@ namespace Calempus360.API.Controllers
                     weeklyHours: courseRequest.WeeklyHours,
                     semester: courseRequest.Semester,
                     credits: courseRequest.Credits
-                ), academicYear, courseRequest.EquipmentType, universityId);
+                ), academicYear, courseRequest.EquipmentType!, universityId);
             return Ok(course.MapToDto());
         }
         #endregion
@@ -76,7 +76,7 @@ namespace Calempus360.API.Controllers
         public async Task<IActionResult> DeleteCourse(Guid id)
         {
             var response = await _courseService.DeleteCourseAsync(id);
-            if(response) return Ok(new { message = $"Course with id : {id} deleted" });
+            if (response) return Ok(new { message = $"Course with id : {id} deleted" });
             return NotFound(new { message = $"Course with id: {id} not found or could not be deleted" });
         }
         #endregion

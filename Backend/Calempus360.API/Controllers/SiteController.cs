@@ -7,14 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Calempus360.API.Controllers
 {
-    [Route("api/universities/{universityId:guid}/sites")]
+    [Route("api/sites")]
     [ApiController]
     public class SiteController(ISiteService siteService) : ControllerBase
     {
         #region GET
 
         [HttpGet]
-        public async Task<IActionResult> GetSitesByUniversityIdAsync(Guid universityId)
+        public async Task<IActionResult> GetSitesByUniversityIdAsync([FromQuery] Guid universityId)
         {
             var sites = await siteService.GetSitesByUniversityAsync(universityId);
             return Ok(sites.Select(s => s?.MapToDto()));
@@ -32,7 +32,7 @@ namespace Calempus360.API.Controllers
         #region POST
 
         [HttpPost]
-        public async Task<IActionResult> CreateSiteAsync(Guid universityId, [FromBody] SiteRequestDto requestDto)
+        public async Task<IActionResult> CreateSiteAsync([FromQuery] Guid universityId, [FromBody] SiteRequestDto requestDto)
         {
             var site = await siteService.CreateSiteAsync(new Site
             (
