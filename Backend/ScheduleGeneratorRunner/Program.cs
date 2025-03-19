@@ -9,7 +9,7 @@ public class Program
         List<Class> classes = new()
         {
             new("1A", "A", 60, null),
-            
+
             new("2A", "A", 60,
                 new List<Equipement>
                     { new Equipement("A", "Science Kit", Guid.NewGuid()) }),
@@ -42,6 +42,24 @@ public class Program
         {
             new(8, 9), new(9, 10), new(10, 11), new(11, 12),
             new(13, 14), new(14, 15), new(15, 16), new(16, 17)
+        };
+
+        List<(string site, string dayOfWeek, (int startHour, int endHour))> openingHours = new(){
+            ("A", "Monday", (8, 12)), ("A", "Monday", (13, 17)),
+            ("A", "Tuesday", (8, 12)), ("A", "Tuesday", (13, 17)),
+            ("A", "Wednesday", (8, 12)), ("A", "Wednesday", (13, 17)),
+            ("A", "Thursday", (8, 12)), ("A", "Thursday", (13, 17)),
+            ("A", "Friday", (8, 12)), ("A", "Friday", (13, 17)),
+            ("B", "Monday", (8, 12)), ("B", "Monday", (13, 17)),
+            ("B", "Tuesday", (8, 12)), ("B", "Tuesday", (13, 17)),
+            ("B", "Wednesday", (8, 12)), ("B", "Wednesday", (13, 17)),
+            ("B", "Thursday", (8, 12)), ("B", "Thursday", (13, 17)),
+            ("B", "Friday", (8, 12)), ("B", "Friday", (13, 17)),
+            ("C", "Monday", (8, 12)), ("C", "Monday", (13, 17)),
+            ("C", "Tuesday", (8, 12)), ("C", "Tuesday", (13, 17)),
+            ("C", "Wednesday", (8, 12)), ("C", "Wednesday", (13, 17)),
+            ("C", "Thursday", (8, 12)), ("C", "Thursday", (13, 17)),
+            ("C", "Friday", (8, 12)), ("C", "Friday", (13, 17))
         };
 
         List<CourseGroups> courseGroups = new()
