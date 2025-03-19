@@ -37,7 +37,11 @@ public class ScheduleService(Calempus360DbContext context)
 
         await context.SaveChangesAsync();
 
-        var classrooms = from c in await context.Classrooms.Include(c => c.ClassroomEquipments)!.ThenInclude(ce => ce.EquipmentEntity).ToListAsync() select ClassAdapter.Adapt(c);
+        var classrooms = from c in await context.Classrooms
+                                .Include(c => c.ClassroomEquipments)!
+                                    .ThenInclude(ce => ce.EquipmentEntity)
+                                .ToListAsync()
+                         select ClassAdapter.Adapt(c);
 
         var flyingEquipments = from e in await context.Equipments
                                     .Include(e => e.EquipmentTypeEntity)
@@ -48,7 +52,21 @@ public class ScheduleService(Calempus360DbContext context)
                                     .ToListAsync()
                                select EquipmentAdapter.Adapt(e);
 
-        var courseGroups = string.Empty;
+        var groupsOfThisYear = from g in await context.StudentGroups
+                                    .Include(g => g.SiteEntity)
+                                    .Include(g => g.OptionEntity)
+                                    .Where(g => g.AcademicYearId == academicYearId &&
+                                                g.SiteEntity!.UniversityId == universityId)
+                                    .ToListAsync()
+                               select g;
+
+        var courseGroups = from c in await context.Courses
+                    .Include(c => c.OptionsCourses)
+                    .Include(c => c.EquipmentTypes)
+                    .ToListAsync()
+                           where c.OptionsCourses.Any(oc => groupsOfThisYear.Any(g => g.OptionEntity.OptionId == oc.OptionId && g.OptionGrade == oc.OptionGrade))
+                           select CourseGroupsAdapter.Adapt(c, groupsOfThisYear.ToList());
+
         var openings = string.Empty;
 
         // var scheduler = new ScheduleGenerator.ScheduleGenerator(

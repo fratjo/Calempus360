@@ -12,17 +12,17 @@ public static class CourseGroupsAdapter
         {
             Course = course.Name,
             Groups = groups.Select(g => new Group()
-                {
-                    Name = g.Code,
-                    Capacity = g.NumberOfStudents,
-                    PreferedSite = g.SiteEntity.Code
-                }
+            {
+                Name = g.Code,
+                Capacity = g.NumberOfStudents,
+                PreferedSite = g.SiteEntity!.Code
+            }
                 ).ToList(),
             Equipements = course.EquipmentTypes
-                                .Select(et => 
+                                .Select(et =>
                                             new Equipement(
-                                                null, 
-                                                et.EquipmentTypeEntity.Name, 
+                                                null,
+                                                et.EquipmentTypeEntity.Name,
                                                 null))
                                 .ToList()
         };
