@@ -64,10 +64,12 @@ public class ScheduleService(Calempus360DbContext context)
                     .Include(c => c.OptionsCourses)
                     .Include(c => c.EquipmentTypes)
                     .ToListAsync()
-                           where c.OptionsCourses.Any(oc => groupsOfThisYear.Any(g => g.OptionEntity.OptionId == oc.OptionId && g.OptionGrade == oc.OptionGrade))
+                           where c.OptionsCourses.Any(oc => groupsOfThisYear.Any(g => g.OptionEntity!.OptionId == oc.OptionId && g.OptionGrade == oc.OptionGrade))
                            select CourseGroupsAdapter.Adapt(c, groupsOfThisYear.ToList());
 
-        var openings = string.Empty;
+        var openings = from o in await context.SitesCoursesSchedules
+                            .Include(scs => scs.CourseScheduleEntity).ToListAsync()
+                       select Tuple.Create(o.SiteEntity.SiteId, o.CourseScheduleEntity.DayOfTheWeek, (o.CourseScheduleEntity.HourStart, o.CourseScheduleEntity.HourEnd));
 
         // var scheduler = new ScheduleGenerator.ScheduleGenerator(
         //     classrooms,
