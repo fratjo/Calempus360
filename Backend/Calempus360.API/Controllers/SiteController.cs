@@ -42,9 +42,9 @@ namespace Calempus360.API.Controllers
                 phone: requestDto.Phone,
                 schedules: requestDto.Schedules.Select(s => new Schedule
                 (
-                    timeStart: s.TimeStart,
-                    timeEnd: s.TimeEnd,
-                    dayOfWeek: s.DayOfWeek
+                    timeStart: TimeOnly.Parse(s.TimeStart),
+                    timeEnd: TimeOnly.Parse(s.TimeEnd),
+                    dayOfWeek: (Core.Models.DayOfWeek) s.DayOfWeek
                 )).ToList()
             ), universityId);
 
@@ -67,9 +67,9 @@ namespace Calempus360.API.Controllers
                 id: id,
                 schedules: requestDto.Schedules.Select(s => new Schedule
                 (
-                    timeStart: s.TimeStart,
-                    timeEnd: s.TimeEnd,
-                    dayOfWeek: s.DayOfWeek
+                    timeStart: TimeOnly.Parse(s.TimeStart),
+                    timeEnd: TimeOnly.Parse(s.TimeEnd),
+                    dayOfWeek: (Core.Models.DayOfWeek)s.DayOfWeek
                 )).ToList()
             ));
 

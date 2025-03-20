@@ -16,6 +16,7 @@ public class SitesRepository(Calempus360DbContext dbContext) : ISiteRepository
     {
         var sites = await dbContext.Sites
                                    .Include(s => s.SiteCourseSchedules)
+                                        .ThenInclude(scs => scs.CourseScheduleEntity)
                                    .Include(s => s.Classrooms)
                                    .Include(s => s.Equipments)
                                    .ToListAsync();
@@ -27,6 +28,7 @@ public class SitesRepository(Calempus360DbContext dbContext) : ISiteRepository
     {
         var sites = from s in await dbContext.Sites
                              .Include(s => s.SiteCourseSchedules)
+                                .ThenInclude(scs => scs.CourseScheduleEntity)
                              .Include(s => s.Classrooms)
                              .Include(s => s.Equipments)
                              .ToListAsync()
@@ -40,6 +42,7 @@ public class SitesRepository(Calempus360DbContext dbContext) : ISiteRepository
     {
         var site = await dbContext.Sites
                                   .Include(s => s.SiteCourseSchedules)
+                                    .ThenInclude(scs => scs.CourseScheduleEntity)
                                   .Include(s => s.Classrooms)
                                   .Include(s => s.Equipments)
                                   .FirstOrDefaultAsync(s => s.SiteId == id);

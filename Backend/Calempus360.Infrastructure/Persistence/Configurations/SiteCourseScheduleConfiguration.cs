@@ -15,14 +15,13 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
         {
             builder.HasKey(scs => new
             {
-                scs.SiteId, scs.ScheduleId, scs.AcademicYearId
+                scs.SiteId, scs.ScheduleId
             });
             
             builder.Property(scs => scs.ScheduleId).IsRequired();
             
             builder.Property(scs => scs.SiteId).IsRequired();
             
-            builder.Property(scs => scs.AcademicYearId).IsRequired();
             
             builder
                 .HasOne(scs => scs.CourseScheduleEntity)
@@ -34,10 +33,6 @@ namespace Calempus360.Infrastructure.Data.ModelConfiguration
                 .WithMany(scs => scs.SiteCourseSchedules)
                 .HasForeignKey(scs => scs.SiteId).OnDelete(DeleteBehavior.Cascade);
             
-            builder
-                .HasOne(scs => scs.AcademicYearEntity)
-                .WithMany(scs => scs.SiteCourseSchedules)
-                .HasForeignKey(scs => scs.AcademicYearId);
         }
     }
 }

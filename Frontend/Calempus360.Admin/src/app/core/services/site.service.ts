@@ -25,6 +25,7 @@ export class SiteService {
 
     return this.http.get<Sites>(this.URL, { params }).pipe(
       tap((s: Sites) => {
+        console.log(s);
         this.sites$.next(s);
       }),
     );

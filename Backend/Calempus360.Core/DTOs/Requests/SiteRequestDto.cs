@@ -10,7 +10,14 @@ public class SiteRequestDto
     public string Code { get; set; } = string.Empty;
     public string Address { get; set; } = string.Empty;
     public string Phone { get; set; } = string.Empty;
-    public List<Schedule> Schedules { get; set; } = new();
+    public List<ScheduleRequestDto> Schedules { get; set; } = new();
+}
+
+public class ScheduleRequestDto
+{
+    public Core.Models.DayOfWeek DayOfWeek { get; set; }
+    public string TimeStart { get; set; } = string.Empty;
+    public string TimeEnd { get; set; } = string.Empty;
 }
 
 public class SiteRequestDtoValidator : AbstractValidator<SiteRequestDto>
@@ -24,7 +31,7 @@ public class SiteRequestDtoValidator : AbstractValidator<SiteRequestDto>
         RuleForEach(x => x.Schedules).SetValidator(new ScheduleValidator());
     }
 
-    public class ScheduleValidator : AbstractValidator<Schedule>
+    public class ScheduleValidator : AbstractValidator<ScheduleRequestDto>
     {
         public ScheduleValidator()
         {

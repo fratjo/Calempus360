@@ -61,6 +61,35 @@
       class="input focus:ring-none focus:border-secondary focus:outline-none"
       formControlName="phone"
     />
+    <div formArrayName="schedules" class="flex flex-row space-x-4 self-center">
+      @for(day of days; track day){  
+    <div [formGroupName]="days.indexOf(day)">
+      <label>{{day}}</label>
+      <div class="flex space-x-2"> 
+        <input 
+        [ngClass]="{
+          'border-error':
+          scheduleArray.touched &&
+          scheduleArray.invalid,
+          'border-primary':
+          scheduleArray.touched && scheduleArray.valid,
+        }"
+        formControlName="timeStart"
+        type="time" class="input focus:ring-none focus:border-secondary focus:outline-none"/>
+        <input 
+        [ngClass]="{
+          'border-error':
+          scheduleArray.touched &&
+          scheduleArray.invalid,
+          'border-primary':
+          scheduleArray.touched && scheduleArray.valid,
+        }"
+        formControlName="timeEnd"
+        type="time" class="input focus:ring-none focus:border-secondary focus:outline-none"/>
+      </div>
+    </div>
+    }
+    </div>
     <div class="flex justify-between space-x-4">
       <button
         (click)="cancel()"

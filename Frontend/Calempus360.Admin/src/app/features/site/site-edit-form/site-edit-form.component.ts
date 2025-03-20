@@ -6,6 +6,7 @@ import {
   FormGroup,
   FormBuilder,
   Validators,
+  FormArray,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -35,6 +36,8 @@ export class SiteEditFormComponent implements OnInit {
   public site$ = this.siteService.site$;
   public siteForm: FormGroup;
 
+  public days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+
   constructor(public fb: FormBuilder) {
     this.siteForm = this.fb.group({
       id: ['', Validators.required],
@@ -42,6 +45,17 @@ export class SiteEditFormComponent implements OnInit {
       address: ['', Validators.required],
       code: ['', Validators.required],
       phone: ['', Validators.required],
+      schedules: this.fb.array([],Validators.required),
+    });
+
+    this.days.forEach((day, i) => {
+      this.scheduleArray.push(
+        this.fb.group({
+          dayOfWeek:[i+1,null],
+          timeStart:['',Validators.required],
+          timeEnd:['',Validators.required],
+        })
+      );
     });
   }
 
@@ -56,6 +70,10 @@ export class SiteEditFormComponent implements OnInit {
       }
     });
   }
+
+  get scheduleArray(){
+      return this.siteForm.get('schedules') as FormArray;
+    }
 
   cancel() {
     // redirect to sites
