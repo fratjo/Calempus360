@@ -35,7 +35,7 @@ public class ClassroomRepository(Calempus360DbContext dbContext) : IClassroomRep
 
         if (classroom == null) throw new NotFoundException("Classroom not found");
 
-        return classroom.ToDomainModel();
+        return classroom.ToDomainModel(true);
     }
 
     public async Task<Classroom> CreateClassroomAsync(Classroom classroom, Guid siteId)
