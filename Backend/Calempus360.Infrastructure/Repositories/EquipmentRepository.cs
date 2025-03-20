@@ -189,7 +189,7 @@ public class EquipmentRepository(Calempus360DbContext dbContext) : IEquipmentRep
 
         var entity = await dbContext.ClassroomsEquipments.Where(ce => ce.EquipmentId == equipmentId && ce.AcademicYearId == academciYearId).FirstOrDefaultAsync();
 
-        dbContext.ClassroomsEquipments.Remove(entity);
+        if (entity is not null) dbContext.ClassroomsEquipments.Remove(entity);
 
         entity = new ClassroomEquipmentEntity
         {
