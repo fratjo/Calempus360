@@ -137,9 +137,68 @@ public class ScheduleService(Calempus360DbContext context) : IScheduleService
 
         var sessions = scheduler.GenerateSchedule();
 
-        // Save sessions
-        // Save groups sessions
-        // Save equipment sessions
+        foreach (var session in sessions)
+        {
+            var academicYearDates =
+                Enumerable.Range(0, (academicYear!.DateEnd.ToDateTime(TimeOnly.MinValue) - academicYear.DateStart.ToDateTime(TimeOnly.MinValue)).Days + 1)
+                .Select(offset => academicYear.DateStart.AddDays(offset))
+                .Where(date => date.DayOfWeek.ToString() == session.Key.Day)
+                .ToList();
+
+            var c = context.Courses
+                .Include(c => c.EquipmentTypes)
+                    .ThenInclude(et => et.EquipmentTypeEntity)
+                .First(c => c.CourseId == Guid.Parse(session.Value.Course));
+
+            foreach (var date in academicYearDates)
+            {
+                var id = Guid.NewGuid();
+                var name = c.Name + " - " + date.ToShortDateString() + " - " + session.Key.Day + " - " + session.Key.TimeSlot.StartHour + "h" + session.Key.TimeSlot.EndHour + "h";
+                var startHour = date.ToDateTime(TimeOnly.MinValue).AddHours(session.Key.TimeSlot.StartHour);
+                var endHour = date.ToDateTime(TimeOnly.MinValue).AddHours(session.Key.TimeSlot.EndHour);
+                var classroomId = Guid.Parse(session.Key.Location.Classroom);
+                var courseId = Guid.Parse(session.Value.Course);
+
+                // Save sessions
+                var sessionEntity = new SessionEntity
+                {
+                    SessionId = id,
+                    Name = name,
+                    DatetimeStart = startHour,
+                    DatetimeEnd = endHour,
+                    ClassroomId = classroomId,
+                    CourseId = courseId
+                };
+
+                context.Sessions.Add(sessionEntity);
+
+                // Save groups sessions
+                foreach (var group in session.Value.Groups)
+                {
+                    var groupSessionEntity = new StudentGroupSessionEntity
+                    {
+                        SessionId = id,
+                        StudentGroupId = Guid.Parse(group)
+                    };
+
+                    context.StudentGroupSessions.Add(groupSessionEntity);
+                }
+
+                // Save equipment sessions
+                foreach (var equipment in session.Value.FlyingEquipments)
+                {
+                    var equipmentSessionEntity = new EquipmentSessionEntity
+                    {
+                        SessionId = id,
+                        EquipmentId = equipment.Code.Value
+                    };
+
+                    context.EquipmentSessions.Add(equipmentSessionEntity);
+                }
+            }
+        }
+
+        await context.SaveChangesAsync();
 
         return true;
     }

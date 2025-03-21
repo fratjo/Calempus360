@@ -8,7 +8,7 @@ public static class ClassAdapter
     public static Class Adapt(ClassroomEntity classroom)
     {
         var room = new Class(
-            classroom.Name,
+            classroom.ClassroomId!.ToString()!,
             classroom.SiteEntity!.SiteId!.ToString()!,
             classroom.Capacity,
             classroom.ClassroomEquipments!
