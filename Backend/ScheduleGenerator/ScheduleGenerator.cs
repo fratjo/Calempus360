@@ -28,8 +28,14 @@ namespace ScheduleGenerator
 
         public Schedule GenerateSchedule()
         {
+            classes.ForEach(c => System.Console.WriteLine(c));
+            courseGroups.ForEach(cg => System.Console.WriteLine(cg));
+            openings.ForEach(o => System.Console.WriteLine(o));
+            flyingEquipments.ForEach(fe => System.Console.WriteLine(fe));
+
+
             System.Console.WriteLine("Generating schedule...");
-            var timeSlots = openings.Sum(o => 1 * classes.Count(c => c.Site == o.site)); // total = nb of slots * nb of classes
+            var timeSlots = openings.Count() * classes.Count(); // total = nb of slots * nb of classes
             System.Console.WriteLine("Time slots (reserve: 5%) : " + (timeSlots - timeSlots * 0.05));
             var groupsCount = courseGroups.Sum(c => c.Groups.Count);
             System.Console.WriteLine("Groups count : " + groupsCount);
@@ -174,17 +180,34 @@ namespace ScheduleGenerator
             var course = courseGroup.Course;
             var requiredEquipment = courseGroup.Equipements;
 
-            var daysOfWeek = openings.Where(o => o.site == currentClass.Site).Select(o => o.dayOfWeek).ToList();
+            var daysOfWeek = openings.Where(o => o.site == currentClass.Site)
+                                      .Select(o => o.dayOfWeek)
+                                      .Distinct()
+                                      .OrderBy(day => day switch
+                                      {
+                                          "Monday" => 1,
+                                          "Tuesday" => 2,
+                                          "Wednesday" => 3,
+                                          "Thursday" => 4,
+                                          "Friday" => 5,
+                                          "Saturday" => 6,
+                                          "Sunday" => 7,
+                                          _ => 8 // fallback for unexpected values
+                                      })
+                                      .ToList();
 
             foreach (var currentDay in daysOfWeek)
             {
 
-                var hours = openings.Where(o => o.site == currentClass.Site && o.dayOfWeek == currentDay).Select(o => o.hours).ToList();
+                var hours = openings.Where(o => o.site == currentClass.Site && o.dayOfWeek == currentDay)
+                                    .Select(o => o.hours)
+                                    .OrderBy(h => h.startHour)
+                                    .ToList();
 
                 // ------------------------------------------------------------- //
                 // Constraint: Not more than 2h of a course per day for a groupe //
                 // ------------------------------------------------------------- //
-                CheckNoMoreThan2HoursPerDayPerGroupForACourse(schedule, groups, course, currentDay);
+                if (!CheckNoMoreThan2HoursPerDayPerGroupForACourse(schedule, groups, course, currentDay)) continue;
 
                 foreach (var timeSlot in hours)
                 {
@@ -527,11 +550,14 @@ namespace ScheduleGenerator
         /// <param name="groups"></param>
         /// <param name="course"></param>
         /// <param name="currentDay"></param>
-        private static void CheckNoMoreThan2HoursPerDayPerGroupForACourse(Schedule schedule, List<Group> groups, string course, string currentDay)
+        private static bool CheckNoMoreThan2HoursPerDayPerGroupForACourse(Schedule schedule, List<Group> groups, string course, string currentDay)
         {
             var groupsToRemove = groups.Where(g =>
                                 schedule.Count(s => s.Key.Day == currentDay && s.Value.Groups.Contains(g.Name) && s.Value.Course == course) >= 2).ToList();
+
+            if (groupsToRemove.Count() > 0 && groups.Count() == 1) return false;
             groups.RemoveAll(g => groupsToRemove.Contains(g));
+            return true;
         }
 
         /// <summary>

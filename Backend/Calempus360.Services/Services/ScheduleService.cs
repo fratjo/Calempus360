@@ -94,26 +94,52 @@ public class ScheduleService(Calempus360DbContext context) : IScheduleService
 
         foreach (var courseGroup in courseGroupsLookup)
         {
-            courseGroups.Add(
-                CourseGroupsAdapter
-                    .Adapt(courseGroup.Key, courseGroup.Value.Cast<StudentGroupEntity>()
-                    .ToList()));
+            var course = courseGroup.Key;
+            var groupsList = courseGroup.Value.Cast<StudentGroupEntity>().ToList();
+            // Supposons que la propriété qui indique le nombre d'heures est "WeeklyHours" (ou "WeeklyHour")
+            var repetitions = course.WeeklyHours; // adapter le nom de la propriété si nécessaire
+
+            for (int i = 0; i < repetitions; i++)
+            {
+                courseGroups.Add(CourseGroupsAdapter.Adapt(course, groupsList));
+            }
         }
 
-        var openings = from o in await context.SitesCoursesSchedules
-                .Include(scs => scs.CourseScheduleEntity).ToListAsync()
-                       from hour in Enumerable.Range(TimeOnlyToInt(o.CourseScheduleEntity.HourStart), TimeOnlyToInt(o.CourseScheduleEntity.HourEnd) - TimeOnlyToInt(o.CourseScheduleEntity.HourStart))
-                       select (site: o.SiteEntity.SiteId.ToString() ?? string.Empty,
-                           dayOfWeek: ((Calempus360.Core.Models.DayOfWeek)o.CourseScheduleEntity.DayOfTheWeek).ToString(),
-                           startEndHour: (hour, hour + 1));
-        // need to adapt the opening hours to the ScheduleGenerator format
+        var sitesCoursesSchedules = await context.SitesCoursesSchedules
+                                    .Include(scs => scs.CourseScheduleEntity)
+                                    .Include(scs => scs.SiteEntity) // Ajout de l'inclusion de SiteEntity
+                                    .Where(scs => scs.SiteEntity!.UniversityId == universityId)
+                                    .ToListAsync();
 
-        // var scheduler = new ScheduleGenerator.ScheduleGenerator(
-        //     classrooms.ToList(),
-        //     openings.ToList(),
-        //     courseGroups.ToList(),
-        //     flyingEquipments.ToList()
-        // );
+        var openings = sitesCoursesSchedules.SelectMany(o =>
+            Enumerable.Range(
+                TimeOnlyToInt(o.CourseScheduleEntity.HourStart),
+                TimeOnlyToInt(o.CourseScheduleEntity.HourEnd) - TimeOnlyToInt(o.CourseScheduleEntity.HourStart)
+            )
+            .Select(hour => (
+                site: o.SiteEntity.SiteId.ToString(),
+                dayOfWeek: ((Calempus360.Core.Models.DayOfWeek)o.CourseScheduleEntity.DayOfTheWeek).ToString(),
+                startEndHour: (hour, hour + 1)
+            ))
+        ).ToList();
+
+        var classroomList = classrooms.ToList();
+        var courseGroupList = courseGroups.ToList();
+        var flyingEquipmentList = flyingEquipments.ToList();
+        var openingList = openings.ToList();
+
+        var scheduler = new ScheduleGenerator.ScheduleGenerator(
+            classroomList,
+            openingList!,
+            courseGroupList,
+            flyingEquipmentList
+        );
+
+        var sessions = scheduler.GenerateSchedule();
+
+        // Save sessions
+        // Save groups sessions
+        // Save equipment sessions
 
         return true;
     }
