@@ -15,6 +15,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Calempus360.Core.Interfaces.Option;
 using Calempus360.Core.Interfaces.Course;
+using Calempus360.Core.Interfaces.Schedule;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +46,7 @@ builder.Services.AddScoped<IClassroomService, ClassroomService>();
 builder.Services.AddScoped<IEquipmentService, EquipmentService>();
 builder.Services.AddScoped<IOptionService, OptionService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<IScheduleService, ScheduleService>();
 // repositories
 builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();
 builder.Services.AddScoped<IAcademicYearRepository, AcademicYearRepository>();

@@ -12,7 +12,7 @@ public static class GroupAdapter
         {
             Name = group.Code,
             Capacity = group.NumberOfStudents,
-            PreferedSite = group.SiteEntity.Name
+            PreferedSite = group.SiteEntity!.Name
         };
     }
 }
