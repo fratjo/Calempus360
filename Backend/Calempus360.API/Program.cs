@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Calempus360.Core.Interfaces.Option;
 using Calempus360.Core.Interfaces.Course;
 using Calempus360.Core.Interfaces.Schedule;
+using Calempus360.Core.Interfaces.Session;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +48,7 @@ builder.Services.AddScoped<IEquipmentService, EquipmentService>();
 builder.Services.AddScoped<IOptionService, OptionService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
+builder.Services.AddScoped<ISessionService, SessionService>();
 // repositories
 builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();
 builder.Services.AddScoped<IAcademicYearRepository, AcademicYearRepository>();
@@ -56,6 +58,7 @@ builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
 builder.Services.AddScoped<IStudentGroupRepository, StudentGroupRepository>();
 builder.Services.AddScoped<IOptionRepository, OptionRepository>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+builder.Services.AddScoped<ISessionRepository, SessionRepository>();
 
 // handlers
 builder.Services.AddExceptionHandler<ExistingEntityExceptionHandler>();
