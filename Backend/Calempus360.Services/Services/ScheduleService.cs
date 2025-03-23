@@ -43,6 +43,7 @@ public class ScheduleService(Calempus360DbContext context) : IScheduleService
         var classrooms = from c in await context.Classrooms
                                 .Include(c => c.ClassroomEquipments)!
                                     .ThenInclude(ce => ce.EquipmentEntity)
+                                        .ThenInclude(e => e.EquipmentTypeEntity)
                                 .Include(c => c.SiteEntity)
                                 .Where(c => c.SiteEntity!.UniversityId == universityId)
                                 .ToListAsync()
