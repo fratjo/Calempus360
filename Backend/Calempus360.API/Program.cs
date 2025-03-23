@@ -17,6 +17,7 @@ using Calempus360.Core.Interfaces.Option;
 using Calempus360.Core.Interfaces.Course;
 using Calempus360.Core.Interfaces.Schedule;
 using Calempus360.Core.Interfaces.Session;
+using Calempus360.Core.Interfaces.DayWithoutCourse;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +50,8 @@ builder.Services.AddScoped<IOptionService, OptionService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
+builder.Services.AddScoped<IDayWithoutCourseService, DayWithoutCourseService>();
+
 // repositories
 builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();
 builder.Services.AddScoped<IAcademicYearRepository, AcademicYearRepository>();
@@ -59,6 +62,7 @@ builder.Services.AddScoped<IStudentGroupRepository, StudentGroupRepository>();
 builder.Services.AddScoped<IOptionRepository, OptionRepository>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<ISessionRepository, SessionRepository>();
+builder.Services.AddScoped<IDayWithoutCourseRepository, DayWithoutCourseRepository>();
 
 // handlers
 builder.Services.AddExceptionHandler<ExistingEntityExceptionHandler>();

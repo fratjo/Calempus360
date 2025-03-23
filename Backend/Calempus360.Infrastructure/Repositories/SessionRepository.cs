@@ -73,8 +73,7 @@ namespace Calempus360.Infrastructure.Repositories
             if (entity == null) throw new NotFoundException("Session not found");
 
             _context.Sessions.Remove(entity);
-            await _context.SaveChangesAsync();
-            return true;
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task<IEnumerable<Session>> GetAllSessionAsync()
