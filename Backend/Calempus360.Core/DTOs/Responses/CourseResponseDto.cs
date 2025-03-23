@@ -16,7 +16,8 @@ namespace Calempus360.Core.DTOs.Responses
         public int WeeklyHours { get; set; }
         public string Semester { get; set; } = string.Empty;
         public int Credits { get; set; }
-        public List<EquipmentTypeResponseDto>? EquipmentType {  get; set; } //TODO : Remplacer par DTO equipmentType
+        public List<EquipmentTypeResponseDto>? EquipmentType { get; set; }
+        public Dictionary<Guid, int>? OptionGrades { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }
@@ -36,6 +37,7 @@ namespace Calempus360.Core.DTOs.Responses
                 Semester = course.Semester,
                 Credits = course.Credits,
                 EquipmentType = course.EquipmentTypes?.Select(et => et.MapToDto()).ToList(),
+                OptionGrades = course.OptionGrades,
                 CreatedAt = course.CreatedAt,
                 UpdatedAt = course.UpdatedAt,
 
