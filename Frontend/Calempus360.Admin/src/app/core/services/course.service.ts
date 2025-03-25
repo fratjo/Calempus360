@@ -43,7 +43,7 @@ export class CourseService {
     let params = new HttpParams();
     params = params.append('academicYear', academicYearId);
     params = params.append('universityId', universityId);
-    return this.http.post<Course>(this.URL, course, { params });
+    return this.http.put<Course>(this.URL + `/${course.id!}`, course, { params });
   }
 
   deleteCourse(id: string) {

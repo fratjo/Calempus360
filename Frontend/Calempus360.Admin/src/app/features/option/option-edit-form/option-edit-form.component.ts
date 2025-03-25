@@ -36,7 +36,6 @@ export class OptionEditFormComponent implements OnInit{
             name: ['',Validators.required],
             code: ['',Validators.required],
             description: ['',Validators.required],
-            courses: this.formBuilder.array([], null),
         });
       }
 
@@ -47,20 +46,12 @@ export class OptionEditFormComponent implements OnInit{
         next: (e) => {
           this.option = e;
           this.optionForm.patchValue(this.option);
-          this.option.courses?.forEach((course) => this.coursesArray.push(this.formBuilder.control(course)));
         },
         error: (e) => alert("Problem while editing the option")
       })
     })
   }
 
-  get coursesArray() {
-    return this.optionForm.get('courses') as FormArray;
-  }
-
-  get selectedCourses(): string[]{
-    return this.coursesArray.value.map((arr: { id: string; }) => arr.id);
-  }
 
   onSave(){
     const option: Option = {
@@ -82,18 +73,6 @@ export class OptionEditFormComponent implements OnInit{
   onCancel(){
     this.goBack();
   }
-
-  selectCourse(course: Course, event: Event){
-    const checked = (event.target as HTMLInputElement).checked;
-    const indexCourse = this.selectedCourses.indexOf(course.id!);
-    if (checked) {   
-      this.coursesArray.push(this.formBuilder.control(course));
-    } else {
-      this.coursesArray.removeAt(indexCourse);
-    }
-    this.optionForm.controls['courses'].markAsTouched();
-  }
-
 
     goBack(){
       const origin = this.route.snapshot.queryParamMap.get('from');

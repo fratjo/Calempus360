@@ -10,4 +10,5 @@ export type Course = {
     semester?: string,
     credits?: number,
     equipmentType?: any[],
+    optionGrades?: {[optionId: string]: number};
 }

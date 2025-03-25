@@ -18,14 +18,14 @@ namespace Calempus360.API.Controllers
 
         #region POST
         [HttpPost]
-        public async Task<IActionResult> AddOption([FromBody] OptionRequestDto optionRequest, [FromQuery] List<Guid> courses,Guid academicYear)
+        public async Task<IActionResult> AddOption([FromBody] OptionRequestDto optionRequest,Guid academicYear)
         {
             var option = await _optionService.AddOptionAsync(new Core.Models.Option
                 (
                     name: optionRequest.Name,
                     code: optionRequest.Code,
                     description: optionRequest.Description
-                ), courses, academicYear);
+                ), academicYear);
 
             return Ok(option.MapToDto());
         }
@@ -53,7 +53,7 @@ namespace Calempus360.API.Controllers
         #region PUT
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdateOption(OptionRequestDto optionRequest, Guid id, [FromQuery] List<Guid> courses, Guid academicYear)
+        public async Task<IActionResult> UpdateOption(OptionRequestDto optionRequest, Guid id, Guid academicYear)
         {
             var option = await _optionService.UpdateOptionAsync(new Core.Models.Option
                 (
@@ -61,7 +61,7 @@ namespace Calempus360.API.Controllers
                     name: optionRequest.Name,
                     code: optionRequest.Code,
                     description: optionRequest.Description
-                ), courses,academicYear);
+                ),academicYear);
             return Ok(option.MapToDto());
         }
 

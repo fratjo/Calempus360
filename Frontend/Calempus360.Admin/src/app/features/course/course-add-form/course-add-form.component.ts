@@ -9,26 +9,35 @@ import { CourseService } from '../../../core/services/course.service';
 import { Course } from '../../../core/models/course.interface';
 import { EquipmentService } from '../../../core/services/equipment.service';
 import { EquipmentType } from '../../../core/models/equipment.interface';
+import { Option } from '../../../core/models/option.interface';
+import { OptionService } from '../../../core/services/option.service';
+import { CourseFormCustomInputComponent } from "../course-form-custom-input/course-form-custom-input.component";
 
 @Component({
   selector: 'app-course-add-form',
   imports: [ReactiveFormsModule,
-          FormsModule,
-          MatFormFieldModule,
-          MatIconModule,
-          RouterModule,
-          MatButtonModule,
-          CommonModule],
+    FormsModule,
+    MatFormFieldModule,
+    MatIconModule,
+    RouterModule,
+    MatButtonModule,
+    CommonModule, CourseFormCustomInputComponent],
   templateUrl: './course-add-form.component.html',
   styleUrl: './course-add-form.component.scss'
 })
 export class CourseAddFormComponent implements OnInit{
   private readonly courseService = inject(CourseService);
   private readonly equipmentTypeService = inject(EquipmentService);
+  private readonly optionService = inject(OptionService);
   private readonly router = inject(Router);
   courseForm: FormGroup;
   formBuilder = inject(FormBuilder);
   equipmentTypeList$ = this.equipmentTypeService.equipmentTypes$;
+  optionList$ = this.optionService.options$;
+  courseOptions:string[] = [];
+  counter: number = 1;
+  selectedOptionId: string | undefined;
+  formValid: boolean = true;
 
   constructor(){
     this.courseForm = this.formBuilder.group({
@@ -40,10 +49,13 @@ export class CourseAddFormComponent implements OnInit{
       semester:['',Validators.required],
       credits:['',Validators.required],
       equipmentType: this.formBuilder.array([], null),
+      optionGrades: this.formBuilder.group({}),
     });
   }
+
   ngOnInit(): void {
     this.equipmentTypeService.getEquipmentTypes().subscribe();
+    this.optionService.getOptions();
   }
 
   onSave(){
@@ -69,6 +81,10 @@ export class CourseAddFormComponent implements OnInit{
     return this.equipmentTypeArray.value.map((arr: { id: string; }) => arr.id);
   }
 
+  get optionGradesFormGroup() {
+    return this.courseForm.get('optionGrades') as FormGroup;
+  }
+
   onCancel(){
     this.router.navigate(['/courses']);
   }
@@ -82,5 +98,45 @@ export class CourseAddFormComponent implements OnInit{
       this.equipmentTypeArray.removeAt(indexEquipmentType);
     }
     this.courseForm.controls['equipmentType'].markAsTouched();
-  } 
+  }
+  
+
+  onOptionSelected(event: { optionId: string; grade: number },index: number){
+    if (event.optionId) {
+  
+     const previousOptionId = this.courseOptions[index];
+  
+      if (previousOptionId && previousOptionId !== event.optionId) {
+        this.optionGradesFormGroup.removeControl(previousOptionId);
+      }
+  
+      if (!this.optionGradesFormGroup.get(event.optionId)) {
+        this.optionGradesFormGroup.addControl(event.optionId, this.formBuilder.control(event.grade));
+      } else {
+        this.optionGradesFormGroup.get(event.optionId)?.setValue(event.grade);
+      }
+  
+      this.courseOptions[index] = event.optionId;
+
+    }
+  }
+
+  onDeleteOption(optionId: string){
+    const indexToDelete = this.courseOptions.indexOf(optionId);
+    if (indexToDelete !== -1) {
+      this.optionGradesFormGroup.removeControl(optionId);
+      this.courseOptions.splice(indexToDelete, 1);
+      this.counter--;
+    }
+  }
+
+  addOption(){
+    this.courseOptions?.push('');
+    console.log(this.courseOptions);
+  }
+
+  getGradeFromOptionId(id: string): number{
+      return this.optionGradesFormGroup.get(id)?.value;
+    }
+
 }
