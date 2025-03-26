@@ -18,9 +18,9 @@ namespace Calempus360.API.Controllers
         }
         #region GET
         [HttpGet]
-        public async Task<IActionResult> GetAllStudentGroups([FromQuery] Guid academicYearId, [FromQuery] Guid universityId)
+        public async Task<IActionResult> GetAllStudentGroups([FromQuery] Guid academicYear, [FromQuery] Guid universityId)
         {
-            var studentGroups = await _studentGroupService.GetAllStudentGroupAsync(academicYearId, universityId);
+            var studentGroups = await _studentGroupService.GetAllStudentGroupAsync(academicYear, universityId);
 
             return Ok(studentGroups.Select(sg => sg.MapToDto()));
         }

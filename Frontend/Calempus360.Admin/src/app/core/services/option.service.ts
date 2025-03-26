@@ -26,20 +26,14 @@ export class OptionService {
 
   addOption(option: Option) {
     const academicYearId = JSON.parse(sessionStorage.getItem('academicYear')!);
-    const courses = option.courses
-      ?.map((course) => `courses=${course.id}`)
-      .join('&');
-    const url = this.URL + `?academicYear=${academicYearId}&${courses}`;
+    const url = this.URL + `?academicYear=${academicYearId}`;
     return this.http.post(url, option);
   }
 
   updateOption(option: Option) {
     const academicYearId = JSON.parse(sessionStorage.getItem('academicYear')!);
-    const courses = option.courses
-      ?.map((course) => `courses=${course.id}`)
-      .join('&');
     const url =
-      this.URL + `/${option.id}` + `?academicYear=${academicYearId}&${courses}`;
+      this.URL + `/${option.id}` + `?academicYear=${academicYearId}`;
     return this.http.put<Option>(url, option);
   }
 

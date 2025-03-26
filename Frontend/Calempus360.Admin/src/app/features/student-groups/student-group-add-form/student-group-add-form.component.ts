@@ -54,10 +54,15 @@ export class StudentGroupAddFormComponent implements OnInit{
     this.studentGroupService.addStudentGroup(studentGroup,siteId,optionId).subscribe({
       next: (v) => console.log(v),
       error: (e) => {
-        const errorMessages = Object.entries(e.error.errors)
-        .map(([subject,messages]) =>`${subject}: ${messages}`)
+        const errorMessages = Object.entries(e.error.errors);
+        if(errorMessages){
+          errorMessages.map(([subject,messages]) =>`${subject}: ${messages}`)
         .join('\n');
         alert(errorMessages);
+        } else {
+          alert("Error when adding a group !");
+        }
+        
       },
       complete: () => this.router.navigate(['/groups'])
     });
