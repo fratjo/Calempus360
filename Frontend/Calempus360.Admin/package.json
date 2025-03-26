@@ -24,6 +24,7 @@
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/daygrid": "^6.1.15",
     "@fullcalendar/interaction": "^6.1.15",
+    "@fullcalendar/timegrid": "^6.1.15",
     "@ng-select/ng-select": "^14.2.3",
     "@tailwindcss/postcss": "^4.0.9",
     "angular-calendar": "^0.31.1",

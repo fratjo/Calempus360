@@ -1,3 +1,9 @@
-<div id="calendar-container">
+<div id="calendar-container" class="flex flex-col gap-4">
+  <button
+    (click)="toggleWeekends()"
+    class="self-end rounded-xl border border-gray-300 bg-white px-4 py-2 text-gray-700"
+  >
+    toggle weekends
+  </button>
   <full-calendar [options]="calendarOptions" class="h-180"></full-calendar>
 </div>
