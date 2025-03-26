@@ -56,6 +56,14 @@ namespace Calempus360.Services.Services
 
         public Task<Session> UpdateSessionAsync(Session session, Guid classRoomId, Guid courseId, List<Guid> equipments, List<Guid> studentGroups)
         {
+            // recuperer la session comme elle est en db
+            var sessionInDb = _context.Sessions.FirstOrDefault(s => s.SessionId == session.Id);
+            if (sessionInDb == null) throw new NotFoundException("Session not found !");
+
+            // si on souhaite modifier la session dans le passé ou moins d'un jour avant, on ne peut pas modifier
+            if (sessionInDb.DatetimeStart > DateTime.Now.AddDays(+1))
+                throw new Exception("Cannot update session in the past or less than a day before !");
+
             if (!CheckBusinessRules(session, classRoomId, courseId, equipments, studentGroups))
                 throw new Exception("Session constraints not respected !");
 
