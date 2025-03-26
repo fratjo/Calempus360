@@ -41,6 +41,7 @@ import { CourseEditFormComponent } from './features/course/course-edit-form/cour
 import { StudentGroupViewComponent } from './features/student-groups/student-group-view/student-group-view.component';
 import { OptionViewComponent } from './features/option/option-view/option-view.component';
 import { CourseViewComponent } from './features/course/course-view/course-view.component';
+import { SessionComponent } from './features/session/session.component';
 
 export const routes: Routes = [
   {
@@ -220,6 +221,10 @@ export const routes: Routes = [
     path: 'courses/edit/:id',
     component: CourseEditFormComponent,
     canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'schedules',
+    component: SessionComponent,
   },
   {
     path: '**',
