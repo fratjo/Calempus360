@@ -12,15 +12,20 @@ using Microsoft.AspNetCore.Mvc;
 namespace Calempus360.API.Controllers
 {
     [ApiController]
-    [Route("api/schedules")]
-    public class ScheduleController(IScheduleService scheduleService, ISessionService sessionService) : ControllerBase
+    [Route("api/sessions")]
+    public class SessionController(ISessionService sessionService) : ControllerBase
     {
 
         #region GET
         [HttpGet]
-        public async Task<IActionResult> GetAllSessions()
+        public async Task<IActionResult> GetAllSessions(
+            [FromQuery] Guid? courseId,
+            [FromQuery] Guid? studentGroupId,
+            [FromQuery] Guid? classroomId,
+            [FromQuery] Guid academicYearId,
+            [FromQuery] Guid universityId)
         {
-            var sessions = await sessionService.GetAllSessionAsync();
+            var sessions = await sessionService.GetAllSessionAsync(courseId, studentGroupId, classroomId, academicYearId, universityId);
             return Ok(sessions.Select(s => s.MapToDto()));
         }
 
@@ -37,7 +42,7 @@ namespace Calempus360.API.Controllers
         [HttpPost("generate")]
         public async Task<IActionResult> GenerateSchedule(Guid universityId, Guid academicYearId)
         {
-            return await scheduleService.GenerateSchedule(universityId, academicYearId) ? Ok() : BadRequest();
+            return await sessionService.GenerateSchedule(universityId, academicYearId) ? Ok() : BadRequest();
         }
 
         [HttpPost]
@@ -60,7 +65,7 @@ namespace Calempus360.API.Controllers
         {
             var session = await sessionService.UpdateSessionAsync(new Core.Models.Session
                 (
-                    id:id,
+                    id: id,
                     name: sessionRequest.Name,
                     dateTimeStart: sessionRequest.DateTimeStart,
                     dateTimeEnd: sessionRequest.DateTimeEnd

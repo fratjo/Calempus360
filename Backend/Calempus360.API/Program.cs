@@ -48,7 +48,6 @@ builder.Services.AddScoped<IClassroomService, ClassroomService>();
 builder.Services.AddScoped<IEquipmentService, EquipmentService>();
 builder.Services.AddScoped<IOptionService, OptionService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
-builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<IDayWithoutCourseService, DayWithoutCourseService>();
 

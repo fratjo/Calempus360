@@ -8,8 +8,14 @@ namespace Calempus360.Core.Interfaces.Session
 {
     public interface ISessionService
     {
-        Task<IEnumerable<Models.Session>> GetAllSessionAsync();
+        Task<IEnumerable<Models.Session>> GetAllSessionAsync(
+            Guid? courseId,
+            Guid? studentGroupId,
+            Guid? classroomId,
+            Guid academicYearId,
+            Guid universityId);
         Task<Models.Session> GetSessionByIdAsync(Guid id);
+        Task<bool> GenerateSchedule(Guid universityId, Guid academicYearId);
         Task<Models.Session> AddSessionAsync(Models.Session session, Guid classRoomId, Guid courseId, List<Guid> equipments, List<Guid> studentGroups);
         Task<Models.Session> UpdateSessionAsync(Models.Session session, Guid classRoomId, Guid courseId, List<Guid> equipments, List<Guid> studentGroups);
         Task<bool> DeleteSessionAsync(Guid id);

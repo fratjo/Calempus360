@@ -17,7 +17,7 @@ namespace Calempus360.Infrastructure.Repositories
     {
         private readonly Calempus360DbContext _context;
 
-        public SessionRepository (Calempus360DbContext context)
+        public SessionRepository(Calempus360DbContext context)
         {
             _context = context;
         }
@@ -37,7 +37,7 @@ namespace Calempus360.Infrastructure.Repositories
             foreach (var equipmentId in equipments)
             {
                 var equipment = await _context.Equipments.FindAsync(equipmentId);
-                if(equipment == null) throw new NotFoundException("Equipment not found !");
+                if (equipment == null) throw new NotFoundException("Equipment not found !");
                 var equipmentSession = new Persistence.Entities.EquipmentSessionEntity
                 {
                     EquipmentId = equipmentId,
@@ -76,16 +76,45 @@ namespace Calempus360.Infrastructure.Repositories
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<IEnumerable<Session>> GetAllSessionAsync()
+        public async Task<IEnumerable<Session>> GetAllSessionAsync(
+            Guid? courseId,
+            Guid? studentGroupId,
+            Guid? classroomId,
+            Guid academicYearId,
+            Guid universityId)
         {
-            var entities = await _context.Sessions
-                            .Include(c => c.ClassroomEntity)
-                            .Include(cs => cs.CourseEntity)
-                            .Include(gs => gs.StudentGroupSessions)
-                                .ThenInclude(sgs => sgs.StudentGroupEntity)
-                            .Include(es => es.EquipmentSessions)
-                                .ThenInclude(sgs => sgs.EquipmentEntity)
-                            .ToListAsync();
+            var academicYear = await _context.AcademicYears.FindAsync(academicYearId);
+            if (academicYear == null) throw new NotFoundException("Academic Year not found !");
+            var university = await _context.Universities.FindAsync(universityId);
+            if (university == null) throw new NotFoundException("University not found !");
+
+            var entities = from s in await _context.Sessions
+                                    .Include(s => s.ClassroomEntity)
+                                        .ThenInclude(c => c.ClassroomEquipments)
+                                            .ThenInclude(ce => ce.EquipmentEntity)
+                                    .Include(s => s.ClassroomEntity)
+                                        .ThenInclude(c => c.SiteEntity)
+                                    .Include(s => s.CourseEntity)
+                                    .Include(gs => gs.StudentGroupSessions)
+                                        .ThenInclude(sgs => sgs.StudentGroupEntity)
+                                    .Include(es => es.EquipmentSessions)
+                                        .ThenInclude(sgs => sgs.EquipmentEntity)
+                                    .Where(s =>
+                                            s.ClassroomEntity.SiteEntity!.UniversityId == universityId
+                                            &&
+                                                s.DatetimeStart >= academicYear.DateStart.ToDateTime(TimeOnly.MinValue)
+                                            && s.DatetimeEnd <= academicYear.DateEnd.ToDateTime(TimeOnly.MaxValue))
+                                    .AsNoTracking()
+                                    .OrderBy(s => s.DatetimeStart).ThenBy(s => s.Name)
+                                    .ToListAsync()
+                           where
+                               (courseId == null || s.CourseId == courseId)
+                               && (studentGroupId == null || s.StudentGroupSessions.Any(sgs => sgs.StudentGroupId == studentGroupId))
+                               && (classroomId == null || s.ClassroomId == classroomId)
+                           select s;
+
+
+
             return entities.Select(e => e.ToDomainModel()).ToList();
         }
 
@@ -134,36 +163,35 @@ namespace Calempus360.Infrastructure.Repositories
             {
                 var equipment = await _context.Equipments.FindAsync(equipmentId);
                 if (equipment == null) throw new NotFoundException("Equipment not found !");
-                if (!entity.EquipmentSessions.ToList().Any(es => es.EquipmentId == equipmentId)) 
+                if (!entity.EquipmentSessions.ToList().Any(es => es.EquipmentId == equipmentId))
                 {
                     entity.EquipmentSessions.Add(new Persistence.Entities.EquipmentSessionEntity
                     {
                         EquipmentEntity = equipment,
                         SessionEntity = entity,
                     });
-                }    
-                
-            }
+                }
 
+            }
+            // supprime ceux qui change, et garde ceux qui ne change pas
             entity.StudentGroupSessions.RemoveAll(sgs => !studentGroups.Contains(sgs.StudentGroupEntity.StudentGroupId));
 
             foreach (var studentGroupId in studentGroups)
             {
                 var studentGroup = await _context.StudentGroups.FindAsync(studentGroupId);
                 if (studentGroup == null) throw new NotFoundException("Student Group not found !");
-                if (!entity.StudentGroupSessions.ToList().Any(es => es.StudentGroupId == studentGroupId))
+                if (!entity.StudentGroupSessions.Any(sgs => sgs.StudentGroupId == studentGroupId))
                 {
                     entity.StudentGroupSessions.Add(new Persistence.Entities.StudentGroupSessionEntity
                     {
                         StudentGroupEntity = studentGroup,
                         SessionEntity = entity,
                     });
-                }            
+                }
             }
 
             await _context.SaveChangesAsync();
             return entity.ToDomainModel();
-
         }
     }
 }
