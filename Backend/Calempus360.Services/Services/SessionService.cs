@@ -28,6 +28,9 @@ namespace Calempus360.Services.Services
 
         public async Task<Session> AddSessionAsync(Session session, Guid classRoomId, Guid courseId, List<Guid> equipments, List<Guid> studentGroups)
         {
+            if (!CheckBusinessRules(session, classRoomId, courseId, equipments, studentGroups))
+                throw new Exception("Session constraints not respected !");
+
             return await _sessionRepository.AddSessionAsync(session, classRoomId, courseId, equipments, studentGroups);
         }
 
@@ -53,99 +56,8 @@ namespace Calempus360.Services.Services
 
         public Task<Session> UpdateSessionAsync(Session session, Guid classRoomId, Guid courseId, List<Guid> equipments, List<Guid> studentGroups)
         {
-            var academicYear = _context.AcademicYears
-                .FirstOrDefault(ay => ay.DateStart <= DateOnly.FromDateTime(session.DateTimeStart) && ay.DateEnd >= DateOnly.FromDateTime(session.DateTimeEnd));
-
-            var classRoom = _context.Classrooms
-                .Include(c => c.SiteEntity)
-                .FirstOrDefault(c => c.ClassroomId == classRoomId);
-            if (classRoom == null)
-                throw new NotFoundException("Classroom not found !");
-
-            // vérifier si le cours est déjà planifié 2h dans la journée
-            var sessions = _context.Sessions.Where(s => s.CourseId == courseId && s.DatetimeStart.Date == session.DateTimeStart.Date).ToList();
-            if (sessions.Count >= 2)
-                throw new Exception("Course already planned 2 times in the day !");
-
-            // vérifier si la salle est déjà occupée à cette heure
-            var sessionInClassroom = _context.Sessions
-                .FirstOrDefault(s => s.ClassroomId == classRoomId && s.DatetimeStart == session.DateTimeStart);
-            if (sessionInClassroom != null) throw new Exception("Classroom already occupied at this time !");
-
-            // vérifier si la salle est équipée ou si les équipements volants sont disponibles à cette heure
-            var classroomsEquipments = _context.ClassroomsEquipments
-                .Include(ce => ce.EquipmentEntity)
-                .Where(ce => ce.AcademicYearId == academicYear!.AcademicYearId)
-                .Select(ce => ce.EquipmentEntity)
-                .ToList(); // equipements de toutes les salles
-
-            var classroomEquipment = from ce in classroomsEquipments where ce.ClassroomEquipments!.Any(ce => ce.ClassroomId == classRoomId) select ce;
-
-            var flyingEquipments = _context.Equipments
-                .Include(e => e.EquipmentTypeEntity)
-                .Include(e => e.EquipmentSessions)
-                    .ThenInclude(es => es.SessionEntity)
-                .Include(e => e.UniversitySiteEquipmentEntity)
-                .Where(
-                    e => e.UniversitySiteEquipmentEntity.SiteId == classRoom.SiteEntity!.SiteId
-                    && !classroomsEquipments.Contains(e)
-                    && !e.EquipmentSessions.Any(es => es.SessionEntity.DatetimeStart == session.DateTimeStart)
-                )
-                .ToList(); // equipement volants disponibles pour cette heure sur le site
-
-            equipments.ForEach(id =>
-            {
-                var equipment = _context.Equipments
-                    .Include(e => e.EquipmentTypeEntity)
-                    .Include(e => e.UniversitySiteEquipmentEntity)
-                    .Where(e => e.UniversitySiteEquipmentEntity.SiteId == classRoom.SiteEntity!.SiteId)
-                    .FirstOrDefault(e => e.EquipmentId == id);
-
-                if (equipment == null) throw new NotFoundException("Equipment not found !");
-                if (!classroomEquipment.Contains(equipment) && !flyingEquipments.Contains(equipment))
-                    throw new Exception("Equipment not available in this classroom !");
-            });
-
-            // vérifier si les groupes sont disponibles à cette heure
-            studentGroups.ForEach(id =>
-            {
-                var group = _context.StudentGroups
-                    .Include(g => g.StudentGroupSessions)
-                        .ThenInclude(sgs => sgs.SessionEntity)
-                    .FirstOrDefault(g => g.StudentGroupId == id);
-
-                if (group == null) throw new NotFoundException("Student group not found !");
-                if (group.StudentGroupSessions.Any(sgs => sgs.SessionEntity.DatetimeStart == session.DateTimeStart && sgs.SessionId != session.Id))
-                    throw new Exception("Student group not available at this time !");
-
-                // verifier si la session d'avant est sur le même site
-                var sessionBefore = _context.Sessions
-                    .Include(s => s.ClassroomEntity)
-                    .FirstOrDefault(s => s.DatetimeEnd == session.DateTimeStart && s.ClassroomEntity.SiteId != classRoom.SiteEntity!.SiteId);
-                if (sessionBefore != null)
-                    throw new Exception("Student group not available at this time !");
-
-                // verfiier si la session d'après est sur le même site
-                var sessionAfter = _context.Sessions
-                    .Include(s => s.ClassroomEntity)
-                    .FirstOrDefault(s => s.DatetimeStart == session.DateTimeEnd && s.ClassroomEntity.SiteId != classRoom.SiteEntity!.SiteId);
-                if (sessionAfter != null)
-                    throw new Exception("Student group not available at this time !");
-            });
-
-            // vérifier si les groupes suivent ce cours
-            studentGroups.ForEach(id =>
-            {
-                var group = _context.StudentGroups
-                    .Include(g => g.OptionEntity)
-                        .ThenInclude(o => o!.OptionCourses)
-                            .ThenInclude(oc => oc.CourseEntity)
-                    .FirstOrDefault(g => g.StudentGroupId == id);
-
-                if (group == null) throw new NotFoundException("Student group not found !");
-                if (!group.OptionEntity!.OptionCourses.Any(oc => oc.CourseId == courseId))
-                    throw new Exception("Student group does not follow this course !");
-            });
+            if (!CheckBusinessRules(session, classRoomId, courseId, equipments, studentGroups))
+                throw new Exception("Session constraints not respected !");
 
             return _sessionRepository.UpdateSessionAsync(session, classRoomId, courseId, equipments, studentGroups);
         }
@@ -345,6 +257,105 @@ namespace Calempus360.Services.Services
         private static int TimeOnlyToInt(TimeOnly hour)
         {
             return hour.Hour;
+        }
+
+        private bool CheckBusinessRules(Session session, Guid classRoomId, Guid courseId, List<Guid> equipments, List<Guid> studentGroups)
+        {
+            var academicYear = _context.AcademicYears
+                    .FirstOrDefault(ay => ay.DateStart <= DateOnly.FromDateTime(session.DateTimeStart) && ay.DateEnd >= DateOnly.FromDateTime(session.DateTimeEnd));
+
+            var classRoom = _context.Classrooms
+                .Include(c => c.SiteEntity)
+                .FirstOrDefault(c => c.ClassroomId == classRoomId);
+            if (classRoom == null)
+                throw new NotFoundException("Classroom not found !");
+
+            // vérifier si le cours est déjà planifié 2h dans la journée
+            var sessions = _context.Sessions.Where(s => s.CourseId == courseId && s.DatetimeStart.Date == session.DateTimeStart.Date).ToList();
+            if (sessions.Count >= 2)
+                throw new Exception("Course already planned 2 times in the day !");
+
+            // vérifier si la salle est déjà occupée à cette heure
+            var sessionInClassroom = _context.Sessions
+                .FirstOrDefault(s => s.ClassroomId == classRoomId && s.DatetimeStart == session.DateTimeStart);
+            if (sessionInClassroom != null) throw new Exception("Classroom already occupied at this time !");
+
+            // vérifier si la salle est équipée ou si les équipements volants sont disponibles à cette heure
+            var classroomsEquipments = _context.ClassroomsEquipments
+                .Include(ce => ce.EquipmentEntity)
+                .Where(ce => ce.AcademicYearId == academicYear!.AcademicYearId)
+                .Select(ce => ce.EquipmentEntity)
+                .ToList(); // equipements de toutes les salles
+
+            var classroomEquipment = from ce in classroomsEquipments where ce.ClassroomEquipments!.Any(ce => ce.ClassroomId == classRoomId) select ce;
+
+            var flyingEquipments = _context.Equipments
+                .Include(e => e.EquipmentTypeEntity)
+                .Include(e => e.EquipmentSessions)
+                    .ThenInclude(es => es.SessionEntity)
+                .Include(e => e.UniversitySiteEquipmentEntity)
+                .Where(
+                    e => e.UniversitySiteEquipmentEntity.SiteId == classRoom.SiteEntity!.SiteId
+                    && !classroomsEquipments.Contains(e)
+                    && !e.EquipmentSessions.Any(es => es.SessionEntity.DatetimeStart == session.DateTimeStart)
+                )
+                .ToList(); // equipement volants disponibles pour cette heure sur le site
+
+            equipments.ForEach(id =>
+            {
+                var equipment = _context.Equipments
+                    .Include(e => e.EquipmentTypeEntity)
+                    .Include(e => e.UniversitySiteEquipmentEntity)
+                    .Where(e => e.UniversitySiteEquipmentEntity.SiteId == classRoom.SiteEntity!.SiteId)
+                    .FirstOrDefault(e => e.EquipmentId == id);
+
+                if (equipment == null) throw new NotFoundException("Equipment not found !");
+                if (!classroomEquipment.Contains(equipment) && !flyingEquipments.Contains(equipment))
+                    throw new Exception("Equipment not available in this classroom !");
+            });
+
+            // vérifier si les groupes sont disponibles à cette heure
+            studentGroups.ForEach(id =>
+            {
+                var group = _context.StudentGroups
+                    .Include(g => g.StudentGroupSessions)
+                        .ThenInclude(sgs => sgs.SessionEntity)
+                    .FirstOrDefault(g => g.StudentGroupId == id);
+
+                if (group == null) throw new NotFoundException("Student group not found !");
+                if (group.StudentGroupSessions.Any(sgs => sgs.SessionEntity.DatetimeStart == session.DateTimeStart && sgs.SessionId != session.Id))
+                    throw new Exception("Student group not available at this time !");
+
+                // verifier si la session d'avant est sur le même site
+                var sessionBefore = _context.Sessions
+                    .Include(s => s.ClassroomEntity)
+                    .FirstOrDefault(s => s.DatetimeEnd == session.DateTimeStart && s.ClassroomEntity.SiteId != classRoom.SiteEntity!.SiteId);
+                if (sessionBefore != null)
+                    throw new Exception("Student group not available at this time !");
+
+                // verfiier si la session d'après est sur le même site
+                var sessionAfter = _context.Sessions
+                    .Include(s => s.ClassroomEntity)
+                    .FirstOrDefault(s => s.DatetimeStart == session.DateTimeEnd && s.ClassroomEntity.SiteId != classRoom.SiteEntity!.SiteId);
+                if (sessionAfter != null)
+                    throw new Exception("Student group not available at this time !");
+            });
+
+            // vérifier si les groupes suivent ce cours
+            studentGroups.ForEach(id =>
+            {
+                var group = _context.StudentGroups
+                    .Include(g => g.OptionEntity)
+                        .ThenInclude(o => o!.OptionCourses)
+                            .ThenInclude(oc => oc.CourseEntity)
+                    .FirstOrDefault(g => g.StudentGroupId == id);
+
+                if (group == null) throw new NotFoundException("Student group not found !");
+                if (!group.OptionEntity!.OptionCourses.Any(oc => oc.CourseId == courseId))
+                    throw new Exception("Student group does not follow this course !");
+            });
+
+            return true;
         }
     }
 }
