@@ -271,6 +271,7 @@ namespace Calempus360.Services.Services
         {
             var academicYear = _context.AcademicYears
                     .FirstOrDefault(ay => ay.DateStart <= DateOnly.FromDateTime(session.DateTimeStart) && ay.DateEnd >= DateOnly.FromDateTime(session.DateTimeEnd));
+            if (academicYear == null) throw new NotFoundException("Academic year not found !");
 
             var classRoom = _context.Classrooms
                 .Include(c => c.SiteEntity)
