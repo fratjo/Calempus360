@@ -1,9 +1,67 @@
 <div id="calendar-container" class="flex flex-col gap-4">
-  <button
-    (click)="toggleWeekends()"
-    class="self-end rounded-xl border border-gray-300 bg-white px-4 py-2 text-gray-700"
-  >
-    toggle weekends
-  </button>
+  <div class="flex w-full flex-row items-center justify-between">
+    <div class="flex flex-row gap-4">
+      <fieldset
+        class="fieldset bg-base-100 border-base-300 rounded-box w-full border px-4 pt-2 shadow-lg"
+      >
+        <legend class="fieldset-legend pt-0">Student Group</legend>
+        <select
+          name="studentGroup"
+          id="studentGroup"
+          class="w-36"
+          (change)="onStudentGroupChange($event)"
+        >
+          <option value="all">All</option>
+          @if (studentGroups$ | async; as studentGroups) {
+            @for (group of studentGroups; track group.id) {
+              <option value="{{ group.id }}">{{ group.code }}</option>
+            }
+          }
+        </select>
+      </fieldset>
+      <fieldset
+        class="fieldset bg-base-100 border-base-300 rounded-box w-full border px-4 pt-2 shadow-lg"
+      >
+        <legend class="fieldset-legend pt-0">Classroom</legend>
+        <select
+          name="classroom"
+          id="classroom"
+          class="w-36"
+          (change)="onClassroomChange($event)"
+        >
+          <option value="all">All</option>
+          @if (classrooms$ | async; as classrooms) {
+            @for (classroom of classrooms; track classroom.id) {
+              <option value="{{ classroom.id }}">{{ classroom.name }}</option>
+            }
+          }
+        </select>
+      </fieldset>
+      <fieldset
+        class="fieldset bg-base-100 border-base-300 rounded-box w-full border px-4 pt-2 shadow-lg"
+      >
+        <legend class="fieldset-legend pt-0">Course</legend>
+        <select
+          name="course"
+          id="course"
+          class="w-36"
+          (change)="onCourseChange($event)"
+        >
+          <option value="all">All</option>
+          @if (courses$ | async; as courses) {
+            @for (course of courses; track course.id) {
+              <option value="{{ course.id }}">{{ course.code }}</option>
+            }
+          }
+        </select>
+      </fieldset>
+    </div>
+    <button
+      (click)="toggleWeekends()"
+      class="self-end rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700"
+    >
+      toggle weekends
+    </button>
+  </div>
   <full-calendar [options]="calendarOptions" class="h-180"></full-calendar>
 </div>

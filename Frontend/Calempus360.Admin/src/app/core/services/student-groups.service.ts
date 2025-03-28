@@ -21,8 +21,6 @@ export class StudentGroupsService {
     const universityId = JSON.parse(sessionStorage.getItem('university')!);
     const academicYearId = JSON.parse(sessionStorage.getItem('academicYear')!);
 
-
-
     let params = new HttpParams();
     params = params.append('universityId', universityId);
     params = params.append('academicYear', academicYearId);
@@ -32,7 +30,7 @@ export class StudentGroupsService {
       .subscribe({
         next: (groups) => {
           this.studentGroups$.next(groups);
-        }
+        },
       });
   }
 
@@ -75,7 +73,11 @@ export class StudentGroupsService {
     params = params.append('option', optionId);
     params = params.append('site', siteId);
 
-    return this.http.put<StudentGroup>(this.URL + `/${studentGroup.id}`, studentGroup, { params });
+    return this.http.put<StudentGroup>(
+      this.URL + `/${studentGroup.id}`,
+      studentGroup,
+      { params },
+    );
   }
 
   deleteStudentGroup(id: string) {

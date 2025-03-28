@@ -198,6 +198,12 @@ namespace ScheduleGenerator
 
             foreach (var currentDay in daysOfWeek)
             {
+                var groupsCopy = groups.Select(g => new Group
+                {
+                    Name = g.Name,
+                    Capacity = g.Capacity,
+                    PreferedSite = g.PreferedSite
+                }).ToList();
 
                 var hours = openings.Where(o => o.site == currentClass.Site && o.dayOfWeek == currentDay)
                                     .Select(o => o.hours)
@@ -207,7 +213,7 @@ namespace ScheduleGenerator
                 // ------------------------------------------------------------- //
                 // Constraint: Not more than 2h of a course per day for a groupe //
                 // ------------------------------------------------------------- //
-                if (!CheckNoMoreThan2HoursPerDayPerGroupForACourse(schedule, groups, course, currentDay)) continue;
+                if (!CheckNoMoreThan2HoursPerDayPerGroupForACourse(schedule, groupsCopy, course, currentDay)) continue;
 
                 foreach (var timeSlot in hours)
                 {
@@ -222,7 +228,7 @@ namespace ScheduleGenerator
                     // Constraint: Can place 2 slots of the same course in a row //
                     // --------------------------------------------------------- //
                     if (!CheckIfCanPlace2SameCourseInARow(
-                        currentClass, schedule, groups, course, currentDay, timeSlot, scheduleKey,
+                        currentClass, schedule, groupsCopy, course, currentDay, timeSlot, scheduleKey,
                         out (int startHour, int endHour) previousHour,
                         out (int startHour, int endHour) nextHour,
                         out (ScheduleKey, ScheduleEntry)? value))
@@ -239,7 +245,7 @@ namespace ScheduleGenerator
                     // -------------------------------------------------------------- //
                     // Constraint: Check if the groups are available for the timeslot //
                     // -------------------------------------------------------------- //
-                    CheckGroupsAvailableForCurretTimeSlot(schedule, groups, currentDay, timeSlot, out List<Group> groupsAvailable);
+                    CheckGroupsAvailableForCurretTimeSlot(schedule, groupsCopy, currentDay, timeSlot, out List<Group> groupsAvailable);
 
                     // -------------------------------------------------------------------------------------- //
                     // Constraint: Check if the groups are not on an other site for the previous or next hour //
@@ -555,7 +561,7 @@ namespace ScheduleGenerator
             var groupsToRemove = groups.Where(g =>
                                 schedule.Count(s => s.Key.Day == currentDay && s.Value.Groups.Contains(g.Name) && s.Value.Course == course) >= 2).ToList();
 
-            if (groupsToRemove.Count() > 0 && groups.Count() == 1) return false;
+            if (groupsToRemove.Count() > 0 || (groupsToRemove.Count() > 0 && groups.Count() == 1)) return false;
             groups.RemoveAll(g => groupsToRemove.Contains(g));
             return true;
         }
