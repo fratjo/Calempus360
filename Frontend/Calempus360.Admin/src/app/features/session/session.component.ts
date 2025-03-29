@@ -10,6 +10,7 @@ import { SiteService } from '../../core/services/site.service';
 import { StudentGroupsService } from '../../core/services/student-groups.service';
 import { CourseService } from '../../core/services/course.service';
 import { AsyncPipe } from '@angular/common';
+import { Session } from '../../core/models/session.interface';
 
 @Component({
   selector: 'app-session',
@@ -26,7 +27,6 @@ export class SessionComponent implements OnInit {
   public classrooms$ = this.classroomService.classrooms$;
   private courseService = inject(CourseService);
   public courses$ = this.courseService.courses$;
-
   currentPopover: HTMLDivElement | null = null;
 
   ngOnInit(): void {
@@ -130,17 +130,33 @@ export class SessionComponent implements OnInit {
       console.log('eventDragStop', arg.event.start);
     },
 
-    eventDrop: function (info) {
-      console.log(info.event.start);
-
-      alert(
-        info.event.title +
+    eventDrop: (arg) => {
+      this.sessionService.getSessionById(arg.event.id).subscribe((session) => {
+        if(session){
+          session.dateTimeStart = arg.event.start!;
+          console.log(arg.event.end);
+          session.dateTimeEnd = arg.event.end!;
+          session.classroom = session.classroom.id;
+          session.course = session.course.id;
+          session.studentGroups = session.studentGroups!.map((sg) => sg.id);
+          session.equipments = session.equipments!.map((e) => e.id);
+          this.sessionService.updateSessions(session).subscribe({
+            next: (e) => console.log('Updated !'),
+            error: (e) => {
+              alert(e.error.detail);
+              arg.revert();
+            }
+          });
+        }
+      })
+        alert(
+        arg.event.title +
           ' was dropped on ' +
-          (info.event.start ? info.event.start : 'an unknown date'),
+          (arg.event.start ? arg.event.start : 'an unknown date'),
       );
 
       if (!confirm('Are you sure about this change?')) {
-        info.revert();
+        arg.revert();
       }
     },
 

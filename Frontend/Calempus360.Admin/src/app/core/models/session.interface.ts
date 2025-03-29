@@ -9,10 +9,10 @@ export interface Session {
   name?: string;
   dateTimeStart?: DateInput;
   dateTimeEnd?: DateInput;
-  classroom?: Classroom;
-  course?: Course;
-  studentGroups?: StudentGroup[];
-  equipments?: Equipments;
+  classroom?: any;
+  course?: any;
+  studentGroups?: any[];
+  equipments?: any[];
 }
 
 export type Sessions = Session[];

@@ -280,10 +280,10 @@ namespace Calempus360.Services.Services
                 throw new NotFoundException("Classroom not found !");
 
             // vérifier si le cours est déjà planifié 2h dans la journée
-            var sessions = _context.Sessions.Where(s => s.CourseId == courseId && s.DatetimeStart.Date == session.DateTimeStart.Date).ToList();
+            var sessions = _context.Sessions.Where(s => s.CourseId == courseId && s.DatetimeStart.Date == session.DateTimeStart.Date && s.SessionId != session.Id).ToList();
             if (sessions.Count >= 2)
                 throw new Exception("Course already planned 2 times in the day !");
-
+                
             // vérifier si la salle est déjà occupée à cette heure
             var sessionInClassroom = _context.Sessions
                 .FirstOrDefault(s => s.ClassroomId == classRoomId && s.DatetimeStart == session.DateTimeStart);
@@ -334,20 +334,22 @@ namespace Calempus360.Services.Services
                 if (group == null) throw new NotFoundException("Student group not found !");
                 if (group.StudentGroupSessions.Any(sgs => sgs.SessionEntity.DatetimeStart == session.DateTimeStart && sgs.SessionId != session.Id))
                     throw new Exception("Student group not available at this time !");
+                    
 
                 // verifier si la session d'avant est sur le même site
                 var sessionBefore = _context.Sessions
                     .Include(s => s.ClassroomEntity)
-                    .FirstOrDefault(s => s.DatetimeEnd == session.DateTimeStart && s.ClassroomEntity.SiteId != classRoom.SiteEntity!.SiteId);
+                    .FirstOrDefault(s => s.DatetimeEnd == session.DateTimeStart && s.ClassroomEntity.SiteId != classRoom.SiteEntity!.SiteId && s.StudentGroupSessions.Any(sg => sg.StudentGroupId == group.StudentGroupId));
                 if (sessionBefore != null)
                     throw new Exception("Student group not available at this time !");
 
                 // verfiier si la session d'après est sur le même site
                 var sessionAfter = _context.Sessions
                     .Include(s => s.ClassroomEntity)
-                    .FirstOrDefault(s => s.DatetimeStart == session.DateTimeEnd && s.ClassroomEntity.SiteId != classRoom.SiteEntity!.SiteId);
+                    .FirstOrDefault(s => s.DatetimeStart == session.DateTimeEnd && s.ClassroomEntity.SiteId != classRoom.SiteEntity!.SiteId && s.StudentGroupSessions.Any(sg => sg.StudentGroupId == group.StudentGroupId));
                 if (sessionAfter != null)
                     throw new Exception("Student group not available at this time !");
+                    
             });
 
             // vérifier si les groupes suivent ce cours
