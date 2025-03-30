@@ -51,8 +51,8 @@ namespace Calempus360.API.Controllers
             var session = await sessionService.AddSessionAsync(new Core.Models.Session
                 (
                     name: sessionRequest.Name,
-                    dateTimeStart: sessionRequest.DateTimeStart.ToLocalTime(),
-                    dateTimeEnd: sessionRequest.DateTimeEnd.ToLocalTime()
+                    dateTimeStart: sessionRequest.DateTimeStart,
+                    dateTimeEnd: sessionRequest.DateTimeEnd
                 ), sessionRequest.Classroom, sessionRequest.Course, sessionRequest.Equipments, sessionRequest.StudentGroups);
 
             return Ok(session.MapToDto());
@@ -67,8 +67,8 @@ namespace Calempus360.API.Controllers
                 (
                     id: id,
                     name: sessionRequest.Name,
-                    dateTimeStart: sessionRequest.DateTimeStart.ToLocalTime(),
-                    dateTimeEnd: sessionRequest.DateTimeEnd.ToLocalTime()
+                    dateTimeStart: sessionRequest.DateTimeStart,
+                    dateTimeEnd: sessionRequest.DateTimeEnd
                 ), sessionRequest.Classroom, sessionRequest.Course, sessionRequest.Equipments, sessionRequest.StudentGroups);
 
             return Ok(session.MapToDto());

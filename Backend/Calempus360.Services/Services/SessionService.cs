@@ -61,7 +61,7 @@ namespace Calempus360.Services.Services
             if (sessionInDb == null) throw new NotFoundException("Session not found !");
 
             // si on souhaite modifier la session dans le passé ou moins d'un jour avant, on ne peut pas modifier
-            if (sessionInDb.DatetimeStart > DateTime.Now.AddDays(+1))
+            if (sessionInDb.DatetimeStart < DateTime.Now.AddDays(+1))
                 throw new Exception("Cannot update session in the past or less than a day before !");
 
             if (!CheckBusinessRules(session, classRoomId, courseId, equipments, studentGroups))
@@ -286,7 +286,7 @@ namespace Calempus360.Services.Services
                 
             // vérifier si la salle est déjà occupée à cette heure
             var sessionInClassroom = _context.Sessions
-                .FirstOrDefault(s => s.ClassroomId == classRoomId && s.DatetimeStart == session.DateTimeStart);
+                .FirstOrDefault(s => s.ClassroomId == classRoomId && s.DatetimeStart == session.DateTimeStart && s.SessionId != session.Id);
             if (sessionInClassroom != null) throw new Exception("Classroom already occupied at this time !");
 
             // vérifier si la salle est équipée ou si les équipements volants sont disponibles à cette heure
@@ -306,7 +306,8 @@ namespace Calempus360.Services.Services
                 .Where(
                     e => e.UniversitySiteEquipmentEntity.SiteId == classRoom.SiteEntity!.SiteId
                     && !classroomsEquipments.Contains(e)
-                    && !e.EquipmentSessions.Any(es => es.SessionEntity.DatetimeStart == session.DateTimeStart)
+                    && !e.EquipmentSessions.Any(es => es.SessionEntity.DatetimeStart == session.DateTimeStart
+                    && !e.EquipmentSessions.Any(es => es.SessionId == session.Id))
                 )
                 .ToList(); // equipement volants disponibles pour cette heure sur le site
 

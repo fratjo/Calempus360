@@ -11,6 +11,7 @@ import { StudentGroupsService } from '../../core/services/student-groups.service
 import { CourseService } from '../../core/services/course.service';
 import { AsyncPipe } from '@angular/common';
 import { Session } from '../../core/models/session.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-session',
@@ -28,6 +29,7 @@ export class SessionComponent implements OnInit {
   private courseService = inject(CourseService);
   public courses$ = this.courseService.courses$;
   currentPopover: HTMLDivElement | null = null;
+  private readonly router = inject(Router);
 
   ngOnInit(): void {
     this.sessionService
@@ -81,8 +83,9 @@ export class SessionComponent implements OnInit {
     editable: true,
     selectable: true,
 
-    eventClick(arg) {
-      alert('Event: ' + arg.event.title);
+    eventClick:(arg)  => {
+      this.removePopover();
+      this.router.navigate(['/schedules/edit',arg.event.id]);
     },
 
     eventMouseEnter: (arg) => {
@@ -111,18 +114,11 @@ export class SessionComponent implements OnInit {
     },
 
     eventMouseLeave: (arg) => {
-      document.querySelectorAll('.popover')!.forEach((popover) => {
-        if (popover instanceof HTMLDivElement) {
-          popover.remove();
-        }
-      });
-      if (this.currentPopover && document.body.contains(this.currentPopover)) {
-        document.body.removeChild(this.currentPopover);
-      }
-      this.currentPopover = null; // Clear the stored popover
+      this.removePopover();
     },
 
-    eventDragStart(arg) {
+    eventDragStart:(arg) => {
+      this.removePopover();
       console.log('eventDragStart', arg.event.start);
     },
 
@@ -275,5 +271,17 @@ export class SessionComponent implements OnInit {
           };
         });
       });
+  }
+
+  removePopover(){
+    document.querySelectorAll('.popover')!.forEach((popover) => {
+      if (popover instanceof HTMLDivElement) {
+        popover.remove();
+      }
+    });
+    if (this.currentPopover && document.body.contains(this.currentPopover)) {
+      document.body.removeChild(this.currentPopover);
+    }
+    this.currentPopover = null; // Clear the stored popover
   }
 }
