@@ -289,4 +289,37 @@ export class SessionComponent implements OnInit {
     }
     this.currentPopover = null; // Clear the stored popover
   }
+
+  generateForCurrentYear() {
+    const universityId = JSON.parse(sessionStorage.getItem('university')!);
+    const academicYearId = JSON.parse(sessionStorage.getItem('academicYear')!);
+
+    this.sessionService
+      .generateSessions({ universityId, academicYearId })
+      .subscribe({
+        next: () => {
+          alert('Sessions generated successfully');
+          this.sessionService
+            .getSessions({
+              universityId,
+              academicYearId,
+            })
+            .subscribe((sessions) => {
+              this.calendarOptions.events = sessions.map((session) => {
+                return {
+                  id: session.id,
+                  title: session.name,
+                  start: session.dateTimeStart,
+                  end: session.dateTimeEnd,
+                  classroom: session.classroom,
+                  course: session.course,
+                  studentGroups: session.studentGroups,
+                  equipments: session.equipments,
+                };
+              });
+            });
+        },
+        error: (e) => alert(e.error.detail),
+      });
+  }
 }

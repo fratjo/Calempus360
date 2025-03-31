@@ -40,7 +40,7 @@ namespace Calempus360.API.Controllers
         #region POST
 
         [HttpPost("generate")]
-        public async Task<IActionResult> GenerateSchedule(Guid universityId, Guid academicYearId)
+        public async Task<IActionResult> GenerateSchedule([FromQuery] Guid universityId, [FromQuery] Guid academicYearId)
         {
             return await sessionService.GenerateSchedule(universityId, academicYearId) ? Ok() : BadRequest();
         }

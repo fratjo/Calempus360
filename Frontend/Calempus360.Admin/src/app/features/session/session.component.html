@@ -2,7 +2,7 @@
   <div class="flex w-full flex-row items-center justify-between">
     <div class="flex flex-row gap-4">
       <fieldset
-        class="fieldset bg-base-100 border-base-300 rounded-box w-full border px-4 pt-2 shadow-lg"
+        class="fieldset bg-base-100 border-base-300 rounded-box w-32 border px-4 pt-2 shadow-lg"
       >
         <legend class="fieldset-legend pt-0">Student Group</legend>
         <select
@@ -20,7 +20,7 @@
         </select>
       </fieldset>
       <fieldset
-        class="fieldset bg-base-100 border-base-300 rounded-box w-full border px-4 pt-2 shadow-lg"
+        class="fieldset bg-base-100 border-base-300 rounded-box w-32 border px-4 pt-2 shadow-lg"
       >
         <legend class="fieldset-legend pt-0">Classroom</legend>
         <select
@@ -38,7 +38,7 @@
         </select>
       </fieldset>
       <fieldset
-        class="fieldset bg-base-100 border-base-300 rounded-box w-full border px-4 pt-2 shadow-lg"
+        class="fieldset bg-base-100 border-base-300 rounded-box w-32 border px-4 pt-2 shadow-lg"
       >
         <legend class="fieldset-legend pt-0">Course</legend>
         <select
@@ -55,13 +55,31 @@
           }
         </select>
       </fieldset>
+      <fieldset
+        class="fieldset bg-base-100 border-base-300 rounded-box w-full border px-4 pt-2 shadow-lg"
+      >
+        <legend class="fieldset-legend pt-0">Actions</legend>
+        <div class="flex flex-row gap-4">
+          <button
+            class="self-end rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700"
+            (click)="generateForCurrentYear()"
+          >
+            Generate for current year
+          </button>
+          <button
+            (click)="toggleWeekends()"
+            class="self-end rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700"
+          >
+            toggle weekends
+          </button>
+          <button
+            class="self-end rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700"
+          >
+            + Add Session
+          </button>
+        </div>
+      </fieldset>
     </div>
-    <button
-      (click)="toggleWeekends()"
-      class="self-end rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700"
-    >
-      toggle weekends
-    </button>
   </div>
   <full-calendar [options]="calendarOptions" class="h-180"></full-calendar>
 </div>

@@ -76,6 +76,12 @@ namespace Calempus360.Services.Services
             var academicYear = await _context.AcademicYears
                 .FirstOrDefaultAsync(ay => ay.AcademicYearId == academicYearId);
 
+            if (academicYear == null)
+                throw new NotFoundException("Academic Year not found !");
+
+            if (DateTime.Now.Date > academicYear.DateStart.ToDateTime(TimeOnly.MinValue))
+                throw new Exception("Cannot generate schedule for past academic year or already started academic year!");
+
             var x = from s in await _context.Sessions
                         .Include(s => s.ClassroomEntity)
                         .ThenInclude(c => c.SiteEntity)

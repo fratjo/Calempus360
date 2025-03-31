@@ -58,4 +58,22 @@ export class SessionService {
   updateSessions(session: Session) {
     return this.http.put<Session>(`${this.URL}/${session.id}`, session);
   }
+
+  generateSessions({
+    universityId,
+    academicYearId,
+  }: {
+    universityId: string;
+    academicYearId: string;
+  }) {
+    let params = new HttpParams();
+    if (universityId) {
+      params = params.append('universityId', universityId);
+    }
+    if (academicYearId) {
+      params = params.append('academicYearId', academicYearId);
+    }
+
+    return this.http.post(`${this.URL}/generate`, {}, { params });
+  }
 }
