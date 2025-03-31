@@ -55,7 +55,7 @@ export class SessionService {
     );
   }
 
-  updateSessions(session: Session){
-    return this.http.put<Session>(`${this.URL}/${session.id}`,session);
+  updateSessions(session: Session) {
+    return this.http.put<Session>(`${this.URL}/${session.id}`, session);
   }
 }

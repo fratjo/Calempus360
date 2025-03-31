@@ -82,10 +82,15 @@ export class SessionComponent implements OnInit {
     weekends: false,
     editable: true,
     selectable: true,
+    timeZone: 'Europe/Paris',
+    allDaySlot: false,
+    slotDuration: '00:30:00',
+    slotMinTime: '07:00:00',
+    slotMaxTime: '21:30:00',
 
-    eventClick:(arg)  => {
+    eventClick: (arg) => {
       this.removePopover();
-      this.router.navigate(['/schedules/edit',arg.event.id]);
+      this.router.navigate(['/schedules/edit', arg.event.id]);
     },
 
     eventMouseEnter: (arg) => {
@@ -117,7 +122,7 @@ export class SessionComponent implements OnInit {
       this.removePopover();
     },
 
-    eventDragStart:(arg) => {
+    eventDragStart: (arg) => {
       this.removePopover();
       console.log('eventDragStart', arg.event.start);
     },
@@ -128,7 +133,7 @@ export class SessionComponent implements OnInit {
 
     eventDrop: (arg) => {
       this.sessionService.getSessionById(arg.event.id).subscribe((session) => {
-        if(session){
+        if (session) {
           session.dateTimeStart = arg.event.start!;
           console.log(arg.event.end);
           session.dateTimeEnd = arg.event.end!;
@@ -141,11 +146,11 @@ export class SessionComponent implements OnInit {
             error: (e) => {
               alert(e.error.detail);
               arg.revert();
-            }
+            },
           });
         }
-      })
-        alert(
+      });
+      alert(
         arg.event.title +
           ' was dropped on ' +
           (arg.event.start ? arg.event.start : 'an unknown date'),
@@ -273,7 +278,7 @@ export class SessionComponent implements OnInit {
       });
   }
 
-  removePopover(){
+  removePopover() {
     document.querySelectorAll('.popover')!.forEach((popover) => {
       if (popover instanceof HTMLDivElement) {
         popover.remove();

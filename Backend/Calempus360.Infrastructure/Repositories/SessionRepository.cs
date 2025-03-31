@@ -152,7 +152,7 @@ namespace Calempus360.Infrastructure.Repositories
             if (courseEntity == null) throw new NotFoundException("Course not found !");
             entity.CourseEntity = courseEntity;
 
-            entity.Name = session.Name;
+            entity.Name = courseEntity.Name + " - " + session.DateTimeStart.ToShortDateString() + " - " + session.DateTimeStart.Day.ToString() + " - " + session.DateTimeStart.Hour + "h" + session.DateTimeEnd.Hour + "h";
             entity.DatetimeStart = session.DateTimeStart;
             entity.DatetimeEnd = session.DateTimeEnd;
             entity.UpdatedAt = DateTime.Now;

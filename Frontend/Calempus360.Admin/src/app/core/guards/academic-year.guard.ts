@@ -13,7 +13,7 @@ export const academicYearGuard: CanActivateFn = () => {
     console.log(
       'No academic year found, redirecting to academic year change page',
     );
-    route.navigate(['academic-year/change']);
+    route.navigate(['schedules']);
     return false;
   }
 

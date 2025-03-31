@@ -45,11 +45,11 @@ import { SessionComponent } from './features/session/session.component';
 import { SessionEditFormComponent } from './features/session/session-edit-form/session-edit-form.component';
 
 export const routes: Routes = [
-  {
-    path: 'home',
-    component: HomeComponent,
-    canActivate: [univeristyGuard, academicYearGuard],
-  },
+  // {
+  //   path: 'home',
+  //   component: HomeComponent,
+  //   canActivate: [univeristyGuard, academicYearGuard],
+  // },
   {
     path: 'university',
     component: UniversityComponent,
@@ -226,6 +226,7 @@ export const routes: Routes = [
   {
     path: 'schedules',
     component: SessionComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
   },
   {
     path: 'schedules/edit/:id',
@@ -234,6 +235,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'home',
+    redirectTo: 'schedules',
   },
 ];

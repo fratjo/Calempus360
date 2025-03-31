@@ -7,8 +7,8 @@ import { StudentGroup } from './student-group.interface';
 export interface Session {
   id?: string;
   name?: string;
-  dateTimeStart?: DateInput;
-  dateTimeEnd?: DateInput;
+  dateTimeStart?: Date;
+  dateTimeEnd?: Date;
   classroom?: any;
   course?: any;
   studentGroups?: any[];
