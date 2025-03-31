@@ -1,21 +1,19 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FullCalendarModule } from '@fullcalendar/angular';
-import { Calendar, CalendarOptions } from '@fullcalendar/core/index.js';
+import { CalendarOptions } from '@fullcalendar/core/index.js';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { ClassroomService } from '../../core/services/classroom.service';
 import { SessionService } from '../../core/services/session.service';
-import { SiteService } from '../../core/services/site.service';
 import { StudentGroupsService } from '../../core/services/student-groups.service';
 import { CourseService } from '../../core/services/course.service';
 import { AsyncPipe } from '@angular/common';
-import { Session } from '../../core/models/session.interface';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-session',
-  imports: [FullCalendarModule, AsyncPipe],
+  imports: [FullCalendarModule, AsyncPipe, RouterLink],
   templateUrl: './session.component.html',
   styleUrl: './session.component.scss',
 })
@@ -141,7 +139,7 @@ export class SessionComponent implements OnInit {
           session.course = session.course.id;
           session.studentGroups = session.studentGroups!.map((sg) => sg.id);
           session.equipments = session.equipments!.map((e) => e.id);
-          this.sessionService.updateSessions(session).subscribe({
+          this.sessionService.updateSession(session).subscribe({
             next: (e) => console.log('Updated !'),
             error: (e) => {
               alert(e.error.detail);

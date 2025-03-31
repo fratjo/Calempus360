@@ -55,7 +55,11 @@ export class SessionService {
     );
   }
 
-  updateSessions(session: Session) {
+  addSession(session: Session): Observable<Session> {
+    return this.http.post<Session>(this.URL, session);
+  }
+
+  updateSession(session: Session) {
     return this.http.put<Session>(`${this.URL}/${session.id}`, session);
   }
 

@@ -1,6 +1,6 @@
 <div id="calendar-container" class="flex flex-col gap-4">
   <div class="flex w-full flex-row items-center justify-between">
-    <div class="flex flex-row gap-4">
+    <div class="flex w-full flex-row items-center justify-between gap-2">
       <fieldset
         class="fieldset bg-base-100 border-base-300 rounded-box w-32 border px-4 pt-2 shadow-lg"
       >
@@ -55,30 +55,24 @@
           }
         </select>
       </fieldset>
-      <fieldset
-        class="fieldset bg-base-100 border-base-300 rounded-box w-full border px-4 pt-2 shadow-lg"
+      <button
+        class="self-end rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700"
+        (click)="generateForCurrentYear()"
       >
-        <legend class="fieldset-legend pt-0">Actions</legend>
-        <div class="flex flex-row gap-4">
-          <button
-            class="self-end rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700"
-            (click)="generateForCurrentYear()"
-          >
-            Generate for current year
-          </button>
-          <button
-            (click)="toggleWeekends()"
-            class="self-end rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700"
-          >
-            toggle weekends
-          </button>
-          <button
-            class="self-end rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700"
-          >
-            + Add Session
-          </button>
-        </div>
-      </fieldset>
+        Generate for current year
+      </button>
+      <button
+        (click)="toggleWeekends()"
+        class="self-end rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700"
+      >
+        toggle weekends
+      </button>
+      <button
+        class="cursor-pointer self-end rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700"
+        [routerLink]="['/schedule/add']"
+      >
+        + Add Session
+      </button>
     </div>
   </div>
   <full-calendar [options]="calendarOptions" class="h-180"></full-calendar>

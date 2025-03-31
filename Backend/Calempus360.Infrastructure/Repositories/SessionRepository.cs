@@ -7,6 +7,7 @@ using Calempus360.Infrastructure.Persistence.Mappers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -152,7 +153,8 @@ namespace Calempus360.Infrastructure.Repositories
             if (courseEntity == null) throw new NotFoundException("Course not found !");
             entity.CourseEntity = courseEntity;
 
-            entity.Name = courseEntity.Name + " - " + session.DateTimeStart.ToShortDateString() + " - " + session.DateTimeStart.Day.ToString() + " - " + session.DateTimeStart.Hour + "h" + session.DateTimeEnd.Hour + "h";
+            CultureInfo cultureInfo = new CultureInfo("en-US");
+            entity.Name = courseEntity.Name + " - " + session.DateTimeStart.ToShortDateString() + " - " + session.DateTimeStart.ToString("dddd", cultureInfo).First().ToString().ToUpper() + session.DateTimeStart.ToString("dddd", cultureInfo).Substring(1) + " - " + session.DateTimeStart.Hour + "h" + session.DateTimeEnd.Hour + "h";
             entity.DatetimeStart = session.DateTimeStart;
             entity.DatetimeEnd = session.DateTimeEnd;
             entity.UpdatedAt = DateTime.Now;

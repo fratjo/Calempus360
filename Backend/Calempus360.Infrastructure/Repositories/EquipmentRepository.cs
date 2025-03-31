@@ -73,7 +73,7 @@ public class EquipmentRepository(Calempus360DbContext dbContext) : IEquipmentRep
 
     #region Equipment
 
-    public async Task<IEnumerable<Equipment>> GetEquipmentsAsync(Guid? universityId, Guid? siteId, Guid? classroomId, Guid? equipmentTypeId)
+    public async Task<IEnumerable<Equipment>> GetEquipmentsAsync(Guid? universityId, Guid? academicYearId, Guid? siteId, Guid? classroomId, Guid? equipmentTypeId, bool flying = false)
     {
         var equipments = from eq in await dbContext.Equipments
                                     .Include(eq => eq.EquipmentTypeEntity)
@@ -82,9 +82,12 @@ public class EquipmentRepository(Calempus360DbContext dbContext) : IEquipmentRep
                                     .Include(eq => eq.UniversitySiteEquipmentEntity)
                                     .ToListAsync()
                          where (universityId == null || eq.UniversitySiteEquipmentEntity.UniversityId == universityId) &&
-                               (siteId == null || eq.UniversitySiteEquipmentEntity.SiteId == siteId) &&
-                               (classroomId == null || eq.ClassroomEquipments!.Any(ce => ce.ClassroomId == classroomId)) &&
-                               (equipmentTypeId == null || eq.EquipmentTypeEntity!.EquipmentTypeId == equipmentTypeId)
+                                (siteId == null || eq.UniversitySiteEquipmentEntity.SiteId == siteId) &&
+                                (classroomId == null || eq.ClassroomEquipments!.Any(ce => ce.ClassroomId == classroomId)) &&
+                                (equipmentTypeId == null || eq.EquipmentTypeEntity!.EquipmentTypeId == equipmentTypeId) &&
+                                (academicYearId == null || eq.ClassroomEquipments!.Any(ce => ce.AcademicYearId == academicYearId)) //&&
+                                                                                                                                   // (flying == false || eq.ClassroomEquipments!.Any(ce =>
+                                                                                                                                   //             ce.AcademicYearId == academicYearId && ce.ClassroomEntity == null))
                          select eq;
 
         return equipments.Select(eq => eq.ToDomainModel());

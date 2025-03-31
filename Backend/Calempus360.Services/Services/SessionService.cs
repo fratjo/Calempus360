@@ -79,8 +79,8 @@ namespace Calempus360.Services.Services
             if (academicYear == null)
                 throw new NotFoundException("Academic Year not found !");
 
-            if (DateTime.Now.Date > academicYear.DateStart.ToDateTime(TimeOnly.MinValue))
-                throw new Exception("Cannot generate schedule for past academic year or already started academic year!");
+            // if (DateTime.Now.Date > academicYear.DateStart.ToDateTime(TimeOnly.MinValue))
+            //     throw new Exception("Cannot generate schedule for past academic year or already started academic year!");
 
             var x = from s in await _context.Sessions
                         .Include(s => s.ClassroomEntity)
@@ -286,7 +286,7 @@ namespace Calempus360.Services.Services
                 throw new NotFoundException("Classroom not found !");
 
             // vérifier si le cours est déjà planifié 2h dans la journée
-            var sessions = _context.Sessions.Where(s => s.CourseId == courseId && s.DatetimeStart.Date == session.DateTimeStart.Date && s.SessionId != session.Id).ToList();
+            var sessions = _context.Sessions.Where(s => s.StudentGroupSessions.Any(sgs => studentGroups.Contains(sgs.StudentGroupId)) && s.CourseId == courseId && s.DatetimeStart.Date == session.DateTimeStart.Date && s.SessionId != session.Id).ToList();
             if (sessions.Count >= 2)
                 throw new Exception("Course already planned 2 times in the day !");
 
@@ -302,7 +302,9 @@ namespace Calempus360.Services.Services
                 .Select(ce => ce.EquipmentEntity)
                 .ToList(); // equipements de toutes les salles
 
-            var classroomEquipment = from ce in classroomsEquipments where ce.ClassroomEquipments!.Any(ce => ce.ClassroomId == classRoomId) select ce;
+            var classroomEquipment = classroomsEquipments
+                                        .Where(e => e.ClassroomEquipments?.Any(ce => ce.ClassroomId == classRoomId) ?? false)
+                                        .ToList();
 
             var flyingEquipments = _context.Equipments
                 .Include(e => e.EquipmentTypeEntity)
@@ -326,8 +328,11 @@ namespace Calempus360.Services.Services
                     .FirstOrDefault(e => e.EquipmentId == id);
 
                 if (equipment == null) throw new NotFoundException("Equipment not found !");
-                if (!classroomEquipment.Contains(equipment) && !flyingEquipments.Contains(equipment))
+                if (!(classroomEquipment?.Any(ce => ce.EquipmentId == equipment.EquipmentId) ?? false) &&
+                    !(flyingEquipments?.Any(fe => fe.EquipmentId == equipment.EquipmentId) ?? false))
+                {
                     throw new Exception("Equipment not available in this classroom !");
+                }
             });
 
             // vérifier si les groupes sont disponibles à cette heure

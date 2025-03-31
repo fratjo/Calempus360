@@ -99,11 +99,13 @@ export class EquipmentService {
     siteId,
     classroomId,
     equipmentTypeId,
+    flying,
   }: {
     universityId?: string;
     siteId?: string;
     classroomId?: string;
     equipmentTypeId?: string;
+    flying?: boolean;
   } = {}) {
     let params = new HttpParams();
 
@@ -119,6 +121,11 @@ export class EquipmentService {
     if (equipmentTypeId) {
       params = params.set('equipmentTypeId', equipmentTypeId);
     }
+    if (flying) {
+      params = params.set('flying', flying);
+    }
+
+    console.log(params.toString());
 
     return this.http.get<Equipments>(this.URL, { params }).pipe(
       tap((s: Equipments) => {

@@ -1,1 +1,174 @@
-<p>session-add-form works!</p>
+<div
+  class="card bg-base-100 flex flex-col items-center justify-center rounded-lg"
+>
+  <h1 class="card-title mt-4">Edit Session</h1>
+  <form
+    [formGroup]="sessionForm"
+    (ngSubmit)="onSave()"
+    class="card-body flex w-64 flex-col space-y-4"
+  >
+    <input
+      [ngClass]="{
+        'border-error':
+          sessionForm.controls['name'].touched &&
+          sessionForm.controls['name'].invalid,
+        'border-primary':
+          sessionForm.controls['name'].touched &&
+          sessionForm.controls['name'].valid,
+      }"
+      type="text"
+      placeholder="Nom"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="name"
+    />
+    <input
+      [ngClass]="{
+        'border-error':
+          sessionForm.controls['dateTimeStart'].touched &&
+          sessionForm.controls['dateTimeStart'].invalid,
+        'border-primary':
+          sessionForm.controls['dateTimeStart'].touched &&
+          sessionForm.controls['dateTimeStart'].valid,
+      }"
+      type="datetime-local"
+      placeholder="Starting Time"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="dateTimeStart"
+    />
+    <input
+      [ngClass]="{
+        'border-error':
+          sessionForm.controls['dateTimeEnd'].touched &&
+          sessionForm.controls['dateTimeEnd'].invalid,
+        'border-primary':
+          sessionForm.controls['dateTimeEnd'].touched &&
+          sessionForm.controls['dateTimeEnd'].valid,
+      }"
+      type="datetime-local"
+      placeholder="Ending Time"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="dateTimeEnd"
+    />
+    <select
+      [ngClass]="{
+        'border-error':
+          sessionForm.controls['classroom'].touched &&
+          sessionForm.controls['classroom'].invalid,
+        'border-primary':
+          sessionForm.controls['classroom'].touched &&
+          sessionForm.controls['classroom'].valid,
+      }"
+      formControlName="classroom"
+      id="classroom"
+      class="select focus:ring-none focus:border-secondary focus:outline-none"
+      (change)="onClassroomChange($event)"
+    >
+      <option [ngValue]="null" disabled>Classroom</option>
+      <option *ngFor="let option of classrooms$ | async" [value]="option.id">
+        {{ option.name }}
+      </option>
+    </select>
+
+    <select
+      [ngClass]="{
+        'border-error':
+          sessionForm.controls['course'].touched &&
+          sessionForm.controls['course'].invalid,
+        'border-primary':
+          sessionForm.controls['course'].touched &&
+          sessionForm.controls['course'].valid,
+      }"
+      formControlName="course"
+      id="course"
+      class="select focus:ring-none focus:border-secondary focus:outline-none"
+    >
+      <option [ngValue]="null" disabled>Course</option>
+      <option *ngFor="let course of courses$ | async" [value]="course.id">
+        {{ course.name }}
+      </option>
+    </select>
+
+    <details class="dropdown">
+      <summary
+        (click)="this.sessionForm.controls['studentGroups'].markAsTouched()"
+        [ngClass]="{
+          'border-error':
+            studentGroupArray.touched && studentGroupArray.invalid,
+          'border-primary':
+            studentGroupArray.touched && studentGroupArray.valid,
+        }"
+        class="select focus:ring-none focus:border-secondary focus:outline-none"
+      >
+        Student Groups
+      </summary>
+      <ul
+        class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
+      >
+        <li
+          *ngFor="let studentGroup of studentGroups$ | async"
+          [value]="studentGroup.id"
+        >
+          <label class="flex cursor-pointer items-center gap-2">
+            <input
+              type="checkbox"
+              [value]="studentGroup.id"
+              (change)="selectStudentGroup(studentGroup, $event)"
+              [checked]="this.selectedStudentGroups.includes(studentGroup.id!)"
+              class="checkbox checkbox-primary"
+            />
+            <span>{{ studentGroup.code }}</span>
+          </label>
+        </li>
+      </ul>
+    </details>
+
+    <details class="dropdown">
+      <summary
+        (click)="this.sessionForm.controls['equipments'].markAsTouched()"
+        [ngClass]="{
+          'border-error': equipmentArray.touched && equipmentArray.invalid,
+          'border-primary': equipmentArray.touched && equipmentArray.valid,
+        }"
+        class="select focus:ring-none focus:border-secondary focus:outline-none"
+      >
+        Equipments
+      </summary>
+      <ul
+        class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
+      >
+        <li
+          *ngFor="let equipment of equipments$ | async"
+          [value]="equipment.id"
+        >
+          <label class="flex cursor-pointer items-center gap-2">
+            <input
+              type="checkbox"
+              [value]="equipment.id"
+              (change)="selectEquipment(equipment, $event)"
+              [checked]="this.selectedEquipments.includes(equipment.id!)"
+              class="checkbox checkbox-primary"
+            />
+            <span>{{ equipment.name }}</span>
+          </label>
+        </li>
+      </ul>
+    </details>
+
+    <div class="flex justify-between space-x-4">
+      <button
+        (click)="onCancel()"
+        type="reset"
+        class="rounded-box h-8 cursor-pointer border border-red-400 px-3 py-1 text-red-400 hover:bg-red-100 hover:text-red-500"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        [disabled]="sessionForm.invalid"
+        class="rounded-box h-8 cursor-pointer border border-blue-400 px-3 py-1 text-blue-400 hover:bg-blue-100 hover:text-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        Save
+      </button>
+    </div>
+  </form>
+</div>

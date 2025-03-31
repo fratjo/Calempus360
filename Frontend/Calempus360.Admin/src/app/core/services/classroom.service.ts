@@ -40,7 +40,7 @@ export class ClassroomService {
 
     return this.http.get<Classrooms>(this.URL, { params }).pipe(
       tap((s: Classrooms) => {
-        this.classrooms$.next(s);
+        this.classrooms$.next(s.sort((a, b) => a.code!.localeCompare(b.code!)));
       }),
     );
   }

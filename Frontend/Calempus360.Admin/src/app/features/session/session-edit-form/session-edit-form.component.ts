@@ -132,9 +132,12 @@ export class SessionEditFormComponent implements OnInit {
         this.equipmentService
           .getEquipments({
             siteId: classroom.site!,
+            flying: true,
           })
           .subscribe();
       });
+
+    this.equipmentArray.clear();
   }
 
   selectEquipment(equipmentType: Equipment, event: any) {
@@ -169,7 +172,7 @@ export class SessionEditFormComponent implements OnInit {
       id: this.session?.id,
     };
     console.log(session);
-    this.sessionService.updateSessions(session).subscribe({
+    this.sessionService.updateSession(session).subscribe({
       next: (v) => console.log(v),
       error: (e) => alert(e.error.detail),
       complete: () => this.router.navigate(['/schedules']),

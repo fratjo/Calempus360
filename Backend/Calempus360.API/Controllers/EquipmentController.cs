@@ -83,10 +83,11 @@ namespace Calempus360.API.Controllers
         #region Get
 
         [HttpGet]
-        public async Task<IActionResult> GetEquipments([FromQuery] Guid? universityId, [FromQuery] Guid? siteId, [FromQuery] Guid? classroomId, [FromQuery] Guid? equipmentTypeId)
+        public async Task<IActionResult> GetEquipments([FromQuery] Guid? universityId, [FromQuery] Guid? academicYearId, [FromQuery] Guid? siteId, [FromQuery] Guid? classroomId, [FromQuery] Guid? equipmentTypeId, [FromQuery] bool flying = false)
         {
-            var equipments = await equipmentService.GetEquipmentsAsync(universityId, siteId, classroomId, equipmentTypeId);
-            return Ok(equipments.Select(e => e.MapToDto()));
+            var equipments = await equipmentService.GetEquipmentsAsync(universityId, academicYearId, siteId, classroomId, equipmentTypeId, flying);
+            var e = equipments.Select(e => e.MapToDto()).ToList();
+            return Ok(e);
         }
 
         [HttpGet("{id:guid}")]

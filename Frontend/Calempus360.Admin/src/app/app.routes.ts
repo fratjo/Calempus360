@@ -43,6 +43,7 @@ import { OptionViewComponent } from './features/option/option-view/option-view.c
 import { CourseViewComponent } from './features/course/course-view/course-view.component';
 import { SessionComponent } from './features/session/session.component';
 import { SessionEditFormComponent } from './features/session/session-edit-form/session-edit-form.component';
+import { SessionAddFormComponent } from './features/session/session-add-form/session-add-form.component';
 
 export const routes: Routes = [
   // {
@@ -231,6 +232,11 @@ export const routes: Routes = [
   {
     path: 'schedules/edit/:id',
     component: SessionEditFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'schedule/add',
+    component: SessionAddFormComponent,
     canActivate: [univeristyGuard, academicYearGuard],
   },
   {
