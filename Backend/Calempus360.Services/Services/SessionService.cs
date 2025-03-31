@@ -61,7 +61,7 @@ namespace Calempus360.Services.Services
             if (sessionInDb == null) throw new NotFoundException("Session not found !");
 
             // si on souhaite modifier la session dans le passé ou moins d'un jour avant, on ne peut pas modifier
-            if (sessionInDb.DatetimeStart < DateTime.Now.AddDays(+1))
+            if (sessionInDb.DatetimeStart.Date < DateTime.Now.Date.AddDays(+1))
                 throw new Exception("Cannot update session in the past or less than a day before !");
 
             if (!CheckBusinessRules(session, classRoomId, courseId, equipments, studentGroups))
@@ -283,7 +283,7 @@ namespace Calempus360.Services.Services
             var sessions = _context.Sessions.Where(s => s.CourseId == courseId && s.DatetimeStart.Date == session.DateTimeStart.Date && s.SessionId != session.Id).ToList();
             if (sessions.Count >= 2)
                 throw new Exception("Course already planned 2 times in the day !");
-                
+
             // vérifier si la salle est déjà occupée à cette heure
             var sessionInClassroom = _context.Sessions
                 .FirstOrDefault(s => s.ClassroomId == classRoomId && s.DatetimeStart == session.DateTimeStart && s.SessionId != session.Id);
@@ -335,7 +335,7 @@ namespace Calempus360.Services.Services
                 if (group == null) throw new NotFoundException("Student group not found !");
                 if (group.StudentGroupSessions.Any(sgs => sgs.SessionEntity.DatetimeStart == session.DateTimeStart && sgs.SessionId != session.Id))
                     throw new Exception("Student group not available at this time !");
-                    
+
 
                 // verifier si la session d'avant est sur le même site
                 var sessionBefore = _context.Sessions
@@ -350,7 +350,7 @@ namespace Calempus360.Services.Services
                     .FirstOrDefault(s => s.DatetimeStart == session.DateTimeEnd && s.ClassroomEntity.SiteId != classRoom.SiteEntity!.SiteId && s.StudentGroupSessions.Any(sg => sg.StudentGroupId == group.StudentGroupId));
                 if (sessionAfter != null)
                     throw new Exception("Student group not available at this time !");
-                    
+
             });
 
             // vérifier si les groupes suivent ce cours

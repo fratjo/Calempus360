@@ -4,7 +4,14 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CourseService } from '../../../core/services/course.service';
 import { EquipmentService } from '../../../core/services/equipment.service';
 import { ClassroomService } from '../../../core/services/classroom.service';
-import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { CourseFormCustomInputComponent } from '../../course/course-form-custom-input/course-form-custom-input.component';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,17 +24,19 @@ import { Session } from '../../../core/models/session.interface';
 
 @Component({
   selector: 'app-session-edit-form',
-  imports: [ReactiveFormsModule,
-              FormsModule,
-              MatFormFieldModule,
-              MatIconModule,
-              RouterModule,
-              MatButtonModule,
-              CommonModule],
+  imports: [
+    ReactiveFormsModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatIconModule,
+    RouterModule,
+    MatButtonModule,
+    CommonModule,
+  ],
   templateUrl: './session-edit-form.component.html',
-  styleUrl: './session-edit-form.component.scss'
+  styleUrl: './session-edit-form.component.scss',
 })
-export class SessionEditFormComponent implements OnInit{
+export class SessionEditFormComponent implements OnInit {
   private readonly courseService = inject(CourseService);
   private readonly equipmentService = inject(EquipmentService);
   private readonly studentGroupService = inject(StudentGroupsService);
@@ -43,76 +52,110 @@ export class SessionEditFormComponent implements OnInit{
   studentGroups$ = this.studentGroupService.studentGroups$;
   equipments$ = this.equipmentService.equipments$;
 
-  constructor(){
+  constructor() {
     this.sessionForm = this.formBuilder.group({
-            name:['',Validators.required],
-            dateTimeStart:['',Validators.required],
-            dateTimeEnd:['',Validators.required],
-            classroom:['',Validators.required],
-            course:['',Validators.required],
-            studentGroups: this.formBuilder.array([], Validators.required),
-            equipments: this.formBuilder.array([], null), 
-          });
+      name: ['', Validators.required],
+      dateTimeStart: ['', Validators.required],
+      dateTimeEnd: ['', Validators.required],
+      classroom: ['', Validators.required],
+      course: ['', Validators.required],
+      studentGroups: this.formBuilder.array([], Validators.required),
+      equipments: this.formBuilder.array([], null),
+    });
   }
 
   ngOnInit(): void {
     const universityId = JSON.parse(sessionStorage.getItem('university')!);
-    this.classRoomService.getClassrooms({universityId: universityId,siteId: undefined}).subscribe();
+    this.classRoomService
+      .getClassrooms({ universityId: universityId })
+      .subscribe();
     this.courseService.getCourses();
     this.studentGroupService.getStudentGroups();
-    this.equipmentService.getEquipments().subscribe();
-    this.route.paramMap.subscribe(params => {
+
+    this.route.paramMap.subscribe((params) => {
       this.sessionService.getSessionById(params.get('id')!).subscribe({
         next: (e) => {
           this.session = e;
-          this.sessionForm.patchValue(
-            {
-              name: e.name,
-              dateTimeStart: e.dateTimeStart,
-              dateTimeEnd: e.dateTimeEnd,
-              classroom: e.classroom.id,
-              course:e.course.id
-            }
+          this.sessionForm.patchValue({
+            name: e.name,
+            dateTimeStart: e.dateTimeStart,
+            dateTimeEnd: e.dateTimeEnd,
+            classroom: e.classroom.id,
+            course: e.course.id,
+          });
+          e.studentGroups?.forEach((studentGroup) =>
+            this.studentGroupArray.push(
+              this.formBuilder.control(studentGroup.id),
+            ),
           );
-          e.studentGroups?.forEach((studentGroup) => this.studentGroupArray.push(this.formBuilder.control(studentGroup.id)));
-          e.equipments?.forEach((equipment) => this.equipmentArray.push(this.formBuilder.control(equipment.id)));        
+          e.equipments?.forEach((equipment) =>
+            this.equipmentArray.push(this.formBuilder.control(equipment.id)),
+          );
+          this.classRoomService
+            .getClassroomById(e.classroom.id)
+            .subscribe((classroom) => {
+              this.equipmentService
+                .getEquipments({
+                  universityId: universityId,
+                  siteId: classroom.site!,
+                })
+                .subscribe();
+            });
         },
-        error: (e) => alert("Problem while editing the course")
-      })
-    })
+        error: (e) => alert('Problem while editing the course'),
+      });
+    });
   }
 
-  get studentGroupArray(){
+  get studentGroupArray() {
     return this.sessionForm.get('studentGroups') as FormArray;
   }
 
-  get selectedStudentGroups(){
+  get selectedStudentGroups() {
     return this.studentGroupArray.value;
   }
 
   get equipmentArray() {
-        return this.sessionForm.get('equipments') as FormArray;
-      }
-  
-    get selectedEquipments(): string[]{
-      return this.equipmentArray.value;
-    }
-
-  selectEquipment(equipmentType: Equipment, event: any){
-        const checked = event.target.checked;
-        const indexEquipmentType = this.selectedEquipments.indexOf(equipmentType.id!);
-        if (checked) {   
-          this.equipmentArray.push(this.formBuilder.control(equipmentType.id));
-        } else {
-          this.equipmentArray.removeAt(indexEquipmentType);
-        }
-        this.sessionForm.controls['equipments'].markAsTouched();
+    return this.sessionForm.get('equipments') as FormArray;
   }
 
-  selectStudentGroup(studentGroup: StudentGroup, event: any){
+  get selectedEquipments(): string[] {
+    return this.equipmentArray.value;
+  }
+
+  onClassroomChange(event: any) {
+    console.log(event.target.value);
+
+    this.classRoomService
+      .getClassroomById(event.target.value)
+      .subscribe((classroom) => {
+        this.equipmentService
+          .getEquipments({
+            siteId: classroom.site!,
+          })
+          .subscribe();
+      });
+  }
+
+  selectEquipment(equipmentType: Equipment, event: any) {
     const checked = event.target.checked;
-    const indexStudentGroup = this.selectedStudentGroups.indexOf(studentGroup.id!);
-    if (checked) {   
+    const indexEquipmentType = this.selectedEquipments.indexOf(
+      equipmentType.id!,
+    );
+    if (checked) {
+      this.equipmentArray.push(this.formBuilder.control(equipmentType.id));
+    } else {
+      this.equipmentArray.removeAt(indexEquipmentType);
+    }
+    this.sessionForm.controls['equipments'].markAsTouched();
+  }
+
+  selectStudentGroup(studentGroup: StudentGroup, event: any) {
+    const checked = event.target.checked;
+    const indexStudentGroup = this.selectedStudentGroups.indexOf(
+      studentGroup.id!,
+    );
+    if (checked) {
       this.studentGroupArray.push(this.formBuilder.control(studentGroup.id));
     } else {
       this.studentGroupArray.removeAt(indexStudentGroup);
@@ -120,21 +163,20 @@ export class SessionEditFormComponent implements OnInit{
     this.sessionForm.controls['studentGroups'].markAsTouched();
   }
 
-  onSave(){
+  onSave() {
     const session: Session = {
       ...this.sessionForm.value,
-      id: this.session?.id
-    }
+      id: this.session?.id,
+    };
     console.log(session);
     this.sessionService.updateSessions(session).subscribe({
       next: (v) => console.log(v),
       error: (e) => alert(e.error.detail),
-      complete: () => this.router.navigate(['/schedules'])
-    })
+      complete: () => this.router.navigate(['/schedules']),
+    });
   }
 
-  onCancel(){
+  onCancel() {
     this.router.navigate(['/schedules']);
   }
-
 }
