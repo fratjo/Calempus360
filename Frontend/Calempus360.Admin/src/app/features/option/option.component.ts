@@ -9,10 +9,12 @@ import { Option } from '../../core/models/option.interface';
 import { LegendCardComponent } from "../../shared/components/legend-card/legend-card.component";
 import { CourseService } from '../../core/services/course.service';
 import { Course } from '../../core/models/course.interface';
+import { OptionFilterViewComponent } from "./option-filter-view/option-filter-view.component";
+import { OptionListViewComponent } from "./option-list-view/option-list-view.component";
 
 @Component({
   selector: 'app-option',
-  imports: [RouterLink, AsyncPipe, MatIconModule, MatButtonModule, LegendCardComponent],
+  imports: [MatIconModule, MatButtonModule, OptionFilterViewComponent, OptionListViewComponent],
   templateUrl: './option.component.html',
   styleUrl: './option.component.scss'
 })
@@ -23,6 +25,8 @@ export class OptionComponent {
 
   options$: Observable<Option[]> = this.optionService.options$;
   course$: Observable<Course[]> = this.courseService.courses$;
+
+  courseId: any = 0;
 
   ngOnInit(): void {
     this.updateUI();
@@ -48,16 +52,8 @@ export class OptionComponent {
     }); 
   }
 
-  onCourseChange(event: any){
-    if(event.target.value != 0){
-      this.options$ = this.options$.pipe(
-        map((options: Option[]) => 
-          options.filter(option => 
-            option.courses?.some((course) => course.id == event.target.value))));
-    } else {
-      this.options$ = this.optionService.options$;
-    }
-    
+  onCourseChange(courseId: any){
+    this.courseId = courseId;
   }
 
 }

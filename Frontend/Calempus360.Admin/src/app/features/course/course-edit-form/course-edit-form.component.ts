@@ -159,6 +159,7 @@ export class CourseEditFormComponent implements OnInit{
     goBack(){
       const origin = this.route.snapshot.queryParamMap.get('from');
       if(origin === 'details') this.router.navigate(['/courses/view',this.course?.id]);
+      else if(origin === 'optionView') this.router.navigate(['/options/view',this.route.snapshot.queryParamMap.get('optionId')]);
       else this.router.navigate(['/courses']);
     }
 

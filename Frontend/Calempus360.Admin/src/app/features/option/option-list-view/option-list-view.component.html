@@ -1,0 +1,66 @@
+<app-legend-card [legend]="'Options'">
+    @if (options$ | async; as options) {
+        <div class="rounded-box bg-base-100">
+            <div
+            class="rounded-box border-base-content/5 bg-base-100 border-base-content overflow-x-auto"
+            >
+            <table class="table-pin-rows table w-full">
+                <thead>
+                <tr class="pt-2 pb-2">
+                    <th></th>
+                    <th>Nom</th>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th class="">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                @for (option of options; track option?.id; let i = $index) {
+                    <tr
+                    class="hover:bg-base-200 group hover:rounded-box"
+                    >
+                    <th>{{ i }}</th>
+                    <td>{{ option?.name }}</td>
+                    <td>{{ option?.code }}</td>
+                    <td>{{ option?.description }}</td>
+                    <td class="space-x-2">
+                        <button
+                        class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-blue-400 hover:border-blue-400 hover:bg-blue-100"
+                        (click)="onSelect(option.id!)">
+                        view
+                    </button>
+                        <button class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-green-400 hover:border-green-400 hover:bg-green-100"
+                        (click)="onEdit(option.id!)">
+                        edit
+                        </button>
+                        <button class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-red-400 hover:border-red-400 hover:bg-red-100" 
+                        (click)="onDelete(option.id!)">
+                        delete
+                        </button>
+                    </td>
+                    </tr>
+                } @empty {
+                    <tr>
+                    <td colspan="7" class="text-center">No option!</td>
+                    </tr>
+                }
+                <tr>
+                    <td colspan="7" class="text-center">
+                        @if(!this.selectedCourseId())
+                        {
+                    <button
+                    routerLink="/options/add"
+                    class="rounded-box cursor-pointer border border-green-400 px-3 py-1 text-green-400 hover:bg-green-100 hover:text-green-500">
+                    + Add a new option
+                    </button>
+                        }
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        } @else {
+        <p>Option not found!</p>
+        }
+</app-legend-card>

@@ -1,0 +1,19 @@
+<app-legend-card [legend]="'Filters'">
+    <div class="space-x-[6px] border-none flex w-full flex-row">
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Course</legend>
+      <select
+        class="select focus:outline-none"
+        (change)="onCourseChange($event)"
+      >
+        <option [value]="0">All</option>
+        @if (course$ | async; as courses) {
+          @for (course of courses; track course?.id; let i = $index) {
+            <option [value]="course.id">{{ course.name }}</option>
+          }
+        }
+      </select>
+      <span class="fieldset-label">Optional</span>
+    </fieldset>
+  </div>
+  </app-legend-card>

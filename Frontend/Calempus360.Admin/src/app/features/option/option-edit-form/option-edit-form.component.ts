@@ -74,10 +74,11 @@ export class OptionEditFormComponent implements OnInit{
     this.goBack();
   }
 
-    goBack(){
-      const origin = this.route.snapshot.queryParamMap.get('from');
-      if(origin === 'details') this.router.navigate(['/options/view',this.option?.id]);
-      else this.router.navigate(['/options']);
-    }
+  goBack(){
+    const origin = this.route.snapshot.queryParamMap.get('from');
+    if(origin === 'details') this.router.navigate(['/options/view',this.option?.id]);
+    else if(origin === 'courseView') this.router.navigate(['/courses/view',this.route.snapshot.queryParamMap.get('courseId')]);
+    else this.router.navigate(['/options']);
+  }
 
 }

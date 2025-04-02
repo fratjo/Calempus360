@@ -5,10 +5,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { LegendCardComponent } from '../../../shared/components/legend-card/legend-card.component';
 import { OptionService } from '../../../core/services/option.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { CourseListViewComponent } from '../../course/course-list-view/course-list-view.component';
 
 @Component({
   selector: 'app-option-view',
-  imports: [CommonModule, MatIconModule,LegendCardComponent],
+  imports: [CommonModule, MatIconModule,LegendCardComponent,CourseListViewComponent],
   templateUrl: './option-view.component.html',
   styleUrl: './option-view.component.scss'
 })

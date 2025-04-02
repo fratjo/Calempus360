@@ -11,7 +11,7 @@ export const univeristyGuard: CanActivateFn = () => {
     sessionStorage.getItem('university') === null
   ) {
     console.log('No university found, redirecting to university change page');
-    route.navigate(['schedules']);
+    route.navigate(['university/change']);
     return false;
   }
 
