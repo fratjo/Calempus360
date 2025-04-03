@@ -16,7 +16,7 @@
         public virtual SiteEntity? SiteEntity { get; set; } = null!;
 
         // ClassroomEquipment
-        public IEnumerable<ClassroomEquipmentEntity> ClassroomEquipments { get; set; } = null!;
+        public List<ClassroomEquipmentEntity> ClassroomEquipments { get; set; } = null!;
 
         // Session
         public List<SessionEntity>? Sessions { get; set; }

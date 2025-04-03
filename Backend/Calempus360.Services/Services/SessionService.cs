@@ -255,7 +255,7 @@ namespace Calempus360.Services.Services
                         var equipmentSessionEntity = new EquipmentSessionEntity
                         {
                             SessionId = id,
-                            EquipmentId = equipment.Code.Value
+                            EquipmentId = equipment!.Code!.Value
                         };
 
                         _context.EquipmentSessions.Add(equipmentSessionEntity);

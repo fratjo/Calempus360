@@ -9,8 +9,8 @@ public static class EquipmentAdapter
     public static Equipement Adapt(EquipmentEntity equipment)
     {
         return new Equipement(
-            site: equipment.UniversitySiteEquipmentEntity.SiteEntity.SiteId!.ToString(),
-            type: equipment.EquipmentTypeEntity.EquipmentTypeId!.ToString(),
+            site: equipment.UniversitySiteEquipmentEntity.SiteEntity!.SiteId!.ToString(),
+            type: equipment.EquipmentTypeEntity!.EquipmentTypeId!.ToString(),
             code: equipment.EquipmentId
         );
     }

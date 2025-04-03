@@ -7,9 +7,9 @@ namespace ScheduleGenerator
         public int Capacity { get; private set; } = 0;
         public List<Equipement>? Equipments { get; private set; }
 
-        public Class(string name, string site, int capacity, List<Equipement>? equipments)
+        public Class(string id, string site, int capacity, List<Equipement>? equipments)
         {
-            Name = name;
+            Name = id;
             Site = site;
             Capacity = capacity;
             Equipments = equipments;
