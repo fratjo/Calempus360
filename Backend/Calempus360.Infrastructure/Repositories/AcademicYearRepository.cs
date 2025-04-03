@@ -44,8 +44,9 @@ public class AcademicYearRepository(Calempus360DbContext dbContext) : IAcademicY
 
         if (existingEntity == null) throw new NotFoundException("Academic year not found");
 
+        existingEntity.AcademicYearCode = entity.AcademicYearCode;
         existingEntity.DateStart = entity.DateStart;
-        existingEntity.DateEnd   = entity.DateEnd;
+        existingEntity.DateEnd = entity.DateEnd;
         existingEntity.UpdatedAt = DateTime.Now;
 
         await dbContext.SaveChangesAsync();
@@ -56,13 +57,13 @@ public class AcademicYearRepository(Calempus360DbContext dbContext) : IAcademicY
     public async Task DeleteAcademicYearAsync(Guid id)
     {
         var entity = await dbContext.AcademicYears.FirstOrDefaultAsync(a => a.AcademicYearId == id);
-        
+
         if (entity == null) throw new NotFoundException("Academic year not found");
-        
+
         dbContext.AcademicYears.Remove(entity);
-        
+
         await dbContext.SaveChangesAsync();
-        
+
         return;
     }
 }

@@ -46,26 +46,6 @@
       class="input focus:ring-none focus:border-secondary focus:outline-none"
       formControlName="description"
     />
-      <details class="dropdown">
-        <summary 
-        [ngClass]="{
-          'border-error':
-          coursesArray.touched &&
-          coursesArray.invalid,
-          'border-primary':
-          coursesArray.touched && coursesArray.valid,
-        }"
-        class="select focus:ring-none focus:border-secondary focus:outline-none">Cours</summary>
-          <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-            <li *ngFor="let course of courseList$ | async" [value]="course.id">
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" [value]="course.id" (change)="selectCourse(course,$event)"
-                   class="checkbox checkbox-primary" />
-                <span>{{ course.name }}</span>
-              </label>
-            </li>
-          </ul>
-      </details>
     <div class="flex justify-between space-x-4">
       <button
         (click)="onCancel()"

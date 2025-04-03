@@ -65,7 +65,7 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IClassro
     public async Task<bool> DeleteEquipmentTypeByIdAsync(Guid id)
     {
         // check if one or more equipment is using this equipment type
-        var equipments = await equipmentRepository.GetEquipmentsAsync(null, null, null, id);
+        var equipments = await equipmentRepository.GetEquipmentsAsync(null, null, null, null, id);
 
         if (equipments.Any())
             throw new ValidationException("One or more equipment is using this equipment type");
@@ -78,9 +78,9 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IClassro
 
     #region Equipment
 
-    public Task<IEnumerable<Equipment>> GetEquipmentsAsync(Guid? universityId, Guid? siteId, Guid? classroomId, Guid? equipmentTypeId)
+    public Task<IEnumerable<Equipment>> GetEquipmentsAsync(Guid? universityId, Guid? academicYearId, Guid? siteId, Guid? classroomId, Guid? equipmentTypeId, bool flying = false)
     {
-        var equipments = equipmentRepository.GetEquipmentsAsync(universityId, siteId, classroomId, equipmentTypeId);
+        var equipments = equipmentRepository.GetEquipmentsAsync(universityId, academicYearId, siteId, classroomId, equipmentTypeId, flying);
 
         return equipments;
     }
@@ -164,7 +164,7 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IClassro
 
     public async Task<bool> DeleteEquipmentsByUniversityAsync(Guid universityId)
     {
-        var equipments = await equipmentRepository.GetEquipmentsAsync(universityId, null, null, null);
+        var equipments = await equipmentRepository.GetEquipmentsAsync(universityId, null, null, null, null);
 
         foreach (var equipment in equipments)
         {
@@ -176,7 +176,7 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IClassro
 
     public async Task<bool> DeleteEquipmentsBySiteAsync(Guid siteId)
     {
-        var equipments = await equipmentRepository.GetEquipmentsAsync(null, siteId, null, null);
+        var equipments = await equipmentRepository.GetEquipmentsAsync(null, null, siteId, null, null);
 
         foreach (var equipment in equipments)
         {

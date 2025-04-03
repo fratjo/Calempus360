@@ -3,34 +3,43 @@ namespace ScheduleGenerator
     public class ScheduleGenerator
     {
         private readonly List<Class> classes;
-        private readonly List<string> daysOfWeek;
-        private readonly List<(int startHour, int endHour)> hours;
+        // private readonly List<string> daysOfWeek;
+        // private readonly List<(int startHour, int endHour)> hours;
+        private readonly List<(string site, string dayOfWeek, (int startHour, int endHour) hours)> openings;
         private readonly List<CourseGroups> courseGroups;
         private readonly List<Equipement> flyingEquipments;
         public Schedule schedule { get; private set; } = new Schedule();
 
         public ScheduleGenerator(
                 List<Class> classes,
-                List<string> daysOfWeek,
-                List<(int startHour, int endHour)> hours,
+                // List<string> daysOfWeek,
+                // List<(int startHour, int endHour)> hours,
+                List<(string site, string dayOfWeek, (int startHour, int endHour))> openings,
                 List<CourseGroups> courseGroups,
                 List<Equipement> flyingEquipments)
         {
             this.classes = classes;
-            this.daysOfWeek = daysOfWeek;
-            this.hours = hours;
+            // this.daysOfWeek = daysOfWeek;
+            // this.hours = hours;
+            this.openings = openings;
             this.courseGroups = courseGroups;
             this.flyingEquipments = flyingEquipments;
         }
 
         public Schedule GenerateSchedule()
         {
+            classes.ForEach(c => System.Console.WriteLine(c));
+            courseGroups.ForEach(cg => System.Console.WriteLine(cg));
+            openings.ForEach(o => System.Console.WriteLine(o));
+            flyingEquipments.ForEach(fe => System.Console.WriteLine(fe));
+
+
             System.Console.WriteLine("Generating schedule...");
-            var timeSlots = classes.Count * daysOfWeek.Count * hours.Count;
+            var timeSlots = openings.Count() * classes.Count(); // total = nb of slots * nb of classes
             System.Console.WriteLine("Time slots (reserve: 5%) : " + (timeSlots - timeSlots * 0.05));
             var groupsCount = courseGroups.Sum(c => c.Groups.Count);
             System.Console.WriteLine("Groups count : " + groupsCount);
-            var classesCapacity = classes.Sum(c => c.Capacity) * daysOfWeek.Count * hours.Count;
+            var classesCapacity = classes.Sum(c => c.Capacity) * timeSlots;
             System.Console.WriteLine("Capacity (reserve: 5%): " + (classesCapacity - (classesCapacity * 0.05)));
             var groupsCapacity = courseGroups.Sum(c => c.GetCapacity());
             System.Console.WriteLine("Groups capacity: " + groupsCapacity);
@@ -54,17 +63,9 @@ namespace ScheduleGenerator
             // ----------------------------------------------------------------- //
             // Pre condition: Check if there are any days of the week available  //
             // ----------------------------------------------------------------- //
-            if (daysOfWeek.Count == 0)
+            if (openings.Count() == 0)
             {
-                throw new Exception("No schedule possible: no days of the week available.");
-            }
-
-            // ----------------------------------------------------------------- //
-            // Pre condition: Check if there are any hours available             //
-            // ----------------------------------------------------------------- //
-            if (hours.Count == 0)
-            {
-                throw new Exception("No schedule possible: no hours available.");
+                throw new Exception("No schedule possible: no slots available.");
             }
             // -------------------------------------------------------------------------------------- //
             // Pre conditions : Check if there is enough time slots and capacity to place all groups  // 
@@ -77,7 +78,7 @@ namespace ScheduleGenerator
             {
                 throw new Exception("No schedule possible: not enough capacity.");
             }
-            else if (!BacktrackSchedule(daysOfWeek, hours, courseGroups, classes, schedule)) // If no schedule found
+            else if (!BacktrackSchedule(openings, courseGroups, classes, schedule)) // If no schedule found
             {
                 throw new Exception("No schedule found");
             }
@@ -88,8 +89,7 @@ namespace ScheduleGenerator
         }
 
         private bool BacktrackSchedule(
-            List<string> daysOfWeek,
-            List<(int startHour, int endHour)> hours,
+            List<(string site, string dayOfWeek, (int startHour, int endHour) hours)> openings,
             List<CourseGroups> courseGroups,
             List<Class> classes,
             Schedule schedule)
@@ -126,7 +126,7 @@ namespace ScheduleGenerator
                         biggestCourseGroup.Groups.RemoveAll(g => entry.Groups.Contains(g.Name));
                         if (biggestCourseGroup.Groups.Count == 0) courseGroups.RemoveAt(0);
 
-                        var success = BacktrackSchedule(daysOfWeek, hours, courseGroups, classes, schedule);
+                        var success = BacktrackSchedule(openings, courseGroups, classes, schedule);
                         if (success) return true;
 
                         schedule.Remove(key);
@@ -180,12 +180,40 @@ namespace ScheduleGenerator
             var course = courseGroup.Course;
             var requiredEquipment = courseGroup.Equipements;
 
+            var daysOfWeek = openings.Where(o => o.site == currentClass.Site)
+                                      .Select(o => o.dayOfWeek)
+                                      .Distinct()
+                                      .OrderBy(day => day switch
+                                      {
+                                          "Monday" => 1,
+                                          "Tuesday" => 2,
+                                          "Wednesday" => 3,
+                                          "Thursday" => 4,
+                                          "Friday" => 5,
+                                          "Saturday" => 6,
+                                          "Sunday" => 7,
+                                          _ => 8 // fallback for unexpected values
+                                      })
+                                      .ToList();
+
             foreach (var currentDay in daysOfWeek)
             {
+                var groupsCopy = groups.Select(g => new Group
+                {
+                    Name = g.Name,
+                    Capacity = g.Capacity,
+                    PreferedSite = g.PreferedSite
+                }).ToList();
+
+                var hours = openings.Where(o => o.site == currentClass.Site && o.dayOfWeek == currentDay)
+                                    .Select(o => o.hours)
+                                    .OrderBy(h => h.startHour)
+                                    .ToList();
+
                 // ------------------------------------------------------------- //
                 // Constraint: Not more than 2h of a course per day for a groupe //
                 // ------------------------------------------------------------- //
-                CheckNoMoreThan2HoursPerDayPerGroupForACourse(schedule, groups, course, currentDay);
+                if (!CheckNoMoreThan2HoursPerDayPerGroupForACourse(schedule, groupsCopy, course, currentDay)) continue;
 
                 foreach (var timeSlot in hours)
                 {
@@ -200,7 +228,7 @@ namespace ScheduleGenerator
                     // Constraint: Can place 2 slots of the same course in a row //
                     // --------------------------------------------------------- //
                     if (!CheckIfCanPlace2SameCourseInARow(
-                        currentClass, schedule, groups, course, currentDay, timeSlot, scheduleKey,
+                        currentClass, schedule, groupsCopy, course, currentDay, timeSlot, scheduleKey,
                         out (int startHour, int endHour) previousHour,
                         out (int startHour, int endHour) nextHour,
                         out (ScheduleKey, ScheduleEntry)? value))
@@ -217,7 +245,7 @@ namespace ScheduleGenerator
                     // -------------------------------------------------------------- //
                     // Constraint: Check if the groups are available for the timeslot //
                     // -------------------------------------------------------------- //
-                    CheckGroupsAvailableForCurretTimeSlot(schedule, groups, currentDay, timeSlot, out List<Group> groupsAvailable);
+                    CheckGroupsAvailableForCurretTimeSlot(schedule, groupsCopy, currentDay, timeSlot, out List<Group> groupsAvailable);
 
                     // -------------------------------------------------------------------------------------- //
                     // Constraint: Check if the groups are not on an other site for the previous or next hour //
@@ -279,7 +307,11 @@ namespace ScheduleGenerator
         /// <returns>true if we must continue to place, false if we have a new schedule entry</returns>
         private bool CheckIfCanPlace2SameCourseInARow(Class currentClass, Schedule schedule, List<Group> groups, string course, string currentDay, (int startHour, int endHour) timeSlot, ScheduleKey scheduleKey, out (int startHour, int endHour) previousHour, out (int startHour, int endHour) nextHour, out (ScheduleKey, ScheduleEntry)? value)
         {
-            previousHour = hours.FirstOrDefault(h => h.endHour == timeSlot.startHour);
+            previousHour =
+                openings.Where(o => o.site == currentClass.Site && o.dayOfWeek == currentDay)
+                .Select(o => o.hours)
+                .FirstOrDefault(h => h.endHour == timeSlot.startHour);
+
             var pvH = previousHour;
             var previousCourseInSameClassroom = schedule.FirstOrDefault(s =>
                                     s.Key.Day == currentDay &&
@@ -289,7 +321,11 @@ namespace ScheduleGenerator
                                 );
             var previousGroupsInSameClassroom = previousCourseInSameClassroom.Value?.Groups ?? new List<string>();
 
-            nextHour = hours.FirstOrDefault(h => h.startHour == timeSlot.endHour);
+            nextHour =
+                openings.Where(o => o.site == currentClass.Site && o.dayOfWeek == currentDay)
+                .Select(o => o.hours)
+                .FirstOrDefault(h => h.startHour == timeSlot.endHour);
+
             var nxH = nextHour;
             var nextCourseInSameClassroom = schedule.FirstOrDefault(s =>
                 s.Key.Day == currentDay &&
@@ -520,11 +556,14 @@ namespace ScheduleGenerator
         /// <param name="groups"></param>
         /// <param name="course"></param>
         /// <param name="currentDay"></param>
-        private static void CheckNoMoreThan2HoursPerDayPerGroupForACourse(Schedule schedule, List<Group> groups, string course, string currentDay)
+        private static bool CheckNoMoreThan2HoursPerDayPerGroupForACourse(Schedule schedule, List<Group> groups, string course, string currentDay)
         {
             var groupsToRemove = groups.Where(g =>
                                 schedule.Count(s => s.Key.Day == currentDay && s.Value.Groups.Contains(g.Name) && s.Value.Course == course) >= 2).ToList();
+
+            if (groupsToRemove.Count() > 0 || (groupsToRemove.Count() > 0 && groups.Count() == 1)) return false;
             groups.RemoveAll(g => groupsToRemove.Contains(g));
+            return true;
         }
 
         /// <summary>
@@ -587,8 +626,7 @@ namespace ScheduleGenerator
         /// <returns>true if site is full, false if site is available</returns>
         private bool IsSiteFullForTimeSlot(string site, List<Class> classes, Schedule schedule)
         {
-            int maxTimeSlotsForSite = classes
-                .Count(c => c.Site == site) * daysOfWeek.Count * hours.Count;
+            int maxTimeSlotsForSite = openings.Where(o => o.site == site).Sum(o => 1 * classes.Count(c => c.Site == o.site));
 
             int usedTimeSlotsForSite = schedule
                 .Count(entry => entry.Key.Location.Site == site);

@@ -10,9 +10,9 @@ public static class GroupAdapter
     {
         return new Group
         {
-            Name = group.Code,
+            Name = group.StudentGroupId!.ToString(),
             Capacity = group.NumberOfStudents,
-            PreferedSite = group.SiteEntity.Name
+            PreferedSite = group.SiteEntity!.SiteId!.ToString()!
         };
     }
 }

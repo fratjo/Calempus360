@@ -1,3 +1,4 @@
+<div class="flex w-full flex-col gap-2">
 <app-legend-card [legend]="'Course'">
     <div class="relative flex items-center gap-4">
         <header>
@@ -28,5 +29,8 @@
         </button>
     </div>
 </app-legend-card>
+<app-option-list-view [selectedCourseId]="this.course?.id"/>
+</div>
+
 
 

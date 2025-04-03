@@ -10,19 +10,19 @@ public static class CourseGroupsAdapter
     {
         var courseGroups = new CourseGroups
         {
-            Course = course.Name,
+            Course = course.CourseId!.ToString(),
             Groups = groups.Select(g => new Group()
-                {
-                    Name = g.Code,
-                    Capacity = g.NumberOfStudents,
-                    PreferedSite = g.SiteEntity.Code
-                }
+            {
+                Name = g.StudentGroupId!.ToString(),
+                Capacity = g.NumberOfStudents,
+                PreferedSite = g.SiteEntity!.SiteId!.ToString()!,
+            }
                 ).ToList(),
             Equipements = course.EquipmentTypes
-                                .Select(et => 
+                                .Select(et =>
                                             new Equipement(
-                                                null, 
-                                                et.EquipmentTypeEntity.Name, 
+                                                null,
+                                                et.EquipmentTypeEntity.EquipmentTypeId!.ToString(),
                                                 null))
                                 .ToList()
         };

@@ -56,7 +56,6 @@
 **/**/secrets.json
 
 # Entity Framework Migrations
-**/Migrations/
 
 # Configuration files
 **/appsettings*.json

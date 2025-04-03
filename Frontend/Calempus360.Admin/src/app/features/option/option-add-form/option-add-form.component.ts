@@ -36,7 +36,6 @@ export class OptionAddFormComponent implements OnInit{
           name: ['',Validators.required],
           code: ['',Validators.required],
           description: ['',Validators.required],
-          courses: this.formBuilder.array([], this.coursesSelectedCheckboxValidator()),
       });
     }
 
@@ -61,32 +60,5 @@ export class OptionAddFormComponent implements OnInit{
 
   onCancel(){
     this.router.navigate(['/options']);
-  }
-
-  get coursesArray() {
-    return this.optionForm.get('courses') as FormArray;
-  }
-
-  get selectedCourses(): string[]{
-    return this.coursesArray.value.map((arr: { id: string; }) => arr.id);
-  }
-
-  selectCourse(course: Course, event: Event){
-    const checked = (event.target as HTMLInputElement).checked;
-    const indexCourse = this.selectedCourses.indexOf(course.id!);
-    if (checked) {   
-      this.coursesArray.push(this.formBuilder.control(course));
-    } else {
-      this.coursesArray.removeAt(indexCourse);
-    }
-    this.optionForm.controls['courses'].markAsTouched();
-  }
-
-
-  coursesSelectedCheckboxValidator(){
-    return (control: AbstractControl) => {
-      const formArray = control as FormArray;
-      return formArray.length >= 1 ? null : { required: true };
-    };
   }
 }

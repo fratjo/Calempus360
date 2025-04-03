@@ -24,6 +24,6 @@
         public List<ClassroomEquipmentEntity>? ClassroomEquipments { get; set; } = null!;
 
         // EquipmentSession
-        public virtual List<EquipmentSessionEntity>? EquipmentSessions { get; set; } = null!;
+        public virtual List<EquipmentSessionEntity> EquipmentSessions { get; set; } = null!;
     }
 }

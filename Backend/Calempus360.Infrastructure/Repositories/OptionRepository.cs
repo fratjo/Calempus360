@@ -22,23 +22,11 @@ namespace Calempus360.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Option> AddOptionAsync(Option option, List<Guid> courses, Guid academicYear)
+        public async Task<Option> AddOptionAsync(Option option, Guid academicYear)
         {
             var academicYearEntity = await _context.AcademicYears.FindAsync(academicYear);
             if(academicYearEntity == null) throw new NotFoundException("Academic Year not found !");
             var entity = option.ToEntity();
-            foreach (var id in courses)
-            {
-                var courseEntity = await _context.Courses.FindAsync(id);
-                if (courseEntity == null) throw new NotFoundException("Course not found !");
-                entity.OptionCourses.Add(
-                    new OptionCourseEntity
-                    {
-                        AcademicYearEntity = academicYearEntity,
-                        CourseEntity = courseEntity,
-                        OptionEntity = entity,
-                    });                   
-            }
 
             await _context.Options.AddAsync(entity);
             await _context.SaveChangesAsync();
@@ -90,7 +78,7 @@ namespace Calempus360.Infrastructure.Repositories
             return entity.ToDomainModel();
         }
 
-        public async Task<Option> UpdateOptionAsync(Option option, List<Guid> courses, Guid academicYear)
+        public async Task<Option> UpdateOptionAsync(Option option, Guid academicYear)
         {
             var entity = await _context.Options
                         .Include(o => o.OptionCourses)
@@ -109,25 +97,6 @@ namespace Calempus360.Infrastructure.Repositories
             entity.Description = option.Description;
             entity.UpdatedAt = DateTime.Now;
 
-            //Clear les relations plus valides
-            entity.OptionCourses.RemoveAll(oc => !courses.Contains(oc.CourseEntity.CourseId));
-
-            foreach (var id in courses)
-            {
-                var courseEntity = await _context.Courses.FindAsync(id);
-                if (courseEntity == null) throw new NotFoundException("Course not found !");
-
-                if(!entity.OptionCourses.ToList().Any(oc =>  oc.CourseEntity.CourseId == id))
-                {
-                    entity.OptionCourses.Add(
-                    new OptionCourseEntity
-                    {
-                        AcademicYearEntity = academicYearEntity,
-                        CourseEntity = courseEntity,
-                        OptionEntity = entity,
-                    });
-                } 
-            }
             await _context.SaveChangesAsync();
             return entity.ToDomainModel();
         }

@@ -1,0 +1,74 @@
+<div class="top-bar p-2 pb-0">
+  <div
+    class="navbar bg-base-100 rounded-box border-base-300 z-10 border shadow-lg"
+  >
+    <div class="flex-1">
+      <a class="btn btn-ghost text-xl" routerLink="">
+        Calempus360 <span class="text-primary">Student</span></a
+      >
+    </div>
+    <div class="flex-none">
+      <ul
+        class="menu menu-horizontal flex flex-row items-center justify-center gap-2 px-1"
+      >
+        <li>
+          <fieldset
+            class="fieldset bg-base-100 border-base-300 rounded-box w-32 border px-4 pt-2 shadow-lg"
+          >
+            <legend class="fieldset-legend pt-0">University</legend>
+            <select
+              name="university"
+              id="university"
+              class="w-36"
+              (change)="onUniversityChange($event)"
+            >
+              <option value="all">All</option>
+              @if (universities$ | async; as universities) {
+                @for (university of universities; track university.id) {
+                  <option value="{{ university.id }}">
+                    {{ university.name }}
+                  </option>
+                }
+              }
+            </select>
+          </fieldset>
+        </li>
+        <li>
+          <fieldset
+            class="fieldset bg-base-100 border-base-300 rounded-box w-32 border px-4 pt-2 shadow-lg"
+          >
+            <legend class="fieldset-legend pt-0">Student Group</legend>
+            <select
+              name="studentGroup"
+              id="studentGroup"
+              class="w-36"
+              (change)="onStudentGroupChange($event)"
+            >
+              <option value="all">All</option>
+              @if (studentGroups$ | async; as studentGroups) {
+                @for (group of studentGroups; track group.id) {
+                  <option value="{{ group.id }}">{{ group.code }}</option>
+                }
+              }
+            </select>
+          </fieldset>
+        </li>
+        <li>
+          <button
+            (click)="toggleWeekends()"
+            class="self-end rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700"
+          >
+            toggle weekends
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div id="calendar-container" class="flex flex-col gap-4 p-2">
+  <div class="flex w-full flex-row items-center justify-between">
+    <div class="flex w-full flex-row items-center justify-between gap-2"></div>
+  </div>
+  <full-calendar [options]="calendarOptions" class="h-180"></full-calendar>
+</div>

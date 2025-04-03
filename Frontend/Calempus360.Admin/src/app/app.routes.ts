@@ -41,13 +41,16 @@ import { CourseEditFormComponent } from './features/course/course-edit-form/cour
 import { StudentGroupViewComponent } from './features/student-groups/student-group-view/student-group-view.component';
 import { OptionViewComponent } from './features/option/option-view/option-view.component';
 import { CourseViewComponent } from './features/course/course-view/course-view.component';
+import { SessionComponent } from './features/session/session.component';
+import { SessionEditFormComponent } from './features/session/session-edit-form/session-edit-form.component';
+import { SessionAddFormComponent } from './features/session/session-add-form/session-add-form.component';
 
 export const routes: Routes = [
-  {
-    path: 'home',
-    component: HomeComponent,
-    canActivate: [univeristyGuard, academicYearGuard],
-  },
+  // {
+  //   path: 'home',
+  //   component: HomeComponent,
+  //   canActivate: [univeristyGuard, academicYearGuard],
+  // },
   {
     path: 'university',
     component: UniversityComponent,
@@ -222,7 +225,22 @@ export const routes: Routes = [
     canActivate: [univeristyGuard, academicYearGuard],
   },
   {
+    path: 'schedules',
+    component: SessionComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'schedules/edit/:id',
+    component: SessionEditFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
+    path: 'schedule/add',
+    component: SessionAddFormComponent,
+    canActivate: [univeristyGuard, academicYearGuard],
+  },
+  {
     path: '**',
-    redirectTo: 'home',
+    redirectTo: 'schedules',
   },
 ];

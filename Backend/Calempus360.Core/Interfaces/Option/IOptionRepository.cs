@@ -11,8 +11,8 @@ namespace Calempus360.Core.Interfaces.Option
     {
         Task<IEnumerable<Models.Option>> GetAllOptionAsync();
         Task<Models.Option?> GetOptionByIdAsync(Guid id);
-        Task <Models.Option> AddOptionAsync(Models.Option option, List<Guid> courses, Guid academicYear);
-        Task<Models.Option> UpdateOptionAsync(Models.Option option, List<Guid> courses, Guid academicYear);
+        Task <Models.Option> AddOptionAsync(Models.Option option, Guid academicYear);
+        Task<Models.Option> UpdateOptionAsync(Models.Option option, Guid academicYear);
         Task<bool> DeleteOptionAsync(Guid id);
     }
 }

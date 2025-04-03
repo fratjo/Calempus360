@@ -42,6 +42,24 @@ namespace Calempus360.Infrastructure.Repositories
                         UniversityEntity = universityEntity,
                     });
             }
+            if(course.OptionGrades != null)
+            {
+                foreach (var optionGrade in course.OptionGrades)
+                {
+                    var optionEntity = await _context.Options.FindAsync(optionGrade.Key);
+                    if (optionEntity == null) throw new NotFoundException("Option not found!");
+                    entity.OptionsCourses.Add(
+                        new OptionCourseEntity
+                        {
+                            CourseEntity = entity,
+                            OptionEntity = optionEntity,
+                            OptionGrade = optionGrade.Value,
+                            AcademicYearEntity = academicYearEntity
+                        }
+                        );
+                }
+            }
+            
 
             await _context.Courses.AddAsync(entity);
             await _context.SaveChangesAsync();
@@ -140,6 +158,30 @@ namespace Calempus360.Infrastructure.Repositories
                     }
                     
                 }
+            }
+
+            if (course.OptionGrades != null)
+            {
+                //Clear les relations plus valides
+                entity.OptionsCourses.RemoveAll(oc => !course.OptionGrades.Keys.Contains(oc.OptionEntity.OptionId));
+                foreach(var optionGrade in course.OptionGrades)
+                {
+                    var optionEntity = await _context.Options.FindAsync(optionGrade.Key);
+                    if (optionEntity == null) throw new NotFoundException("Option not found !");
+
+                    if(!entity.OptionsCourses.ToList().Any(oc => oc.OptionEntity.OptionId == optionGrade.Key))
+                    {
+                        entity.OptionsCourses.Add(
+                            new OptionCourseEntity
+                            {
+                                OptionEntity = optionEntity,
+                                CourseEntity = entity,
+                                OptionGrade = optionGrade.Value,
+                                AcademicYearEntity = academicYearEntity
+                            });
+                    }
+                }
+
             }
 
             await _context.SaveChangesAsync();

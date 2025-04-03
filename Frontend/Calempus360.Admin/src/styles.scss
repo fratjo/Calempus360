@@ -3,6 +3,8 @@
 @use "./app/styles/tailwind.scss";
 @use "./app/styles/custom.scss";
 
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+
 html,
 body {
   height: 100%;

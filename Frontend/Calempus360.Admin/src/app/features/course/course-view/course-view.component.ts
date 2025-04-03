@@ -8,10 +8,11 @@ import { CommonModule } from '@angular/common';
 import { EquipmentService } from '../../../core/services/equipment.service';
 import { EquipmentType } from '../../../core/models/equipment.interface';
 import { map } from 'rxjs';
+import { OptionListViewComponent } from "../../option/option-list-view/option-list-view.component";
 
 @Component({
   selector: 'app-course-view',
-  imports: [MatIconModule, LegendCardComponent, CommonModule],
+  imports: [MatIconModule, LegendCardComponent, CommonModule, OptionListViewComponent],
   templateUrl: './course-view.component.html',
   styleUrl: './course-view.component.scss'
 })

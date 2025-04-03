@@ -16,7 +16,7 @@
             courseForm.controls['name'].touched && courseForm.controls['name'].valid,
         }"
       type="text"
-      placeholder="Nom"
+      placeholder="Name"
       class="input focus:ring-none focus:border-secondary focus:outline-none"
       formControlName="name"
     />
@@ -119,6 +119,18 @@
             </li>
           </ul>
       </details>
+      
+      @if(optionList$ | async; as options){
+        <div *ngFor="let course of courseOptions;let i = index">
+      <app-course-form-custom-input [optionList]="options" [optionIdAndGradeInput]="{optionId:course,grade:getGradeFromOptionId(course)}" (optionIdAndGrade)="onOptionSelected($event,i)" (optionIdDelete)="onDeleteOption($event)"/>
+    </div>
+      }  
+      <button
+      type="button"
+      (click)="addOption()"
+      class="rounded-box cursor-pointer border border-green-400 px-3 py-1 text-green-400 hover:bg-green-100 hover:text-green-500">
+          + Add a new option
+      </button>
     <div class="flex justify-between space-x-4">
       <button
         (click)="onCancel()"

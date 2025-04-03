@@ -39,7 +39,13 @@ namespace Calempus360.API.Controllers
                 name: requestDto.Name,
                 code: requestDto.Code,
                 address: requestDto.Address,
-                phone: requestDto.Phone
+                phone: requestDto.Phone,
+                schedules: requestDto.Schedules.Select(s => new Schedule
+                (
+                    timeStart: TimeOnly.Parse(s.TimeStart),
+                    timeEnd: TimeOnly.Parse(s.TimeEnd),
+                    dayOfWeek: (Core.Models.DayOfWeek) s.DayOfWeek
+                )).ToList()
             ), universityId);
 
             return Ok(site.MapToDto());
@@ -58,7 +64,13 @@ namespace Calempus360.API.Controllers
                 code: requestDto.Code,
                 address: requestDto.Address,
                 phone: requestDto.Phone,
-                id: id
+                id: id,
+                schedules: requestDto.Schedules.Select(s => new Schedule
+                (
+                    timeStart: TimeOnly.Parse(s.TimeStart),
+                    timeEnd: TimeOnly.Parse(s.TimeEnd),
+                    dayOfWeek: (Core.Models.DayOfWeek)s.DayOfWeek
+                )).ToList()
             ));
 
             return Ok(site.MapToDto());

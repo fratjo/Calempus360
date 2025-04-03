@@ -18,26 +18,31 @@ public static class CourseMapper
             credits: entity.Credits,
             createdAt: entity.CreatedAt,
             updatedAt: entity.UpdatedAt,
+            optionGrades: entity.OptionsCourses?
+                                .ToDictionary(
+                                    og => og.OptionId,
+                                    og => og.OptionGrade
+                                ),
             equipmentTypes: entity.EquipmentTypes?
                                 .Select(cet => cet.EquipmentTypeEntity.ToDomainModel())
                                 .ToList()
         );
     }
-    
+
     public static CourseEntity ToEntity(this Course model)
     {
         return new CourseEntity
         {
-            CourseId   = model.Id,
-            Name       = model.Name,
-            Code       = model.Code,
+            CourseId = model.Id,
+            Name = model.Name,
+            Code = model.Code,
             Description = model.Description,
             WeeklyHours = model.WeeklyHours,
             TotalHours = model.TotalHours,
             Semester = model.Semester,
             Credits = model.Credits,
-            CreatedAt  = model.CreatedAt,
-            UpdatedAt  = model.UpdatedAt
+            CreatedAt = model.CreatedAt,
+            UpdatedAt = model.UpdatedAt
         };
     }
 }

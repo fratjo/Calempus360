@@ -3,8 +3,10 @@ using Calempus360.Core.Models;
 using Calempus360.Errors;
 using Calempus360.Errors.CustomExceptions;
 using Calempus360.Infrastructure.Data;
+using Calempus360.Infrastructure.Persistence.Entities;
 using Calempus360.Infrastructure.Persistence.Mappers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Calempus360.Infrastructure.Repositories;
 
@@ -13,6 +15,8 @@ public class SitesRepository(Calempus360DbContext dbContext) : ISiteRepository
     public async Task<IEnumerable<Site>> GetSitesAsync()
     {
         var sites = await dbContext.Sites
+                                   .Include(s => s.SiteCourseSchedules)
+                                        .ThenInclude(scs => scs.CourseScheduleEntity)
                                    .Include(s => s.Classrooms)
                                    .Include(s => s.Equipments)
                                    .ToListAsync();
@@ -20,9 +24,11 @@ public class SitesRepository(Calempus360DbContext dbContext) : ISiteRepository
         return sites.Select(s => s.ToDomainModel());
     }
 
-    public async Task<IEnumerable<Site>> GetSitesByUniversityAsync(Guid universityId)
+    public async Task<IEnumerable<Site?>> GetSitesByUniversityAsync(Guid universityId)
     {
         var sites = from s in await dbContext.Sites
+                             .Include(s => s.SiteCourseSchedules)
+                                .ThenInclude(scs => scs.CourseScheduleEntity)
                              .Include(s => s.Classrooms)
                              .Include(s => s.Equipments)
                              .ToListAsync()
@@ -35,6 +41,8 @@ public class SitesRepository(Calempus360DbContext dbContext) : ISiteRepository
     public async Task<Site> GetSiteByIdAsync(Guid id)
     {
         var site = await dbContext.Sites
+                                  .Include(s => s.SiteCourseSchedules)
+                                    .ThenInclude(scs => scs.CourseScheduleEntity)
                                   .Include(s => s.Classrooms)
                                   .Include(s => s.Equipments)
                                   .FirstOrDefaultAsync(s => s.SiteId == id);
@@ -49,6 +57,45 @@ public class SitesRepository(Calempus360DbContext dbContext) : ISiteRepository
         var entity = site.ToEntity();
 
         entity.UniversityId = universityId;
+
+        // opening schedule
+
+        // for each schedule
+        site.Schedules?.ForEach(schedule =>
+        {
+            var existingSchedule = dbContext.CoursesSchedules.FirstOrDefault(s =>
+                                                // if both schedules are in the same day and time
+                                                s.HourStart == schedule.TimeStart
+                                                && s.HourEnd == schedule.TimeEnd
+                                                && s.DayOfTheWeek == (int)schedule.DayOfWeek);
+
+            if (existingSchedule != null) entity.SiteCourseSchedules.Add(new SiteCourseScheduleEntity
+            {
+                SiteId = (Guid)entity.SiteId!,
+                ScheduleId = existingSchedule.ScheduleId
+            });
+            else
+            {
+                var newSchedule = new CourseScheduleEntity
+                {
+                    ScheduleId = Guid.NewGuid(),
+                    DayOfTheWeek = (int)schedule.DayOfWeek,
+                    HourStart = schedule.TimeStart,
+                    HourEnd = schedule.TimeEnd,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+
+                dbContext.CoursesSchedules.Add(newSchedule);
+                dbContext.SaveChanges();
+
+                entity.SiteCourseSchedules.Add(new SiteCourseScheduleEntity
+                {
+                    SiteId = (Guid)entity.SiteId!,
+                    ScheduleId = newSchedule.ScheduleId
+                });
+            }
+        });
 
         await dbContext.Sites.AddAsync(entity);
         await dbContext.SaveChangesAsync();
@@ -67,6 +114,49 @@ public class SitesRepository(Calempus360DbContext dbContext) : ISiteRepository
         entity.Address = site.Address;
         entity.Phone = site.Phone;
         entity.UpdatedAt = site.UpdatedAt;
+
+        // for each schedule
+        site.Schedules?.ForEach(schedule =>
+        {
+            var existingSchedule = dbContext.CoursesSchedules.FirstOrDefault(s =>
+                                                // if both schedules are in the same day
+                                                s.DayOfTheWeek == (int)schedule.DayOfWeek &&
+                                                    (
+                                                        // if both schedules are in the morning
+                                                        (s.HourEnd.ToTimeSpan() <= new TimeSpan(12, 0, 0)
+                                                        && schedule.TimeEnd.ToTimeSpan() <= new TimeSpan(12, 0, 0))
+                                                    ||
+                                                        // if both schedules are in the afternoon
+                                                        (s.HourStart.ToTimeSpan() >= new TimeSpan(12, 0, 0)
+                                                        && schedule.TimeStart.ToTimeSpan() >= new TimeSpan(12, 0, 0))));
+
+            if (existingSchedule != null) entity.SiteCourseSchedules.Add(new SiteCourseScheduleEntity
+            {
+                SiteId = (Guid)entity.SiteId!,
+                ScheduleId = existingSchedule.ScheduleId
+            });
+            else
+            {
+                var newSchedule = new CourseScheduleEntity
+                {
+                    ScheduleId = Guid.NewGuid(),
+                    DayOfTheWeek = (int)schedule.DayOfWeek,
+                    HourStart = schedule.TimeStart,
+                    HourEnd = schedule.TimeEnd,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+
+                dbContext.CoursesSchedules.Add(newSchedule);
+                dbContext.SaveChanges();
+
+                entity.SiteCourseSchedules.Add(new SiteCourseScheduleEntity
+                {
+                    SiteId = (Guid)entity.SiteId!,
+                    ScheduleId = newSchedule.ScheduleId
+                });
+            }
+        });
 
         await dbContext.SaveChangesAsync();
 

@@ -17,9 +17,9 @@ namespace Calempus360.Services.Services
         {
             _optionRepository = optionRepository;
         }
-        public async Task<Option> AddOptionAsync(Option option, List<Guid> courses, Guid academicYear)
+        public async Task<Option> AddOptionAsync(Option option, Guid academicYear)
         {
-            return await _optionRepository.AddOptionAsync(option, courses, academicYear);
+            return await _optionRepository.AddOptionAsync(option, academicYear);
         }
 
         public async Task<bool> DeleteOptionAsync(Guid id)
@@ -37,9 +37,9 @@ namespace Calempus360.Services.Services
             return await _optionRepository.GetOptionByIdAsync(id);
         }
 
-        public async Task<Option> UpdateOptionAsync(Option option, List<Guid> courses, Guid academicYear)
+        public async Task<Option> UpdateOptionAsync(Option option, Guid academicYear)
         {
-            return await _optionRepository.UpdateOptionAsync(option,courses, academicYear);
+            return await _optionRepository.UpdateOptionAsync(option, academicYear);
         }
     }
 }

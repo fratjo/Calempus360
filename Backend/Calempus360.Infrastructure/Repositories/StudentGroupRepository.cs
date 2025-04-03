@@ -59,7 +59,7 @@ namespace Calempus360.Infrastructure.Repositories
                 .Include(sg => sg.SiteEntity)
                 .Include(sg => sg.AcademicYearEntity)
                 .Include(sg => sg.OptionEntity)
-                .Where(sg => sg.AcademicYearId == academicYear && sitesEntity.Select(s => s.UniversityId).Contains(universityId))
+                .Where(sg => sg.AcademicYearId == academicYear && sitesEntity.Contains(sg.SiteEntity!))
                 .ToListAsync();
 
             return entities.Select(e => e.ToDomainModel());

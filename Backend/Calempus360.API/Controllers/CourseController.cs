@@ -28,7 +28,8 @@ namespace Calempus360.API.Controllers
                     totalHours: courseRequest.TotalHours,
                     weeklyHours: courseRequest.WeeklyHours,
                     semester: courseRequest.Semester,
-                    credits: courseRequest.Credits
+                    credits: courseRequest.Credits,
+                    optionGrades: courseRequest.OptionGrades
                 ), academicYear, universityId, courseRequest.EquipmentType!);
 
             return Ok(course.MapToDto());
@@ -65,7 +66,8 @@ namespace Calempus360.API.Controllers
                     totalHours: courseRequest.TotalHours,
                     weeklyHours: courseRequest.WeeklyHours,
                     semester: courseRequest.Semester,
-                    credits: courseRequest.Credits
+                    credits: courseRequest.Credits,
+                    optionGrades: courseRequest.OptionGrades
                 ), academicYear, courseRequest.EquipmentType!, universityId);
             return Ok(course.MapToDto());
         }
