@@ -3,15 +3,9 @@ using Calempus360.Core.Models;
 using Calempus360.Errors.CustomExceptions;
 using Calempus360.Infrastructure.Data;
 using Calempus360.Infrastructure.Persistence.Entities;
-using Calempus360.Infrastructure.Repositories;
 using Calempus360.Services.Adapters.ScheduleGenerator;
 using Microsoft.EntityFrameworkCore;
 using ScheduleGenerator;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Calempus360.Services.Services
 {
@@ -29,7 +23,7 @@ namespace Calempus360.Services.Services
         public async Task<Session> AddSessionAsync(Session session, Guid classRoomId, Guid courseId, List<Guid> equipments, List<Guid> studentGroups)
         {
             if (!CheckBusinessRules(session, classRoomId, courseId, equipments, studentGroups))
-                throw new Exception("Session constraints not respected !");
+                throw new SessionConstraintException("Session constraints not respected !");
 
             return await _sessionRepository.AddSessionAsync(session, classRoomId, courseId, equipments, studentGroups);
         }
@@ -62,10 +56,10 @@ namespace Calempus360.Services.Services
 
             // si on souhaite modifier la session dans le passé ou moins d'un jour avant, on ne peut pas modifier
             if (sessionInDb.DatetimeStart.Date < DateTime.Now.Date.AddDays(+1))
-                throw new Exception("Cannot update session in the past or less than a day before !");
+                throw new SessionConstraintException("Session constraints not respected ! : Cannot update session in the past or less than a day before !");
 
             if (!CheckBusinessRules(session, classRoomId, courseId, equipments, studentGroups))
-                throw new Exception("Session constraints not respected !");
+                throw new SessionConstraintException("Session constraints not respected !");
 
             return _sessionRepository.UpdateSessionAsync(session, classRoomId, courseId, equipments, studentGroups);
         }
@@ -288,12 +282,12 @@ namespace Calempus360.Services.Services
             // vérifier si le cours est déjà planifié 2h dans la journée
             var sessions = _context.Sessions.Where(s => s.StudentGroupSessions.Any(sgs => studentGroups.Contains(sgs.StudentGroupId)) && s.CourseId == courseId && s.DatetimeStart.Date == session.DateTimeStart.Date && s.SessionId != session.Id).ToList();
             if (sessions.Count >= 2)
-                throw new Exception("Course already planned 2 times in the day !");
+                throw new SessionConstraintException("Course already planned 2 times in the day !");
 
             // vérifier si la salle est déjà occupée à cette heure
             var sessionInClassroom = _context.Sessions
                 .FirstOrDefault(s => s.ClassroomId == classRoomId && s.DatetimeStart == session.DateTimeStart && s.SessionId != session.Id);
-            if (sessionInClassroom != null) throw new Exception("Classroom already occupied at this time !");
+            if (sessionInClassroom != null) throw new SessionConstraintException("Classroom already occupied at this time !");
 
             // vérifier si la salle est équipée ou si les équipements volants sont disponibles à cette heure
             var classroomsEquipments = _context.ClassroomsEquipments
@@ -331,7 +325,7 @@ namespace Calempus360.Services.Services
                 if (!(classroomEquipment?.Any(ce => ce.EquipmentId == equipment.EquipmentId) ?? false) &&
                     !(flyingEquipments?.Any(fe => fe.EquipmentId == equipment.EquipmentId) ?? false))
                 {
-                    throw new Exception("Equipment not available in this classroom !");
+                    throw new ItemNotAvailableException("Equipment not available in this classroom !");
                 }
             });
 
@@ -345,7 +339,7 @@ namespace Calempus360.Services.Services
 
                 if (group == null) throw new NotFoundException("Student group not found !");
                 if (group.StudentGroupSessions.Any(sgs => sgs.SessionEntity.DatetimeStart == session.DateTimeStart && sgs.SessionId != session.Id))
-                    throw new Exception("Student group not available at this time !");
+                    throw new ItemNotAvailableException("Student group not available at this time !");
 
 
                 // verifier si la session d'avant est sur le même site
@@ -353,14 +347,14 @@ namespace Calempus360.Services.Services
                     .Include(s => s.ClassroomEntity)
                     .FirstOrDefault(s => s.DatetimeEnd == session.DateTimeStart && s.ClassroomEntity.SiteId != classRoom.SiteEntity!.SiteId && s.StudentGroupSessions.Any(sg => sg.StudentGroupId == group.StudentGroupId));
                 if (sessionBefore != null)
-                    throw new Exception("Student group not available at this time !");
+                    throw new ItemNotAvailableException("Student group not available at this time !");
 
                 // verfiier si la session d'après est sur le même site
                 var sessionAfter = _context.Sessions
                     .Include(s => s.ClassroomEntity)
                     .FirstOrDefault(s => s.DatetimeStart == session.DateTimeEnd && s.ClassroomEntity.SiteId != classRoom.SiteEntity!.SiteId && s.StudentGroupSessions.Any(sg => sg.StudentGroupId == group.StudentGroupId));
                 if (sessionAfter != null)
-                    throw new Exception("Student group not available at this time !");
+                    throw new ItemNotAvailableException("Student group not available at this time !");
 
             });
 
@@ -375,7 +369,7 @@ namespace Calempus360.Services.Services
 
                 if (group == null) throw new NotFoundException("Student group not found !");
                 if (!group.OptionEntity!.OptionCourses.Any(oc => oc.CourseId == courseId))
-                    throw new Exception("Student group does not follow this course !");
+                    throw new ItemNotAvailableException("Student group does not follow this course !");
             });
 
             return true;
