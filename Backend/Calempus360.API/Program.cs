@@ -15,7 +15,6 @@ using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Calempus360.Core.Interfaces.Option;
 using Calempus360.Core.Interfaces.Course;
-using Calempus360.Core.Interfaces.Schedule;
 using Calempus360.Core.Interfaces.Session;
 using Calempus360.Core.Interfaces.DayWithoutCourse;
 
@@ -64,6 +63,8 @@ builder.Services.AddScoped<ISessionRepository, SessionRepository>();
 builder.Services.AddScoped<IDayWithoutCourseRepository, DayWithoutCourseRepository>();
 
 // handlers
+builder.Services.AddExceptionHandler<SessionConstraintExceptionHandler>();
+builder.Services.AddExceptionHandler<ItemNotAvailableExceptionHandler>();
 builder.Services.AddExceptionHandler<ExistingEntityExceptionHandler>();
 builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
 builder.Services.AddExceptionHandler<TestExceptionHandler>();
@@ -76,6 +77,10 @@ builder.Services.AddValidatorsFromAssemblyContaining<SiteRequestDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<AcademicYearRequestDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<ClassroomRequestDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<EquipmentRequestDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<StudentGroupRequestDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<OptionRequestDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CourseRequestDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<SessionRequestDtoValidator>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

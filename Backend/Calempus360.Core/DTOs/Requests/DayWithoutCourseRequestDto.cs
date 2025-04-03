@@ -10,8 +10,7 @@ namespace Calempus360.Core.DTOs.Requests
     public class DayWithoutCourseRequestDto
     {
         public string Name { get; set; } = string.Empty;
-        public DateTime Date {  get; set; }
-
+        public DateTime Date { get; set; }
     }
 
     public class DayWithoutCourseRequestDtoValidator : AbstractValidator<DayWithoutCourseRequestDto>
