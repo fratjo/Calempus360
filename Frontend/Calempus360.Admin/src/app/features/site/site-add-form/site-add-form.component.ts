@@ -44,16 +44,16 @@ export class SiteAddFormComponent {
       address: ['', Validators.required],
       code: ['', Validators.required],
       phone: ['', Validators.required],
-      schedules: this.fb.array([],Validators.required),
+      schedules: this.fb.array([], Validators.required),
     });
 
     this.days.forEach((day, i) => {
       this.scheduleArray.push(
         this.fb.group({
-          dayOfWeek:[i+1,null],
-          timeStart:['',Validators.required],
-          timeEnd:['',Validators.required],
-        })
+          dayOfWeek: [i + 1, null],
+          timeStart: ['', Validators.required],
+          timeEnd: ['', Validators.required],
+        }),
       );
     });
   }
@@ -63,7 +63,7 @@ export class SiteAddFormComponent {
     this.router.navigate(['/sites']);
   }
 
-  get scheduleArray(){
+  get scheduleArray() {
     return this.siteForm.get('schedules') as FormArray;
   }
 
@@ -73,8 +73,6 @@ export class SiteAddFormComponent {
       .addSite(this.siteForm.value)
       .pipe(
         catchError((error) => {
-          console.error('Error adding site', error);
-
           return of(null);
         }),
       )

@@ -60,6 +60,14 @@ export class EquipmentService {
         tap((s: EquipmentType) => {
           this.equipmentTypes$.next([...this.equipmentTypes$.value, s]);
         }),
+        tap({
+          error: (err) => {
+            console.error('Error adding site:', err);
+            // Handle the error as needed
+            // For example, you can show a notification or log the error
+            alert(`An error occurred while adding. ${err.error.title}`);
+          },
+        }),
       );
   }
 
@@ -74,6 +82,14 @@ export class EquipmentService {
           this.equipmentTypes$.next(
             this.equipmentTypes$.value.map((e) => (e.id === s.id ? s : e)),
           );
+        }),
+        tap({
+          error: (err) => {
+            console.error('Error adding site:', err);
+            // Handle the error as needed
+            // For example, you can show a notification or log the error
+            alert(`An error occurred while adding. ${err.error.title}`);
+          },
         }),
       );
   }
@@ -160,6 +176,14 @@ export class EquipmentService {
       tap((s: Equipment) => {
         this.equipments$.next([...this.equipments$.value, s]);
       }),
+      tap({
+        error: (err) => {
+          console.error('Error adding site:', err);
+          // Handle the error as needed
+          // For example, you can show a notification or log the error
+          alert(`An error occurred while adding. ${err.error.title}`);
+        },
+      }),
     );
   }
 
@@ -177,6 +201,14 @@ export class EquipmentService {
             this.equipments$.value.map((e) => (e.id === s.id ? s : e)),
           );
           this.equipment$.next(s);
+        }),
+        tap({
+          error: (err) => {
+            console.error('Error adding site:', err);
+            // Handle the error as needed
+            // For example, you can show a notification or log the error
+            alert(`An error occurred while adding. ${err.error.title}`);
+          },
         }),
       );
   }

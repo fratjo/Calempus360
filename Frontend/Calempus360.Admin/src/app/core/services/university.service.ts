@@ -50,6 +50,14 @@ export class UniversityService {
           this.universities$.next(universities);
           this.university$.next(u);
         }),
+        tap({
+          error: (err) => {
+            console.error('Error adding site:', err);
+            // Handle the error as needed
+            // For example, you can show a notification or log the error
+            alert(`An error occurred while adding. ${err.error.title}`);
+          },
+        }),
       );
   }
 
@@ -57,6 +65,14 @@ export class UniversityService {
     return this.http.post<University>(this.URL, university).pipe(
       tap((u: University) => {
         this.universities$.next([...this.universities$.value, u]);
+      }),
+      tap({
+        error: (err) => {
+          console.error('Error adding site:', err);
+          // Handle the error as needed
+          // For example, you can show a notification or log the error
+          alert(`An error occurred while adding. ${err.error.title}`);
+        },
       }),
     );
   }

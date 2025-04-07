@@ -45,7 +45,7 @@ public class Program
         // };
 
         List<(string site, string dayOfWeek, (int startHour, int endHour))> openingHours = new(){
-            ("A", "Monday", (8, 9)), ("A", "Monday", (9, 10)), ("A", "Monday", (10, 11)), ("A", "Monday", (11, 12)),
+            /*("A", "Monday", (8, 9)),*/ ("A", "Monday", (9, 10)), ("A", "Monday", (10, 11)), ("A", "Monday", (11, 12)),
             ("A", "Monday", (13, 14)), ("A", "Monday", (14, 15)), ("A", "Monday", (15, 16)), ("A", "Monday", (16, 17)),
             ("A", "Tuesday", (8, 9)), ("A", "Tuesday", (9, 10)), ("A", "Tuesday", (10, 11)), ("A", "Tuesday", (11, 12)),
             ("A", "Tuesday", (13, 14)), ("A", "Tuesday", (14, 15)), ("A", "Tuesday", (15, 16)), ("A", "Tuesday", (16, 17)),

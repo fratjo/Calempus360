@@ -70,6 +70,14 @@ export class ClassroomService {
           classrooms[index] = s;
           this.classrooms$.next(classrooms);
         }),
+        tap({
+          error: (err) => {
+            console.error('Error adding site:', err);
+            // Handle the error as needed
+            // For example, you can show a notification or log the error
+            alert(`An error occurred while adding. ${err.error.title}`);
+          },
+        }),
       );
   }
 
@@ -89,6 +97,14 @@ export class ClassroomService {
       .pipe(
         tap((s: Classroom) => {
           this.classrooms$.next([...this.classrooms$.value, s]);
+        }),
+        tap({
+          error: (err) => {
+            console.error('Error adding site:', err);
+            // Handle the error as needed
+            // For example, you can show a notification or log the error
+            alert(`An error occurred while adding. ${err.error.title}`);
+          },
         }),
       );
   }

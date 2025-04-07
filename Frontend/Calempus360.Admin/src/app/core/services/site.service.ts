@@ -77,6 +77,14 @@ export class SiteService {
         sites[index] = s;
         this.sites$.next(sites);
       }),
+      tap({
+        error: (err) => {
+          console.error('Error adding site:', err);
+          // Handle the error as needed
+          // For example, you can show a notification or log the error
+          alert(`An error occurred while adding. ${err.error.title}`);
+        },
+      }),
     );
   }
 
@@ -86,6 +94,14 @@ export class SiteService {
     return this.http.post<Site>(this.URL, site, { params }).pipe(
       tap((s: Site) => {
         this.sites$.next([...this.sites$.value, s]);
+      }),
+      tap({
+        error: (err) => {
+          console.error('Error adding site:', err);
+          // Handle the error as needed
+          // For example, you can show a notification or log the error
+          alert(`An error occurred while adding. ${err.error.title}`);
+        },
       }),
     );
   }
