@@ -347,14 +347,14 @@ namespace Calempus360.Services.Services
                     .Include(s => s.ClassroomEntity)
                     .FirstOrDefault(s => s.DatetimeEnd == session.DateTimeStart && s.ClassroomEntity.SiteId != classRoom.SiteEntity!.SiteId && s.StudentGroupSessions.Any(sg => sg.StudentGroupId == group.StudentGroupId));
                 if (sessionBefore != null)
-                    throw new ItemNotAvailableException("Student group not available at this time !");
+                    throw new ItemNotAvailableException("Student group not available at this time ! Must be 1h between sessions on different sites!");
 
                 // verfiier si la session d'après est sur le même site
                 var sessionAfter = _context.Sessions
                     .Include(s => s.ClassroomEntity)
                     .FirstOrDefault(s => s.DatetimeStart == session.DateTimeEnd && s.ClassroomEntity.SiteId != classRoom.SiteEntity!.SiteId && s.StudentGroupSessions.Any(sg => sg.StudentGroupId == group.StudentGroupId));
                 if (sessionAfter != null)
-                    throw new ItemNotAvailableException("Student group not available at this time !");
+                    throw new ItemNotAvailableException("Student group not available at this time ! Must be 1h between sessions on different sites!");
 
             });
 
