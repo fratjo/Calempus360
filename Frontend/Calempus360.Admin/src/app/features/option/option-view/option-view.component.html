@@ -1,0 +1,22 @@
+<div class="flex w-full flex-col gap-2">
+    <app-legend-card [legend]="'Option'">
+        <div class="relative flex items-center gap-4">
+            <header>
+            <mat-icon [inline]="true" fontIcon="school" class="icon"></mat-icon>        
+            </header>
+            <section class="text-lg space-y-2">
+                <h1 class="text-2xl">Option : {{option?.name}}</h1>
+                <p>Code : {{option?.code}}</p>
+                <p>Description : {{option?.description}}</p>
+            </section>
+            <button
+                class="absolute top-0 right-0 rounded-box h-8 cursor-pointer border border-green-400 px-3 py-1 text-green-400 hover:bg-green-100 hover:text-green-500"
+                (click)="onEdit(option?.id!)"
+                >
+                Edit
+            </button>
+        </div>
+    </app-legend-card>
+    <app-course-list-view [selectedOption]="this.option?.id"/>
+</div>
+

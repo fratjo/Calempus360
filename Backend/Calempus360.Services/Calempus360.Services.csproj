@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Calempus360.Core\Calempus360.Core.csproj" />
+      <ProjectReference Include="..\Calempus360.Errors\Calempus360.Errors.csproj" />
+      <ProjectReference Include="..\Calempus360.Infrastructure\Calempus360.Infrastructure.csproj" />
+      <ProjectReference Include="..\ScheduleGenerator\ScheduleGenerator.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="NuGet.DependencyResolver.Core" Version="6.11.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Calempus360.Errors">
+        <HintPath>..\Calempus360.API\bin\Debug\net8.0\Calempus360.Errors.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

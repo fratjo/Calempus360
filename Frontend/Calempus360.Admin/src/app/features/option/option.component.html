@@ -1,0 +1,5 @@
+<div class="flex w-full flex-col gap-2">
+  <app-option-filter-view (courseId)="onCourseChange($event)"/>
+  <app-option-list-view [courseFilterId]="this.courseId"/>
+</div>
+

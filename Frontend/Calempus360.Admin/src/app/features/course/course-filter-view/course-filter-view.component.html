@@ -1,0 +1,19 @@
+<app-legend-card [legend]="'Filters'">
+    <div class="space-x-[6px] border-none flex w-full flex-row">
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Equipment Type</legend>
+      <select
+        class="select focus:outline-none"
+        (change)="onEquipmentTypeChange($event)"
+      >
+        <option [value]="0">All</option>
+        @if (equipmentTypeList$ | async; as equipmentTypes) {
+          @for (equipmentType of equipmentTypes; track equipmentType?.id;) {
+            <option [value]="equipmentType.id">{{ equipmentType.name }}</option>
+          }
+        }
+      </select>
+      <span class="fieldset-label">Optional</span>
+    </fieldset>
+  </div>
+</app-legend-card>

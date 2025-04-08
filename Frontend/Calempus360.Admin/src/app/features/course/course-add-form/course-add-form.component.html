@@ -1,0 +1,151 @@
+<div
+  class="card bg-base-100 flex flex-col items-center justify-center rounded-lg"
+>
+  <h1 class="card-title mt-4">Add Course</h1>
+  <form
+    [formGroup]="courseForm"
+    (ngSubmit)="onSave()"
+    class="card-body flex w-64 flex-col space-y-4"
+  >
+    <input
+        [ngClass]="{
+            'border-error':
+            courseForm.controls['name'].touched &&
+            courseForm.controls['name'].invalid,
+            'border-primary':
+            courseForm.controls['name'].touched && courseForm.controls['name'].valid,
+        }"
+      type="text"
+      placeholder="Name"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="name"
+    />
+    <input
+    [ngClass]="{
+        'border-error':
+        courseForm.controls['code'].touched &&
+        courseForm.controls['code'].invalid,
+        'border-primary':
+        courseForm.controls['code'].touched && courseForm.controls['code'].valid,
+    }"
+      type="text"
+      placeholder="Code"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="code"
+    />
+    <input
+    [ngClass]="{
+        'border-error':
+        courseForm.controls['description'].touched &&
+        courseForm.controls['description'].invalid,
+        'border-primary':
+        courseForm.controls['description'].touched && courseForm.controls['description'].valid,
+    }"
+      type="text"
+      placeholder="Description"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="description"
+    />
+    <input
+    [ngClass]="{
+        'border-error':
+        courseForm.controls['totalHours'].touched &&
+        courseForm.controls['totalHours'].invalid,
+        'border-primary':
+        courseForm.controls['totalHours'].touched && courseForm.controls['totalHours'].valid,
+    }"
+      type="number"
+      placeholder="Total Hours"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="totalHours"
+    />
+    <input
+    [ngClass]="{
+        'border-error':
+        courseForm.controls['weeklyHours'].touched &&
+        courseForm.controls['weeklyHours'].invalid,
+        'border-primary':
+        courseForm.controls['weeklyHours'].touched && courseForm.controls['weeklyHours'].valid,
+    }"
+      type="number"
+      placeholder="Weekly Hours"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="weeklyHours"
+    />
+    <input
+    [ngClass]="{
+        'border-error':
+        courseForm.controls['semester'].touched &&
+        courseForm.controls['semester'].invalid,
+        'border-primary':
+        courseForm.controls['semester'].touched && courseForm.controls['semester'].valid,
+    }"
+      type="text"
+      placeholder="Semester"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="semester"
+    />
+    <input
+    [ngClass]="{
+        'border-error':
+        courseForm.controls['credits'].touched &&
+        courseForm.controls['credits'].invalid,
+        'border-primary':
+        courseForm.controls['credits'].touched && courseForm.controls['credits'].valid,
+    }"
+      type="number"
+      placeholder="Credits"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="credits"
+    />
+      <details class="dropdown">
+        <summary 
+        (click)="this.courseForm.controls['equipmentType'].markAsTouched();"
+        [ngClass]="{
+          'border-error':
+          equipmentTypeArray.touched &&
+          equipmentTypeArray.invalid,
+          'border-primary':
+          equipmentTypeArray.touched && equipmentTypeArray.valid,
+        }"
+        class="select focus:ring-none focus:border-secondary focus:outline-none">Equipment Type</summary>
+          <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+            <li *ngFor="let equipmentType of equipmentTypeList$ | async" [value]="equipmentType.id">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" [value]="equipmentType.id" (change)="selectEquipment(equipmentType,$event)"
+                   class="checkbox checkbox-primary" />
+                <span>{{ equipmentType.name }}</span>
+              </label>
+            </li>
+          </ul>
+      </details>
+      
+      @if(optionList$ | async; as options){
+        <div *ngFor="let course of courseOptions;let i = index">
+      <app-course-form-custom-input [optionList]="options" [optionIdAndGradeInput]="{optionId:course,grade:getGradeFromOptionId(course)}" (optionIdAndGrade)="onOptionSelected($event,i)" (optionIdDelete)="onDeleteOption($event)"/>
+    </div>
+      }  
+      <button
+      type="button"
+      (click)="addOption()"
+      class="rounded-box cursor-pointer border border-green-400 px-3 py-1 text-green-400 hover:bg-green-100 hover:text-green-500">
+          + Add a new option
+      </button>
+    <div class="flex justify-between space-x-4">
+      <button
+        (click)="onCancel()"
+        type="reset"
+        class="rounded-box h-8 cursor-pointer border border-red-400 px-3 py-1 text-red-400 hover:bg-red-100 hover:text-red-500">
+        Cancel
+      </button>
+      <button
+        type="submit"
+        [disabled]="courseForm.invalid"
+        class="rounded-box h-8 cursor-pointer border border-blue-400 px-3 py-1 text-blue-400 hover:bg-blue-100 hover:text-blue-500 disabled:cursor-not-allowed disabled:opacity-50">
+        Save
+      </button>
+    </div>
+  </form>
+</div>
+
+

@@ -1,0 +1,83 @@
+<div
+  class="card bg-base-100 rounded-box flex h-full flex-col items-center justify-center shadow-lg"
+>
+  <h1 class="card-title mt-4">Add University</h1>
+  <form
+    [formGroup]="universityForm"
+    (ngSubmit)="save()"
+    class="card-body flex w-64 flex-col space-y-4"
+  >
+    <input
+      [ngClass]="{
+        'border-error':
+          universityForm.controls['name'].touched &&
+          universityForm.controls['name'].invalid,
+        'border-primary':
+          universityForm.controls['name'].touched &&
+          universityForm.controls['name'].valid,
+      }"
+      type="text"
+      placeholder="University Name"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="name"
+    />
+    <input
+      [ngClass]="{
+        'border-error':
+          universityForm.controls['code'].touched &&
+          universityForm.controls['code'].invalid,
+        'border-primary':
+          universityForm.controls['code'].touched &&
+          universityForm.controls['code'].valid,
+      }"
+      type="text"
+      placeholder="University Code"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="code"
+    />
+    <input
+      [ngClass]="{
+        'border-error':
+          universityForm.controls['address'].touched &&
+          universityForm.controls['address'].invalid,
+        'border-primary':
+          universityForm.controls['address'].touched &&
+          universityForm.controls['address'].valid,
+      }"
+      type="text"
+      placeholder="University Address"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="address"
+    />
+    <input
+      [ngClass]="{
+        'border-error':
+          universityForm.controls['phone'].touched &&
+          universityForm.controls['phone'].invalid,
+        'border-primary':
+          universityForm.controls['phone'].touched &&
+          universityForm.controls['phone'].valid,
+      }"
+      type="text"
+      placeholder="University Phone"
+      class="input focus:ring-none focus:border-secondary focus:outline-none"
+      formControlName="phone"
+    />
+    <div class="flex justify-between space-x-4">
+      <button
+        (click)="cancel()"
+        type="reset"
+        class="rounded-box h-8 cursor-pointer border border-red-400 px-3 py-1 text-red-400 hover:bg-red-100 hover:text-red-500"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        [disabled]="!universityForm.valid"
+        class="rounded-box h-8 cursor-pointer border border-blue-400 px-3 py-1 text-blue-400 hover:bg-blue-100 hover:text-blue-500"
+      >
+        Save
+      </button>
+    </div>
+  </form>
+</div>

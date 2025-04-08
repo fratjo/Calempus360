@@ -1,0 +1,49 @@
+<div>
+  <h1>Academic Year</h1>
+  @if (editMode && (academicYear$ | async); as academicYear) {
+  <div>
+    <form [formGroup]="academicYearForm" (ngSubmit)="save()">
+      <p>{{ academicYear.id }}</p>
+      <mat-form-field>
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input
+            matStartDate
+            placeholder="Start date"
+            formControlName="dateStart"
+          />
+          <input matEndDate placeholder="End date" formControlName="dateEnd" />
+        </mat-date-range-input>
+        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+      <div>
+        <button mat-button (click)="cancel()" type="reset">
+          <mat-icon fontIcon="cancel"></mat-icon>Cancel
+        </button>
+        <button mat-button type="submit" [disabled]="!academicYearForm.valid">
+          <mat-icon fontIcon="save"></mat-icon>Save
+        </button>
+      </div>
+    </form>
+  </div>
+  } @else { @if (academicYear$ | async; as academicYear) {
+  <div>
+    <h3>Id :</h3>
+    <p>{{ academicYear.id }}</p>
+    <h3>StartDate :</h3>
+    <p>{{ academicYear.dateStart }}</p>
+    <h3>EndDate :</h3>
+    <p>{{ academicYear.dateEnd }}</p>
+    <button mat-button (click)="edit()">
+      <mat-icon fontIcon="edit"></mat-icon>Edit
+    </button>
+  </div>
+  } @else {
+  <p>University not found!</p>
+  } }
+</div>

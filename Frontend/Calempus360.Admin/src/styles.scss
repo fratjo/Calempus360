@@ -1,0 +1,21 @@
+@use "./app/styles/material.scss";
+@use "./app/styles/colors.scss";
+@use "./app/styles/tailwind.scss";
+@use "./app/styles/custom.scss";
+
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}

@@ -1,0 +1,76 @@
+<fieldset
+  class="fieldset bg-base-100 border-base-300 rounded-box h-full w-full border p-4 shadow-lg"
+>
+  <legend class="fieldset-legend pt-0">Universities</legend>
+  @if (universityList$ | async; as universities) {
+    <div class="rounded-box bg-base-100 flex w-full">
+      <div
+        class="rounded-box border-base-content/5 bg-base-100 border-base-content w-full overflow-x-auto"
+      >
+        <table class="table-pin-rows table w-full flex-grow">
+          <thead>
+            <tr class="pt-2 pb-2">
+              <th></th>
+              <th>Name</th>
+              <th>Code</th>
+              <th>Address</th>
+              <th>Phone</th>
+              <th class="">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (
+              university of universities;
+              track university?.id;
+              let i = $index
+            ) {
+              <tr class="hover:bg-base-200 group hover:rounded-box">
+                <th>{{ i + 1 }}</th>
+                <td>{{ university?.name }}</td>
+                <td>{{ university?.code }}</td>
+                <td>{{ university?.address }}</td>
+                <td>{{ university?.phone }}</td>
+                <td class="space-x-2">
+                  <button
+                    class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-blue-400 hover:border-blue-400 hover:bg-blue-100"
+                    (click)="onSelect(university.id!)"
+                  >
+                    select
+                  </button>
+                  <button
+                    class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-green-400 hover:border-green-400 hover:bg-green-100"
+                    (click)="onEdit(university.id!)"
+                  >
+                    edit
+                  </button>
+                  <button
+                    class="rounded-box border-base-100 group-hover:border-base-200 cursor-pointer border px-3 py-1 text-red-400 hover:border-red-400 hover:bg-red-100"
+                    (click)="onDelete(university.id!)"
+                  >
+                    delete
+                  </button>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="6" class="text-center">University empty!</td>
+              </tr>
+            }
+            <tr>
+              <td colspan="6" class="text-center">
+                <button
+                  routerLink="/university/add"
+                  class="rounded-box cursor-pointer border border-green-400 px-3 py-1 text-green-400 hover:bg-green-100 hover:text-green-500"
+                >
+                  + Add a new university
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  } @else {
+    <p>University not found!</p>
+  }
+</fieldset>
