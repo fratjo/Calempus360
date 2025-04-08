@@ -30,6 +30,13 @@ namespace Calempus360.Services.Services
 
         public async Task<bool> DeleteSessionAsync(Guid id)
         {
+            // recuperer la session comme elle est en db
+            var sessionInDb = await _sessionRepository.GetSessionByIdAsync(id);
+            if (sessionInDb == null) throw new NotFoundException("Session not found !");
+
+            if (sessionInDb.DateTimeStart.Date < DateTime.Now.Date.AddDays(+1))
+                throw new SessionConstraintException("Session constraints not respected ! : Cannot update session in the past or less than a day before !");
+
             return await _sessionRepository.DeleteSessionAsync(id);
         }
 
@@ -48,20 +55,20 @@ namespace Calempus360.Services.Services
             return await _sessionRepository.GetSessionByIdAsync(id);
         }
 
-        public Task<Session> UpdateSessionAsync(Session session, Guid classRoomId, Guid courseId, List<Guid> equipments, List<Guid> studentGroups)
+        public async Task<Session> UpdateSessionAsync(Session session, Guid classRoomId, Guid courseId, List<Guid> equipments, List<Guid> studentGroups)
         {
             // recuperer la session comme elle est en db
-            var sessionInDb = _context.Sessions.FirstOrDefault(s => s.SessionId == session.Id);
+            var sessionInDb = await _sessionRepository.GetSessionByIdAsync(session.Id);
             if (sessionInDb == null) throw new NotFoundException("Session not found !");
 
             // si on souhaite modifier la session dans le passé ou moins d'un jour avant, on ne peut pas modifier
-            if (sessionInDb.DatetimeStart.Date < DateTime.Now.Date.AddDays(+1))
+            if (sessionInDb.DateTimeStart.Date < DateTime.Now.Date.AddDays(+1))
                 throw new SessionConstraintException("Session constraints not respected ! : Cannot update session in the past or less than a day before !");
 
             if (!CheckBusinessRules(session, classRoomId, courseId, equipments, studentGroups))
                 throw new SessionConstraintException("Session constraints not respected !");
 
-            return _sessionRepository.UpdateSessionAsync(session, classRoomId, courseId, equipments, studentGroups);
+            return await _sessionRepository.UpdateSessionAsync(session, classRoomId, courseId, equipments, studentGroups);
         }
 
         public async Task<bool> GenerateSchedule(Guid universityId, Guid academicYearId)

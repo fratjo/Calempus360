@@ -144,6 +144,13 @@
         Cancel
       </button>
       <button
+        (click)="onDelete()"
+        type="reset"
+        class="rounded-box h-8 cursor-pointer border border-red-400 px-3 py-1 text-red-400 hover:bg-red-100 hover:text-red-500"
+      >
+        Delete
+      </button>
+      <button
         type="submit"
         [disabled]="sessionForm.invalid"
         class="rounded-box h-8 cursor-pointer border border-blue-400 px-3 py-1 text-blue-400 hover:bg-blue-100 hover:text-blue-500 disabled:cursor-not-allowed disabled:opacity-50"

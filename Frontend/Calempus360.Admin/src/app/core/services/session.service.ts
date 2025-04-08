@@ -63,6 +63,10 @@ export class SessionService {
     return this.http.put<Session>(`${this.URL}/${session.id}`, session);
   }
 
+  deleteSession(id: string) {
+    return this.http.delete(`${this.URL}/${id}`);
+  }
+
   generateSessions({
     universityId,
     academicYearId,

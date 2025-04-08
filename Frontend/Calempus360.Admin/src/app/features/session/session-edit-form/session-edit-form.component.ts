@@ -182,4 +182,12 @@ export class SessionEditFormComponent implements OnInit {
   onCancel() {
     this.router.navigate(['/schedules']);
   }
+
+  onDelete() {
+    this.sessionService.deleteSession(this.session?.id!).subscribe({
+      next: (v) => console.log(v),
+      error: (e) => alert(e.error.detail),
+      complete: () => this.router.navigate(['/schedules']),
+    });
+  }
 }
